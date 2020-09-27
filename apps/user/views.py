@@ -29,9 +29,6 @@ def login(request):
             if not user:
                 raise exceptions.AuthenticationFailed({'message': '账号密码错误'})
 
-    # if pendulum.now() > pendulum.parse(str(user.teams.end_datetime)):
-    #     raise exceptions.AuthenticationFailed({'message': '账号已过期'})
-
     auth.login(request, user)
     return Response(status=status.HTTP_200_OK)
 
@@ -75,8 +72,6 @@ def register(request):
     if User.objects.filter(username=username).first():
         raise exceptions.ValidationError({'message': '账号已被注册'})
 
-    # end_datetime = pendulum.now().add(days=30)
-    # teams = Teams.objects.create(phone=phone, company_name=company_name, end_datetime=end_datetime)
     teams = Teams.objects.create(phone=phone, company_name=company_name)
     User.objects.create(name=name, phone=phone, username=username,
                         password=password, teams=teams)
@@ -92,9 +87,6 @@ def get_info(request):
     inventory_warning_count = Inventory.objects.filter(
         teams=teams, quantity__lte=F('goods__inventory_warning_lower_limit')).count()
     data = {'username': request.user.username, 'inventory_warning_count': inventory_warning_count}
-    # if request.user.is_boss:
-    #     data['end_datetime'] = teams.end_datetime
-
     return Response(data=data, status=status.HTTP_200_OK)
 
 
