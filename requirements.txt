@@ -1,0 +1,16 @@
+certifi==2020.6.20
+chardet==3.0.4
+Django==2.2
+django-filter==2.3.0
+django-mysql==3.8.1
+djangorestframework==3.11.1
+idna==2.10
+mysqlclient==2.0.1
+pendulum==2.1.2
+python-dateutil==2.8.1
+pytz==2020.1
+pytzdata==2020.1
+requests==2.24.0
+six==1.15.0
+sqlparse==0.3.1
+urllib3==1.25.10
