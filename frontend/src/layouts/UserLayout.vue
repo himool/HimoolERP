@@ -23,7 +23,7 @@
     },
     methods: {
       backIndex() {
-        windows.open('http:www.haioucloud.com');
+        window.open('http:www.haioucloud.com');
       },
     },
   }
