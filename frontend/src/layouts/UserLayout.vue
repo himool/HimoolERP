@@ -2,10 +2,10 @@
   <div class="background" ref="card">
     <a-card class="card">
       <div>
-        <div style="text-align: center; padding-top: 16px;">
+        <div style="text-align: center; padding-top: 16px; cursor: pointer;" @click="backIndex">
           <img :src="logo" width="112" style="margin-top: -6px; margin-left: 8px;" />
         </div>
-        <div class="title" @click="$router.push('/')" style="margin: 0;">海鸥云</div>
+        <div class="title" @click="backIndex" style="margin: 0;">海鸥云</div>
         <div style="text-align: center; font-size: 16px; color: #666; margin-bottom: 24px;">进销存 - 让生意更简单高效</div>
       </div>
       <router-view />
@@ -20,6 +20,11 @@
       return {
         logo: require('@/assets/logo.png'),
       }
+    },
+    methods: {
+      backIndex() {
+        windows.open('http:www.haioucloud.com');
+      },
     },
   }
 </script>
