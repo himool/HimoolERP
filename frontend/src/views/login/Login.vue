@@ -28,6 +28,8 @@
       </a-col>
     </a-row>
 
+    <div style="text-align: center; font-size: 16px; color: #40a9ff; margin-bottom: 24px; margin-top: 28px;">此版本为试用版, 如需定制或购买请联系我们</div>
+
   </div>
 </template>
 
