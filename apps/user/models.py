@@ -27,6 +27,8 @@ class User(AbstractBaseUser):
     create_date = models.DateTimeField(auto_now_add=True)
     is_boss = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)
+    custom_made = models.CharField(max_length=256, null=True)
+    budget = models.CharField(max_length=64, null=True)
 
     USERNAME_FIELD = 'username'
     objects = UserManager()

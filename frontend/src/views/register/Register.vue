@@ -26,6 +26,12 @@
         <a-form-model-item prop="confirm" label="确认密码">
           <a-input-password size="large" v-model="form.confirm" />
         </a-form-model-item>
+        <a-form-model-item prop="custom_made" label="定制需求">
+          <a-input size="large" v-model="form.custom_made" placeholder="是/否"/>
+        </a-form-model-item>
+        <a-form-model-item prop="budget" label="预算">
+          <a-input size="large" v-model="form.budget" />
+        </a-form-model-item>
       </a-form-model>
     </div>
     <a-row>
@@ -60,6 +66,8 @@
           username: '',
           password: '',
           confirm: '',
+          custom_made: '',
+          budget: '',
         },
         rules: {
           company_name: [
@@ -86,6 +94,8 @@
             { required: true, message: '请再次输入密码', trigger: 'change' },
             { validator: this.validateConfirm, trigger: 'blur' },
           ],
+          custom_made: [{ required: true, message: '请输入定制', trigger: 'change' }],
+          budget: [{ required: true, message: '请输入微预算', trigger: 'change' }],
         },
       };
     },

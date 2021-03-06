@@ -47,6 +47,8 @@ def register(request):
     code = request.data.get('code')
     username = request.data.get('username')
     password = request.data.get('password')
+    custom_made = request.data.get('custom_made')
+    budget = request.data.get('budget')
 
     # 数据验证
     if not username or not password or not company_name or not name or not phone:
@@ -74,7 +76,7 @@ def register(request):
 
     teams = Teams.objects.create(phone=phone, company_name=company_name)
     User.objects.create(name=name, phone=phone, username=username,
-                        password=password, teams=teams)
+                        password=password, teams=teams, custom_made=custom_made, budget=budget)
     return Response(status=status.HTTP_201_CREATED)
 
 
