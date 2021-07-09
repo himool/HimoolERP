@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import { register, getCaptcha } from '@/api/user'
+  import { register } from '@/api/user'
 
   export default {
     name: 'Register',

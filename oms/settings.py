@@ -145,6 +145,3 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'NON_FIELD_ERRORS_KEY': 'message',
 }
-
-# 短信验证码 appkey
-captcha_app_key = '9c06acc23b8a64a8'

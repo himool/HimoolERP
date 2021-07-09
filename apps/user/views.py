@@ -1,8 +1,7 @@
 from rest_framework.decorators import api_view, action
-from oms.settings import captcha_app_key
 from rest_framework import status, exceptions
 from rest_framework.response import Response
-from .models import Teams, User, Captcha
+from .models import Teams, User
 from warehouse.models import Inventory
 from rest_framework import viewsets
 from django.contrib import auth
