@@ -36,19 +36,11 @@ export function getInfo() {
   })
 }
 
-export function setPassword(params) {
-  return axios({
-    url: '/user/set_password/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
-    method: 'post',
-    data: Qs.stringify(params),
-  })
-}
-
-export function getCaptcha(params) {
-  return axios({
-    url: '/user/get_captcha/',
-    method: 'get',
-    params,
-  })
-}
+// export function setPassword(params) {
+//   return axios({
+//     url: '/user/set_password/',
+//     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+//     method: 'post',
+//     data: Qs.stringify(params),
+//   })
+// }

@@ -11,12 +11,6 @@
         <a-form-model-item prop="phone" label="手机号">
           <a-input size="large" v-model="form.phone" />
         </a-form-model-item>
-        <a-form-model-item prop="code" label="验证码">
-          <a-input-search v-model="form.code" size="large" @search="getCaptcha">
-            <a-button slot="enterButton" type="primary" :loading="captchaLoading" style="font-size: 14px;">
-              {{captchaLoading ? countdown : '获取验证码'}}</a-button>
-          </a-input-search>
-        </a-form-model-item>
         <a-form-model-item prop="username" label="用户名">
           <a-input size="large" v-model="form.username" />
         </a-form-model-item>
@@ -25,12 +19,6 @@
         </a-form-model-item>
         <a-form-model-item prop="confirm" label="确认密码">
           <a-input-password size="large" v-model="form.confirm" />
-        </a-form-model-item>
-        <a-form-model-item prop="custom_made" label="定制需求">
-          <a-input size="large" v-model="form.custom_made" placeholder="是/否"/>
-        </a-form-model-item>
-        <a-form-model-item prop="budget" label="预算">
-          <a-input size="large" v-model="form.budget" />
         </a-form-model-item>
       </a-form-model>
     </div>
@@ -62,12 +50,9 @@
           company_name: '',
           name: '',
           phone: '',
-          code: '',
           username: '',
           password: '',
           confirm: '',
-          custom_made: '',
-          budget: '',
         },
         rules: {
           company_name: [
@@ -80,10 +65,6 @@
             { required: true, message: '请输入手机号', trigger: 'change' },
             { pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' },
           ],
-          code: [
-            { required: true, message: '请输入验证码', trigger: 'change' },
-            { len: 6, message: '请检查验证码 (6位)', trigger: 'blur' },
-          ],
           username: [
             { required: true, message: '请输入用户名', trigger: 'change' },
           ],
@@ -94,8 +75,6 @@
             { required: true, message: '请再次输入密码', trigger: 'change' },
             { validator: this.validateConfirm, trigger: 'blur' },
           ],
-          custom_made: [{ required: true, message: '请输入定制', trigger: 'change' }],
-          budget: [{ required: true, message: '请输入微预算', trigger: 'change' }],
         },
       };
     },
@@ -118,33 +97,6 @@
               .finally(() => {
                 this.isLoading = false;
               });
-          }
-        });
-      },
-      countSecond() {
-        this.countdown -= 1;
-        if (this.countdown >= 0) {
-          window.setTimeout(this.countSecond, 1000);
-        } else {
-          this.countdown = 60;
-          this.captchaLoading = false;
-        }
-      },
-      getCaptcha() {  // 验证码
-        this.$refs.form.validateField(['phone'], (err) => {
-          if (!err) {
-            this.captchaLoading = true;
-            this.countSecond();
-
-            getCaptcha({ phone: this.form.phone })
-              .then(() => {
-                this.$message.success('验证码发送成功');
-              })
-              .catch(() => {
-                this.captchaLoading = false;
-                this.countdown = -1;
-                this.$message.error('验证码发送失败');
-              })
           }
         });
       },

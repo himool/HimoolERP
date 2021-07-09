@@ -16,11 +16,11 @@ export default {
       meta: { title: '注册' },
       component: () => import('@/views/register/Register'),
     },
-    {
-      path: 'set_password',
-      name: 'setPassword',
-      meta: { title: '设置密码' },
-      component: () => import('@/views/setPassword/SetPassword'),
-    },
+    // {
+    //   path: 'set_password',
+    //   name: 'setPassword',
+    //   meta: { title: '设置密码' },
+    //   component: () => import('@/views/setPassword/SetPassword'),
+    // },
   ],
 }

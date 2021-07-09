@@ -13,7 +13,7 @@
 
     <a-row>
       <a-col :span="7" offset="5">
-        <a-button type="link" style="float: left; padding: 0;" @click="$router.push('/user/set_password')">忘记密码
+        <a-button type="link" style="float: left; padding: 0;" @click="$router.push('/user/set_password')" disabled>忘记密码
         </a-button>
       </a-col>
       <a-col :span="7">
