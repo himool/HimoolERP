@@ -25,4 +25,4 @@
 * 系统管理
 
 ## 联系我们
-！[欢迎添加微信咨询](http://www.haioucloud.com/static/img/wechat_customer_service.427ba24e.png "微信号")
+![欢迎添加微信咨询](http://www.haioucloud.com/static/img/wechat_customer_service.427ba24e.png "微信号")
