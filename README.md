@@ -16,6 +16,9 @@
 * 其他Python包可参考requirements.txt文件
 
 ### 业务流程
+![流程](https://gitee.com/haioucloud/oms/raw/main/raw/OMS%20Flow.JPG)
+
+### 管理模块
 * 报表管理
 * 商品管理
 * 采购管理
