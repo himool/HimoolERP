@@ -11,13 +11,10 @@
       </a-form-model>
     </div>
 
-    <a-row>
-      <a-col :span="7" offset="5">
-        <a-button type="link" style="float: left; padding: 0;" @click="$router.push('/user/set_password')" disabled>忘记密码
-        </a-button>
-      </a-col>
-      <a-col :span="7">
-        <a-button type="link" style="float: right; padding: 0;" @click="$router.push('/user/register')">注册账号</a-button>
+    <a-row style="margin-bottom: 12px;">
+      <a-col offset="12" :span="8">
+        <span>没有帐号？</span>
+        <a @click="$router.push('/user/register')">注册账号</a>
       </a-col>
     </a-row>
 
@@ -27,8 +24,6 @@
           @click="login">登录</a-button>
       </a-col>
     </a-row>
-
-    <div style="text-align: center; font-size: 16px; color: #40a9ff; margin-bottom: 24px; margin-top: 28px;">此版本为试用版, 如需定制或购买请联系我们</div>
 
   </div>
 </template>

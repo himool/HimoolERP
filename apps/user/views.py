@@ -40,14 +40,12 @@ def logout(request):
 
 @api_view(['POST'])
 def register(request):
-    company_name = request.data.get('company_name')
-    name = request.data.get('name')
     phone = request.data.get('phone')
     username = request.data.get('username')
     password = request.data.get('password')
 
     # 数据验证
-    if not username or not password or not company_name or not name or not phone:
+    if not username or not password or not phone:
         raise exceptions.ValidationError
 
     if Teams.objects.filter(phone=phone).first():
@@ -56,8 +54,8 @@ def register(request):
     if User.objects.filter(username=username).first():
         raise exceptions.ValidationError({'message': '账号已被注册'})
 
-    teams = Teams.objects.create(phone=phone, company_name=company_name)
-    User.objects.create(name=name, phone=phone, username=username, password=password, teams=teams)
+    teams = Teams.objects.create(phone=phone)
+    User.objects.create(phone=phone, username=username, password=password, teams=teams)
     return Response(status=status.HTTP_201_CREATED)
 
 
@@ -71,40 +69,3 @@ def get_info(request):
         teams=teams, quantity__lte=F('goods__inventory_warning_lower_limit')).count()
     data = {'username': request.user.username, 'inventory_warning_count': inventory_warning_count}
     return Response(data=data, status=status.HTTP_200_OK)
-
-
-# @api_view(['POST'])
-# def set_password(request):
-#     phone = request.data.get('phone')
-#     code = request.data.get('code')
-#     password = request.data.get('password')
-#     confirm = request.data.get('confirm')
-
-#     # 数据验证
-#     if not phone or not password or not confirm or password != confirm:
-#         raise exceptions.ValidationError
-
-#     if not code or len(code) != 6 or not re.match(r'^1[3456789]\d{9}$', phone):
-#         raise exceptions.ValidationError
-
-#     # 验证 code
-#     filters = {
-#         'phone': phone,
-#         'code': code,
-#         'create_datetime__gte': pendulum.now().subtract(minutes=10),
-#         'create_datetime__lte': pendulum.now(),
-#     }
-
-#     if not Captcha.objects.filter(**filters).first():
-#         raise exceptions.ValidationError({'message': '验证码错误'})
-
-#     teams = Teams.objects.filter(phone=phone).first()
-#     if not teams:
-#         raise exceptions.ValidationError({'message': '账号不存在'})
-
-#     user = teams.users.filter(is_boss=True).first()
-#     user.set_password(password)
-#     user.save()
-
-#     auth.logout(request)
-#     return Response(status=status.HTTP_200_OK)

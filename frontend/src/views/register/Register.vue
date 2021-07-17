@@ -2,12 +2,6 @@
   <div>
     <div>
       <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 5 }" :wrapper-col="{ span: 14 }">
-        <a-form-model-item prop="company_name" label="公司名称">
-          <a-input size="large" v-model="form.company_name" />
-        </a-form-model-item>
-        <a-form-model-item prop="name" label="姓名">
-          <a-input size="large" v-model="form.name" />
-        </a-form-model-item>
         <a-form-model-item prop="phone" label="手机号">
           <a-input size="large" v-model="form.phone" />
         </a-form-model-item>
@@ -22,9 +16,10 @@
         </a-form-model-item>
       </a-form-model>
     </div>
-    <a-row>
-      <a-col :span="14" offset="5">
-        <a-button type="link" style="float: left; padding: 0;" @click="$router.push('/user/login')">返回登录</a-button>
+    <a-row style="margin-bottom: 12px;">
+      <a-col offset="12" :span="8">
+        <span>已有帐号?</span>
+        <a @click="$router.push('/user/login')">返回登录</a>
       </a-col>
     </a-row>
 
@@ -47,20 +42,12 @@
         captchaLoading: false,
         countdown: 60,
         form: {
-          company_name: '',
-          name: '',
           phone: '',
           username: '',
           password: '',
           confirm: '',
         },
         rules: {
-          company_name: [
-            { required: true, message: '请输入公司名称', trigger: 'change' },
-          ],
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'change' },
-          ],
           phone: [
             { required: true, message: '请输入手机号', trigger: 'change' },
             { pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' },

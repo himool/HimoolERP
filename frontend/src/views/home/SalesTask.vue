@@ -29,7 +29,7 @@
         loading: false,
         columns: [
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'warehouse_name',
             key: 'warehouse_name',
           },

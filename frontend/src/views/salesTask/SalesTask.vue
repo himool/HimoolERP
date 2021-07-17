@@ -46,7 +46,7 @@
         currentPage: 1,
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             width: '64px',

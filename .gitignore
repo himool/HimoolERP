@@ -129,8 +129,6 @@ dmypy.json
 .pyre/
 
 # The Project
-*.lock
 .vscode/
 apps/*/migrations/*
 !apps/*/migrations/__init__.py
-.idea/

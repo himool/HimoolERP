@@ -26,4 +26,12 @@ module.exports = {
         minRatio: 0.8
       })]
   },
+  devServer: {
+    proxy: {
+        '/api': {
+            target: 'http://127.0.0.1:8000',
+            changeOrigin: true,
+        }
+    }
+  },
 }

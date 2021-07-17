@@ -5,7 +5,7 @@
         <a-card>
           <a-row gutter="16">
             <a-col :span="12" style="margin-bottom: 8px;">
-              <a-select v-model="searchForm.warehouse" placeholder="公司" style="width: 100%;" allowClear>
+              <a-select v-model="searchForm.warehouse" placeholder="仓库" style="width: 100%;" allowClear>
                 <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                 </a-select-option>
               </a-select>
@@ -47,7 +47,7 @@
                 <a-col :span="24" style="font-size: 15px; font-weight: 500;">关联销售单: {{salesForm.id}}</a-col>
               </a-row>
               <a-row style="margin: 6px 0;">
-                <a-col :span="6">公司: {{salesForm.warehouse_name}}</a-col>
+                <a-col :span="6">仓库: {{salesForm.warehouse_name}}</a-col>
                 <a-col :span="6">结算账户: {{salesForm.account_name}}</a-col>
                 <a-col :span="6">整单折扣: {{salesForm.discount}}</a-col>
                 <a-col :span="6">实收金额: {{salesForm.amount}}</a-col>
@@ -75,7 +75,7 @@
             <a-divider />
           </div>
           <a-row style="margin: 6px 0;">
-            <a-col :span="6">公司: {{form.warehouse_name}}</a-col>
+            <a-col :span="6">仓库: {{form.warehouse_name}}</a-col>
             <a-col :span="6">结算账户: {{form.account_name}}</a-col>
             <a-col :span="6">整单折扣: {{form.discount}}</a-col>
             <a-col :span="6">实收金额: {{form.amount}}</a-col>
@@ -157,7 +157,7 @@
         ],
         goodsColumns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },

@@ -5,8 +5,6 @@ from django.db import models
 
 class Teams(models.Model):
     phone = models.CharField(max_length=12, unique=True)
-    company_name = models.CharField(max_length=48)
-    # end_datetime = models.DateTimeField()
 
 
 class UserManager(BaseUserManager):
@@ -19,7 +17,6 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField(primary_key=True, max_length=24)
-    name = models.CharField(max_length=48)
     phone = models.CharField(max_length=12)
     teams = models.ForeignKey('user.Teams', models.CASCADE, related_name='users')
 

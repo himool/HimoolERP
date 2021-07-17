@@ -78,7 +78,7 @@
                 </a-row>
               </div>
               <div>
-                <div style="font-size: 16px; margin: 12px 0;">公司
+                <div style="font-size: 16px; margin: 12px 0;">仓库
                   <a-checkbox value="warehouse" :indeterminate="checkStatus.warehouse.indeterminate"
                     :checked="checkStatus.warehouse.isCheckAll" style="margin-left: 4px;"
                     @change="(e) => checkAll(e.target.checked, [...warehouseOptions1, ...warehouseOptions2, ...warehouseOptions3])" />

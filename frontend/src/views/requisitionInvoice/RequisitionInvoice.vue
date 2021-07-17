@@ -15,8 +15,8 @@
           </a-col>
         </a-row>
         <a-row style="font-size: 15px; margin-top: 8px;">
-          <a-col :span="6">调出公司: {{item.out_warehouse_name}}</a-col>
-          <a-col :span="6">调入公司: {{item.into_warehouse_name}}</a-col>
+          <a-col :span="6">调出仓库: {{item.out_warehouse_name}}</a-col>
+          <a-col :span="6">调入仓库: {{item.into_warehouse_name}}</a-col>
           <a-col :span="6">调拨总数: {{totalQuantity}}</a-col>
           <a-col :span="6">日期: {{moment(item.date).format('YYYY-MM-DD')}}</a-col>
         </a-row>

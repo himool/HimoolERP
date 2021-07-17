@@ -55,7 +55,7 @@
         <a-form-model-item prop="holder" label="开户人">
           <a-input size="large" v-model="form.holder" />
         </a-form-model-item>
-        <a-form-model-item prop="warehouse" label="公司">
+        <a-form-model-item prop="warehouse" label="仓库">
           <a-select v-model="form.warehouse" size="large" allowClear>
             <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
             </a-select-option>
@@ -98,7 +98,7 @@
       return {
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             width: '64px',
@@ -125,7 +125,7 @@
             key: 'type',
           },
           {
-            title: '所属公司',
+            title: '所属仓库',
             dataIndex: 'warehouse',
             key: 'warehouse',
             scopedSlots: { customRender: 'warehouse' },

@@ -18,7 +18,7 @@
               </a-button>
             </a-popover>
           </a-form-model-item>
-          <a-form-model-item class="form" label="公司" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+          <a-form-model-item class="form" label="仓库" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
             <a-select v-model="searchForm.warehouse" allowClear>
               <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
               </a-select-option>
@@ -159,7 +159,7 @@
             scopedSlots: { customRender: 'category_name' },
           },
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'warehouse_name',
             key: 'warehouse_name',
           },

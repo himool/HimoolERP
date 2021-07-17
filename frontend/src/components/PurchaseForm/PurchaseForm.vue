@@ -3,7 +3,7 @@
     <a-card :title="form.is_return ? `采购退货单 - ${form.id}` : `采购单 - ${form.id}`">
       <a-row style="margin: 6px 0;">
         <a-col :span="8">供应商: {{form.supplier_name}}</a-col>
-        <a-col :span="8">公司: {{form.warehouse_name}}</a-col>
+        <a-col :span="8">仓库: {{form.warehouse_name}}</a-col>
         <a-col :span="8">结算账户: {{form.account_name}}</a-col>
       </a-row>
       <a-row style="margin: 6px 0;">
@@ -46,7 +46,7 @@
         loading: false,
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },

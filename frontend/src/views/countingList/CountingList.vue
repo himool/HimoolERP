@@ -5,7 +5,7 @@
         <a-card>
           <a-row style="margin-bottom: 8px;">
             <a-col :span="24" style="margin-bottom: 8px;">
-              <a-select v-model="searchForm.warehouse" placeholder="公司" style="width: 100%;" allowClear
+              <a-select v-model="searchForm.warehouse" placeholder="仓库" style="width: 100%;" allowClear
                 @change="search">
                 <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                 </a-select-option>
@@ -31,7 +31,7 @@
           <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
             <a-row gutter="8">
               <a-col :span="12" :xl="6">
-                <a-form-model-item prop="warehouse" label="公司">
+                <a-form-model-item prop="warehouse" label="仓库">
                   <a-select v-model="form.warehouse" :disabled="form.id">
                     <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                     </a-select-option>
@@ -122,14 +122,14 @@
             scopedSlots: { customRender: 'date' },
           },
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'warehouse_name',
             key: 'warehouse_name',
           },
         ],
         rules: {
           warehouse: [
-            { required: true, message: '请选择公司', trigger: 'change' },
+            { required: true, message: '请选择仓库', trigger: 'change' },
           ],
         },
 
@@ -137,7 +137,7 @@
         addGoodsModalVisible: false,
         goodsColumns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },

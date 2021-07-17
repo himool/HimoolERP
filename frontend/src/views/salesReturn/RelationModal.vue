@@ -2,7 +2,7 @@
   <div>
     <a-modal v-model="visible" title="选择销售关联单" width="640px" :footer="null" :maskClosable="false" @cancel="cancel">
       <div>
-        <a-input-search v-model="searchForm.search" placeholder="单号/公司/销售员" @search="search" />
+        <a-input-search v-model="searchForm.search" placeholder="单号/仓库/销售员" @search="search" />
       </div>
       <div style="margin-top: 12px;">
         <a-table :columns="columns" :data-source="items" :loading="loading" size="small" :pagination="false">
@@ -49,7 +49,7 @@
             scopedSlots: { customRender: 'date' },
           },
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'warehouse_name',
             key: 'warehouse_name',
           },

@@ -62,7 +62,7 @@
                 </a-select-option>
               </a-select>
             </a-form-model-item>
-            <a-form-model-item prop="warehouse" label="公司">
+            <a-form-model-item prop="warehouse" label="仓库">
               <a-select v-model="form.warehouse">
                 <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                 </a-select-option>
@@ -129,7 +129,7 @@
         sellerItems: [],
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },
@@ -186,7 +186,7 @@
           discount: [{ required: true, message: '请输入整单折扣', trigger: 'change' }],
           date: [{ required: true, message: '请选择日期', trigger: 'change' }],
           seller: [{ required: true, message: '请选择供应商', trigger: 'change' }],
-          warehouse: [{ required: true, message: '请选择公司', trigger: 'change' }],
+          warehouse: [{ required: true, message: '请选择仓库', trigger: 'change' }],
           account: [{ required: true, message: '请选择账户', trigger: 'change' }],
           amount: [{ required: true, message: '请输入实收金额', trigger: 'change' }],
           client_phone: [{ pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' }]

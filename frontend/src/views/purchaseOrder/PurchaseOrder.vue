@@ -29,7 +29,7 @@
                   </a-form-model-item>
                 </a-col>
                 <a-col :sm="12" :xl="8" :xs="24">
-                  <a-form-model-item prop="warehouse" label="公司">
+                  <a-form-model-item prop="warehouse" label="仓库">
                     <a-select v-model="purchaseForm.warehouse" :disabled="purchaseForm.id">
                       <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                       </a-select-option>
@@ -166,7 +166,7 @@
         buttonLoading: false,
         goodsColumns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },
@@ -266,7 +266,7 @@
 
         rules: {
           supplier: [{ required: true, message: '请选择供应商', trigger: 'change' }],
-          warehouse: [{ required: true, message: '请选择公司', trigger: 'change' }],
+          warehouse: [{ required: true, message: '请选择仓库', trigger: 'change' }],
           account: [{ required: true, message: '请选择账户', trigger: 'change' }],
           contacts: [{ required: true, message: '请选择联系人', trigger: 'change' }],
           amount: [{ required: true, message: '请输入金额', trigger: 'change' }],

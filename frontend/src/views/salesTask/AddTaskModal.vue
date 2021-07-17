@@ -25,7 +25,7 @@
         <a-form-model-item label="商品货号">
           <div>{{selectedGoods.code}}</div>
         </a-form-model-item>
-        <a-form-model-item prop="warehouse" label="公司">
+        <a-form-model-item prop="warehouse" label="仓库">
           <a-select v-model="form.warehouse">
             <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
             </a-select-option>
@@ -87,7 +87,7 @@
         formModalVisible: false,
         rules: {
           warehouse: [
-            { required: true, message: '请选择公司', trigger: 'change' },
+            { required: true, message: '请选择仓库', trigger: 'change' },
           ],
           quantity: [
             { required: true, message: '请输入任务数量', trigger: 'change' },

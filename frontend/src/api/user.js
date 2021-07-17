@@ -5,7 +5,7 @@ import Qs from 'qs'
 
 export function login(params) {
   return axios({
-    url: '/user/login/',
+    url: '/api/user/login/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'post',
     data: Qs.stringify(params),
@@ -14,7 +14,7 @@ export function login(params) {
 
 export function logout() {
   return axios({
-    url: '/user/logout/',
+    url: '/api/user/logout/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'post',
   })
@@ -22,7 +22,7 @@ export function logout() {
 
 export function register(params) {
   return axios({
-    url: '/user/register/',
+    url: '/api/user/register/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'post',
     data: Qs.stringify(params),
@@ -31,16 +31,7 @@ export function register(params) {
 
 export function getInfo() {
   return axios({
-    url: '/user/get_info/',
+    url: '/api/user/get_info/',
     method: 'get',
   })
 }
-
-// export function setPassword(params) {
-//   return axios({
-//     url: '/user/set_password/',
-//     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
-//     method: 'post',
-//     data: Qs.stringify(params),
-//   })
-// }

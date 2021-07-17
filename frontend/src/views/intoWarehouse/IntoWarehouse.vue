@@ -5,7 +5,7 @@
         <a-card>
           <a-row gutter="8" style="margin-bottom: 8px;">
             <a-col :span="24" :xl="12" style="margin-bottom: 8px;">
-              <a-select v-model="searchForm.warehouse" placeholder="公司" style="width: 100%;" allowClear
+              <a-select v-model="searchForm.warehouse" placeholder="仓库" style="width: 100%;" allowClear
                 @change="search">
                 <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                 </a-select-option>
@@ -76,7 +76,7 @@
             key: 'id',
           },
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'warehouse_name',
             key: 'warehouse_name',
           },

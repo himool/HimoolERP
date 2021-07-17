@@ -2,7 +2,7 @@ export const goodsOptions1 = [
   { label: '品牌管理', value: 'BRAND_POST_PUT_DELETE' },
   { label: '规格管理', value: 'SPECIFICATION_POST_PUT_DELETE' },
   { label: '分类管理', value: 'CATEGORY_POST_PUT_DELETE' },
-  { label: '公司管理', value: 'WAREHOUSE_POST_PUT_DELETE' },
+  { label: '仓库管理', value: 'WAREHOUSE_POST_PUT_DELETE' },
   { label: '供应商管理', value: 'SUPPLIER_POST_PUT_DELETE' },
 ]
 

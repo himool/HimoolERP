@@ -3,7 +3,7 @@
     <a-card>
       <div>
         <a-form-model :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }" layout="inline">
-          <a-form-model-item class="form" label="公司">
+          <a-form-model-item class="form" label="仓库">
             <a-select v-model="searchForm.warehouse" allowClear>
               <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
               </a-select-option>
@@ -100,7 +100,7 @@
             key: 'unit',
           },
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'warehouse_name',
             key: 'warehouse_name',
           },

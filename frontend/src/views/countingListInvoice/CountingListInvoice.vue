@@ -15,7 +15,7 @@
           </a-col>
         </a-row>
         <a-row style="font-size: 15px; margin-top: 8px;">
-          <a-col :span="6">公司: {{item.warehouse_name}}</a-col>
+          <a-col :span="6">仓库: {{item.warehouse_name}}</a-col>
           <a-col :span="6">盘点总数: {{total.quantity}}</a-col>
           <a-col :span="6">盈亏金额: {{total.profitAmount}}</a-col>
           <a-col :span="6">日期: {{moment(item.date).format('YYYY-MM-DD')}}</a-col>

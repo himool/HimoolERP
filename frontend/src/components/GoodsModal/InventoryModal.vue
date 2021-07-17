@@ -26,7 +26,7 @@
         loading: false,
         columns: [
           {
-            title: '公司',
+            title: '仓库',
             dataIndex: 'name',
             key: 'name',
           },

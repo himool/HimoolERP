@@ -10,15 +10,12 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Warehouse
-        fields = ['id', 'name', 'type', 'remark', 'create_date', 'update_date', 'address',
+        fields = ['id', 'name', 'remark', 'create_date', 'update_date', 'address',
                   'order', 'status', 'manager', 'goods_total']
         read_only_fields = ['create_date', 'update_date', 'goods_total']
 
     def validate(self, data):
-        if not data.get('name') or not data.get('type'):
-            raise serializers.ValidationError
-
-        if str(data['type']) not in ('仓库', '门店', '公司'):
+        if not data.get('name'):
             raise serializers.ValidationError
 
         teams = self.context['request'].user.teams

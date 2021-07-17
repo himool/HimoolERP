@@ -2,7 +2,7 @@
   <div>
     <a-card :title="form.is_return ? `销售退货单 - ${form.id}` : `销售单 - ${form.id}`">
       <a-row style="margin: 6px 0;">
-        <a-col :span="8">公司: {{form.warehouse_name}}</a-col>
+        <a-col :span="8">仓库: {{form.warehouse_name}}</a-col>
         <a-col :span="8">结算账户: {{form.account_name}}</a-col>
         <a-col :span="8">销售员: {{form.seller}}</a-col>
       </a-row>
@@ -50,7 +50,7 @@
         loading: false,
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },

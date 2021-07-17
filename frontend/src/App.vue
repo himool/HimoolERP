@@ -12,7 +12,7 @@
     data() {
       return {
         locales: window.antd.locales,
-      };  
+      };
     },
   };
 </script>

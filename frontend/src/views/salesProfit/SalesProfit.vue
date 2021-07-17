@@ -3,7 +3,7 @@
     <a-card>
       <a-row>
         <a-col :span="8">
-          <a-form-model-item label="公司" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }" style="margin: 0;">
+          <a-form-model-item label="仓库" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }" style="margin: 0;">
             <a-select v-model="searchForm.warehouse" allowClear :disabled="loading" style="width: 100%;" @change="search">
               <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
               </a-select-option>

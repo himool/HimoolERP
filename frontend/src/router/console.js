@@ -37,7 +37,7 @@ export default {
     {
       path: 'warehouse',
       name: 'warehouse',
-      meta: { title: '公司' },
+      meta: { title: '仓库' },
       component: () => import('@/views/warehouse/Warehouse'),
     },
     {

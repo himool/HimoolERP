@@ -5,13 +5,13 @@
         <a-card>
             <a-row gutter="8" style="margin-bottom: 8px;">
               <a-col :span="12" style="margin-bottom: 8px;">
-                <a-select v-model="searchForm.out_warehouse" placeholder="调出公司" style="width: 100%;" allowClear @change="search">
+                <a-select v-model="searchForm.out_warehouse" placeholder="调出仓库" style="width: 100%;" allowClear @change="search">
                   <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                   </a-select-option>
                 </a-select>
               </a-col>
               <a-col :span="12" style="margin-bottom: 8px;">
-                <a-select v-model="searchForm.into_warehouse" placeholder="调入公司" style="width: 100%;" allowClear @change="search">
+                <a-select v-model="searchForm.into_warehouse" placeholder="调入仓库" style="width: 100%;" allowClear @change="search">
                   <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                   </a-select-option>
                 </a-select>
@@ -35,7 +35,7 @@
           <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
             <a-row>
               <a-col :span="12" :xl="8">
-                <a-form-model-item prop="out_warehouse" label="调出公司">
+                <a-form-model-item prop="out_warehouse" label="调出仓库">
                   <a-select v-model="form.out_warehouse" :disabled="form.id">
                     <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                     </a-select-option>
@@ -43,7 +43,7 @@
                 </a-form-model-item>
               </a-col>
               <a-col :span="12" :xl="8">
-                <a-form-model-item prop="into_warehouse" label="调入公司">
+                <a-form-model-item prop="into_warehouse" label="调入仓库">
                   <a-select v-model="form.into_warehouse" :disabled="form.id">
                     <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
                     </a-select-option>
@@ -145,10 +145,10 @@
         ],
         rules: {
           out_warehouse: [
-            { required: true, message: '请选择调出公司', trigger: 'change' },
+            { required: true, message: '请选择调出仓库', trigger: 'change' },
           ],
           into_warehouse: [
-            { required: true, message: '请选择调入公司', trigger: 'change' },
+            { required: true, message: '请选择调入仓库', trigger: 'change' },
           ],
           date: [
             { required: true, message: '请选择日期', trigger: 'change' },
@@ -164,7 +164,7 @@
         addGoodsModalVisible: false,
         goodsColumns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: 'index',
             key: 'index',
             scopedSlots: { customRender: 'index' },
@@ -237,7 +237,7 @@
         this.tableLoading = true;
 
         if (this.searchForm.out_warehouse && this.searchForm.into_warehouse && this.searchForm.out_warehouse === this.searchForm.into_warehouse) {
-          this.$message.error('调入公司与调出公司冲突');
+          this.$message.error('调入仓库与调出仓库冲突');
           return
         }
         requisitionList(this.searchForm)
@@ -260,7 +260,7 @@
               return
             }
             if (this.form.out_warehouse === this.form.into_warehouse) {
-              this.$message.error('调入公司与调出公司冲突');
+              this.$message.error('调入仓库与调出仓库冲突');
               return
             }
 
