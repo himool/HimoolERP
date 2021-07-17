@@ -10,7 +10,7 @@
 #### 我们也希望对进销存管理系统感兴趣的朋友一起加入到我们的项目中来给客户提供服务，我们的代码将持续更新，并且保持与[Demo](http://oms.haioucloud.com/)地址的同步,
 #### Demo测试帐号：admin  密码：admin
 #### 欢迎扫描下方二维码添加技术交流群，添加时请备注信息
-![微信群](https://gitee.com/haioucloud/oms/blob/main/raw/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
+![微信群](https://gitee.com/haioucloud/oms/raw/main/raw/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
 
 ### 开发环境
 * Python版本为V3.7.0+
@@ -22,7 +22,7 @@
 * 其他Python包可参考requirements.txt文件
 
 ### 业务流程
-![微信群](https://gitee.com/haioucloud/oms/raw/main/raw/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
+![业务流程](https://gitee.com/haioucloud/oms/raw/main/raw/OMS%20Flow.JPG)
 
 ### 管理模块
 * 报表管理 
