@@ -60,11 +60,6 @@
             scopedSlots: { customRender: 'create_date' },
           },
           {
-            title: '姓名',
-            dataIndex: 'name',
-            key: 'name',
-          },
-          {
             title: '手机号',
             dataIndex: 'phone',
             key: 'phone',
