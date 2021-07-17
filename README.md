@@ -1,6 +1,9 @@
 ## 海鸥云OMS--开源进销存管理系统
 ### 项目介绍
 #### 开源进销存管理系统，该前后端分离，api使用restful协议，方便二次开发，后端使用Python，Django，DRF等技术，前端代码使用AntD进行构建，包含采购管理，销售管理，库存管理等业务管理流程
+* Gitee地址: [Gitee](https://gitee.com/haioucloud/oms)
+* Github地址: [Github](https://github.com/lianzhanshu/oms)
+* Demo地址: [Demo](http://oms.haioucloud.com/)
 
 ### 项目背景
 #### 目前市面上没有一款采用流行的前后端技术易用开源的进销存系统。有不少朋友也跟我们反应实施了进销存系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年进销存系统开发的经验，设计了这款开源的海鸥云进销存系统，支持高自由度的开发，来支持企业的自定义需求。
@@ -39,5 +42,3 @@
 ![库存](https://gitee.com/haioucloud/oms/raw/main/raw/%E5%BA%93%E5%AD%98.png)
 ![财务](https://gitee.com/haioucloud/oms/raw/main/raw/%E8%B4%A2%E5%8A%A1.png)
 ![设置](https://gitee.com/haioucloud/oms/raw/main/raw/%E8%AE%BE%E7%BD%AE.png)
-
-
