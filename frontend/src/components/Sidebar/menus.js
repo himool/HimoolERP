@@ -1,11 +1,11 @@
 export default [
   {
-    key: '1', name: '报表管理', icon: 'line-chart', submenus: [
+    key: '1', name: '报表统计', icon: 'line-chart', submenus: [
       { key: '/sales_report', name: '销售报表' },
       { key: '/purchase_report', name: '采购报表' },
       { key: '/inventory', name: '库存报表' },
       { key: '/financial_statistics', name: '收支统计' },
-      { key: '/financial_report', name: '利润报表' },
+      { key: '/financial_report', name: '利润统计' },
     ]
   },
   {

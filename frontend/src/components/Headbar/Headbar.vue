@@ -10,6 +10,9 @@
           <a-icon type="down" />
         </span>
         <a-menu slot="overlay">
+          <a-menu-item @click="$router.push('/user/set_password')" disabled>
+            <span>修改密码</span>
+          </a-menu-item>
           <a-menu-divider />
           <a-menu-item @click="logout">
             <span>退出登录</span>

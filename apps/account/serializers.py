@@ -24,11 +24,11 @@ class SubuserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['name', 'phone', 'username', 'create_date', 'roles', 'role_names']
+        fields = ['phone', 'username', 'create_date', 'roles', 'role_names']
         read_only_fields = ['create_date', 'roles', 'role_names']
 
     def validate(self, data):
-        if not data.get('username') or not data.get('name') or not data.get('phone'):
+        if not data.get('username') or not data.get('phone'):
             raise serializers.ValidationError
 
         if not re.match(r'^1[3456789]\d{9}$', data['phone']):
@@ -44,7 +44,6 @@ class SubuserSerializer(serializers.ModelSerializer):
 
     def get_role_names(self, obj):
         return obj.roles.all().values_list('name', flat=True)
-
 
 
 class AccountSerializer(serializers.ModelSerializer):

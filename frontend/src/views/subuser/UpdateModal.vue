@@ -4,9 +4,6 @@
       <div slot="title">编辑子账号: {{form.username}}</div>
       <a-form-model ref="updateForm" :model="updateForm" :rules="rules" :label-col="{ span: 4 }"
         :wrapper-col="{ span: 16 }">
-        <a-form-model-item prop="name" label="姓名">
-          <a-input size="large" v-model="updateForm.name" />
-        </a-form-model-item>
         <a-form-model-item prop="phone" label="电话">
           <a-input size="large" v-model="updateForm.phone" />
         </a-form-model-item>
@@ -34,7 +31,6 @@
       return {
         updateForm: {},
         rules: {
-          name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
           phone: [
             { required: true, message: '请输入电话', trigger: 'change' },
             { pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' },

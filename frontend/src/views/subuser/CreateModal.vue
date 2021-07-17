@@ -3,9 +3,6 @@
     <a-modal v-model="visible" title="创建子账号" okText="创建" :maskClosable="false" @ok="create" @cancel="cancel">
       <a-form-model ref="createForm" :model="createForm" :rules="rules" :label-col="{ span: 4 }"
         :wrapper-col="{ span: 16 }">
-        <a-form-model-item prop="name" label="姓名">
-          <a-input size="large" v-model="createForm.name" />
-        </a-form-model-item>
         <a-form-model-item prop="phone" label="电话">
           <a-input size="large" v-model="createForm.phone" />
         </a-form-model-item>
@@ -39,7 +36,6 @@
       return {
         createForm: { name: '', phone: '', username: '', password: '', confirm: '', roles: [] },
         rules: {
-          name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
           phone: [
             { required: true, message: '请输入电话', trigger: 'change' },
             { pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' },
