@@ -7,7 +7,7 @@
 #### 我们也希望对进销存管理系统感兴趣的朋友一起加入到我们的项目中来给客户提供服务，我们的代码将持续更新，并且保持与[Demo](http://oms.haioucloud.com/)地址的同步,
 #### Demo测试帐号：admin  密码：admin
 #### 欢迎扫描下方二维码联系我们，添加时请备注信息
-![商品](https://gitee.com/haioucloud/oms/raw/main/raw/%E5%BE%AE%E4%BF%A1.png)
+![微信](https://gitee.com/haioucloud/oms/raw/main/raw/%E5%BE%AE%E4%BF%A1.png)
 
 ### 开发环境
 * Python版本为V3.7.0+
@@ -23,12 +23,12 @@
 
 ### 管理模块
 * 报表管理
+* 基础数据
 * 商品管理
 * 采购管理
 * 销售管理
 * 库存管理
 * 财务管理
-* 基础数据
 * 系统管理
 
 ### 界面截图
