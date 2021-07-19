@@ -108,7 +108,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
                                    amount=amount, remark=goods2.get('remark'), sales_order_id=order_id))
                     break
 
-        serializer.save(teams=teams, id=order_id, seller_name=seller.name, warehouse_name=warehouse.name,
+        serializer.save(teams=teams, id=order_id, warehouse_name=warehouse.name,
                         account_name=account.name, total_quantity=total_quantity, total_amount=total_amount,
                         client=client)
         SalesGoods.objects.bulk_create(sales_goods_set)

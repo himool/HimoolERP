@@ -15,6 +15,7 @@ requests = "==2.24.0"
 djangorestframework = "==3.11.1"
 django-filter = "==2.3.0"
 django-mysql = "==3.8.1"
+django-extensions = "*"
 
 [requires]
 python_version = "3.7"

@@ -131,7 +131,7 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
 
         serializer.save(id=order_id, supplier_name=supplier.name, warehouse_name=warehouse.name,
                         warehouse_address=warehouse.address, account_name=account.name,
-                        contacts_name=contacts.name, contacts_phone=contacts.phone,
+                        contacts_phone=contacts.phone,
                         total_quantity=total_quantity, total_amount=total_amount, teams=teams)
 
         PurchaseGoods.objects.bulk_create(purchase_goods_set)

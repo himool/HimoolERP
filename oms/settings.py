@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django_mysql',
     'rest_framework',
     'django_filters',
+    'django_extensions',
+
     'apps.user.apps.UserConfig',
     'apps.account.apps.AccountConfig',
     'apps.goods.apps.GoodsConfig',
