@@ -76,7 +76,7 @@
               <a-col :sm="12" :xl="8" :xs="24">
                 <a-form-model-item prop="contacts" label="联系人">
                   <a-select v-model="form.contacts" :disabled="form.id">
-                    <a-select-option v-for="value in userItems" :key="value" :value="value">{{value}}
+                    <a-select-option v-for="item in userItems" :key="item.id" :value="item.id">{{item.username}}
                     </a-select-option>
                   </a-select>
                 </a-form-model-item>
@@ -389,7 +389,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
 
         supplierList()
@@ -397,7 +398,8 @@
             this.supplierItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
 
         accountList()
@@ -405,7 +407,8 @@
             this.accountItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
 
         userList()
@@ -413,7 +416,8 @@
             this.userItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -424,7 +428,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.tableLoading = false;
@@ -434,7 +439,8 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.form.goods_set.length == 0) {
-              this.$message.error('请选择条目');
+              
+                this.$message.error('请选择条目');
               return
             }
             this.buttonLoading = true;
@@ -445,6 +451,7 @@
                 this.form = resp.data;
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {
@@ -464,7 +471,8 @@
             }
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       destroy() {
@@ -476,7 +484,8 @@
             this.resetForm();
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       addGoods(goodsItem) {

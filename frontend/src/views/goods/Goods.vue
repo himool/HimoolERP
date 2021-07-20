@@ -154,7 +154,8 @@
             this.categoryItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -165,7 +166,8 @@
             this.goodsItems = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -191,7 +193,8 @@
             this.goodsItems.splice(this.goodsItems.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       search() {

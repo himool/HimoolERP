@@ -89,7 +89,7 @@
             </a-form-model-item>
             <a-form-model-item prop="seller" label="销售员">
               <a-select v-model="form.seller">
-                <a-select-option v-for="value in sellerItems" :key="value" :value="value">{{value}}
+                <a-select-option v-for="item in sellerItems" :key="item.id" :value="item.id">{{item.username}}
                 </a-select-option>
               </a-select>
             </a-form-model-item>
@@ -291,7 +291,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
 
         accountList()
@@ -299,7 +300,8 @@
             this.accountItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
 
         sellertList()
@@ -307,14 +309,16 @@
             this.sellerItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       create() {
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.form.goods_set.length == 0) {
-              this.$message.error('请选择条目');
+              
+                this.$message.error('请选择条目');
               return
             }
             this.loading = true;
@@ -324,6 +328,7 @@
                 this.resetForm();
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {

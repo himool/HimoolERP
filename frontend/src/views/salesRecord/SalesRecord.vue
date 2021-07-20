@@ -239,7 +239,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -250,7 +251,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -267,7 +269,8 @@
             }
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       destroy() {
@@ -279,7 +282,8 @@
             this.form = {};
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       search() {

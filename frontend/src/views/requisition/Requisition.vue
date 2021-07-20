@@ -230,14 +230,16 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
         this.tableLoading = true;
 
         if (this.searchForm.out_warehouse && this.searchForm.into_warehouse && this.searchForm.out_warehouse === this.searchForm.into_warehouse) {
-          this.$message.error('调入仓库与调出仓库冲突');
+          
+                this.$message.error('调入仓库与调出仓库冲突');
           return
         }
         requisitionList(this.searchForm)
@@ -246,7 +248,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.tableLoading = false;
@@ -256,11 +259,13 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.form.goods_set.length == 0) {
-              this.$message.error('请选择条目');
+              
+                this.$message.error('请选择条目');
               return
             }
             if (this.form.out_warehouse === this.form.into_warehouse) {
-              this.$message.error('调入仓库与调出仓库冲突');
+              
+                this.$message.error('调入仓库与调出仓库冲突');
               return
             }
 
@@ -271,6 +276,7 @@
                 this.resetForm();
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {

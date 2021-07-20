@@ -88,7 +88,8 @@
             this.items = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -110,7 +111,8 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       resetForm() {

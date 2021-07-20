@@ -195,7 +195,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
 
         categoryList()
@@ -203,7 +204,8 @@
             this.categoryItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -220,7 +222,8 @@
             this.noMoreData = resp.data.results.length < this.perPage ? true : false;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -244,7 +247,8 @@
             this.convertRes2Blob(resp);
           })
           .catch((err) => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       convertRes2Blob(response) {

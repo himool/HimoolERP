@@ -59,7 +59,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
         if seller == self.request.user.username:
             seller = self.request.user
         else:
-            seller = User.objects.filter(username=seller, teams=teams, is_delete=False).first()
+            seller = User.objects.filter(id=seller, teams=teams, is_delete=False).first()
 
         account = self.request.data.get('account')
         account = Account.objects.filter(id=account, teams=teams, is_delete=False).first()

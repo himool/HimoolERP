@@ -54,7 +54,8 @@
             this.chart.forceFit();
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;

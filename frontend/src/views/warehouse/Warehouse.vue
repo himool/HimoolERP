@@ -35,7 +35,7 @@
         </a-form-model-item>
         <a-form-model-item prop="manager" label="管理人">
           <a-select v-model="form.manager" size="large" :allowClear="true">
-            <a-select-option v-for="value in userItems" :key="value" :value="value">{{value}}
+            <a-select-option v-for="item in userItems" :key="item.id" :value="item.id">{{item.username}}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -153,7 +153,8 @@
             this.items = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -164,7 +165,8 @@
             this.userItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
       },
       create() {
@@ -177,6 +179,7 @@
                 this.visible = false;
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               });
           }
@@ -192,6 +195,7 @@
                 this.visible = false;
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               });
           }
@@ -205,7 +209,8 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       resetForm() {

@@ -75,7 +75,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -92,7 +93,8 @@
       },
       confirm() {
         if (this.selectedGoods.quantity <= 0) {
-          this.$message.error('商品数量不能小于等于0');
+          
+                this.$message.error('商品数量不能小于等于0');
           return
         }
         this.$emit('confirm', { ...this.selectedGoods });

@@ -48,7 +48,7 @@
                 <a-col :sm="12" :xl="8" :xs="24">
                   <a-form-model-item prop="contacts" label="联系人">
                     <a-select v-model="purchaseForm.contacts" :disabled="purchaseForm.id">
-                      <a-select-option v-for="value in userItems" :key="value" :value="value">{{value}}
+                      <a-select-option v-for="item in userItems" :key="item.id" :value="item.id">{{item.username}}
                       </a-select-option>
                     </a-select>
                   </a-form-model-item>
@@ -75,7 +75,8 @@
                 <a-col :sm="12" :xl="8" :xs="24">
                   <a-form-model-item style="float: right;">
                     <a-button type="primary" @click="addGoodsModalVisible = true" :disabled="purchaseForm.id">
-                      <a-icon type="plus" />添加条目</a-button>
+                      <a-icon type="plus" />添加条目
+                    </a-button>
                   </a-form-model-item>
                 </a-col>
               </a-row>
@@ -85,7 +86,7 @@
           <div style="margin: 16px 0;">
             <a-table :columns="goodsColumns" :data-source="dataSource" :loading="loading" :pagination="false"
               size="small">
-              <div slot="index" slot-scope="value, item, index">{{item.isTotal ?  '' : index + 1}}</div>
+              <div slot="index" slot-scope="value, item, index">{{item.isTotal ? '' : index + 1}}</div>
               <div slot="amount" slot-scope="value">{{NP.round(value, 2)}}</div>
               <div slot="discount_amount" slot-scope="value">{{NP.round(value, 2)}}</div>
 
@@ -317,11 +318,13 @@
             this.accountItems = resp.data;
           })
           .catch(err => {
+
             this.$message.error(err.response.data.message);
           });
 
         userList()
           .then(resp => {
+            console.log(resp.data)
             this.userItems = resp.data;
           })
           .catch(err => {
@@ -345,6 +348,7 @@
       create() {
         this.$refs.purchaseForm.validate(valid => {
           if (valid) {
+            console.log(this.purchaseForm);
             if (this.purchaseForm.goods_set.length == 0) {
               this.$message.error('请选择条目');
               return
@@ -359,6 +363,7 @@
                 this.purchaseForm = resp.data;
               })
               .catch(err => {
+                console.log(err.response.data);
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {
@@ -376,6 +381,7 @@
             this.resetForm();
           })
           .catch(err => {
+
             this.$message.error(err.response.data.message);
           });
       },

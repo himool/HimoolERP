@@ -147,7 +147,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.tableLoading = false;
@@ -164,6 +165,7 @@
                 this.resetForm();
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {
@@ -180,7 +182,8 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       search() {

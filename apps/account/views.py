@@ -97,13 +97,13 @@ class SellerViewSet(viewsets.ModelViewSet):
         queryset = request.user.teams.users.filter(is_delete=False)
         roles = request.user.roles.all()
         if not roles:  # 没有设置角色默认拥有全部权限
-            return Response(queryset.values_list('username', flat=True))
+            return Response(queryset.values('id', 'username'))
 
         for role in roles:
             if 'CHANGE_SELLER' in role.permissions:
-                return Response(queryset.values_list('username', flat=True))
+                return Response(queryset.values('id', 'username'))
 
-        return Response([request.user.username])
+        return Response([{'id': request.user.id, 'username': request.user.username}])
 
 
 class BookkeepingViewSet(viewsets.ModelViewSet):
@@ -169,5 +169,5 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        results = request.user.teams.users.filter(is_delete=False).values_list('username', flat=True)
+        results = request.user.teams.users.filter(is_delete=False).values('id', 'username')
         return Response(data=results)

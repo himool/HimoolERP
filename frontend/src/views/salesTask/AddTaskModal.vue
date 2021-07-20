@@ -113,7 +113,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -124,7 +125,8 @@
             this.goodsItems = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -141,6 +143,7 @@
                 this.$emit('cancel', false);
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               });
           }

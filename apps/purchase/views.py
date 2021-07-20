@@ -56,7 +56,7 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         order_id = f'P{pendulum.now().format("YYYYMMDDHHmmssSSSS")}'
         teams = self.request.user.teams
-
+        print(1)
         # 验证
         if self.request.data.get('is_return', False):  # 退货单
             purchase_order = self.request.data.get('purchase_order')
@@ -71,14 +71,16 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
             supplier = Supplier.objects.filter(id=supplier, teams=teams, is_delete=False).first()
             warehouse = self.request.data.get('warehouse')
             warehouse = Warehouse.objects.filter(id=warehouse, teams=teams, is_delete=False).first()
+        print(2)
 
         account = self.request.data.get('account')
         account = Account.objects.filter(id=account, teams=teams, is_delete=False).first()
         contacts = self.request.data.get('contacts')
-        contacts = User.objects.filter(username=contacts, teams=teams, is_delete=False).first()
+        contacts = User.objects.filter(id=contacts, teams=teams, is_delete=False).first()
 
         if not supplier or not warehouse or not account or not contacts:
             raise ValidationError
+        print(3)
 
         # 创建表单商品
         goods_set = self.request.data.get('goods_set', [])
@@ -87,8 +89,9 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
 
         if len(goods_set) != len(goods_list):
             raise ValidationError
+        print(4)
 
-        # change_records = []
+        change_records = []
         total_quantity = 0
         total_amount = 0
         purchase_goods_set = []
@@ -108,26 +111,18 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
                                                             amount=amount, discount_amount=discount_amount,
                                                             purchase_order_id=order_id))
 
-                    # # 计算平均采购价
-                    # if goods2['is_calculate_avg'] and goods1.purchase_price != goods2['purchase_price']:
-                    #     print()
-                    #     total_quantity = Inventory.objects.filter(teams=teams, goods=goods1).aggregate(
-                    #         total_quantity=Sum('quantity')).get('total_quantity', 0)
-                    #     total_amount = math.times(total_quantity, goods1.purchase_price)
-                    #     total_amount = math.plus(total_amount, amount)
-                    #     total_quantity = math.plus(total_quantity, goods2['quantity'])
-                    #     after_change = math.divide(total_amount, total_quantity)
-                    #     print(total_amount, total_quantity)
+                    # 采购价变更
+                    if goods1.purchase_price != goods2['purchase_price']:
+                        change_records.append(ChangeRecord(
+                            goods=goods1, goods_code=goods1.id, goods_name=goods1.name,
+                            specification=goods1.specification, unit=goods1.unit, change_method='采购变价',
+                            before_change=goods1.purchase_price, operator=self.request.user, teams=teams,
+                            after_change=goods2['purchase_price'], relation_order=serializer.instance))
 
-                    #     change_records.append(ChangeRecord(
-                    #         goods=goods1, goods_code=goods1.id, goods_name=goods1.name,
-                    #         specification=goods1.specification, unit=goods1.unit, change_method='采购均价',
-                    #         before_change=goods1.purchase_price, operator=self.request.user, teams=teams,
-                    #         after_change=after_change, relation_order=serializer.instance))
-
-                    #     goods1.purchase_price = after_change
-                    #     goods1.save()
+                        goods1.purchase_price = goods2['purchase_price']
+                        goods1.save()
                     break
+        print(5)
 
         serializer.save(id=order_id, supplier_name=supplier.name, warehouse_name=warehouse.name,
                         warehouse_address=warehouse.address, account_name=account.name,
@@ -142,7 +137,7 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
             PaymentRecord.objects.create(amount=amount, account=account, account_name=account.name,
                                          purchase_order=serializer.instance)
 
-        # ChangeRecord.objects.bulk_create(change_records)
+        ChangeRecord.objects.bulk_create(change_records)
 
     def perform_destroy(self, instance):
         if instance.is_done:

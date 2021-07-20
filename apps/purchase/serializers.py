@@ -26,6 +26,7 @@ class PurchaseOrderSerializer(serializers.ModelSerializer):
                   'is_return', 'purchase_order', *read_only_fields]
 
     def validate(self, data):
+        print(data)
         if not data.get('supplier') or not data.get('warehouse') or not data.get('account'):
             raise serializers.ValidationError
 

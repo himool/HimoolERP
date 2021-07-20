@@ -228,7 +228,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -239,7 +240,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            this.$message.error(err.response.data.message);
+            
+                this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.tableLoading = false;
@@ -249,7 +251,8 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.form.goods_set.length == 0) {
-              this.$message.error('请选择条目');
+              
+                this.$message.error('请选择条目');
               return
             }
             this.buttonLoading = true;
@@ -260,6 +263,7 @@
                 this.resetForm();
               })
               .catch(err => {
+                
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {
