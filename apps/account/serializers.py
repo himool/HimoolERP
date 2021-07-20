@@ -51,9 +51,9 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['name', 'account', 'holder', 'warehouse', 'warehouse_name',
-                  'type', 'status', 'order', 'remark']
         read_only_fields = ['id', 'warehouse_name']
+        fields = ['name', 'account', 'holder', 'warehouse', 'type', 'status',
+                  'order', 'remark', *read_only_fields]
 
     def validate(self, data):
         if not data.get('name') or not data.get('type'):
