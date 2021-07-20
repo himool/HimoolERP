@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="min-width: 1440px; overflow-x: auto;">
     <a-locale-provider :locale="locales.zh_CN">
       <router-view />
     </a-locale-provider>
