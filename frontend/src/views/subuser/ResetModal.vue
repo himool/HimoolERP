@@ -42,7 +42,7 @@
       reset() {
         this.$refs.resetForm.validate(valid => {
           if (valid) {
-            subuserReset({ username: this.form.username, password: this.resetForm.password })
+            subuserReset({ id: this.form.id, password: this.resetForm.password })
               .then(() => {
                 this.$message.success('重置成功');
                 this.cancel();

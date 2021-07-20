@@ -43,7 +43,7 @@
       update() {
         this.$refs.updateForm.validate(valid => {
           if (valid) {
-            subuserUpdate(this.form.username, this.updateForm)
+            subuserUpdate(this.updateForm)
               .then(resp => {
                 this.$message.success('修改成功');
                 this.$emit('update', resp.data);
@@ -64,7 +64,9 @@
     watch: {
       visible(value) {
         if (value) {
+          console.log(this.form)
           this.updateForm = {
+            id: this.form.id,
             name: this.form.name,
             phone: this.form.phone,
             username: this.form.username,

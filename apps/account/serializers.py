@@ -24,8 +24,8 @@ class SubuserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['phone', 'username', 'create_date', 'roles', 'role_names']
-        read_only_fields = ['create_date', 'roles', 'role_names']
+        read_only_fields = ['id', 'create_date']
+        fields = ['phone', 'username', 'roles', 'role_names', *read_only_fields]
 
     def validate(self, data):
         if not data.get('username') or not data.get('phone'):
@@ -51,7 +51,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['id', 'name', 'account', 'holder', 'warehouse', 'warehouse_name',
+        fields = ['name', 'account', 'holder', 'warehouse', 'warehouse_name',
                   'type', 'status', 'order', 'remark']
         read_only_fields = ['id', 'warehouse_name']
 

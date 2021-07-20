@@ -16,11 +16,11 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    username = models.CharField(primary_key=True, max_length=24)
+    username = models.CharField(max_length=24, unique=True)
     phone = models.CharField(max_length=12)
     teams = models.ForeignKey('user.Teams', models.CASCADE, related_name='users')
 
-    roles = models.ManyToManyField('account.Role', related_name='users')
+    roles = models.ManyToManyField('account.Role', blank=True, related_name='users')
     create_date = models.DateTimeField(auto_now_add=True)
     is_boss = models.BooleanField(default=True)
     is_delete = models.BooleanField(default=False)

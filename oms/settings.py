@@ -93,7 +93,7 @@ DATABASES = {
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': '123456',
-        'NAME': 'oms',
+        'NAME': 'oms_db',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }

@@ -177,7 +177,7 @@
         clientDestroy(form)
           .then(() => {
             this.$message.success('删除成功');
-            this.items.splice(this.items.findIndex(item => item.username === form.username), 1);
+            this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
             this.$message.error(err.response.data.message);

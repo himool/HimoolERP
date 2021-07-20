@@ -54,9 +54,9 @@ export function subuserCreate(form) {
   })
 }
 
-export function subuserUpdate(username, form) {
+export function subuserUpdate(form) {
   return axios({
-    url: `/api/subusers/${username}/`,
+    url: `/api/subusers/${form.id}/`,
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'put',
     data: form,
@@ -65,7 +65,7 @@ export function subuserUpdate(username, form) {
 
 export function subuserReset(form) {
   return axios({
-    url: `/api/subusers/${form.username}/`,
+    url: `/api/subusers/${form.id}/`,
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'patch',
     data: form,
@@ -74,7 +74,7 @@ export function subuserReset(form) {
 
 export function subuserDestroy(form) {
   return axios({
-    url: `/api/subusers/${form.username}/`,
+    url: `/api/subusers/${form.id}/`,
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'delete',
   })

@@ -12,7 +12,7 @@ project_path = Path.cwd()
 
 # 重建数据库
 print('重建数据库')
-db = pymysql.connect(host, user, password)
+db = pymysql.connect(host=host, user=user, password=password)
 cursor = db.cursor()
 cursor.execute(f'DROP DATABASE {database};')
 db.commit()
