@@ -1,6 +1,11 @@
 <template>
   <div>
     <a-card title="分类管理">
+      <div slot="extra" style="margin: -6px 0;">
+        <a-button type="primary" @click="resetForm(); visible = true;">
+          <a-icon type="plus" />新增分类</a-button>
+      </div>
+
       <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
         <div slot="action" slot-scope="value, item">
@@ -16,10 +21,6 @@
           </a-button-group>
         </div>
       </a-table>
-      <div style="float: right; margin-top: 24px;">
-        <a-button type="primary" @click="resetForm(); visible = true;">
-          <a-icon type="plus" />新增分类</a-button>
-      </div>
     </a-card>
     
     <category-modal :form="form" :visible="visible" @create="create" @update="update" @cancel="visible = false" />

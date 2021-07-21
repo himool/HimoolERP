@@ -1,6 +1,12 @@
 <template>
   <div>
     <a-card>
+      <div slot="extra" style="margin: -6px 0;">
+        <a-button type="primary" @click="resetForm(); visible = true;">
+          <a-icon type="plus" />新增结算账户
+        </a-button>
+      </div>
+
       <div slot="title">
         <span>结算账户</span>
         <span style="margin-left: 36px; margin-right: 4px;">统计时间:</span>
@@ -36,10 +42,6 @@
 
         </div>
       </a-table>
-      <div style="float: right; margin-top: 24px;">
-        <a-button type="primary" @click="resetForm(); visible = true;">
-          <a-icon type="plus" />新增结算账户</a-button>
-      </div>
     </a-card>
 
     <a-modal v-model="visible" :title="form.id ? '编辑结算账户' : '新增结算账户'" :maskClosable="false"
@@ -190,8 +192,8 @@
             this.items = resp.data;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -202,8 +204,8 @@
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           });
 
       },
@@ -217,7 +219,7 @@
                 this.visible = false;
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               });
           }
@@ -233,7 +235,7 @@
                 this.visible = false;
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               });
           }
@@ -247,8 +249,8 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           });
       },
       statisticalAccount() {
@@ -258,7 +260,7 @@
           return
         }
 
-        let form = {...this.statisticalForm};
+        let form = { ...this.statisticalForm };
         form.start_date = form.start_date.format();
         form.end_date = form.end_date.format();
         this.statisticalLoading = true;
@@ -269,8 +271,8 @@
             this.expenditure = resp.data.expenditure;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           }).finally(() => {
             this.statisticalLoading = false;
           });

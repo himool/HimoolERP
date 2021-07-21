@@ -1,31 +1,31 @@
 <template>
   <div>
-    <div>
-      <a-card>
-        <a-form-model ref="searchForm" :model="searchForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }"
-          layout="inline">
-          <a-form-model-item prop="name" label="商品名称">
-            <a-input v-model="searchForm.name" />
-          </a-form-model-item>
-          <a-form-model-item prop="category" label="商品分类">
-            <a-select v-model="searchForm.category" style="width: 200px;" :allowClear="true">
-              <a-select-option v-for="item of categoryItems" :key="item.id" :value="item.id">{{item.name}}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item>
-            <a-button @click="search">查询</a-button>
-          </a-form-model-item>
-          <a-form-model-item style="float: right;">
-            <a-button type="primary" @click="resetForm(); goodsVisible = true;">
-              <a-icon type="plus" />新增商品</a-button>
-          </a-form-model-item>
-        </a-form-model>
-      </a-card>
-    </div>
-
     <div style="margin-top: 8px;">
-      <a-card>
+      <a-card title="商品信息">
+        <div slot="extra" style="margin: -6px 0;">
+          <a-button type="primary" @click="resetForm(); goodsVisible = true;">
+            <a-icon type="plus" />新增商品
+          </a-button>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <a-form-model ref="searchForm" :model="searchForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }"
+            layout="inline">
+            <a-form-model-item prop="name" label="商品名称">
+              <a-input v-model="searchForm.name" />
+            </a-form-model-item>
+            <a-form-model-item prop="category" label="商品分类">
+              <a-select v-model="searchForm.category" style="width: 200px;" :allowClear="true">
+                <a-select-option v-for="item of categoryItems" :key="item.id" :value="item.id">{{item.name}}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
+            <a-form-model-item>
+              <a-button @click="search">查询</a-button>
+            </a-form-model-item>
+          </a-form-model>
+        </div>
+
         <a-table :columns="columns" :data-source="goodsItems" size="small" :loading="loading" :pagination="false">
           <div slot="status" slot-scope="value, item">{{item.status ? '启用' : '停用'}}</div>
           <div slot="action" slot-scope="value, item">
@@ -154,8 +154,8 @@
             this.categoryItems = resp.data;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           });
       },
       list() {
@@ -166,8 +166,8 @@
             this.goodsItems = resp.data.results;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
@@ -193,8 +193,8 @@
             this.goodsItems.splice(this.goodsItems.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           });
       },
       search() {

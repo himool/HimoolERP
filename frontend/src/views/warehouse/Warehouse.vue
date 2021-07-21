@@ -1,6 +1,12 @@
 <template>
   <div>
     <a-card title="仓库">
+      <div slot="extra" style="margin: -6px 0;">
+        <a-button type="primary" @click="resetForm(); visible = true;">
+          <a-icon type="plus" />新增仓库
+        </a-button>
+      </div>
+
       <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
         <div slot="create_date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
@@ -20,15 +26,10 @@
 
         </div>
       </a-table>
-      <div style="float: right; margin-top: 24px;">
-        <a-button type="primary" @click="resetForm(); visible = true;">
-          <a-icon type="plus" />新增仓库</a-button>
-      </div>
     </a-card>
 
-    <a-modal v-model="visible" :title="form.id ? '编辑仓库' : '新增仓库'" :maskClosable="false"
-      :okText="form.id ? '保存' : '新增'" cancelText="取消" @ok="form.id ? update() : create()"
-      @cancel="$refs.form.clearValidate()">
+    <a-modal v-model="visible" :title="form.id ? '编辑仓库' : '新增仓库'" :maskClosable="false" :okText="form.id ? '保存' : '新增'"
+      cancelText="取消" @ok="form.id ? update() : create()" @cancel="$refs.form.clearValidate()">
       <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
         <a-form-model-item prop="name" label="名称">
           <a-input size="large" v-model="form.name" />
@@ -153,20 +154,20 @@
             this.items = resp.data;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.loading = false;
           });
 
-          userList()
+        userList()
           .then(resp => {
             this.userItems = resp.data;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           })
       },
       create() {
@@ -179,7 +180,7 @@
                 this.visible = false;
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               });
           }
@@ -195,7 +196,7 @@
                 this.visible = false;
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               });
           }
@@ -209,8 +210,8 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           });
       },
       resetForm() {

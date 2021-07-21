@@ -1,6 +1,11 @@
 <template>
   <div>
     <a-card title="供应商">
+      <div slot="extra" style="margin: -6px 0;">
+        <a-button type="primary" @click="resetForm(); visible = true;">
+          <a-icon type="plus" />新增供应商</a-button>
+      </div>
+
       <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
         <div slot="update_date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
@@ -18,10 +23,6 @@
           </a-button-group>
         </div>
       </a-table>
-      <div style="float: right; margin-top: 24px;">
-        <a-button type="primary" @click="resetForm(); visible = true;">
-          <a-icon type="plus" />新增供应商</a-button>
-      </div>
     </a-card>
 
     <a-modal v-model="visible" :title="form.id ? '编辑供应商' : '新增供应商'" :maskClosable="false"
