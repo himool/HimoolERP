@@ -4,7 +4,7 @@
       <a-row style="margin: 6px 0;">
         <a-col :span="8">仓库: {{form.warehouse_name}}</a-col>
         <a-col :span="8">结算账户: {{form.account_name}}</a-col>
-        <a-col :span="8">销售员: {{form.seller}}</a-col>
+        <a-col :span="8">销售员: {{form.seller_username}}</a-col>
       </a-row>
       <a-row style="margin: 6px 0;">
         <a-col :span="8">日期: {{moment(form.date).format('YYYY-MM-DD')}}</a-col>

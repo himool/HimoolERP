@@ -388,7 +388,7 @@ const salesReportList = {
             "goods_name": "goods1",
             "brand_name": "brand1",
             "category_name": "category1",
-            "seller_name": "11",
+            "seller_username": "11",
             "warehouse_name": "warehouse1",
             "date": "2020-07-11T00:00:00Z",
             "relation_order": 9
@@ -401,7 +401,7 @@ const salesReportList = {
             "goods_name": "goods1",
             "brand_name": "brand1",
             "category_name": "category1",
-            "seller_name": "11",
+            "seller_username": "11",
             "warehouse_name": "warehouse2",
             "date": "2020-06-30T16:00:00Z",
             "relation_order": 11
@@ -414,7 +414,7 @@ const salesReportList = {
             "goods_name": "goods1",
             "brand_name": "brand1",
             "category_name": "category1",
-            "seller_name": "11",
+            "seller_username": "11",
             "warehouse_name": "warehouse1",
             "date": "2020-07-08T00:00:00Z",
             "relation_order": 7
@@ -427,7 +427,7 @@ const salesReportList = {
             "goods_name": "goods1",
             "brand_name": "brand1",
             "category_name": "category1",
-            "seller_name": "11",
+            "seller_username": "11",
             "warehouse_name": "warehouse1",
             "date": "2020-07-12T00:00:00Z",
             "relation_order": 10
@@ -440,7 +440,7 @@ const salesReportList = {
             "goods_name": "goods1",
             "brand_name": "brand1",
             "category_name": "category1",
-            "seller_name": "11",
+            "seller_username": "11",
             "warehouse_name": "warehouse2",
             "date": "2020-07-08T00:00:00Z",
             "relation_order": 6
@@ -453,7 +453,7 @@ const salesReportList = {
             "goods_name": "goods3",
             "brand_name": "brand2",
             "category_name": "category1",
-            "seller_name": "11",
+            "seller_username": "11",
             "warehouse_name": "warehouse1",
             "date": "2020-07-08T00:00:00Z",
             "relation_order": 8

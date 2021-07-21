@@ -6,6 +6,10 @@
       </div>
 
       <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
+        <div slot="username" slot-scope="value">
+          <a-button type="link" @click="$router.push({path: '/sales_record', query: {search: value}})">{{value}}</a-button>
+        </div>
+
         <div slot="create_date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
         <div slot="roles" slot-scope="value, item">{{item.role_names.join(', ')}}</div>
         <div slot="action" slot-scope="value, item">
@@ -52,6 +56,7 @@
             title: '用户名',
             dataIndex: 'username',
             key: 'username',
+            scopedSlots: { customRender: 'username' },
           },
           {
             title: '创建时间',

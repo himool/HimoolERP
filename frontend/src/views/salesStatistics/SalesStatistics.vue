@@ -108,8 +108,8 @@
           },
           {
             title: '销售员',
-            dataIndex: 'seller_name',
-            key: 'seller_name',
+            dataIndex: 'seller_username',
+            key: 'seller_username',
           },
           {
             title: '客户',

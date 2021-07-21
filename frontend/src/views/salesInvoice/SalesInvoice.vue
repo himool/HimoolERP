@@ -16,7 +16,7 @@
         </a-row>
         <a-row style="font-size: 15px; margin-top: 8px;">
           <a-col :span="6">仓库: {{item.warehouse_name}}</a-col>
-          <a-col :span="6">销售员: {{item.seller_name}}</a-col>
+          <a-col :span="6">销售员: {{item.seller_username}}</a-col>
           <a-col :span="6">结算账户: {{item.account_name}}</a-col>
           <a-col :span="6">日期: {{moment(item.date).format('YYYY-MM-DD')}}</a-col>
         </a-row>

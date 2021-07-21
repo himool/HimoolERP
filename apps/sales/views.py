@@ -31,7 +31,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
     pagination_class = SalesOrderPagination
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = SalesOrderFilter
-    search_fields = ['id', 'client_name', 'client_phone', 'remark']
+    search_fields = ['id', 'client_name', 'client_phone', 'remark', 'seller_username']
     ordering_fields = ['id', 'date', 'total_amount', 'amount']
     ordering = ['-id']
 
@@ -56,7 +56,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
             warehouse = Warehouse.objects.filter(id=warehouse, teams=teams, is_delete=False).first()
 
         seller = self.request.data.get('seller')
-        if seller == self.request.user.username:
+        if seller == self.request.user.id:
             seller = self.request.user
         else:
             seller = User.objects.filter(id=seller, teams=teams, is_delete=False).first()
@@ -108,7 +108,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
                                    amount=amount, remark=goods2.get('remark'), sales_order_id=order_id))
                     break
 
-        serializer.save(teams=teams, id=order_id, warehouse_name=warehouse.name,
+        serializer.save(teams=teams, id=order_id, warehouse_name=warehouse.name, seller_username=seller.username,
                         account_name=account.name, total_quantity=total_quantity, total_amount=total_amount,
                         client=client)
         SalesGoods.objects.bulk_create(sales_goods_set)

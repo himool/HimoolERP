@@ -55,8 +55,8 @@
           },
           {
             title: '销售员',
-            dataIndex: 'seller',
-            key: 'seller',
+            dataIndex: 'seller_username',
+            key: 'seller_username',
           },
           {
             title: '选择',

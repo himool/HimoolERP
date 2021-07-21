@@ -10,7 +10,7 @@ class SalesOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SalesOrder
-        read_only_fields = ['id', 'seller_name', 'warehouse_name', 'account_name', 'is_done',
+        read_only_fields = ['id', 'seller_username', 'warehouse_name', 'account_name', 'is_done',
                             'goods_set', 'total_amount']
         fields = ['date', 'seller', 'warehouse', 'account', 'discount', 'amount', 'client_phone',
                   'client_contacts', 'client_name', 'client_address', 'remark', 'is_return',

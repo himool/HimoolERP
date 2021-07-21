@@ -68,7 +68,7 @@ class SalesReportViewSet(viewsets.ModelViewSet):
         else:
             results = queryset.values('code', 'name', 'specification', 'unit', 'quantity',
                                       date=F('sales_order__date'), category_name=F('goods__category__name'),
-                                      seller_name=F('sales_order__seller_name'),
+                                      seller_username=F('sales_order__seller_username'),
                                       warehouse_name=F('sales_order__warehouse_name'),
                                       relation_order=F('sales_order')).order_by('-sales_order__date')
 

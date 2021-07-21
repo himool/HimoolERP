@@ -53,7 +53,7 @@
                 <a-col :span="6">实收金额: {{salesForm.amount}}</a-col>
               </a-row>
               <a-row style="margin: 6px 0;">
-                <a-col :span="6">销售员: {{salesForm.seller}}</a-col>
+                <a-col :span="6">销售员: {{salesForm.seller_username}}</a-col>
                 <a-col :span="6">客户名称: {{salesForm.client_name}}</a-col>
                 <a-col :span="6">联系人: {{salesForm.client_contacts}}</a-col>
                 <a-col :span="6">电话: {{salesForm.client_phone}}</a-col>
@@ -81,7 +81,7 @@
             <a-col :span="6">实收金额: {{form.amount}}</a-col>
           </a-row>
           <a-row style="margin: 6px 0;">
-            <a-col :span="6">销售员: {{form.seller}}</a-col>
+            <a-col :span="6">销售员: {{form.seller_username}}</a-col>
             <a-col :span="6">客户名称: {{form.client_name}}</a-col>
             <a-col :span="6">联系人: {{form.client_contacts}}</a-col>
             <a-col :span="6">电话: {{form.client_phone}}</a-col>
@@ -151,8 +151,8 @@
           },
           {
             title: '销售员',
-            dataIndex: 'seller',
-            key: 'seller',
+            dataIndex: 'seller_username',
+            key: 'seller_username',
           },
         ],
         goodsColumns: [

@@ -4,6 +4,10 @@
       <a-col :span="24" :xl="16">
         <a-card title="客户">
           <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="tableLoading">
+            <div slot="phone" slot-scope="value, item">
+              <a-button type="link" @click="$router.push({path: '/sales_record', query: {search: value}})">{{value}}</a-button>
+            </div>
+
             <div slot="create_date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
             <div slot="action" slot-scope="value, item">
               <a-button-group>
@@ -49,8 +53,7 @@
             </a-form-model-item>
           </a-form-model>
           <div style="text-align: center;">
-            <a-button type="primary" :loading="buttonLoading" style="width: 96px;"
-              @click="create">添加客户
+            <a-button type="primary" :loading="buttonLoading" style="width: 96px;" @click="create">添加客户
             </a-button>
           </div>
         </a-card>
@@ -62,8 +65,7 @@
             </a-form-model-item>
           </a-form-model>
           <div style="text-align: center;">
-            <a-button type="primary" :loading="tableLoading" style="width: 96px;"
-              @click="search">查询
+            <a-button type="primary" :loading="tableLoading" style="width: 96px;" @click="search">查询
             </a-button>
           </div>
         </a-card>
@@ -88,6 +90,7 @@
             title: '手机号',
             dataIndex: 'phone',
             key: 'phone',
+            scopedSlots: { customRender: 'phone' },
           },
           {
             title: '联系人',
@@ -147,8 +150,8 @@
             this.items = resp.data.results;
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           })
           .finally(() => {
             this.tableLoading = false;
@@ -165,7 +168,7 @@
                 this.resetForm();
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               })
               .finally(() => {
@@ -182,8 +185,7 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+            this.$message.error(err.response.data.message);
           });
       },
       search() {

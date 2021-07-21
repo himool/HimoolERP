@@ -6,7 +6,7 @@ class SalesOrder(models.Model):
     id = models.CharField(primary_key=True, max_length=20)
     date = models.DateTimeField()
     seller = models.ForeignKey('user.User', models.CASCADE, related_name='sales_order_set')  # 销售员
-    seller_name = models.CharField(max_length=48)
+    seller_username = models.CharField(max_length=48)
     warehouse = models.ForeignKey('warehouse.Warehouse', models.CASCADE, related_name='sales_order_set')
     warehouse_name = models.CharField(max_length=48)
     account = models.ForeignKey('account.Account', models.CASCADE, related_name='sales_order_set')  # 结算账户
