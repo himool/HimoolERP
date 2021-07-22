@@ -5,7 +5,7 @@ from rest_framework import serializers
 class SupplierSerializer(serializers.ModelSerializer):
     class Meta:
         model = Supplier
-        fields = ['id', 'name', 'manager', 'phone', 'address', 'mailbox', 'bank_account', 'bank_name',
+        fields = ['id', 'name', 'manager', 'phone', 'address', 'email', 'bank_account', 'bank_name',
                   'order', 'status', 'address', 'url', 'default_discount', 'remark', 'update_date']
         read_only_fields = ['id', 'update_date']
 

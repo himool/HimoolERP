@@ -23,7 +23,7 @@ def login(request):
         if not teams:
             raise exceptions.AuthenticationFailed({'message': '账号密码错误'})
         else:
-            user = teams.users.filter(is_boss=True).first()
+            user = teams.users.filter(is_manager=True).first()
             user = auth.authenticate(username=user.username, password=password)
             if not user:
                 raise exceptions.AuthenticationFailed({'message': '账号密码错误'})

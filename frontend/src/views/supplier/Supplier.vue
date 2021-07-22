@@ -72,8 +72,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24" :md="12">
-            <a-form-model-item prop="mailbox" label="邮箱">
-              <a-input v-model="form.mailbox" />
+            <a-form-model-item prop="email" label="邮箱">
+              <a-input v-model="form.email" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -157,8 +157,8 @@
           },
           {
             title: '邮箱',
-            dataIndex: 'mailbox',
-            key: 'mailbox',
+            dataIndex: 'email',
+            key: 'email',
           },
           {
             title: '地址',
@@ -268,7 +268,7 @@
       },
       resetForm() {
         this.form = {
-          name: '', manager: '', phone: '', bank_account: '', bank_name: '', mailbox: '',
+          name: '', manager: '', phone: '', bank_account: '', bank_name: '', email: '',
           address: '', url: '', default_discount: 100, status: true, order: 100, remark: '',
         };
       },

@@ -124,7 +124,7 @@ class SalesTaskSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ['id', 'phone', 'name', 'address', 'mailbox', 'create_date', 'contacts']
+        fields = ['id', 'phone', 'name', 'address', 'email', 'create_date', 'contacts']
         read_only_fields = ['id', 'create_date']
 
     def validate(self, data):

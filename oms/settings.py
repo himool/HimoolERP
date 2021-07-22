@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_mysql',
     'rest_framework',
     'django_filters',
     'django_extensions',
+    'drf_yasg',
 
     'apps.user.apps.UserConfig',
     'apps.account.apps.AccountConfig',

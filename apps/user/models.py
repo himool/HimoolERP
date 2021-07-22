@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Teams(models.Model):
-    phone = models.CharField(max_length=12, unique=True)
+    phone = models.CharField(max_length=12, unique=True, verbose_name='手机号')
 
 
 class UserManager(BaseUserManager):
@@ -16,14 +16,14 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    username = models.CharField(max_length=24, unique=True)
-    phone = models.CharField(max_length=12)
-    teams = models.ForeignKey('user.Teams', models.CASCADE, related_name='users')
+    username = models.CharField(max_length=24, unique=True, verbose_name='用户名')
+    phone = models.CharField(max_length=12, verbose_name='手机号')
+    teams = models.ForeignKey('user.Teams', models.CASCADE, related_name='users', verbose_name='组')
 
-    roles = models.ManyToManyField('account.Role', blank=True, related_name='users')
-    create_date = models.DateTimeField(auto_now_add=True)
-    is_boss = models.BooleanField(default=True)
-    is_delete = models.BooleanField(default=False)
+    roles = models.ManyToManyField('account.Role', blank=True, related_name='users', verbose_name='角色')
+    create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    is_manager = models.BooleanField(default=True, verbose_name='管理员状态')
+    is_delete = models.BooleanField(default=False, verbose_name='删除状态')
 
     USERNAME_FIELD = 'username'
     objects = UserManager()

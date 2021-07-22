@@ -34,7 +34,7 @@ class SubusertViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, SubuserPermission]
 
     def get_queryset(self):
-        return self.request.user.teams.users.filter(is_boss=False, is_delete=False).order_by('create_date')
+        return self.request.user.teams.users.filter(is_manager=False, is_delete=False).order_by('create_date')
 
     def perform_create(self, serializer):
         password = self.request.data.get('password')
@@ -47,7 +47,7 @@ class SubusertViewSet(viewsets.ModelViewSet):
         if User.objects.filter(username=username).first():
             raise exceptions.ValidationError({'message': '账号已存在'})
 
-        serializer.save(teams=self.request.user.teams, is_boss=False, password=password, roles=roles)
+        serializer.save(teams=self.request.user.teams, is_manager=False, password=password, roles=roles)
 
     def perform_update(self, serializer):
         username = self.request.data.get('username')

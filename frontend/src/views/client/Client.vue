@@ -56,8 +56,8 @@
         <a-form-model-item prop="name" label="名称">
           <a-input size="large" v-model="form.name" />
         </a-form-model-item>
-        <a-form-model-item prop="mailbox" label="邮箱">
-          <a-input size="large" v-model="form.mailbox" />
+        <a-form-model-item prop="email" label="邮箱">
+          <a-input size="large" v-model="form.email" />
         </a-form-model-item>
         <a-form-model-item prop="address" label="地址">
           <a-input size="large" v-model="form.address" />
@@ -100,8 +100,8 @@
           },
           {
             title: '邮箱',
-            dataIndex: 'mailbox',
-            key: 'mailbox',
+            dataIndex: 'email',
+            key: 'email',
           },
           {
             title: '地址',
@@ -201,7 +201,7 @@
         this.initailize();
       },
       resetForm() {
-        this.form = { name: '', phone: '', address: '', mailbox: '', contacts: '' };
+        this.form = { name: '', phone: '', address: '', email: '', contacts: '' };
       },
       handleSearch() {
         this.list();
