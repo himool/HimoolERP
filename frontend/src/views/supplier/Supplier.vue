@@ -3,8 +3,18 @@
     <a-card title="供应商">
       <div slot="extra" style="margin: -6px 0;">
         <a-button type="primary" @click="resetForm(); visible = true;">
-          <a-icon type="plus" />新增供应商</a-button>
+          <a-icon type="plus" />新增供应商
+        </a-button>
       </div>
+
+      <a-row gutter="16">
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-input v-model="searchForm.search" placeholder="名称" allowClear @pressEnter="handleSearch" />
+        </a-col>
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
+        </a-col>
+      </a-row>
 
       <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
@@ -133,6 +143,7 @@
             title: '名称',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: '负责人',
@@ -170,6 +181,7 @@
             title: '排序',
             dataIndex: 'order',
             key: 'order',
+            sorter: true,
           },
           {
             title: '状态',
@@ -192,23 +204,23 @@
         rules: {
           name: [{ required: true, message: '请输入名称', trigger: 'change' }],
         },
+        searchForm: {},
       };
     },
     methods: {
       initialize() {
         this.resetForm();
+        this.list();
+      },
+      list() {
         this.loading = true;
-        supplierList()
-          .then(resp => {
-            this.items = resp.data;
-          })
-          .catch(err => {
-            
-                this.$message.error(err.response.data.message);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+        supplierList(this.searchForm).then(resp => {
+          this.items = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
+        }).finally(() => {
+          this.loading = false;
+        });
       },
       create() {
         this.$refs.form.validate(valid => {
@@ -220,7 +232,7 @@
                 this.visible = false;
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               });
           }
@@ -236,7 +248,7 @@
                 this.visible = false;
               })
               .catch(err => {
-                
+
                 this.$message.error(err.response.data.message);
               });
           }
@@ -250,8 +262,8 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+
+            this.$message.error(err.response.data.message);
           });
       },
       resetForm() {
@@ -259,6 +271,13 @@
           name: '', manager: '', phone: '', bank_account: '', bank_name: '', mailbox: '',
           address: '', url: '', default_discount: 100, status: true, order: 100, remark: '',
         };
+      },
+      handleSearch() {
+        this.list();
+      },
+      handleTableChange(pagination, filters, sorter) {
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
     },
     mounted() {

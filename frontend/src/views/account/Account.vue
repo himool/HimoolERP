@@ -21,10 +21,19 @@
         <span style="margin-left: 24px;">支出:</span>
         <a-spin v-if="statisticalLoading" size="small" style="margin-left: 8px;" />
         <span v-else style="margin-left: 8px;">{{expenditure}}</span>
-
       </div>
+
+      <a-row gutter="16">
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-input v-model="searchForm.search" placeholder="名称" allowClear @pressEnter="handleSearch" />
+        </a-col>
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
+        </a-col>
+      </a-row>
+
       <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading"
-        :row-selection="rowSelection">
+        :row-selection="rowSelection" @change="handleTableChange">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
         <div slot="warehouse" slot-scope="value, item">{{item.warehouse_name ? item.warehouse_name : ''}}</div>
         <div slot="status" slot-scope="value, item">{{item.status ? '启用' : '停用'}}</div>
@@ -110,6 +119,7 @@
             title: '账户名称',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: '账号',
@@ -141,6 +151,7 @@
             title: '排序',
             dataIndex: 'order',
             key: 'order',
+            sorter: true,
           },
           {
             title: '状态',
@@ -180,34 +191,32 @@
         },
         revenue: 0.0,
         expenditure: 0.0,
+        searchForm: {},
       }
     },
     methods: {
       initialize() {
         this.resetForm();
         this.statisticalAccount();
-        this.loading = true;
-        accountList()
-          .then(resp => {
-            this.items = resp.data;
-          })
-          .catch(err => {
-
-            this.$message.error(err.response.data.message);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+        this.list();
 
         warehouseList()
           .then(resp => {
             this.warehouseItems = resp.data;
           })
           .catch(err => {
-
             this.$message.error(err.response.data.message);
           });
-
+      },
+      list() {
+        this.loading = true;
+        accountList(this.searchForm).then(resp => {
+          this.items = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
+        }).finally(() => {
+          this.loading = false;
+        });
       },
       create() {
         this.$refs.form.validate(valid => {
@@ -219,7 +228,6 @@
                 this.visible = false;
               })
               .catch(err => {
-
                 this.$message.error(err.response.data.message);
               });
           }
@@ -235,7 +243,6 @@
                 this.visible = false;
               })
               .catch(err => {
-
                 this.$message.error(err.response.data.message);
               });
           }
@@ -279,6 +286,13 @@
       },
       resetForm() {
         this.form = { name: '', account: '', holder: '', status: true, order: 100, remark: '', warehouse: null, type: '现金' };
+      },
+      handleSearch() {
+        this.list();
+      },
+      handleTableChange(pagination, filters, sorter) {
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
     },
     mounted() {

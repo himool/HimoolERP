@@ -8,25 +8,24 @@
           </a-button>
         </div>
 
-        <div style="margin-bottom: 12px;">
-          <a-form-model ref="searchForm" :model="searchForm" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }"
-            layout="inline">
-            <a-form-model-item prop="name" label="商品名称">
-              <a-input v-model="searchForm.name" />
-            </a-form-model-item>
-            <a-form-model-item prop="category" label="商品分类">
-              <a-select v-model="searchForm.category" style="width: 200px;" :allowClear="true">
-                <a-select-option v-for="item of categoryItems" :key="item.id" :value="item.id">{{item.name}}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item>
-              <a-button @click="search">查询</a-button>
-            </a-form-model-item>
-          </a-form-model>
-        </div>
+        <a-row gutter="16">
+          <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+            <a-input v-model="searchForm.search" placeholder="名称, 货号" allowClear @pressEnter="handleSearch" />
+          </a-col>
+          <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+            <a-select v-model="searchForm.category" placeholder="商品分类" style="width: 100%;" allowClear
+              @change="handleSearch">
+              <a-select-option v-for="item of categoryItems" :key="item.id" :value="item.id">{{item.name}}
+              </a-select-option>
+            </a-select>
+          </a-col>
+          <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+            <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
+          </a-col>
+        </a-row>
 
-        <a-table :columns="columns" :data-source="goodsItems" size="small" :loading="loading" :pagination="false">
+        <a-table :columns="columns" :data-source="goodsItems" size="small" :loading="loading" :pagination="false"
+          @change="handleTableChange">
           <div slot="status" slot-scope="value, item">{{item.status ? '启用' : '停用'}}</div>
           <div slot="action" slot-scope="value, item">
             <a-button-group>
@@ -71,7 +70,7 @@
     data() {
       return {
         NP,
-        searchForm: { name: '', category: '', page: 1 },
+        searchForm: { page: 1 },
         goodsForm: {},
         goodsItems: [],
         categoryItems: [],
@@ -87,11 +86,13 @@
             title: '名称',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: '货号',
             dataIndex: 'code',
             key: 'code',
+            sorter: true,
           },
           {
             title: '品牌',
@@ -117,11 +118,13 @@
             title: '采购价',
             dataIndex: 'purchase_price',
             key: 'purchase_price',
+            sorter: true,
           },
           {
             title: '零售价',
             dataIndex: 'retail_price',
             key: 'retail_price',
+            sorter: true,
           },
           {
             title: '状态',
@@ -133,6 +136,7 @@
             title: '排序',
             dataIndex: 'order',
             key: 'order',
+            sorter: true,
           },
           {
             title: '操作',
@@ -154,7 +158,6 @@
             this.categoryItems = resp.data;
           })
           .catch(err => {
-
             this.$message.error(err.response.data.message);
           });
       },
@@ -219,6 +222,13 @@
           inventory: {},
           initial_quantity: 0,
         };
+      },
+      handleSearch() {
+        this.list();
+      },
+      handleTableChange(pagination, filters, sorter) {
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
     },
     mounted() {

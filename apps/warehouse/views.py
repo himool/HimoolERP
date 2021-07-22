@@ -25,10 +25,10 @@ class WarehouseViewSet(viewsets.ModelViewSet):
     """list, create, update, destroy"""
     serializer_class = WarehouseSerializer
     permission_classes = [IsAuthenticated, WarehousePermission]
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filter_backends = [OrderingFilter, SearchFilter, DjangoFilterBackend]
     filter_fields = ['status']
+    search_fields = ['name']
     ordering_fields = ['name', 'manager', 'create_date', 'order']
-    ordering = ['order']
 
     def get_queryset(self):
         return self.request.user.teams.warehouse_set.filter(is_delete=False)

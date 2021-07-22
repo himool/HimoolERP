@@ -2,11 +2,12 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 // Warehouse
-export function warehouseList() {
+export function warehouseList(params) {
   return axios({
     url: '/api/warehouse/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'get',
+    params,
   })
 }
 

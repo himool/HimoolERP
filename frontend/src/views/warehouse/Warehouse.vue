@@ -7,7 +7,17 @@
         </a-button>
       </div>
 
-      <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
+      <a-row gutter="16">
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-input v-model="searchForm.search" placeholder="名称" allowClear @pressEnter="handleSearch" />
+        </a-col>
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
+        </a-col>
+      </a-row>
+
+      <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading"
+        @change="handleTableChange">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
         <div slot="create_date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
         <div slot="update_date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
@@ -23,7 +33,6 @@
               </a-button>
             </a-popconfirm>
           </a-button-group>
-
         </div>
       </a-table>
     </a-card>
@@ -82,6 +91,7 @@
             title: '名称',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: '负责人',
@@ -108,6 +118,7 @@
             title: '创建时间',
             dataIndex: 'create_date',
             key: 'create_date',
+            sorter: true,
             scopedSlots: { customRender: 'create_date' },
           },
           {
@@ -120,6 +131,7 @@
             title: '排序',
             dataIndex: 'order',
             key: 'order',
+            sorter: true,
           },
           {
             title: '状态',
@@ -144,31 +156,29 @@
           name: [{ required: true, message: '请输入名称', trigger: 'change' }],
           type: [{ required: true, message: '请选择类型', trigger: 'change' }],
         },
+        searchForm: {},
       };
     },
     methods: {
       initialize() {
-        this.loading = true;
-        warehouseList()
-          .then(resp => {
-            this.items = resp.data;
-          })
-          .catch(err => {
-
-            this.$message.error(err.response.data.message);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
-
+        this.list();
         userList()
           .then(resp => {
             this.userItems = resp.data;
           })
           .catch(err => {
-
             this.$message.error(err.response.data.message);
           })
+      },
+      list() {
+        this.loading = true;
+        warehouseList(this.searchForm).then(resp => {
+          this.items = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
+        }).finally(() => {
+          this.loading = false;
+        });
       },
       create() {
         this.$refs.form.validate(valid => {
@@ -180,7 +190,6 @@
                 this.visible = false;
               })
               .catch(err => {
-
                 this.$message.error(err.response.data.message);
               });
           }
@@ -196,7 +205,6 @@
                 this.visible = false;
               })
               .catch(err => {
-
                 this.$message.error(err.response.data.message);
               });
           }
@@ -216,6 +224,13 @@
       },
       resetForm() {
         this.form = { name: '', type: '', manager: '', address: '', status: true, order: 100, remark: '' };
+      },
+      handleSearch() {
+        this.list();
+      },
+      handleTableChange(pagination, filters, sorter) {
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
     },
     mounted() {

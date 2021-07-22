@@ -3,16 +3,17 @@ from .paginations import BookkeepingPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import RolePermission, SubuserPermission
 from rest_framework import permissions, pagination
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import status, exceptions
 from utils.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from django.db.models import Sum
+from django.db.models import Sum, Value
 from django.contrib import auth
 from user.models import User
 from .models import Role
 import pendulum
+from django.db.models.functions import Coalesce
 
 
 class RoleViewSet(viewsets.ModelViewSet):
@@ -77,6 +78,9 @@ class AccountViewSet(viewsets.ModelViewSet):
     """list, create, update, destroy"""
     serializer_class = AccountSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [OrderingFilter, SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    ordering_fields = ['name', 'order']
 
     def get_queryset(self):
         return self.request.user.teams.accounts.filter(is_delete=False).order_by('order')
@@ -133,9 +137,9 @@ class StatisticalAccountViewSet(viewsets.ModelViewSet):
         bookkeeping_queryset = self.request.user.teams.bookkeeping_set.filter(
             account_id__in=accoutns)
         purchase_queryset = self.request.user.teams.purchase_order_set.filter(
-            account_id__in=accoutns, is_undo=False)
+            account_id__in=accoutns, is_return=False)
         sales_queryset = self.request.user.teams.sales_order_set.filter(
-            account_id__in=accoutns, is_undo=False)
+            account_id__in=accoutns, is_return=False)
 
         if start_date:
             bookkeeping_queryset = bookkeeping_queryset.filter(create_datetime__gte=start_date)
@@ -153,8 +157,8 @@ class StatisticalAccountViewSet(viewsets.ModelViewSet):
         bookkeeping_queryset, purchase_queryset, sales_queryset = self.get_queryset()
 
         amount_list = bookkeeping_queryset.values_list('amount', flat=True)
-        expenditure = purchase_queryset.aggregate(amount=Sum('amount')).get('amount', 0)
-        revenue = sales_queryset.aggregate(amount=Sum('amount_received') - Sum('change_amount')).get('amount', 0)
+        expenditure = purchase_queryset.aggregate(amount=Coalesce(Sum('amount'), Value(0)))['amount']
+        revenue = sales_queryset.aggregate(amount=Coalesce(Sum('amount'), Value(0)))['amount']
 
         for amount in amount_list:
             if amount > 0:

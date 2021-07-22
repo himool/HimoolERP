@@ -17,9 +17,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """商品分类: list, post, update, delete"""
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated, CategoryPermission]
-    filter_backends = [OrderingFilter]
-    ordering_fields = ['order']
-    ordering = ['order']
+    filter_backends = [OrderingFilter, SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    ordering_fields = ['name', 'order']
 
     def get_queryset(self):
         return self.request.user.teams.category_set.all()
@@ -37,7 +37,6 @@ class GoodsViewSet(viewsets.ModelViewSet):
     filter_fields = ['name', 'category', 'status']
     search_fields = ['name', 'code']
     ordering_fields = ['name', 'code', 'purchase_price', 'suggested_retail_price', 'retail_price', 'order']
-    ordering = ['order']
 
     def get_queryset(self):
         return self.request.user.teams.goods_set.filter(is_delete=False)

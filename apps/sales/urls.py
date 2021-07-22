@@ -13,6 +13,6 @@ urlpatterns = [
     path('sales_values/', views.SalesValueViewSet.as_view({'get': 'list'})),
     path('sales_top_ten/', views.SalesTopTenViewSet.as_view({'get': 'list'})),
     path('clients/', views.ClientViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('clients/<str:pk>/', views.ClientViewSet.as_view({'delete': 'destroy'})),
+    path('clients/<str:pk>/', views.ClientViewSet.as_view({'put': 'update', 'delete': 'destroy'})),
     path('sales_payment_records/', views.SalesPaymentRecordViewSet.as_view({'get': 'list'})),
 ]

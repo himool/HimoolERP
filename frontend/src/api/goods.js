@@ -3,11 +3,12 @@ import axios from 'axios'
 
 
 // Category
-export function categoryList() {
+export function categoryList(params) {
   return axios({
     url: '/api/categories/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'get',
+    params,
   })
 }
 

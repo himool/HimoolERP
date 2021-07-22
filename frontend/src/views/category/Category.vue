@@ -3,10 +3,21 @@
     <a-card title="分类管理">
       <div slot="extra" style="margin: -6px 0;">
         <a-button type="primary" @click="resetForm(); visible = true;">
-          <a-icon type="plus" />新增分类</a-button>
+          <a-icon type="plus" />新增分类
+        </a-button>
       </div>
 
-      <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading">
+      <a-row gutter="16">
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-input v-model="searchForm.search" placeholder="名称" allowClear @pressEnter="handleSearch" />
+        </a-col>
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
+          <a-button type="primary" icon="search" @click="handleSearch">查询</a-button>
+        </a-col>
+      </a-row>
+
+      <a-table :columns="columns" :data-source="items" size="small" :pagination="false" :loading="loading"
+        @change="handleTableChange">
         <div slot="index" slot-scope="value, item, index">{{index + 1}}</div>
         <div slot="action" slot-scope="value, item">
           <a-button-group>
@@ -22,7 +33,7 @@
         </div>
       </a-table>
     </a-card>
-    
+
     <category-modal :form="form" :visible="visible" @create="create" @update="update" @cancel="visible = false" />
   </div>
 </template>
@@ -49,6 +60,7 @@
             title: '分类名称',
             dataIndex: 'name',
             key: 'name',
+            sorter: true,
           },
           {
             title: '分类描述',
@@ -66,6 +78,7 @@
             title: '排序',
             dataIndex: 'order',
             key: 'order',
+            sorter: true,
           },
           {
             title: '操作',
@@ -79,22 +92,22 @@
         form: { name: '', description: '', order: 100 },
         loading: false,
         visible: false,
+        searchForm: {},
       };
     },
     methods: {
       initialize() {
+        this.list();
+      },
+      list() {
         this.loading = true;
-        categoryList()
-          .then(resp => {
-            this.items = resp.data;
-          })
-          .catch(err => {
-            
-                this.$message.error(err.response.data.message);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+        categoryList(this.searchForm).then(resp => {
+          this.items = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
+        }).finally(() => {
+          this.loading = false;
+        });
       },
       create(categoryItem) {
         this.items.push(categoryItem);
@@ -112,12 +125,18 @@
             this.items.splice(this.items.findIndex(item => item.id === form.id), 1);
           })
           .catch(err => {
-            
-                this.$message.error(err.response.data.message);
+            this.$message.error(err.response.data.message);
           });
       },
       resetForm() {
         this.form = { name: '', description: '', order: 100 };
+      },
+      handleSearch() {
+        this.list();
+      },
+      handleTableChange(pagination, filters, sorter) {
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
     },
     mounted() {

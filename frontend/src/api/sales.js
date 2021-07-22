@@ -131,6 +131,15 @@ export function clientCreate(form) {
   })
 }
 
+export function clientUpdate(form) {
+  return axios({
+    url: `/api/clients/${form.id}/`,
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'put',
+    data: form,
+  })
+}
+
 export function clientDestroy(form) {
   return axios({
     url: `/api/clients/${form.id}/`,

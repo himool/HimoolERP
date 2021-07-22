@@ -26,6 +26,10 @@ class SupplierViewSet(viewsets.ModelViewSet):
     """list, create, update, destroy"""
     serializer_class = SupplierSerializer
     permission_classes = [IsAuthenticated, SupplierPermission]
+    filter_backends = [OrderingFilter, SearchFilter, DjangoFilterBackend]
+    search_fields = ['name']
+    ordering_fields = ['name', 'order']
+    ordering = ['order']
 
     def get_queryset(self):
         return self.request.user.teams.supplier_set.filter(is_delete=False).order_by('order')
@@ -56,7 +60,7 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         order_id = f'P{pendulum.now().format("YYYYMMDDHHmmssSSSS")}'
         teams = self.request.user.teams
-        print(1)
+
         # 验证
         if self.request.data.get('is_return', False):  # 退货单
             purchase_order = self.request.data.get('purchase_order')
@@ -71,7 +75,6 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
             supplier = Supplier.objects.filter(id=supplier, teams=teams, is_delete=False).first()
             warehouse = self.request.data.get('warehouse')
             warehouse = Warehouse.objects.filter(id=warehouse, teams=teams, is_delete=False).first()
-        print(2)
 
         account = self.request.data.get('account')
         account = Account.objects.filter(id=account, teams=teams, is_delete=False).first()
@@ -80,7 +83,6 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
 
         if not supplier or not warehouse or not account or not contacts:
             raise ValidationError
-        print(3)
 
         # 创建表单商品
         goods_set = self.request.data.get('goods_set', [])
@@ -89,7 +91,6 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
 
         if len(goods_set) != len(goods_list):
             raise ValidationError
-        print(4)
 
         change_records = []
         total_quantity = 0
@@ -122,7 +123,6 @@ class PurchaseOrderViewSet(viewsets.ModelViewSet):
                         goods1.purchase_price = goods2['purchase_price']
                         goods1.save()
                     break
-        print(5)
 
         serializer.save(id=order_id, supplier_name=supplier.name, warehouse_name=warehouse.name,
                         warehouse_address=warehouse.address, account_name=account.name,

@@ -2,11 +2,12 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 
 // Supplier
-export function supplierList() {
+export function supplierList(params) {
   return axios({
     url: '/api/supplier/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'get',
+    params,
   })
 }
 

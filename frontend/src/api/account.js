@@ -82,11 +82,12 @@ export function subuserDestroy(form) {
 
 
 // Account
-export function accountList() {
+export function accountList(params) {
   return axios({
     url: '/api/accounts/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'get',
+    params,
   })
 }
 

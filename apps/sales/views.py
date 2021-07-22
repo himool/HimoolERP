@@ -309,23 +309,16 @@ class ClientViewSet(viewsets.ModelViewSet):
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = ClientPagination
-    filter_backends = [SearchFilter]
+    filter_backends = [OrderingFilter, SearchFilter, DjangoFilterBackend]
     search_fields = ['phone', 'name']
+    ordering_fields = ['id', 'phone', 'contacts', 'name', 'create_date']
+    ordering = ['id']
 
     def get_queryset(self):
         return self.request.user.teams.clients.filter(is_delete=False).order_by('-create_date')
 
     def perform_create(self, serializer):
-        teams = self.request.user.teams
-        phone = self.request.data['phone']
-        client = Client.objects.filter(phone=phone, teams=teams).first()
-        if not client:
-            serializer.save(teams=teams)
-        elif client.is_delete:
-            client.is_delete = False
-            client.save()
-        else:
-            raise ValidationError({'message': '客户已存在'})
+        serializer.save(teams=self.request.user.teams)
 
     def perform_destroy(self, instance):
         instance.is_delete = True
