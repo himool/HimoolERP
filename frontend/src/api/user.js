@@ -35,3 +35,21 @@ export function getInfo() {
     method: 'get',
   })
 }
+
+// Config
+export function configRetrieve() {
+  return axios({
+    url: '/api/user/configs/',
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'get',
+  })
+}
+
+export function configUpdate(data) {
+  return axios({
+    url: '/api/user/configs/',
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'put',
+    data,
+  })
+}

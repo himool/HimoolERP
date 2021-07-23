@@ -10,6 +10,8 @@ import requests
 import pendulum
 import random
 import re
+from .serializers import ConfigSerializer
+from utils.permissions import IsAuthenticated
 
 
 @api_view(['POST'])
@@ -69,3 +71,12 @@ def get_info(request):
         teams=teams, quantity__lte=F('goods__inventory_warning_lower_limit')).count()
     data = {'username': request.user.username, 'inventory_warning_count': inventory_warning_count}
     return Response(data=data, status=status.HTTP_200_OK)
+
+
+class ConfigViewSet(viewsets.ModelViewSet):
+    """配置: retrieve, post, update"""
+    serializer_class = ConfigSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.teams

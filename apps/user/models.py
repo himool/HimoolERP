@@ -5,6 +5,8 @@ from django.db import models
 
 class Teams(models.Model):
     phone = models.CharField(max_length=12, unique=True, verbose_name='手机号')
+    auto_stock_in = models.BooleanField(default=False, verbose_name='自动入库')
+    auto_stock_out = models.BooleanField(default=False, verbose_name='自动出库')
 
 
 class UserManager(BaseUserManager):

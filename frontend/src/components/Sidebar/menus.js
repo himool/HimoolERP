@@ -57,6 +57,7 @@ export default [
     key: '8', name: '系统管理', icon: 'team', submenus: [
       { key: '/role', name: '角色权限' },
       { key: '/subuser', name: '账号管理' },
+      { key: '/config', name: '配置管理' },
     ]
   },
 ]

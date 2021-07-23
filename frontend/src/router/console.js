@@ -178,5 +178,11 @@ export default {
       meta: { title: '采购付款统计' },
       component: () => import('@/views/purchaseStatistics/PurchaseStatistics'),
     },
+    {
+      path: 'config',
+      name: 'config',
+      meta: { title: '配置管理' },
+      component: () => import('@/views/config/Config'),
+    },
   ]
 }
