@@ -50,6 +50,7 @@ export const columns = [
     dataIndex: 'discount_price',
     key: 'discount_price',
     customRender: (value, item) => {
+      if (item.isTotal) return value;
       value = NP.times(item.purchase_price, item.discount, 0.01);
       return item.id ? NP.round(value, 2) : ''
     },
@@ -59,8 +60,9 @@ export const columns = [
     dataIndex: 'amount',
     key: 'amount',
     customRender: (value, item) => {
+      if (item.isTotal) return value;
       value = NP.times(item.quantity, item.purchase_price);
-      return item.id ? NP.round(NP.times(item.quantity, item.purchase_price), 2) : ''
+      return item.id ? NP.round(value, 2) : ''
     },
   },
   {
@@ -68,6 +70,7 @@ export const columns = [
     dataIndex: 'discount_amount',
     key: 'discount_amount',
     customRender: (value, item) => {
+      if (item.isTotal) return value;
       value = NP.times(item.quantity, item.purchase_price, item.discount, 0.01);
       return item.id ? NP.round(value, 2) : ''
     },

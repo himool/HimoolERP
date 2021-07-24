@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="visible" title="选择商品" :footer="null" @cancel="cancel">
+    <a-modal v-model="visible" title="选择客户" :footer="null" @cancel="cancel">
       <div>
         <a-input-search v-model="searchText" placeholder="输入查询..." @search="search" />
       </div>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { goodsList } from '@/api/goods';
+  import { clientList } from '@/api/sales'
   import { columns } from './columns';
 
   export default {
@@ -37,7 +37,7 @@
       },
       list() {
         this.loading = true;
-        goodsList(this.searchForm).then(resp => {
+        clientList(this.searchForm).then(resp => {
           this.pagination.total = resp.data.count;
           this.items = resp.data.results;
         }).catch(err => {

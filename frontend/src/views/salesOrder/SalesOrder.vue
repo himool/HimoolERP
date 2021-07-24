@@ -1,301 +1,240 @@
 <template>
   <div>
-    <a-card>
-      <div slot="title">
-        <a-button type="primary" @click="addGoodsModalVisible = true">
-          <a-icon type="plus" />添加条目
-        </a-button>
-        <a-button style="margin-left: 12px;" @click="resetForm">空白零售单</a-button>
-        <a-popconfirm title="确定结账吗?" @confirm="create">
-          <a-button type="primary" style="float: right;" :loading="loading">结账</a-button>
+    <a-card title="销售单">
+      <div>
+        <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+          <a-row>
+            <a-col :span="8">
+              <a-form-model-item prop="discount" label="整单折扣(%)">
+                <a-input-number v-model="form.discount" :precision="1" :step="5" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="date" label="日期">
+                <a-date-picker v-model="form.date" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="seller" label="销售员">
+                <a-select v-model="form.seller">
+                  <a-select-option v-for="item in sellerItems" :key="item.id" :value="item.id">{{item.username}}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="warehouse" label="仓库">
+                <a-select v-model="form.warehouse">
+                  <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">
+                    {{item.name}}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="account" label="结算账户">
+                <a-select v-model="form.account">
+                  <a-select-option v-for="item in accountItems" :key="item.id" :value="item.id">
+                    {{item.name}}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="amount" label="实收金额">
+                <a-input-number v-model="form.amount" :precision="2" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item :wrapperCol="{ offset: 6 }">
+                <a-button type="primary" style="width: 100%;" @click="addClient">选择已有客户</a-button>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="client_contacts" label="联系人">
+                <a-input v-model="form.client_contacts" allowClear />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="client_phone" label="客户手机">
+                <a-input v-model="form.client_phone" allowClear />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="client_name" label="客户名称">
+                <a-input v-model="form.client_name" allowClear />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="client_address" label="客户地址">
+                <a-input v-model="form.client_address" allowClear />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-model-item prop="remark" label="客户备注">
+                <a-input v-model="form.remark" allowClear />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-model-item style="float: right;">
+                <a-button type="primary" icon="plus" @click="addGoods">添加条目</a-button>
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+        </a-form-model>
+      </div>
+
+      <div>
+        <a-table :columns="columns" :data-source="goodsData" :pagination="false">
+          <div slot="quantity" slot-scope="value, item">
+            <div v-if="item.isTotal">{{ value }}</div>
+            <a-input-number v-else v-model="item.quantity" :precision="0" />
+          </div>
+          <div slot="retail_price" slot-scope="value, item">
+            <a-input-number v-if="!item.isTotal" v-model="item.retail_price" :precision="2" />
+          </div>
+          <div slot="action" slot-scope="value, item">
+            <a-button v-if="!item.isTotal" type="danger" @click="removeGoods(item)">删除</a-button>
+          </div>
+        </a-table>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <a-popconfirm title="确定销售吗?" @confirm="createOrder">
+          <a-button type="primary" :loading="loading">销售</a-button>
         </a-popconfirm>
       </div>
-      <a-row gutter="12">
-        <a-col :span="18">
-          <a-table :columns="columns" :data-source="dataSource" :pagination="false" size="small">
-            <div slot="index" slot-scope="value, item, index">{{item.isTotal ?  '' : index + 1}}</div>
-            <div slot="amount" slot-scope="value, item">
-              {{NP.round(item.isTotal ? value : NP.times(item.quantity, item.retail_price), 2)}}
-            </div>
-            <div slot="action" slot-scope="value, item, index">
-              <a-button-group v-if="!item.isTotal">
-                <a-popover title="修改条目" trigger="click">
-                  <div slot="content">
-                    <a-form-model :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-                      <a-form-model-item label="单价">
-                        <a-input-number v-model="item.retail_price" :precision="2" style="width: 100%;" />
-                      </a-form-model-item>
-                      <a-form-model-item label="备注">
-                        <a-input v-model="item.remark" allowClear />
-                      </a-form-model-item>
-                    </a-form-model>
-                  </div>
-                  <a-button type="primary" size="small">
-                    <a-icon type="edit" />
-                  </a-button>
-                </a-popover>
-                <a-button size="small" @click="item.quantity += 1">
-                  <a-icon type="plus" />
-                </a-button>
-                <a-button size="small" @click="item.quantity -= 1">
-                  <a-icon type="minus" />
-                </a-button>
-                <a-button type="danger" size="small" @click="form.goods_set.splice(index, 1)">
-                  <a-icon type="close" />
-                </a-button>
-              </a-button-group>
-            </div>
-          </a-table>
-        </a-col>
-        <a-col :span="6">
-          <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
-            <a-form-model-item prop="discount" label="整单折扣">
-              <a-input-number v-model="form.discount" :precision="0" :min="0" :max="100" :step="5"
-                :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" style="width: 100%;" />
-            </a-form-model-item>
-            <a-form-model-item prop="date" label="日期">
-              <a-date-picker v-model="form.date" :showToday="false" :allowClear="false" style="width: 100%;" />
-            </a-form-model-item>
-            <a-form-model-item prop="seller" label="销售员">
-              <a-select v-model="form.seller">
-                <a-select-option v-for="item in sellerItems" :key="item.id" :value="item.id">{{item.username}}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item prop="warehouse" label="仓库">
-              <a-select v-model="form.warehouse">
-                <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item prop="account" label="结算账户">
-              <a-select v-model="form.account">
-                <a-select-option v-for="item in accountItems" :key="item.id" :value="item.id">{{item.name}}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item prop="amount" label="实收金额">
-              <a-input-number v-model="form.amount" :precision="2" style="width: 100%;" />
-            </a-form-model-item>
-
-            <a-form-model-item :wrapperCol="{ offset: 8 }">
-              <a-button type="primary" style="width: 100%;" @click="clientModalVisible = true">选择已有客户</a-button>
-            </a-form-model-item>
-
-            <a-form-model-item prop="client_contacts" label="联系人">
-              <a-input v-model="form.client_contacts" allowClear />
-            </a-form-model-item>
-            <a-form-model-item prop="client_phone" label="客户手机">
-              <a-input v-model="form.client_phone" allowClear />
-            </a-form-model-item>
-            <a-form-model-item prop="client_name" label="客户名称">
-              <a-input v-model="form.client_name" allowClear />
-            </a-form-model-item>
-            <a-form-model-item prop="client_address" label="客户地址">
-              <a-input v-model="form.client_address" allowClear />
-            </a-form-model-item>
-            <a-form-model-item prop="remark" label="客户备注">
-              <a-input v-model="form.remark" allowClear />
-            </a-form-model-item>
-          </a-form-model>
-        </a-col>
-      </a-row>
     </a-card>
 
-    <add-goods-modal v-model="addGoodsModalVisible" @confirm="addGoods" />
-    <client-modal v-model="clientModalVisible" @confirm="selectClient" />
+    <select-goods-modal v-model="goodsVisible" @select="selectGoods" />
+    <select-client-modal v-model="clientVisible" @select="selectClient" />
   </div>
 </template>
 
 <script>
-  import { warehouseList } from '@/api/warehouse'
-  import { accountList, sellertList } from '@/api/account'
-  import { salesOrderCreate } from '@/api/sales'
-  import NP from 'number-precision'
-  import moment from 'moment'
+  import { accountList, sellertList } from '@/api/account';
+  import { warehouseList } from '@/api/warehouse';
+  import { salesOrderCreate } from '@/api/sales';
+  import { columns } from './columns';
+  import { rules } from './rules';
+  import NP from 'number-precision';
 
   export default {
-    name: 'SalesOrder',
     components: {
-      AddGoodsModal: () => import('@/components/AddGoodsModal/AddGoodsModal.vue'),
-      ClientModal: () => import('@/components/ClientModal/ClientModal.vue'),
+      SelectGoodsModal: () => import('@/components/SelectGoodsModal/SelectGoodsModal'),
+      SelectClientModal: () => import('@/components/SelectClientModal/SelectClientModal'),
     },
     data() {
       return {
-        NP,
         form: {},
+        goodsItems: [],
+        loading: false,
+        columns,
+        rules,
+        goodsVisible: false,
+        clientVisible: false,
+
         warehouseItems: [],
         accountItems: [],
         sellerItems: [],
-        columns: [
-          {
-            title: '序号',
-            dataIndex: 'index',
-            key: 'index',
-            scopedSlots: { customRender: 'index' },
-          },
-          {
-            title: '货号',
-            dataIndex: 'code',
-            key: 'code',
-          },
-          {
-            title: '名称',
-            dataIndex: 'name',
-            key: 'name',
-          },
-          {
-            title: '规格型号',
-            dataIndex: 'specification',
-            key: 'specification',
-          },
-          {
-            title: '单位',
-            dataIndex: 'unit',
-            key: 'unit',
-          },
-          {
-            title: '数量',
-            dataIndex: 'quantity',
-            key: 'quantity',
-          },
-          {
-            title: '单价',
-            dataIndex: 'retail_price',
-            key: 'retail_price',
-          },
-          {
-            title: '金额',
-            dataIndex: 'amount',
-            key: 'amount',
-            scopedSlots: { customRender: 'amount' },
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            key: 'action',
-            scopedSlots: { customRender: 'action' },
-            width: '156px'
-          },
-        ],
-        loading: false,
-        addGoodsModalVisible: false,
-        clientModalVisible: false,
-
-        rules: {
-          discount: [{ required: true, message: '请输入整单折扣', trigger: 'change' }],
-          date: [{ required: true, message: '请选择日期', trigger: 'change' }],
-          seller: [{ required: true, message: '请选择供应商', trigger: 'change' }],
-          warehouse: [{ required: true, message: '请选择仓库', trigger: 'change' }],
-          account: [{ required: true, message: '请选择账户', trigger: 'change' }],
-          amount: [{ required: true, message: '请输入实收金额', trigger: 'change' }],
-          client_phone: [{ pattern: /^1[3456789]\d{9}$/, message: '手机号格式错误', trigger: 'blur' }]
-        },
       };
     },
     computed: {
-      dataSource() {
+      goodsData() {
+        // 统计合计
         let totalQuantity = 0, totalAmount = 0;
-        if (this.form.goods_set) {
-          for (let item of this.form.goods_set) {
-            totalQuantity += item.quantity;
-            totalAmount = NP.times(item.quantity, item.retail_price);
-          }
+        for (let item of this.goodsItems) {
+          totalQuantity = NP.plus(totalQuantity, item.quantity);
+          let amount = NP.times(item.quantity, item.retail_price);
+          totalAmount = NP.plus(totalAmount, amount);
         }
 
-        let totalItem = {
+        return [...this.goodsItems, {
+          isTotal: true,
           name: '合计:',
           quantity: totalQuantity,
-          amount: NP.times(totalAmount, this.form.discount ? this.form.discount : 100, 0.01),
-          isTotal: true,
-        };
-
-        return this.form.goods_set ? [...this.form.goods_set, totalItem] : [totalItem];
-      }
+          amount: totalAmount,
+        }]
+      },
     },
     methods: {
-      initialize() {
+      initData() {
         this.resetForm();
-        warehouseList()
-          .then(resp => {
-            this.warehouseItems = resp.data;
-          })
-          .catch(err => {
-            
-                this.$message.error(err.response.data.message);
-          });
 
-        accountList()
-          .then(resp => {
-            this.accountItems = resp.data;
-          })
-          .catch(err => {
-            
-                this.$message.error(err.response.data.message);
-          });
+        warehouseList().then(resp => {
+          this.warehouseItems = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
+        });
 
-        sellertList()
-          .then(resp => {
-            this.sellerItems = resp.data;
-          })
-          .catch(err => {
-            
-                this.$message.error(err.response.data.message);
-          });
-      },
-      create() {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            if (this.form.goods_set.length == 0) {
-              
-                this.$message.error('请选择条目');
-              return
-            }
-            this.loading = true;
-            salesOrderCreate(this.form)
-              .then(() => {
-                this.$message.success('结账成功');
-                this.resetForm();
-              })
-              .catch(err => {
-                console.log(err.response.data);
-                this.$message.error(err.response.data.message);
-              })
-              .finally(() => {
-                this.loading = false;
-              });
-          }
+        accountList().then(resp => {
+          this.accountItems = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
+        });
+
+        sellertList().then(resp => {
+          this.sellerItems = resp.data;
+        }).catch(err => {
+          this.$message.error(err.response.data.message);
         });
       },
-      addGoods(goodsItem) {
-        goodsItem.remark = '';
-        this.form.goods_set.push(goodsItem);
+      addGoods() {
+        this.goodsVisible = true;
+      },
+      removeGoods(item) {
+        let index = this.goodsItems.findIndex(_item => _item.id == item.id);
+        if (index != -1) this.goodsItems.splice(index, 1);
+      },
+      selectGoods(item) {
+        this.goodsItems.push({
+          index: this.goodsItems.length + 1,
+          id: item.id,
+          code: item.code,
+          name: item.name,
+          specification: item.specification,
+          unit: item.unit,
+          quantity: 1,
+          retail_price: item.retail_price,
+        });
+      },
+      addClient() {
+        this.clientVisible = true;
       },
       selectClient(item) {
-        this.form.client_phone = item.phone;
         this.form.client_contacts = item.contacts;
+        this.form.client_phone = item.phone;
         this.form.client_name = item.name;
         this.form.client_address = item.address;
       },
+      createOrder() {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            if (this.goodsItems.length == 0) {
+              this.$message.error('请选择条目');
+              return
+            }
+
+            this.loading = true;
+            let form = { ...this.form, goods_set: this.goodsItems };
+            salesOrderCreate(form).then(() => {
+              this.$message.success('新增成功');
+              this.resetForm();
+            }).catch(err => {
+              this.$message.error(err.response.data.message);
+            }).finally(() => {
+              this.loading = false;
+            });
+          }
+        });
+      },
       resetForm() {
-        this.form = {
-          date: moment().startOf('day').format(),
-          warehouse: null,
-          account: null,
-          seller: null,
-          amount: 0.0,
-          client_phone: '',
-          client_contacts: '',
-          client_name: '',
-          client_address: '',
-          remark: '',
-          discount: 100,
-          goods_set: [],
-        };
+        this.form.discount = 100;
+        this.goodsItems = [];
       },
     },
     mounted() {
-      this.initialize();
+      this.initData();
     },
   }
 </script>

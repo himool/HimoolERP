@@ -67,16 +67,17 @@
       <div>
         <a-table :columns="columns" :data-source="goodsData" :pagination="false">
           <div slot="quantity" slot-scope="value, item">
-            <a-input-number v-model="item.quantity" :precision="0" />
+            <div v-if="item.isTotal">{{ value }}</div>
+            <a-input-number v-else v-model="item.quantity" :precision="0" />
           </div>
           <div slot="purchase_price" slot-scope="value, item">
-            <a-input-number v-model="item.purchase_price" :precision="2" />
+            <a-input-number v-if="!item.isTotal" v-model="item.purchase_price" :precision="2" />
           </div>
           <div slot="discount" slot-scope="value, item">
-            <a-input-number v-model="item.discount" :precision="1" :step="5" />
+            <a-input-number v-if="!item.isTotal" v-model="item.discount" :precision="1" :step="5" />
           </div>
           <div slot="action" slot-scope="value, item">
-            <a-button type="danger" @click="removeGoods(item)">删除</a-button>
+            <a-button v-if="!item.isTotal" type="danger" @click="removeGoods(item)">删除</a-button>
           </div>
         </a-table>
       </div>
@@ -98,6 +99,7 @@
   import { warehouseList } from '@/api/warehouse';
   import { columns } from './columns';
   import { rules } from './rules';
+  import NP from 'number-precision';
 
   export default {
     components: {
@@ -111,6 +113,7 @@
         columns,
         rules,
         visible: false,
+
         supplierItems: [],
         warehouseItems: [],
         accountItems: [],
@@ -119,11 +122,28 @@
     },
     computed: {
       goodsData() {
-        return this.goodsItems
+        // 统计合计
+        let totalQuantity = 0, totalAmount = 0, totalDiscountAmount = 0;
+        for (let item of this.goodsItems) {
+          totalQuantity = NP.plus(totalQuantity, item.quantity);
+          let amount = NP.times(item.quantity, item.purchase_price);
+          totalAmount = NP.plus(totalAmount, amount);
+          totalDiscountAmount = NP.plus(totalDiscountAmount, NP.times(amount, item.discount, 0.01));
+        }
+
+        return [...this.goodsItems, {
+          isTotal: true,
+          name: '合计:',
+          quantity: totalQuantity,
+          amount: totalAmount,
+          discount_amount: totalDiscountAmount
+        }]
       },
     },
     methods: {
       initData() {
+        this.resetForm();
+
         warehouseList().then(resp => {
           this.warehouseItems = resp.data;
         }).catch(err => {
@@ -169,7 +189,6 @@
         });
       },
       createOrder() {
-        console.log(1)
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.goodsItems.length == 0) {
@@ -181,8 +200,7 @@
             let form = { ...this.form, goods_set: this.goodsItems };
             purchaseOrderCreate(form).then(() => {
               this.$message.success('新增成功');
-              this.form = {};
-              this.goodsItems = [];
+              this.resetForm();
             }).catch(err => {
               this.$message.error(err.response.data.message);
             }).finally(() => {
@@ -190,6 +208,10 @@
             });
           }
         });
+      },
+      resetForm() {
+        this.form = { discount: 100 };
+        this.goodsItems = [];
       },
     },
     mounted() {
