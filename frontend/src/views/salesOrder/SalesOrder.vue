@@ -46,7 +46,7 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="8">
-              <a-form-model-item :wrapperCol="{ offset: 6 }">
+              <a-form-model-item prop="client" label="客户">
                 <a-button type="primary" style="width: 100%;" @click="addClient">选择已有客户</a-button>
               </a-form-model-item>
             </a-col>

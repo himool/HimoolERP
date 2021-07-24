@@ -2,7 +2,7 @@
   <div>
     <a-modal v-model="visible" title="选择商品" :footer="null" @cancel="cancel">
       <div>
-        <a-input-search v-model="searchText" placeholder="输入查询..." @search="search" />
+        <a-input-search v-model="searchForm.search" placeholder="输入查询..." @search="searchData" />
       </div>
       <div style="margin-top: 12px;">
         <a-table size="small" :columns="columns" :data-source="items" :loading="loading" :pagination="pagination">

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <a-modal v-model="visible" title="选择客户" :footer="null" @cancel="cancel">
+    <a-modal v-model="visible" title="选择采购单" width="720px" :footer="null" @cancel="cancel">
       <div>
-        <a-input-search v-model="searchForm.search" placeholder="输入查询..." @search="searchData" />
+        <a-input-search v-model="searchForm.search" placeholder="单号/仓库/供应商" @search="searchData" />
       </div>
       <div style="margin-top: 12px;">
         <a-table size="small" :columns="columns" :data-source="items" :loading="loading" :pagination="pagination">
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { clientList } from '@/api/sales'
+  import { purchaseOrderList } from '@/api/purchase';
   import { columns } from './columns';
 
   export default {
@@ -24,7 +24,7 @@
     model: { prop: 'visible', event: 'cancel' },
     data() {
       return {
-        searchForm: { search: '', page: 1 },
+        searchForm: { search: '', page: 1, is_done: true, is_return: false },
         pagination: { current: 1, total: 0, pageSize: 16, showTotal: total => `共 ${total} 条` },
         loading: false,
         items: [],
@@ -37,7 +37,7 @@
       },
       list() {
         this.loading = true;
-        clientList(this.searchForm).then(resp => {
+        purchaseOrderList(this.searchForm).then(resp => {
           this.pagination.total = resp.data.count;
           this.items = resp.data.results;
         }).catch(err => {

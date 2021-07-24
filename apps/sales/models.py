@@ -4,7 +4,7 @@ from django.db import models
 class SalesOrder(models.Model):
     """销售单"""
     id = models.CharField(primary_key=True, max_length=20, verbose_name='编号')
-    date = models.DateTimeField(verbose_name='日期')
+    date = models.DateField(verbose_name='日期')
     seller = models.ForeignKey('user.User', models.CASCADE, related_name='sales_order_set', verbose_name='销售员')
     seller_username = models.CharField(max_length=48, verbose_name='销售员用户名')
     warehouse = models.ForeignKey('warehouse.Warehouse', models.CASCADE, related_name='sales_order_set', verbose_name='仓库')

@@ -36,7 +36,7 @@ class PurchaseOrder(models.Model):
     amount = models.FloatField(default=0, verbose_name='实付金额')
     total_amount = models.FloatField(default=0, verbose_name='应收金额')
     total_quantity = models.FloatField(default=0, verbose_name='总数量')
-    date = models.DateTimeField(verbose_name='日期')
+    date = models.DateField(verbose_name='日期')
     remark = models.CharField(max_length=64, null=True, blank=True, verbose_name='备注')
     is_done = models.BooleanField(default=False, verbose_name='完成状态')
     is_return = models.BooleanField(default=False, verbose_name='退货状态')

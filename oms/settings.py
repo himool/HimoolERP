@@ -146,6 +146,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'frontend/dist/static')]
 # Django REST framework
 
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'NON_FIELD_ERRORS_KEY': 'message',
 }
