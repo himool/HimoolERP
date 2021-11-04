@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class StockInConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'stock_in'
+    name = 'apps.stock_in'

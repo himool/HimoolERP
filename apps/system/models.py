@@ -38,7 +38,7 @@ class Role(BaseModel):
 class User(BaseModel):
     """用户"""
 
-    username = CharField(max_length=64, verbose_name='用户名')
+    username = CharField(max_length=32, verbose_name='用户名')
     password = CharField(max_length=256, verbose_name='密码')
     name = CharField(max_length=64, verbose_name='名称')
     phone = CharField(max_length=32, blank=True, null=True, verbose_name='手机号')

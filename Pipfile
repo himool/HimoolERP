@@ -14,6 +14,7 @@ django-debug-toolbar = "*"
 pillow = "*"
 pendulum = "*"
 number-precision = "*"
+openpyxl = "*"
 
 [dev-packages]
 autopep8 = "*"
