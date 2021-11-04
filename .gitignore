@@ -118,5 +118,6 @@ dmypy.json
 .vscode/
 apps/*/migrations/*
 !apps/*/migrations/__init__.py
-trash/
 media/
+trash/*
+!trash/templates/
