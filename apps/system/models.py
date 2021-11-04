@@ -23,7 +23,7 @@ class Permission(Model):
     code = CharField(max_length=64, verbose_name='权限代码')
 
 
-class Role(BaseModel):
+class Role(Model, ModelMixin):
     """角色"""
 
     name = CharField(max_length=64, verbose_name='名称')
@@ -35,7 +35,7 @@ class Role(BaseModel):
         unique_together = [('name', 'team')]
 
 
-class User(BaseModel):
+class User(Model, ModelMixin):
     """用户"""
 
     username = CharField(max_length=32, verbose_name='用户名')

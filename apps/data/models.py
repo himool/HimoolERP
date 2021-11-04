@@ -1,3 +1,6 @@
-from django.db import models
+from extensions.models import *
 
-# Create your models here.
+
+__all__ = [
+
+]

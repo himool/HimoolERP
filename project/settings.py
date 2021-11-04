@@ -46,6 +46,18 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'apps.system',
+    'apps.data',
+    'apps.goods',
+    'apps.purchase',
+    'apps.sales',
+    'apps.stock_in',
+    'apps.stock_out',
+    'apps.stock_check',
+    'apps.stock_transfer',
+    'apps.flow',
+    'apps.finance',
+    'apps.statistic',    
+    'apps.option',    
 ]
 
 MIDDLEWARE = [
