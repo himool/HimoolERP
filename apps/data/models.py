@@ -30,7 +30,7 @@ class SupplierCategory(Model):
 
 
 class GoodsCategory(Model):
-    """·品分类"""
+    """商品分类"""
 
 
 class GoodsUnit(Model):
