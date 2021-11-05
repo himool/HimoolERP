@@ -17,6 +17,10 @@ class SalesReturnGoods(Model):
     """销售退货商品"""
 
 
+class SalesTask(Model):
+    """销售任务"""
+
+
 __all__ = [
 
 ]

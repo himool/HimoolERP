@@ -13,6 +13,10 @@ class ChargeRecord(Model):
     """收支记录"""
 
 
+class AccountTransferRecord(Model):
+    """结算账户转账记录"""
+
+
 __all__ = [
 
 ]

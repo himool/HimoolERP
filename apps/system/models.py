@@ -38,11 +38,18 @@ class Role(Model, ModelMixin):
 class User(Model, ModelMixin):
     """用户"""
 
+    class Sex(TextChoices):
+        """性别"""
+
+        MAN = ('man', '男')
+        WOMAN = ('woman', '女')
+
     username = CharField(max_length=32, verbose_name='用户名')
     password = CharField(max_length=256, verbose_name='密码')
     name = CharField(max_length=64, verbose_name='名称')
     phone = CharField(max_length=32, blank=True, null=True, verbose_name='手机号')
     email = CharField(max_length=256, blank=True, null=True, verbose_name='邮箱')
+    sex = CharField(max_length=32, choices=Sex.choices, verbose_name='性别')
     roles = ManyToManyField('system.Role', blank=True, related_name='users', verbose_name='角色')
     is_manager = BooleanField(default=False, verbose_name='管理员状态')
     is_active = BooleanField(default=True, verbose_name='激活状态')
