@@ -5,10 +5,10 @@ class StockTransferOrder(Model):
     """调拨单据"""
 
     number = CharField(max_length=32, verbose_name='编号')
-    out_warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
-                               related_name='out_stock_transfer_orders', verbose_name='出库仓库')
-    in_warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
-                              related_name='in_stock_transfer_orders', verbose_name='入库仓库')
+    transfer_out_warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
+                                        related_name='out_stock_transfer_orders', verbose_name='出库仓库')
+    transfer_in_warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
+                                       related_name='in_stock_transfer_orders', verbose_name='入库仓库')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='stock_transfer_orders', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
