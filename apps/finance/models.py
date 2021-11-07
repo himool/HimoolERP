@@ -33,7 +33,7 @@ class PaymentAccount(Model):
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='payment_accounts')
 
     class Meta:
-        unique_together = [('patment_order', 'account')]
+        unique_together = [('payment_order', 'account')]
 
 
 class CollectionOrder(Model):

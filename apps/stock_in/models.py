@@ -66,7 +66,7 @@ class StockInRecord(Model):
 class StockInRecordGoods(Model):
     """入库记录商品"""
 
-    stock_in_order = ForeignKey('stock_in.StockInRecord', on_delete=CASCADE,
+    stock_in_record = ForeignKey('stock_in.StockInRecord', on_delete=CASCADE,
                                 related_name='stock_in_record_goods_set', verbose_name='入库记录')
     stock_in_goods = ForeignKey('stock_in.StockInGoods', on_delete=CASCADE,
                                 related_name='stock_in_record_goods_set', verbose_name='入库商品')
