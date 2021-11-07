@@ -44,7 +44,7 @@ class StockCheckGoods(Model):
                                    related_name='stock_check_goods_set', verbose_name='盘点单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_check_goods_set', verbose_name='商品')
     batch = ForeignKey('goods.Batch', on_delete=SET_NULL, null=True,
-                       related_name='', verbose_name='批次')
+                       related_name='stock_check_goods_set', verbose_name='批次')
     book_quantity = FloatField(verbose_name='账面数量')
     actual_quantity = FloatField(verbose_name='实际数量')
     status = CharField(max_length=32, choices=Status.choices, verbose_name='盘点状态')
@@ -59,5 +59,5 @@ class StockCheckGoods(Model):
 
 
 __all__ = [
-
+    'StockCheckOrder', 'StockCheckGoods',
 ]
