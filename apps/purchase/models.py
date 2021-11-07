@@ -32,6 +32,7 @@ class PurchaseGoods(Model):
     purchase_unit_price = AmountField(verbose_name='采购单价')
     total_amount = AmountField(verbose_name='总金额')
     return_quantity = FloatField(default=0, verbose_name='退货数量')
+    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='purchase_goods_set')
 
     class Meta:
@@ -65,11 +66,12 @@ class PurchaseReturnGodos(Model):
     """采购退货商品"""
 
     purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE,
-                                       related_name='purchase_return_goods_set', verbose_name='采购单据')
+                                       related_name='purchase_return_goods_set', verbose_name='采购退货单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='purchase_return_goods_set', verbose_name='商品')
     return_quantity = FloatField(verbose_name='退货数量')
     return_unit_price = AmountField(verbose_name='退货单价')
     total_amount = AmountField(verbose_name='总金额')
+    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='purchase_return_goods_set')
 
     class Meta:
