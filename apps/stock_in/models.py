@@ -18,7 +18,7 @@ class StockInOrder(Model):
     sales_return_order = OneToOneField('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
                                        related_name='stock_in_order', verbose_name='销售退货单据')
     total_quantity = FloatField(verbose_name='入库总数')
-    stock_in_quantity = FloatField(default=0, verbose_name='入库数量')
+    remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
@@ -37,7 +37,7 @@ class StockInGoods(Model):
                                 related_name='stock_in_goods_set', verbose_name='入库单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_goods_set', verbose_name='商品')
     total_quantity = FloatField(verbose_name='入库总数')
-    stock_in_quantity = FloatField(default=0, verbose_name='入库数量')
+    remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_in_goods_set')
