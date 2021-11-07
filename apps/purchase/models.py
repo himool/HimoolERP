@@ -13,6 +13,7 @@ class PurchaseOrder(Model):
     total_amount = AmountField(verbose_name='总金额')
     total_quantity = FloatField(verbose_name='总数量')
     is_void = BooleanField(default=False, verbose_name='作废状态')
+    enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_purchase_orders', verbose_name='创建人')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -52,6 +53,7 @@ class PurchaseReturnOrder(Model):
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_amount = AmountField(verbose_name='总金额')
     total_quantity = FloatField(verbose_name='总数量')
+    enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_purchase_return_orders', verbose_name='创建人')

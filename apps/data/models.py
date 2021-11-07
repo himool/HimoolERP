@@ -32,6 +32,8 @@ class Client(Model):
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     order = IntegerField(default=100, verbose_name='顺序')
     is_active = BooleanField(default=True, verbose_name='激活状态')
+    initial_arrears_amount = AmountField(default=0, verbose_name='初期欠款金额')
+    arrears_amount = AmountField(default=0, verbose_name='欠款金额')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='clients')
 
     class Meta:
@@ -52,6 +54,8 @@ class Supplier(Model):
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     order = IntegerField(default=100, verbose_name='顺序')
     is_active = BooleanField(default=True, verbose_name='激活状态')
+    initial_arrears_amount = AmountField(default=0, verbose_name='初期欠款金额')
+    arrears_amount = AmountField(default=0, verbose_name='欠款金额')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='suppliers')
 
     class Meta:
@@ -77,6 +81,8 @@ class Account(Model):
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     order = IntegerField(default=100, verbose_name='顺序')
     is_active = BooleanField(default=True, verbose_name='激活状态')
+    initial_balance_amount = AmountField(default=0, verbose_name='初期余额')
+    balance_amount = AmountField(default=0, verbose_name='余额')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='accounts')
 
     class Meta:
