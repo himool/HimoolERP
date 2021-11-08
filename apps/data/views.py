@@ -55,10 +55,11 @@ class ClientViewSet(BaseViewSet, ReadWriteMixin):
 
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated, ClientPermission]
-    filterset_fields = ['is_active']
+    filterset_fields = ['category', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']
+    select_related_fields = ['category']
     queryset = Client.objects.all()
 
     def perform_destroy(self, instance):
@@ -87,10 +88,11 @@ class SupplierViewSet(BaseViewSet, ReadWriteMixin):
 
     serializer_class = SupplierSerializer
     permission_classes = [IsAuthenticated, SupplierPermission]
-    filterset_fields = ['is_active']
+    filterset_fields = ['category', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']
+    select_related_fields = ['category']
     queryset = Supplier.objects.all()
 
     def perform_destroy(self, instance):

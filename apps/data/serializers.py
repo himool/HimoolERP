@@ -1,6 +1,7 @@
 from extensions.serializers import *
 from extensions.exceptions import *
 from apps.data.models import *
+from apps.system.models import *
 
 
 class WarehouseSerializer(BaseSerializer):
@@ -20,14 +21,21 @@ class WarehouseSerializer(BaseSerializer):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
 
+    def validate_manager(self, instance):
+        instance = self.validate_foreign_key(User, instance)
+        if not instance.is_active:
+            raise ValidationError(f'管理员[{instance.name}]未激活')
+        return instance
+
 
 class ClientSerializer(BaseSerializer):
+    category_name = CharField(source='category.name', read_only=True, label='分类名称')
 
     class Meta:
         model = Client
-        read_only_fields = ['id', 'arrears_amount']
-        fields = ['number', 'name', 'contact', 'phone', 'email', 'address', 'remark', 'order',
-                  'is_active', 'initial_arrears_amount', *read_only_fields]
+        read_only_fields = ['id', 'category_name', 'arrears_amount']
+        fields = ['number', 'name', 'category', 'contact', 'phone', 'email', 'address', 'remark',
+                  'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -36,6 +44,10 @@ class ClientSerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
+
+    def validate_category(self, instance):
+        instance = self.validate_foreign_key(ClientCategory, instance)
+        return instance
 
     def create(self, validated_data):
         validated_data['arrears_amount'] = validated_data['initial_arrears_amount']
@@ -50,12 +62,13 @@ class ClientSerializer(BaseSerializer):
 
 
 class SupplierSerializer(BaseSerializer):
+    category_name = CharField(source='category.name', read_only=True, label='分类名称')
 
     class Meta:
         model = Supplier
-        read_only_fields = ['id', 'arrears_amount']
-        fields = ['number', 'name', 'contact', 'phone', 'email', 'address', 'bank_account', 'bank_name',
-                  'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
+        read_only_fields = ['id', 'category_name', 'arrears_amount']
+        fields = ['number', 'name', 'category', 'contact', 'phone', 'email', 'address', 'bank_account',
+                  'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -64,6 +77,10 @@ class SupplierSerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
+
+    def validate_category(self, instance):
+        instance = self.validate_foreign_key(SupplierCategory, instance)
+        return instance
 
     def create(self, validated_data):
         validated_data['arrears_amount'] = validated_data['initial_arrears_amount']

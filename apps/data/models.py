@@ -25,6 +25,8 @@ class Client(Model):
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
+    category = ForeignKey('data.ClientCategory', on_delete=SET_NULL, null=True,
+                          related_name='clients', verbose_name='客户分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
     phone = CharField(max_length=32, blank=True, null=True, verbose_name='手机号')
     email = CharField(max_length=256, blank=True, null=True, verbose_name='邮箱')
@@ -45,6 +47,8 @@ class Supplier(Model):
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
+    category = ForeignKey('data.SupplierCategory', on_delete=SET_NULL, null=True,
+                          related_name='suppliers', verbose_name='供应商分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
     phone = CharField(max_length=32, blank=True, null=True, verbose_name='手机号')
     email = CharField(max_length=256, blank=True, null=True, verbose_name='邮箱')
