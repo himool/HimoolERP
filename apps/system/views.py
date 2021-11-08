@@ -38,7 +38,7 @@ class UserViewSet(BaseViewSet, ReadWriteMixin):
     permission_classes = [IsManagerPermission]
     filterset_fields = ['sex', 'is_active']
     search_fields = ['username', 'name', 'phone', 'email']
-    ordering_fields = ['-id', 'username', 'name']
+    ordering_fields = ['id', 'username', 'name']
     queryset = User.objects.all()
 
     def perform_destroy(self, instance):
