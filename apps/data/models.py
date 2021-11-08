@@ -1,7 +1,7 @@
 from extensions.models import *
 
 
-class Warehouse(Model, ModelMixin):
+class Warehouse(Model):
     """仓库"""
 
     number = CharField(max_length=32, verbose_name='编号')

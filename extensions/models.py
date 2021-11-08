@@ -8,12 +8,6 @@ from django.db.models.functions import Coalesce
 from django.db import transaction, connection
 
 
-class ModelMixin():
-
-    def validate(self):
-        """验证"""
-
-
 class AmountField(DecimalField):
     """金额字段"""
 
@@ -23,7 +17,7 @@ class AmountField(DecimalField):
 
 
 __all__ = [
-    'Model', 'ModelMixin', 'IntegerChoices', 'TextChoices',
+    'Model', 'IntegerChoices', 'TextChoices',
     'CASCADE', 'SET_NULL', 'SET_DEFAULT', 'PROTECT',
     'OneToOneField', 'ForeignKey', 'ManyToManyField',
     'BooleanField', 'IntegerField', 'FloatField', 'DecimalField', 'AmountField',

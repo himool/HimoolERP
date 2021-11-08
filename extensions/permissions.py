@@ -13,6 +13,9 @@ class IsAuthenticated(BasePermission):
         if (expiry_time := request.user.team.expiry_time) < pendulum.now():
             raise ValidationError(f'已到期, 到期日期: {expiry_time}')
 
+        if not (request.user.is_manager or request.user.is_manager.is_active):
+            raise ValidationError('账号未激活, 无法执行任何操作')
+
         return True
 
 

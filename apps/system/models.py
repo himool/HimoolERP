@@ -23,7 +23,7 @@ class Permission(Model):
     code = CharField(max_length=64, verbose_name='权限代码')
 
 
-class Role(Model, ModelMixin):
+class Role(Model):
     """角色"""
 
     name = CharField(max_length=64, verbose_name='名称')
@@ -35,7 +35,7 @@ class Role(Model, ModelMixin):
         unique_together = [('name', 'team')]
 
 
-class User(Model, ModelMixin):
+class User(Model):
     """用户"""
 
     class Sex(TextChoices):
@@ -58,10 +58,6 @@ class User(Model, ModelMixin):
 
     class Meta:
         unique_together = [('username', 'team')]
-
-    def validate(self):
-        if not self.is_active:
-            raise ValidationError(f'用户[{self.username}]未激活')
 
 
 __all__ = [

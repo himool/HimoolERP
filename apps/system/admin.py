@@ -1,3 +1,5 @@
 from django.contrib import admin
+from apps.system.models import *
 
-# Register your models here.
+
+admin.register([Team, PermissionType, Permission, Role, User])
