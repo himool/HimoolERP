@@ -33,34 +33,23 @@ class Goods(Model):
         unique_together = [('number', 'team'), ('name', 'team')]
 
 
-class SupplierPurchasePrice(Model):
-    """供应商采购价"""
-
-    supplier = ForeignKey('data.Supplier', on_delete=CASCADE,
-                          related_name='supplier_purchase_prices', verbose_name='供应商价')
-    goods = ForeignKey('goods.Goods', on_delete=CASCADE,
-                       related_name='supplier_purchase_prices', verbose_name='供应商价')
-    purchase_price = AmountField(verbose_name='采购价')
-    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='supplier_purchase_prices')
-
-    class Meta:
-        unique_together = [('supplier', 'goods', 'team')]
-
-
 class Batch(Model):
     """批次"""
 
     number = CharField(max_length=32, verbose_name='编号')
+    warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='batchs', verbose_name='仓库')
     goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='batchs', verbose_name='商品')
     total_quantity = FloatField(verbose_name='批次数量')
     remain_quantity = FloatField(verbose_name='批次剩余数量')
     production_date = DateField(null=True, verbose_name='生产日期')
     shelf_life_days = IntegerField(default=0, verbose_name='保质期天数')
     expiration_date = DateField(null=True, verbose_name='过期日期')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     is_empty = BooleanField(default=False, verbose_name='库存状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='batchs')
+
+    class Meta:
+        unique_together = [('number', 'warehouse', 'goods', 'team')]
 
 
 class Inventory(Model):
@@ -69,9 +58,13 @@ class Inventory(Model):
     warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='inventories', verbose_name='仓库')
     goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='inventories', verbose_name='商品')
     total_quantity = FloatField(default=0, verbose_name='库存总数')
+    is_empty = BooleanField(default=True, verbose_name='库存状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='inventories')
+
+    class Meta:
+        unique_together = [('warehouse', 'goods', 'team')]
 
 
 __all__ = [
-    'Goods', 'SupplierPurchasePrice', 'Batch', 'Inventory',
+    'Goods', 'Batch', 'Inventory',
 ]
