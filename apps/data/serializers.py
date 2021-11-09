@@ -34,8 +34,8 @@ class ClientSerializer(BaseSerializer):
     class Meta:
         model = Client
         read_only_fields = ['id', 'category_name', 'arrears_amount']
-        fields = ['number', 'name', 'category', 'contact', 'phone', 'email', 'address', 'remark',
-                  'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
+        fields = ['number', 'name', 'level', 'category', 'contact', 'phone', 'email', 'address',
+                  'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')

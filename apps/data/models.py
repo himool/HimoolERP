@@ -22,9 +22,18 @@ class Warehouse(Model):
 
 class Client(Model):
     """客户"""
+    
+    class Level(TextChoices):
+        """等级"""
+
+        LEVEL0 = ('0', '普通客户')
+        LEVEL1 = ('1', '一级客户')
+        LEVEL2 = ('2', '二级客户')
+        LEVEL3 = ('3', '三级客户')
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
+    level = CharField(max_length=32, choices=Level.choices, default=Level.LEVEL0, verbose_name='等级')
     category = ForeignKey('data.ClientCategory', on_delete=SET_NULL, null=True,
                           related_name='clients', verbose_name='客户分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
