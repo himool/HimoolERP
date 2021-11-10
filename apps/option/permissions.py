@@ -28,6 +28,6 @@ __all__ = [
     'RoleOptionPermission', 'UserOptionPermission',
     'WarehouseOptionPermission', 'ClientOptionPermission', 'SupplierOptionPermission', 'AccountOptionPermission',
     'ChargeItemOptionPermission', 'ClientCategoryOptionPermission', 'SupplierCategoryOptionPermission',
-    'GoodsCategoryOptionPermission', 'GoodsUnitOptionPermission', '',
+    'GoodsCategoryOptionPermission', 'GoodsUnitOptionPermission',
     'GoodsOptionPermission', 'BatchOptionPermission',
 ]
