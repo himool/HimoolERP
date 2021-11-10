@@ -44,7 +44,7 @@ class Batch(Model):
     production_date = DateField(null=True, verbose_name='生产日期')
     shelf_life_days = IntegerField(default=0, verbose_name='保质期天数')
     expiration_date = DateField(null=True, verbose_name='过期日期')
-    is_empty = BooleanField(default=False, verbose_name='库存状态')
+    has_stock = BooleanField(default=True, verbose_name='库存状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='batchs')
 
@@ -58,7 +58,7 @@ class Inventory(Model):
     warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='inventories', verbose_name='仓库')
     goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='inventories', verbose_name='商品')
     total_quantity = FloatField(default=0, verbose_name='库存总数')
-    is_empty = BooleanField(default=True, verbose_name='库存状态')
+    has_stock = BooleanField(default=False, verbose_name='库存状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='inventories')
 
     class Meta:

@@ -54,7 +54,7 @@ class BatchSerializer(BaseSerializer):
         model = Batch
         fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'goods', 'goods_number',
                   'goods_name', 'goods_barcode', 'total_quantity', 'remain_quantity', 'unit_name',
-                  'production_date', 'shelf_life_days', 'expiration_date', 'is_empty', 'create_time']
+                  'production_date', 'shelf_life_days', 'expiration_date', 'has_stock', 'create_time']
 
 
 class InventorySerializer(BaseSerializer):
@@ -68,7 +68,7 @@ class InventorySerializer(BaseSerializer):
     class Meta:
         model = Inventory
         fields = ['id', 'warehouse', 'warehouse_number', 'warehouse_name', 'goods', 'goods_number',
-                  'goods_name', 'goods_barcode', 'total_quantity', 'unit_name']
+                  'goods_name', 'goods_barcode', 'total_quantity', 'unit_name', 'has_stock']
 
 
 __all__ = [

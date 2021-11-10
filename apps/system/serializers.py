@@ -28,10 +28,11 @@ class RoleSerializer(BaseSerializer):
 
 
 class UserSerializer(BaseSerializer):
+    sex_display = CharField(source='get_sex_display', read_only=True, label='性别')
 
     class Meta:
         model = User
-        read_only_fields = ['id', 'is_manager', 'create_time']
+        read_only_fields = ['id', 'sex_display', 'is_manager', 'create_time']
         fields = ['username', 'name', 'phone', 'email', 'sex', 'roles', 'is_active', *read_only_fields]
 
     def validate_username(self, value):

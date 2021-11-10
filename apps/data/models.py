@@ -45,6 +45,7 @@ class Client(Model):
     is_active = BooleanField(default=True, verbose_name='激活状态')
     initial_arrears_amount = AmountField(default=0, verbose_name='初期欠款金额')
     arrears_amount = AmountField(default=0, verbose_name='欠款金额')
+    has_arrears = BooleanField(default=False, verbose_name='欠款状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='clients')
 
     class Meta:
@@ -69,6 +70,7 @@ class Supplier(Model):
     is_active = BooleanField(default=True, verbose_name='激活状态')
     initial_arrears_amount = AmountField(default=0, verbose_name='初期欠款金额')
     arrears_amount = AmountField(default=0, verbose_name='欠款金额')
+    has_arrears = BooleanField(default=False, verbose_name='欠款状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='suppliers')
 
     class Meta:

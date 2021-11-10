@@ -29,11 +29,12 @@ class WarehouseSerializer(BaseSerializer):
 
 
 class ClientSerializer(BaseSerializer):
+    level_display = CharField(source='get_level_display', read_only=True, label='等级')
     category_name = CharField(source='category.name', read_only=True, label='分类名称')
 
     class Meta:
         model = Client
-        read_only_fields = ['id', 'category_name', 'arrears_amount']
+        read_only_fields = ['id', 'level_display', 'category_name', 'arrears_amount', 'has_arrears']
         fields = ['number', 'name', 'level', 'category', 'contact', 'phone', 'email', 'address',
                   'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
@@ -66,7 +67,7 @@ class SupplierSerializer(BaseSerializer):
 
     class Meta:
         model = Supplier
-        read_only_fields = ['id', 'category_name', 'arrears_amount']
+        read_only_fields = ['id', 'category_name', 'arrears_amount', 'has_arrears']
         fields = ['number', 'name', 'category', 'contact', 'phone', 'email', 'address', 'bank_account',
                   'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
@@ -95,10 +96,11 @@ class SupplierSerializer(BaseSerializer):
 
 
 class AccountSerializer(BaseSerializer):
+    type_display = CharField(source='get_type_display', read_only=True, label='账户类型')
 
     class Meta:
         model = Account
-        read_only_fields = ['id', 'balance_amount']
+        read_only_fields = ['id', 'type_display', 'balance_amount']
         fields = ['number', 'name', 'type', 'holder', 'remark', 'order', 'is_active',
                   'initial_balance_amount', *read_only_fields]
 
@@ -123,10 +125,11 @@ class AccountSerializer(BaseSerializer):
 
 
 class ChargeItemSerializer(BaseSerializer):
+    type_display = CharField(source='get_type_display', read_only=True, label='收支类型')
 
     class Meta:
         model = ChargeItem
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'type_display']
         fields = ['name', 'type', 'remark', *read_only_fields]
 
     def validate_name(self, value):

@@ -39,7 +39,7 @@ class WarehouseOptionViewSet(OptionViewSet):
 class ClientOptionViewSet(OptionViewSet):
     serializer_class = ClientOptionSerializer
     permission_classes = [IsAuthenticated, ClientOptionPermission]
-    filterset_fields = ['level', 'category']
+    filterset_fields = ['level', 'category', 'has_arrears']
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number', 'order']
     ordering = ['order', 'number', 'id']
@@ -49,7 +49,7 @@ class ClientOptionViewSet(OptionViewSet):
 class SupplierOptionViewSet(OptionViewSet):
     serializer_class = SupplierOptionSerializer
     permission_classes = [IsAuthenticated, SupplierOptionPermission]
-    filterset_fields = ['category']
+    filterset_fields = ['category', 'has_arrears']
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number', 'order']
     ordering = ['order', 'number', 'id']
@@ -118,7 +118,7 @@ class BatchOptionViewSet(OptionViewSet):
     ordering_fields = ['id', 'number']
     ordering = ['-number', 'id']
     select_related_fields = ['goods__unit']
-    queryset = Batch.objects.filter(is_empty=False)
+    queryset = Batch.objects.filter(has_stock=True)
 
 
 __all__ = [

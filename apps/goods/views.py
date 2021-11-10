@@ -55,7 +55,7 @@ class BatchViewSet(BaseViewSet, ReadOnlyMixin):
 
     serializer_class = BatchSerializer
     permission_classes = [IsAuthenticated, BatchPermission]
-    filterset_fields = ['number', 'warehouse', 'goods', 'is_empty']
+    filterset_fields = ['number', 'warehouse', 'goods', 'has_stock']
     search_fields = ['number', 'goods__number', 'goods__name']
     ordering_fields = ['id', 'number', 'total_quantity', 'remain_quantity', 'production_date',
                        'expiration_date', 'create_time']
@@ -68,7 +68,7 @@ class InventoryViewSet(BaseViewSet, ReadOnlyMixin):
 
     serializer_class = InventorySerializer
     permission_classes = [IsAuthenticated, InventoryPermission]
-    filterset_fields = ['warehouse', 'goods', 'is_empty']
+    filterset_fields = ['warehouse', 'goods', 'has_stock']
     search_fields = ['goods__number', 'goods__name']
     ordering_fields = ['id', 'total_quantity']
     select_related_fields = ['warehouse', 'goods', 'goods__unit']
