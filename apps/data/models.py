@@ -166,5 +166,6 @@ class GoodsUnit(Model):
 
 __all__ = [
     'Warehouse', 'Client', 'Supplier', 'Account',
-    'ChargeItem', 'ClientCategory', 'SupplierCategory', 'GoodsCategory', 'GoodsUnit',
+    'ChargeItem', 'ClientCategory', 'SupplierCategory',
+    'GoodsCategory', 'GoodsUnit',
 ]
