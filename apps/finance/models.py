@@ -11,7 +11,6 @@ class PaymentOrder(Model):
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_amount = AmountField(null=True, verbose_name='总金额')
     discount_amount = AmountField(default=0, verbose_name='优惠金额')
-    payment_amount = AmountField(null=True, verbose_name='实付金额')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_payment_orders', verbose_name='创建人')
@@ -20,6 +19,19 @@ class PaymentOrder(Model):
 
     class Meta:
         unique_together = [('number', 'team')]
+
+    @classmethod
+    def get_number(cls, team):
+        start_date, end_date = pendulum.now(), pendulum.tomorrow()
+        instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'FK' + start_date.format('YYYYMMDD') + '0001'
+
+        return number
 
 
 class PaymentAccount(Model):

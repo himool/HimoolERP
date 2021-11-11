@@ -6,6 +6,8 @@ from django.db.models import Model, IntegerChoices, TextChoices
 from django.db.models import Sum, Count, Value, F, Q, Prefetch
 from django.db.models.functions import Coalesce
 from django.db import transaction, connection
+import pendulum
+import re
 
 
 class AmountField(DecimalField):
@@ -23,4 +25,5 @@ __all__ = [
     'BooleanField', 'IntegerField', 'FloatField', 'DecimalField', 'AmountField',
     'CharField', 'DateField', 'DateTimeField', 'JSONField', 'FileField', 'ImageField',
     'Sum', 'Count', 'Value', 'F', 'Q', 'Prefetch', 'Coalesce', 'transaction', 'connection',
+    'pendulum', 're',
 ]

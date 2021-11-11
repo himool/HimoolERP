@@ -10,8 +10,13 @@ class PurchaseOrder(Model):
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='purchase_orders', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    total_amount = AmountField(verbose_name='总金额')
-    total_quantity = FloatField(verbose_name='总数量')
+    total_quantity = FloatField(verbose_name='采购总数量')
+    other_amount = AmountField(default=0, verbose_name='其他费用')
+    total_amount = AmountField(verbose_name='采购总金额')
+    payment_amount = AmountField(default=0, verbose_name='付款金额')
+    arrears_amount = AmountField(default=0, verbose_name='欠款金额')
+    payment_order = OneToOneField('finance.PaymentOrder', on_delete=PROTECT, null=True,
+                                  related_name='purchase_order', verbose_name='付款单据')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     creator = ForeignKey('system.User', on_delete=PROTECT,
@@ -21,6 +26,10 @@ class PurchaseOrder(Model):
 
     class Meta:
         unique_together = [('number', 'team')]
+
+    @classmethod
+    def get_number(cls, team):
+        return
 
 
 class PurchaseGoods(Model):
