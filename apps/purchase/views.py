@@ -17,10 +17,18 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
     search_fields = ['number', 'supplier__number', 'supplier__name', 'remark']
     ordering_fields = ['id', 'number', 'total_quantity', 'total_amount', 'create_time']
     ordering = ['-number', 'id']
-    select_related_fields = ['warehouse', 'supplier', 'handler', 'creator',
-                             'purchase_goods_set__goods__unit']
-    prefetch_related_fields = ['purchase_goods_set', 'payment_order__payment_accounts']
+    select_related_fields = ['warehouse', 'supplier', 'handler', 'creator']
+    prefetch_related_fields = ['purchase_goods_set', 'purchase_goods_set__goods__unit',
+                               'payment_order__payment_accounts']
     queryset = PurchaseOrder.objects.all()
+
+    @extend_schema(responses={200: NumberResponse})
+    @action(detail=False, methods=['get'])
+    def number(self, request, *args, **kwargs):
+        """获取编号"""
+
+        number = PurchaseOrder.get_number(self.team)
+        return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
 __all__ = [

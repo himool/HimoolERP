@@ -1,3 +1,5 @@
 from django.contrib import admin
+from apps.flow.models import *
 
-# Register your models here.
+
+admin.site.register([])

@@ -40,7 +40,7 @@ class UserSerializer(BaseSerializer):
         return value
 
     def validate_roles(self, instances):
-        instances = self.validate_foreign_key_set(Role, instances)
+        instances = self.validate_foreign_key_set(Role, instances, message='角色不存在')
         return instances
 
     def create(self, validated_data):

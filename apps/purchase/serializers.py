@@ -25,7 +25,7 @@ class PurchaseOrderSerializer(BaseSerializer):
             fields = ['goods', 'purchase_quantity', 'purchase_price', *read_only_fields]
 
         def validate_goods(self, instance):
-            instance = self.validate_foreign_key(Goods, instance)
+            instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
             if not instance.is_active:
                 raise ValidationError(f'商品[{instance.name}]未激活')
             return instance
@@ -52,9 +52,9 @@ class PurchaseOrderSerializer(BaseSerializer):
             fields = ['account', 'payment_amount', *read_only_fields]
 
         def validate_account(self, instance):
-            instance = self.validate_foreign_key(Account, instance)
+            instance = self.validate_foreign_key(Account, instance, message='账户不存在')
             if not instance.is_active:
-                raise ValidationError(f'结算账户[{instance.name}]未激活')
+                raise ValidationError(f'账户[{instance.name}]未激活')
             return instance
 
         def validate_payment_amount(self, value):
@@ -85,7 +85,7 @@ class PurchaseOrderSerializer(BaseSerializer):
         return value
 
     def validate_warehouse(self, instance):
-        instance = self.validate_foreign_key(Warehouse, instance)
+        instance = self.validate_foreign_key(Warehouse, instance, message='仓库不存在')
         if not instance.is_active:
             raise ValidationError(f'仓库[{instance.name}]未激活')
 
@@ -94,13 +94,13 @@ class PurchaseOrderSerializer(BaseSerializer):
         return instance
 
     def validate_supplier(self, instance):
-        instance = self.validate_foreign_key(Supplier, instance)
+        instance = self.validate_foreign_key(Supplier, instance, message='供应商不存在')
         if not instance.is_active:
             raise ValidationError(f'供应商[{instance.name}]未激活')
         return instance
 
     def validate_handler(self, instance):
-        instance = self.validate_foreign_key(User, instance)
+        instance = self.validate_foreign_key(User, instance, message='经手人不存在')
         if not instance.is_active:
             raise ValidationError(f'经手人[{instance.name}]未激活')
         return instance
@@ -112,11 +112,10 @@ class PurchaseOrderSerializer(BaseSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        purchase_goods_items = validated_data.pop('purchase_goods_items')
-        payment_account_items = validated_data.pop('payment_account_items', None)
-        print(purchase_goods_items)
-        print(payment_account_items)
-
+        purchase_goods_items = validated_data.pop('purchase_goods_set')
+        payment_order_item = validated_data.pop('payment_order', {})
+        payment_account_items = payment_order_item.pop('payment_accounts', [])
+        
         validated_data['enable_auto_stock_in'] = self.team.enable_auto_stock_in
         validated_data['creator'] = self.user
         purchase_order = super().create(validated_data)
@@ -144,6 +143,8 @@ class PurchaseOrderSerializer(BaseSerializer):
             purchase_order.total_quantity = total_purchase_quantity
             purchase_order.total_amount = total_purchase_amount
 
+        total_payment_amount = 0
+
         # 创建付款单据
         if payment_account_items:
             payment_order_number = PaymentOrder.get_number(team=self.team)
@@ -153,8 +154,6 @@ class PurchaseOrderSerializer(BaseSerializer):
                 handler=purchase_order.handler, handle_time=purchase_order.handle_time,
                 remark=payment_order_remark, creator=self.user, team=self.team
             )
-
-            total_payment_amount = 0
 
             # 创建付款账户
             payment_accounts = []
@@ -170,12 +169,12 @@ class PurchaseOrderSerializer(BaseSerializer):
                 PaymentAccount.objects.bulk_create(payment_accounts)
                 payment_order.total_amount = total_payment_amount
                 payment_order.save(update_fields=['total_amount'])
-                purchase_order.payment_amount = total_payment_amount
-                purchase_order.arrears_amount = NP.minus(total_purchase_amount, total_payment_amount)
                 purchase_order.payment_order = payment_order
 
-        purchase_order = purchase_order.save(update_fields=['total_quantity', 'total_amount', 'payment_amount',
-                                                            'arrears_amount', 'payment_order'])
+        purchase_order.payment_amount = total_payment_amount
+        purchase_order.arrears_amount = NP.minus(total_purchase_amount, total_payment_amount)
+        purchase_order.save(update_fields=['total_quantity', 'total_amount', 'payment_amount',
+                                           'arrears_amount', 'payment_order'])
         return purchase_order
 
 

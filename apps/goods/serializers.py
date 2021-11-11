@@ -26,11 +26,11 @@ class GoodsSerializer(BaseSerializer):
         return value
 
     def validate_category(self, instance):
-        instance = self.validate_foreign_key(GoodsCategory, instance)
+        instance = self.validate_foreign_key(GoodsCategory, instance, message='商品分类不存在')
         return instance
 
     def validate_unit(self, instance):
-        instance = self.validate_foreign_key(GoodsUnit, instance)
+        instance = self.validate_foreign_key(GoodsUnit, instance, message='商品单位不存在')
         return instance
 
     @transaction.atomic

@@ -10,9 +10,9 @@ class PurchaseOrder(Model):
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='purchase_orders', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    total_quantity = FloatField(verbose_name='采购总数量')
+    total_quantity = FloatField(null=True, verbose_name='采购总数量')
     other_amount = AmountField(default=0, verbose_name='其他费用')
-    total_amount = AmountField(verbose_name='采购总金额')
+    total_amount = AmountField(null=True, verbose_name='采购总金额')
     payment_amount = AmountField(default=0, verbose_name='付款金额')
     arrears_amount = AmountField(default=0, verbose_name='欠款金额')
     payment_order = OneToOneField('finance.PaymentOrder', on_delete=PROTECT, null=True,
@@ -29,7 +29,16 @@ class PurchaseOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        return
+        start_date, end_date = pendulum.now(), pendulum.tomorrow()
+        instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'CG' + start_date.format('YYYYMMDD') + '0001'
+
+        return number
 
 
 class PurchaseGoods(Model):

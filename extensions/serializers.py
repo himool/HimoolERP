@@ -28,8 +28,6 @@ class BaseSerializer(ModelSerializer):
         if instance:
             if not (instance := model.objects.filter(id=instance.id, team=self.team).first()):
                 raise ValidationError(message)
-            instance.validate()
-
         return instance
 
     def validate_foreign_key_set(self, model, instances, message):
@@ -39,10 +37,6 @@ class BaseSerializer(ModelSerializer):
 
             if len(instance_ids) != len(instances):
                 raise ValidationError(message)
-
-            for instance in instances:
-                instance.validate()
-
         return instances
 
     def validate_unique(self, fields, message):

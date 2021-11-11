@@ -22,7 +22,7 @@ class WarehouseSerializer(BaseSerializer):
         return value
 
     def validate_manager(self, instance):
-        instance = self.validate_foreign_key(User, instance)
+        instance = self.validate_foreign_key(User, instance, message='管理员不存在')
         if not instance.is_active:
             raise ValidationError(f'管理员[{instance.name}]未激活')
         return instance
@@ -47,7 +47,7 @@ class ClientSerializer(BaseSerializer):
         return value
 
     def validate_category(self, instance):
-        instance = self.validate_foreign_key(ClientCategory, instance)
+        instance = self.validate_foreign_key(ClientCategory, instance, message='客户分类不存在')
         return instance
 
     def create(self, validated_data):
@@ -80,7 +80,7 @@ class SupplierSerializer(BaseSerializer):
         return value
 
     def validate_category(self, instance):
-        instance = self.validate_foreign_key(SupplierCategory, instance)
+        instance = self.validate_foreign_key(SupplierCategory, instance, message='供应商分类不存在')
         return instance
 
     def create(self, validated_data):
