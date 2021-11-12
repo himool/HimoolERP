@@ -75,7 +75,7 @@ class PurchaseOrderSerializer(BaseSerializer):
     class Meta:
         model = PurchaseOrder
         read_only_fields = ['id', 'warehouse_number', 'warehouse_name', 'supplier_number', 'supplier_name',
-                            'handler_name', 'total_amount', 'total_quantity', 'payment_amount', 'arrears_amount',
+                            'handler_name', 'total_quantity', 'total_amount', 'payment_amount', 'arrears_amount',
                             'is_void', 'enable_auto_stock_in', 'creator_name', 'create_time']
         fields = ['number', 'warehouse', 'supplier', 'handler', 'handle_time', 'other_amount', 'remark',
                   'purchase_goods_items', 'payment_account_items', *read_only_fields]

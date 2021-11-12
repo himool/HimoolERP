@@ -84,9 +84,9 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 amount_after = NP.minus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=payment_account.account, type=FinanceFlow.Type.PAYMENT,
-                    amount_before=amount_before, amount_change=amount_change, amount_after=amount_after,
-                    payment_order=payment_order, creator=self.user, team=self.team
+                    account=account, type=FinanceFlow.Type.PAYMENT, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after, payment_order=payment_order,
+                    creator=self.user, team=self.team
                 ))
 
                 account.balance_amount = amount_after
@@ -173,8 +173,8 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 amount_after = NP.plus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=payment_account.account, type=FinanceFlow.Type.VOID_PAYMENT,
-                    amount_before=amount_before, amount_change=amount_change, amount_after=amount_after,
+                    account=account, type=FinanceFlow.Type.VOID_PAYMENT, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after,
                     void_payment_order=payment_order, creator=self.user, team=self.team
                 ))
 

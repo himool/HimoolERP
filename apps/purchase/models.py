@@ -13,8 +13,8 @@ class PurchaseOrder(Model):
     total_quantity = FloatField(null=True, verbose_name='采购总数量')
     other_amount = AmountField(default=0, verbose_name='其他费用')
     total_amount = AmountField(null=True, verbose_name='采购总金额')
-    payment_amount = AmountField(default=0, verbose_name='付款金额')
-    arrears_amount = AmountField(default=0, verbose_name='欠款金额')
+    payment_amount = AmountField(null=True, verbose_name='付款金额')
+    arrears_amount = AmountField(null=True, verbose_name='欠款金额')
     payment_order = OneToOneField('finance.PaymentOrder', on_delete=PROTECT, null=True,
                                   related_name='purchase_order', verbose_name='付款单据')
     is_void = BooleanField(default=False, verbose_name='作废状态')
@@ -36,7 +36,7 @@ class PurchaseOrder(Model):
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'CG' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'CG' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD').format('YYYYMMDD') + '0001'
 
         return number
 
@@ -90,7 +90,7 @@ class PurchaseReturnOrder(Model):
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'CR' + pendulum.today(settings.TIME_ZONE) + '0001'
+            number = 'CR' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
 
         return number
 

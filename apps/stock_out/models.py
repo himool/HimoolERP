@@ -38,7 +38,7 @@ class StockOutOrder(Model):
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'CK' + pendulum.today(settings.TIME_ZONE) + '0001'
+            number = 'CK' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
 
         return number
 
@@ -55,7 +55,7 @@ class StockOutGoods(Model):
     stock_out_order = ForeignKey('stock_out.StockOutOrder', on_delete=CASCADE,
                                  related_name='stock_out_goods_set', verbose_name='出库单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_out_goods_set', verbose_name='商品')
-    total_quantity = FloatField(verbose_name='出库总数')
+    stock_out_quantity = FloatField(verbose_name='出库总数')
     remain_quantity = FloatField(default=0, verbose_name='出库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
     is_void = BooleanField(default=False, verbose_name='作废状态')

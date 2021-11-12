@@ -10,12 +10,12 @@ class SalesOrder(Model):
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='sales_orders', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    total_quantity = FloatField(verbose_name='总数量')
-    discount = FloatField(default=100, verbose_name='折扣')
+    total_quantity = FloatField(null=True, verbose_name='总数量')
+    discount = FloatField(default=1, verbose_name='折扣')
     other_amount = AmountField(default=0, verbose_name='其他费用')
-    total_amount = AmountField(verbose_name='总金额')
-    collection_amount = AmountField(default=0, verbose_name='收款金额')
-    arrears_amount = AmountField(default=0, verbose_name='欠款金额')
+    total_amount = AmountField(null=True, verbose_name='总金额')
+    collection_amount = AmountField(null=True, verbose_name='收款金额')
+    arrears_amount = AmountField(null=True, verbose_name='欠款金额')
     collection_order = OneToOneField('finance.CollectionOrder', on_delete=PROTECT, null=True,
                                      related_name='sales_order', verbose_name='收款单据')
     is_void = BooleanField(default=False, verbose_name='作废状态')
@@ -37,7 +37,7 @@ class SalesOrder(Model):
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'XS' + pendulum.today(settings.TIME_ZONE) + '0001'
+            number = 'XS' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
 
         return number
 
@@ -91,7 +91,7 @@ class SalesReturnOrder(Model):
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'SR' + pendulum.today(settings.TIME_ZONE) + '0001'
+            number = 'SR' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
 
         return number
 
