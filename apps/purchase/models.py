@@ -81,6 +81,19 @@ class PurchaseReturnOrder(Model):
     class Meta:
         unique_together = [('number', 'team')]
 
+    @classmethod
+    def get_number(cls, team):
+        start_date, end_date = pendulum.now(), pendulum.tomorrow()
+        instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'CR' + start_date.format('YYYYMMDD') + '0001'
+
+        return number
+
 
 class PurchaseReturnGodos(Model):
     """采购退货商品"""

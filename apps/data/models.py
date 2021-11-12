@@ -19,6 +19,18 @@ class Warehouse(Model):
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
 
+    @classmethod
+    def get_number(cls, team):
+        instance = cls.objects.filter(team=team).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'W001'
+
+        return number
+
 
 class Client(Model):
     """客户"""
@@ -51,6 +63,18 @@ class Client(Model):
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
 
+    @classmethod
+    def get_number(cls, team):
+        instance = cls.objects.filter(team=team).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'C001'
+
+        return number
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.has_arrears = self.arrears_amount > 0
         if update_fields:
@@ -81,6 +105,18 @@ class Supplier(Model):
 
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
+
+    @classmethod
+    def get_number(cls, team):
+        instance = cls.objects.filter(team=team).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'S001'
+
+        return number
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.has_arrears = self.arrears_amount > 0
@@ -115,6 +151,18 @@ class Account(Model):
 
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
+
+    @classmethod
+    def get_number(cls, team):
+        instance = cls.objects.filter(team=team).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'A001'
+
+        return number
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.has_balance = self.balance_amount > 0

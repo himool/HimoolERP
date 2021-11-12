@@ -40,13 +40,7 @@ class GoodsViewSet(BaseViewSet, ReadWriteMixin):
     def number(self, request, *args, **kwargs):
         """获取编号"""
 
-        instance = Goods.objects.filter(team=self.team).last()
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'G000000000001'
-
+        number = Goods.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 

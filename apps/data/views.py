@@ -40,13 +40,7 @@ class WarehouseViewSet(BaseViewSet, ReadWriteMixin):
     def number(self, request, *args, **kwargs):
         """获取编号"""
 
-        instance = Warehouse.objects.filter(team=self.team).last()
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'W001'
-
+        number = Warehouse.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
@@ -73,13 +67,7 @@ class ClientViewSet(BaseViewSet, ReadWriteMixin):
     def number(self, request, *args, **kwargs):
         """获取编号"""
 
-        instance = Client.objects.filter(team=self.team).last()
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'C001'
-
+        number = Client.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
@@ -106,13 +94,7 @@ class SupplierViewSet(BaseViewSet, ReadWriteMixin):
     def number(self, request, *args, **kwargs):
         """获取编号"""
 
-        instance = Supplier.objects.filter(team=self.team).last()
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'S001'
-
+        number = Supplier.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
@@ -138,13 +120,7 @@ class AccountViewSet(BaseViewSet, ReadWriteMixin):
     def number(self, request, *args, **kwargs):
         """获取编号"""
 
-        instance = Account.objects.filter(team=self.team).last()
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'A001'
-
+        number = Account.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 

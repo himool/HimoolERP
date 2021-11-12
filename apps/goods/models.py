@@ -32,6 +32,18 @@ class Goods(Model):
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
 
+    @classmethod
+    def get_number(cls, team):
+        instance = cls.objects.filter(team=team).last()
+
+        try:
+            result = re.match('^(.*?)([1-9]+)$', instance.number)
+            number = result.group(1) + str(int(result.group(2)) + 1)
+        except AttributeError:
+            number = 'G000000000001'
+
+        return number
+
 
 class Batch(Model):
     """批次"""
