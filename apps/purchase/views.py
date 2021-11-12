@@ -30,7 +30,6 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
         # 同步入库
         if purchase_order.enable_auto_stock_in:
-
             # 同步库存, 流水
             inventory_flows = []
             for purchase_goods in purchase_order.purchase_goods_set.all():
@@ -108,6 +107,84 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
     @action(detail=True, methods=['post'])
     def void(self, request, *args, **kwargs):
         """作废"""
+
+        purchase_order = self.get_object()
+        if purchase_order.is_void:
+            raise ValidationError(f'采购单据[{purchase_order.number}]已作废, 无法再次作废')
+
+        # 同步采购单据, 采购商品
+        purchase_order.is_void = True
+        purchase_order.save(update_fields=['is_void'])
+        purchase_order.purchase_goods_set.all().update(is_void=True)
+
+        # 同步入库
+        if purchase_order.enable_auto_stock_in:
+            # 同步库存, 流水
+            inventory_flows = []
+            for purchase_goods in purchase_order.purchase_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=purchase_order.warehouse,
+                                                  goods=purchase_goods.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = purchase_goods.purchase_quantity
+                quantity_after = NP.minus(inventory.total_quantity, purchase_goods.purchase_quantity)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=purchase_order.warehouse, goods=purchase_goods.goods,
+                    type=InventoryFlow.Type.VOID_PURCHASE, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    void_purchase_order=purchase_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+            else:
+                InventoryFlow.objects.bulk_create(inventory_flows)
+        else:
+            # 作废入库单据
+            stock_in_order = purchase_order.stock_in_order
+            if stock_in_order.total_quantity != stock_in_order.remain_quantity:
+                raise ValidationError(f'采购单据[{purchase_order.number}]无法作废, 已存在入库记录')
+
+            stock_in_order.is_void = True
+            stock_in_order.save(update_fields=['is_void'])
+
+            # 作废入库商品
+            stock_in_order.stock_in_goods_set.all().update(is_void=True)
+
+        # 同步欠款
+        supplier = purchase_order.supplier
+        supplier.arrears_amount = NP.minus(supplier.arrears_amount, purchase_order.arrears_amount)
+        supplier.save(update_fields=['arrears_amount'])
+
+        # 同步账户, 流水
+        if payment_order := purchase_order.payment_order:
+            # 作废付款单据
+            payment_order.is_void = True
+            payment_order.save(update_fields=['is_void'])
+
+            # 作废付款账号
+            payment_order.payment_accounts.all().update(is_void=True)
+
+            finance_flows = []
+            for payment_account in payment_order.payment_accounts.all():
+                account = payment_account.account
+                amount_before = account.balance_amount
+                amount_change = payment_account.payment_amount
+                amount_after = NP.plus(amount_before, amount_change)
+
+                finance_flows.append(FinanceFlow(
+                    account=payment_account.account, type=FinanceFlow.Type.VOID_PAYMENT,
+                    amount_before=amount_before, amount_change=amount_change, amount_after=amount_after,
+                    void_payment_order=payment_order, creator=self.user, team=self.team
+                ))
+
+                account.balance_amount = amount_after
+                account.save(update_fields=['balance_amount'])
+            else:
+                FinanceFlow.objects.bulk_create(finance_flows)
+
+        serializer = PurchaseOrderSerializer(instance=purchase_order)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 __all__ = [
