@@ -95,7 +95,7 @@ class PurchaseReturnOrder(Model):
         return number
 
 
-class PurchaseReturnGodos(Model):
+class PurchaseReturnGoods(Model):
     """采购退货商品"""
 
     purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE,
@@ -113,5 +113,5 @@ class PurchaseReturnGodos(Model):
 
 __all__ = [
     'PurchaseOrder', 'PurchaseGoods',
-    'PurchaseReturnOrder', 'PurchaseReturnGodos',
+    'PurchaseReturnOrder', 'PurchaseReturnGoods',
 ]

@@ -20,8 +20,10 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
     search_fields = ['number', 'supplier__number', 'supplier__name', 'remark']
     ordering_fields = ['id', 'number', 'total_quantity', 'total_amount', 'create_time']
     select_related_fields = ['warehouse', 'supplier', 'handler', 'creator']
-    prefetch_related_fields = ['purchase_goods_set', 'purchase_goods_set__goods__unit',
-                               'payment_order__payment_accounts']
+    prefetch_related_fields = ['purchase_goods_set', 'purchase_goods_set__goods',
+                               'purchase_goods_set__goods__unit',
+                               'payment_order__payment_accounts',
+                               'payment_order__payment_accounts__account']
     queryset = PurchaseOrder.objects.all()
 
     @transaction.atomic
@@ -37,7 +39,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                                                   goods=purchase_goods.goods, team=self.team)
                 quantity_before = inventory.total_quantity
                 quantity_change = purchase_goods.purchase_quantity
-                quantity_after = NP.plus(inventory.total_quantity, purchase_goods.purchase_quantity)
+                quantity_after = NP.plus(quantity_before, quantity_change)
 
                 inventory_flows.append(InventoryFlow(
                     warehouse=purchase_order.warehouse, goods=purchase_goods.goods,
@@ -56,7 +58,9 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             stock_in_order = StockInOrder.objects.create(
                 number=stock_in_order_number, warehouse=purchase_order.warehouse,
                 type=StockInOrder.Type.PURCHASE, purchase_order=purchase_order,
-                total_quantity=purchase_order.total_quantity, creator=self.user, team=self.team
+                total_quantity=purchase_order.total_quantity,
+                remain_quantity=purchase_order.total_quantity,
+                creator=self.user, team=self.team
             )
 
             # 创建入库商品
@@ -126,7 +130,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                                                   goods=purchase_goods.goods, team=self.team)
                 quantity_before = inventory.total_quantity
                 quantity_change = purchase_goods.purchase_quantity
-                quantity_after = NP.minus(inventory.total_quantity, purchase_goods.purchase_quantity)
+                quantity_after = NP.minus(quantity_before, quantity_change)
 
                 inventory_flows.append(InventoryFlow(
                     warehouse=purchase_order.warehouse, goods=purchase_goods.goods,

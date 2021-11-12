@@ -20,8 +20,10 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
     search_fields = ['number', 'client__number', 'client__name', 'remark']
     ordering_fields = ['id', 'number', 'total_quantity', 'total_amount', 'create_time']
     select_related_fields = ['warehouse', 'client', 'handler', 'creator']
-    prefetch_related_fields = ['sales_goods_set', 'sales_goods_set__goods__unit',
-                               'payment_order__payment_accounts']
+    prefetch_related_fields = ['sales_goods_set', 'sales_goods_set__goods',
+                               'sales_goods_set__goods__unit',
+                               'collection_order__collection_accounts',
+                               'collection_order__collection_accounts__account']
     queryset = SalesOrder.objects.all()
 
     @transaction.atomic
@@ -37,7 +39,7 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                                                   goods=sales_goods.goods, team=self.team)
                 quantity_before = inventory.total_quantity
                 quantity_change = sales_goods.sales_quantity
-                quantity_after = NP.minus(inventory.total_quantity, sales_goods.sales_quantity)
+                quantity_after = NP.minus(quantity_before, quantity_change)
 
                 inventory_flows.append(InventoryFlow(
                     warehouse=sales_order.warehouse, goods=sales_goods.goods,
@@ -55,7 +57,9 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
             stock_out_order_number = StockOutOrder.get_number(team=self.team)
             stock_out_order = StockOutOrder.objects.create(
                 number=stock_out_order_number, warehouse=sales_order.warehouse,
-                type=StockOutOrder.Type.SALES, sales_order=sales_order, total_quantity=sales_order.total_quantity,
+                type=StockOutOrder.Type.SALES, sales_order=sales_order,
+                total_quantity=sales_order.total_quantity,
+                remain_quantity=sales_order.total_quantity,
                 creator=self.user, team=self.team
             )
 
@@ -126,7 +130,7 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                                                   goods=sales_goods.goods, team=self.team)
                 quantity_before = inventory.total_quantity
                 quantity_change = sales_goods.sales_quantity
-                quantity_after = NP.plus(inventory.total_quantity, sales_goods.sales_quantity)
+                quantity_after = NP.plus(quantity_before, quantity_change)
 
                 inventory_flows.append(InventoryFlow(
                     warehouse=sales_order.warehouse, goods=sales_goods.goods,
