@@ -42,6 +42,13 @@ class StockOutOrder(Model):
 
         return number
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.is_completed = self.remain_quantity == 0
+        if update_fields:
+            update_fields.append('is_completed')
+        return super().save(force_insert, force_update, using, update_fields)
+
+
 class StockOutGoods(Model):
     """出库商品"""
 
@@ -56,6 +63,12 @@ class StockOutGoods(Model):
 
     class Meta:
         unique_together = [('stock_out_order', 'goods')]
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.is_completed = self.remain_quantity == 0
+        if update_fields:
+            update_fields.append('is_completed')
+        return super().save(force_insert, force_update, using, update_fields)
 
 
 class StockOutRecord(Model):
@@ -79,7 +92,7 @@ class StockOutRecordGoods(Model):
     """出库记录商品"""
 
     stock_out_record = ForeignKey('stock_out.StockOutRecord', on_delete=CASCADE,
-                                 related_name='stock_out_record_goods_set', verbose_name='出库记录')
+                                  related_name='stock_out_record_goods_set', verbose_name='出库记录')
     stock_out_goods = ForeignKey('stock_out.StockOutGoods', on_delete=CASCADE,
                                  related_name='stock_out_record_goods_set', verbose_name='出库商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_out_record_goods_set', verbose_name='商品')

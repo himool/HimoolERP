@@ -42,6 +42,12 @@ class StockInOrder(Model):
 
         return number
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.is_completed = self.remain_quantity == 0
+        if update_fields:
+            update_fields.append('is_completed')
+        return super().save(force_insert, force_update, using, update_fields)
+
 
 class StockInGoods(Model):
     """入库商品"""
@@ -57,6 +63,12 @@ class StockInGoods(Model):
 
     class Meta:
         unique_together = [('stock_in_order', 'goods')]
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.is_completed = self.remain_quantity == 0
+        if update_fields:
+            update_fields.append('is_completed')
+        return super().save(force_insert, force_update, using, update_fields)
 
 
 class StockInRecord(Model):

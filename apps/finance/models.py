@@ -58,7 +58,6 @@ class CollectionOrder(Model):
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_amount = AmountField(null=True, verbose_name='总金额')
     discount_amount = AmountField(default=0, verbose_name='优惠金额')
-    collection_amount = AmountField(null=True, verbose_name='实收金额')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_collection_orders', verbose_name='创建人')
