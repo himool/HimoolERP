@@ -31,14 +31,14 @@ class StockOutOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = pendulum.now(), pendulum.tomorrow()
+        start_date, end_date = get_today(), get_tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'CK' + start_date.format('YYYYMMDD') + '0001'
+            number = 'CK' + pendulum.today(settings.TIME_ZONE) + '0001'
 
         return number
 

@@ -31,14 +31,14 @@ class StockInOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = pendulum.now(), pendulum.tomorrow()
+        start_date, end_date = get_today(), get_tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'RK' + start_date.format('YYYYMMDD') + '0001'
+            number = 'RK' + pendulum.today(settings.TIME_ZONE) + '0001'
 
         return number
 
@@ -49,7 +49,7 @@ class StockInGoods(Model):
     stock_in_order = ForeignKey('stock_in.StockInOrder', on_delete=CASCADE,
                                 related_name='stock_in_goods_set', verbose_name='入库单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_goods_set', verbose_name='商品')
-    total_quantity = FloatField(verbose_name='入库总数')
+    stock_in_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
     is_void = BooleanField(default=False, verbose_name='作废状态')
@@ -80,7 +80,7 @@ class StockInRecordGoods(Model):
     """入库记录商品"""
 
     stock_in_record = ForeignKey('stock_in.StockInRecord', on_delete=CASCADE,
-                                related_name='stock_in_record_goods_set', verbose_name='入库记录')
+                                 related_name='stock_in_record_goods_set', verbose_name='入库记录')
     stock_in_goods = ForeignKey('stock_in.StockInGoods', on_delete=CASCADE,
                                 related_name='stock_in_record_goods_set', verbose_name='入库商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_record_goods_set', verbose_name='商品')

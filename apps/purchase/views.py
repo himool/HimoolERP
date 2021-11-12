@@ -8,6 +8,7 @@ from apps.purchase.schemas import *
 from apps.purchase.models import *
 from apps.goods.models import *
 from apps.flow.models import *
+from apps.stock_in.models import *
 
 
 class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
@@ -25,7 +26,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
     @transaction.atomic
     def perform_create(self, serializer):
-        purchase_order = super().perform_create(serializer)
+        purchase_order = serializer.save()
 
         # 同步入库
         if purchase_order.enable_auto_stock_in:
@@ -52,7 +53,22 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
             # 创建入库单据
-            pass
+            stock_in_order_number = StockInOrder.get_number(team=self.team)
+            stock_in_order = StockInOrder.objects.create(
+                number=stock_in_order_number, warehouse=purchase_order.warehouse,
+                type=StockInOrder.Type.PURCHASE, purchase_order=purchase_order,
+                total_quantity=purchase_order.total_quantity, creator=self.user, team=self.team
+            )
+
+            # 创建入库商品
+            stock_in_goods_set = []
+            for purchase_goods in purchase_order.purchase_goods_set.all():
+                stock_in_goods_set.append(StockInGoods(
+                    stock_in_order=stock_in_order, goods=purchase_goods.goods,
+                    stock_in_quantity=purchase_goods.purchase_quantity, team=self.team
+                ))
+            else:
+                StockInGoods.objects.bulk_create(stock_in_goods_set)
 
         # 同步欠款
         supplier = purchase_order.supplier
@@ -62,14 +78,14 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         # 同步账户, 流水
         if payment_order := purchase_order.payment_order:
             finance_flows = []
-            for payemnt_account in payment_order.payemnt_accounts.all():
-                account = payemnt_account.account
+            for payment_account in payment_order.payment_accounts.all():
+                account = payment_account.account
                 amount_before = account.balance_amount
-                amount_change = payemnt_account.payment_amount
+                amount_change = payment_account.payment_amount
                 amount_after = NP.minus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=payemnt_account.account, type=FinanceFlow.Type.PAYMENT,
+                    account=payment_account.account, type=FinanceFlow.Type.PAYMENT,
                     amount_before=amount_before, amount_change=amount_change, amount_after=amount_after,
                     payment_order=payment_order, creator=self.user, team=self.team
                 ))
