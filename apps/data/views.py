@@ -43,6 +43,30 @@ class WarehouseViewSet(BaseViewSet, ReadWriteMixin):
         number = Warehouse.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
+    @extend_schema(responses={200: WarehouseSerializer})
+    @action(detail=True, methods=['post'])
+    def lock(self, request, *args, **kwargs):
+        """锁定仓库"""
+
+        warehouse = self.get_object()
+        warehouse.is_locked = False
+        warehouse.save(update_fields=['is_locked'])
+
+        serializer = WarehouseSerializer(instance=warehouse)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(responses={200: WarehouseSerializer})
+    @action(detail=True, methods=['post'])
+    def unlock(self, request, *args, **kwargs):
+        """解锁仓库"""
+
+        warehouse = self.get_object()
+        warehouse.is_locked = True
+        warehouse.save(update_fields=['is_locked'])
+
+        serializer = WarehouseSerializer(instance=warehouse)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class ClientViewSet(BaseViewSet, ReadWriteMixin):
     """客户"""
