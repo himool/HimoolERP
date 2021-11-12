@@ -89,7 +89,7 @@ class GoodsOptionSerializer(ModelSerializer):
 
     class Meta:
         model = Goods
-        fields = ['id', 'number', 'name', 'barcode', 'enable_shelf_life', 'shelf_life_days',
+        fields = ['id', 'number', 'name', 'barcode', 'enable_batch_control', 'shelf_life_days',
                   'purchase_price', 'retail_price', 'level_price1', 'level_price2', 'level_price3']
 
 

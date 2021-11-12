@@ -80,7 +80,7 @@ class StockOutRecord(Model):
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='stock_out_records', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    total_quantity = FloatField(verbose_name='出库总数')
+    total_quantity = FloatField(null=True, verbose_name='出库总数')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_stock_out_records', verbose_name='创建人')

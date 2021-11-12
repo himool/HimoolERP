@@ -80,7 +80,7 @@ class StockInRecord(Model):
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='stock_in_records', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    total_quantity = FloatField(verbose_name='入库总数')
+    total_quantity = FloatField(null=True, verbose_name='入库总数')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_stock_in_records', verbose_name='创建人')
@@ -97,9 +97,9 @@ class StockInRecordGoods(Model):
                                 related_name='stock_in_record_goods_set', verbose_name='入库商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_record_goods_set', verbose_name='商品')
     stock_in_quantity = FloatField(default=0, verbose_name='入库数量')
-    enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
+    enable_batch_control  = BooleanField(default=False, verbose_name='启用批次控制')
     production_date = DateField(null=True, verbose_name='生产日期')
-    shelf_life_days = IntegerField(default=0, verbose_name='保质期天数')
+    shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
     expiration_date = DateField(null=True, verbose_name='过期日期')
     batch = OneToOneField('goods.Batch', on_delete=CASCADE, null=True,
                           related_name='stock_in_record_goods', verbose_name='批次')

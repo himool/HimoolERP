@@ -76,9 +76,10 @@ class SalesOrderSerializer(BaseSerializer):
         model = SalesOrder
         read_only_fields = ['id', 'warehouse_number', 'warehouse_name', 'client_number', 'client_name',
                             'handler_name', 'total_quantity', 'total_amount', 'collection_amount',
-                            'arrears_amount', 'is_void', 'enable_auto_stock_out', 'creator_name', 'create_time']
-        fields = ['number', 'warehouse', 'client', 'handler', 'handle_time', 'discount', 'other_amount', 'remark',
-                  'sales_goods_items', 'collection_account_items', *read_only_fields]
+                            'arrears_amount', 'is_void', 'enable_auto_stock_out', 'creator',
+                            'creator_name', 'create_time']
+        fields = ['number', 'warehouse', 'client', 'handler', 'handle_time', 'discount', 'other_amount',
+                  'remark', 'sales_goods_items', 'collection_account_items', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')

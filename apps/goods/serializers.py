@@ -11,7 +11,7 @@ class GoodsSerializer(BaseSerializer):
     class Meta:
         model = Goods
         read_only_fields = ['id', 'category_name', 'unit_name']
-        fields = ['number', 'name', 'barcode', 'category', 'unit', 'spec', 'enable_shelf_life',
+        fields = ['number', 'name', 'barcode', 'category', 'unit', 'spec', 'enable_batch_control',
                   'shelf_life_days', 'shelf_life_warning_days', 'enable_inventory_warning',
                   'inventory_upper', 'inventory_lower', 'purchase_price', 'retail_price',
                   'level_price1', 'level_price2', 'level_price3', 'remark', 'order',
@@ -35,8 +35,8 @@ class GoodsSerializer(BaseSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        if (enable_shelf_life := validated_data('enable_shelf_life', False)) != instance.enable_shelf_life:
-            if not enable_shelf_life:
+        if (enable_batch_control := validated_data('enable_batch_control', False)) != instance.enable_batch_control:
+            if not enable_batch_control:
                 instance.batchs.all().delete()
 
         return super().update(instance, validated_data)
