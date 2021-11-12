@@ -90,9 +90,9 @@ class FinanceFlow(Model):
 
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='finance_flows', verbose_name='结算账户')
     type = CharField(max_length=32, choices=Type.choices, verbose_name='流水类型')
-    balance_amount_before = FloatField(verbose_name='变化之前余额')
-    balance_amount_change = FloatField(verbose_name='变化余额')
-    balance_amount_after = FloatField(verbose_name='变化之后余额')
+    amount_before = FloatField(verbose_name='变化之前余额')
+    amount_change = FloatField(verbose_name='变化余额')
+    amount_after = FloatField(verbose_name='变化之后余额')
 
     payment_order = ForeignKey('finance.PaymentOrder', on_delete=CASCADE, null=True,
                                related_name='finance_flows', verbose_name='付款单据')

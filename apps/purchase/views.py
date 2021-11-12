@@ -6,6 +6,8 @@ from apps.purchase.permissions import *
 from apps.purchase.filters import *
 from apps.purchase.schemas import *
 from apps.purchase.models import *
+from apps.goods.models import *
+from apps.flow.models import *
 
 
 class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
@@ -16,11 +18,66 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
     filterset_class = PurchaseOrderFilter
     search_fields = ['number', 'supplier__number', 'supplier__name', 'remark']
     ordering_fields = ['id', 'number', 'total_quantity', 'total_amount', 'create_time']
-    ordering = ['-number', 'id']
     select_related_fields = ['warehouse', 'supplier', 'handler', 'creator']
     prefetch_related_fields = ['purchase_goods_set', 'purchase_goods_set__goods__unit',
                                'payment_order__payment_accounts']
     queryset = PurchaseOrder.objects.all()
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        purchase_order = super().perform_create(serializer)
+
+        # 同步入库
+        if purchase_order.enable_auto_stock_in:
+
+            # 同步库存, 流水
+            inventory_flows = []
+            for purchase_goods in purchase_order.purchase_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=purchase_order.warehouse,
+                                                  goods=purchase_goods.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = purchase_goods.purchase_quantity
+                quantity_after = NP.plus(inventory.total_quantity, purchase_goods.purchase_quantity)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=purchase_order.warehouse, goods=purchase_goods.goods,
+                    type=InventoryFlow.Type.PURCHASE, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    purchase_order=purchase_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+            else:
+                InventoryFlow.objects.bulk_create(inventory_flows)
+        else:
+            # 创建入库单据
+            pass
+
+        # 同步欠款
+        supplier = purchase_order.supplier
+        supplier.arrears_amount = NP.plus(supplier.arrears_amount, purchase_order.arrears_amount)
+        supplier.save(update_fields=['arrears_amount'])
+
+        # 同步账户, 流水
+        if payment_order := purchase_order.payment_order:
+            finance_flows = []
+            for payemnt_account in payment_order.payemnt_accounts.all():
+                account = payemnt_account.account
+                amount_before = account.balance_amount
+                amount_change = payemnt_account.payment_amount
+                amount_after = NP.minus(amount_before, amount_change)
+
+                finance_flows.append(FinanceFlow(
+                    account=payemnt_account.account, type=FinanceFlow.Type.PAYMENT,
+                    amount_before=amount_before, amount_change=amount_change, amount_after=amount_after,
+                    payment_order=payment_order, creator=self.user, team=self.team
+                ))
+
+                account.balance_amount = amount_after
+                account.save(update_fields=['balance_amount'])
+            else:
+                FinanceFlow.objects.bulk_create(finance_flows)
 
     @extend_schema(responses={200: NumberResponse})
     @action(detail=False, methods=['get'])
@@ -29,6 +86,12 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
         number = PurchaseOrder.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    @extend_schema(request=None, responses={200: PurchaseOrderSerializer})
+    @action(detail=True, methods=['post'])
+    def void(self, request, *args, **kwargs):
+        """作废"""
 
 
 __all__ = [

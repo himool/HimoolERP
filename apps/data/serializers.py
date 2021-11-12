@@ -100,7 +100,7 @@ class AccountSerializer(BaseSerializer):
 
     class Meta:
         model = Account
-        read_only_fields = ['id', 'type_display', 'balance_amount']
+        read_only_fields = ['id', 'type_display', 'balance_amount', 'has_balance']
         fields = ['number', 'name', 'type', 'holder', 'remark', 'order', 'is_active',
                   'initial_balance_amount', *read_only_fields]
 

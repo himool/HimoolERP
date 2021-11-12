@@ -51,6 +51,12 @@ class Batch(Model):
     class Meta:
         unique_together = [('number', 'warehouse', 'goods', 'team')]
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.has_stock = self.remain_quantity > 0
+        if update_fields:
+            update_fields.append('has_stock')
+        return super().save(force_insert, force_update, using, update_fields)
+
 
 class Inventory(Model):
     """库存"""
@@ -63,6 +69,12 @@ class Inventory(Model):
 
     class Meta:
         unique_together = [('warehouse', 'goods', 'team')]
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.has_stock = self.total_quantity > 0
+        if update_fields:
+            update_fields.append('has_stock')
+        return super().save(force_insert, force_update, using, update_fields)
 
 
 __all__ = [

@@ -22,7 +22,7 @@ class Warehouse(Model):
 
 class Client(Model):
     """客户"""
-    
+
     class Level(TextChoices):
         """等级"""
 
@@ -51,6 +51,12 @@ class Client(Model):
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.has_arrears = self.arrears_amount > 0
+        if update_fields:
+            update_fields.append('has_arrears')
+        return super().save(force_insert, force_update, using, update_fields)
+
 
 class Supplier(Model):
     """供应商"""
@@ -76,6 +82,12 @@ class Supplier(Model):
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.has_arrears = self.arrears_amount > 0
+        if update_fields:
+            update_fields.append('has_arrears')
+        return super().save(force_insert, force_update, using, update_fields)
+
 
 class Account(Model):
     """结算账户"""
@@ -98,10 +110,17 @@ class Account(Model):
     is_active = BooleanField(default=True, verbose_name='激活状态')
     initial_balance_amount = AmountField(default=0, verbose_name='初期余额')
     balance_amount = AmountField(default=0, verbose_name='余额')
+    has_balance = BooleanField(default=False, verbose_name='余额状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='accounts')
 
     class Meta:
         unique_together = [('number', 'team'), ('name', 'team')]
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.has_balance = self.balance_amount > 0
+        if update_fields:
+            update_fields.append('has_balance')
+        return super().save(force_insert, force_update, using, update_fields)
 
 
 class ChargeItem(Model):
