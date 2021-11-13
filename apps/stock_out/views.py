@@ -62,9 +62,9 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             inventory.save(update_fields=['total_quantity'])
 
             # 同步批次
-            batch = stock_out_record_goods.batch
-            batch.remain_quantity = NP.minus(batch.remain_quantity, quantity_change)
-            batch.save(update_fields=['remain_quantity'])
+            if batch := stock_out_record_goods.batch:
+                batch.remain_quantity = NP.minus(batch.remain_quantity, quantity_change)
+                batch.save(update_fields=['remain_quantity'])
 
             # 同步出库商品
             stock_out_goods = stock_out_record_goods.stock_out_goods

@@ -11,7 +11,7 @@ class SalesOrder(Model):
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_quantity = FloatField(null=True, verbose_name='总数量')
-    discount = FloatField(default=1, verbose_name='折扣')
+    discount = FloatField(default=1, verbose_name='整单折扣')
     other_amount = AmountField(default=0, verbose_name='其他费用')
     total_amount = AmountField(null=True, verbose_name='总金额')
     collection_amount = AmountField(null=True, verbose_name='收款金额')

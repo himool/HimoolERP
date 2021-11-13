@@ -106,6 +106,11 @@ class SalesOrderSerializer(BaseSerializer):
             raise ValidationError(f'经手人[{instance.name}]未激活')
         return instance
 
+    def validate_discount(self, value):
+        if value <= 0:
+            raise ValidationError('整单折扣小于或等于零')
+        return value
+    
     def validate_other_amount(self, value):
         if value <= 0:
             raise ValidationError('其他费用小于或等于零')

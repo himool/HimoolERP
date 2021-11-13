@@ -48,7 +48,7 @@ class StockOutRecordSerializer(BaseSerializer):
         goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
         goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
-        batch_number = CharField(source='batch.number', required=False, label='批次编号')
+        batch_number = CharField(source='batch.number', read_only=True, label='批次编号')
 
         class Meta:
             model = StockOutRecordGoods

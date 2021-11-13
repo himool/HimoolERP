@@ -96,7 +96,7 @@ class StockInRecordGoods(Model):
     stock_in_goods = ForeignKey('stock_in.StockInGoods', on_delete=CASCADE,
                                 related_name='stock_in_record_goods_set', verbose_name='入库商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_record_goods_set', verbose_name='商品')
-    stock_in_quantity = FloatField(default=0, verbose_name='入库数量')
+    stock_in_quantity = FloatField(verbose_name='入库数量')
     enable_batch_control  = BooleanField(default=False, verbose_name='启用批次控制')
     production_date = DateField(null=True, verbose_name='生产日期')
     shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')

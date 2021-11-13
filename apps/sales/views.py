@@ -68,7 +68,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
             for sales_goods in sales_order.sales_goods_set.all():
                 stock_out_goods_set.append(StockOutGoods(
                     stock_out_order=stock_out_order, goods=sales_goods.goods,
-                    stock_out_quantity=sales_goods.sales_quantity, team=self.team
+                    stock_out_quantity=sales_goods.sales_quantity,
+                    remain_quantity=sales_goods.sales_quantity, team=self.team
                 ))
             else:
                 StockOutGoods.objects.bulk_create(stock_out_goods_set)

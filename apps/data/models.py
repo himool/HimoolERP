@@ -49,8 +49,8 @@ class Client(Model):
     category = ForeignKey('data.ClientCategory', on_delete=SET_NULL, null=True,
                           related_name='clients', verbose_name='客户分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
-    phone = CharField(max_length=32, blank=True, null=True, verbose_name='手机号')
-    email = CharField(max_length=256, blank=True, null=True, verbose_name='邮箱')
+    phone = CharField(max_length=32, null=True, blank=True, verbose_name='手机号')
+    email = CharField(max_length=256, null=True, blank=True, verbose_name='邮箱')
     address = CharField(max_length=256, null=True, blank=True, verbose_name='地址')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     order = IntegerField(default=100, verbose_name='顺序')
@@ -90,8 +90,8 @@ class Supplier(Model):
     category = ForeignKey('data.SupplierCategory', on_delete=SET_NULL, null=True,
                           related_name='suppliers', verbose_name='供应商分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
-    phone = CharField(max_length=32, blank=True, null=True, verbose_name='手机号')
-    email = CharField(max_length=256, blank=True, null=True, verbose_name='邮箱')
+    phone = CharField(max_length=32, null=True, blank=True, verbose_name='手机号')
+    email = CharField(max_length=256, null=True, blank=True, verbose_name='邮箱')
     address = CharField(max_length=256, null=True, blank=True, verbose_name='地址')
     bank_account = CharField(max_length=64, null=True, blank=True, verbose_name='银行账户')
     bank_name = CharField(max_length=64, null=True, blank=True, verbose_name='开户行')

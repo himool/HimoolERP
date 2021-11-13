@@ -6,7 +6,7 @@ class Goods(Model):
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
-    barcode = CharField(max_length=32, blank=True, null=True, verbose_name='条码')
+    barcode = CharField(max_length=32, null=True, blank=True, verbose_name='条码')
     category = ForeignKey('data.GoodsCategory', on_delete=SET_NULL, null=True,
                           related_name='goods_set', verbose_name='商品分类')
     unit = ForeignKey('data.GoodsUnit', on_delete=SET_NULL, null=True,
