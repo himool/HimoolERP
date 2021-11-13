@@ -2,7 +2,6 @@ from extensions.serializers import *
 from extensions.exceptions import *
 from apps.goods.models import *
 from apps.data.models import *
-import itertools
 
 
 class GoodsSerializer(BaseSerializer):
@@ -50,6 +49,7 @@ class GoodsSerializer(BaseSerializer):
         inventory_items = validated_data.pop('inventories', [])
         goods = super().create(validated_data)
 
+        # 同步库存
         inventories = []
         for warehouse in Warehouse.objects.filter(team=self.team):
             for inventory_item in inventory_items:
@@ -70,18 +70,30 @@ class GoodsSerializer(BaseSerializer):
     @transaction.atomic
     def update(self, instance, validated_data):
         inventory_items = validated_data.pop('inventories', [])
-        enable_batch_control = validated_data('enable_batch_control', False)
-        if not enable_batch_control and enable_batch_control != instance.enable_batch_control:
-            instance.batchs.all().delete()
-
         goods = super().update(instance, validated_data)
+
+        # 同步批次
+        if enable_batch_control := validated_data.get('enable_batch_control'):
+            if enable_batch_control != instance.enable_batch_control:
+                if enable_batch_control:
+                    batch_number = 'B' + pendulum.today().format('YYYYMMDD')
+                    batchs = []
+                    for inventory in Inventory.objects.filter(goods=goods, has_stock=True, team=self.team):
+                        batchs.append(Batch(
+                            number=batch_number, warehouse=inventory.warehouse, goods=inventory.goods,
+                            total_quantity=inventory.total_quantity, remain_quantity=inventory.total_quantity,
+                            shelf_life_days=goods.shelf_life_days, team=self.team
+                        ))
+                    else:
+                        Batch.objects.bulk_create(batchs)
+                else:
+                    instance.batchs.all().delete()
 
         # 同步库存
         for inventory in Inventory.objects.filter(goods=goods, team=self.team):
             for inventory_item in inventory_items:
                 if (inventory.warehouse == inventory_item['warehouse'] and
                         inventory.initial_quantity != inventory_item['initial_quantity']):
-
                     inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
                     inventory.initial_quantity = inventory_item['initial_quantity']
                     inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)

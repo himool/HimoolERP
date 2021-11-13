@@ -29,7 +29,7 @@ class StockInOrderSerializer(BaseSerializer):
     purchase_order_number = CharField(source='purchase_order.number', read_only=True, label='采购单据编号')
     sales_return_order_number = CharField(source='sales_return_order.number', read_only=True, label='销售退货单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    stock_in_goods_items = StockInGoodsSerializer(source='stock_in_goods_set', many=True, label='入库单据商品')
+    stock_in_goods_items = StockInGoodsSerializer(source='stock_in_goods_set', many=True, label='入库商品')
 
     class Meta:
         model = StockInOrder
@@ -68,7 +68,7 @@ class StockInRecordSerializer(BaseSerializer):
 
         def validate_stock_in_quantity(self, value):
             if value <= 0:
-                raise ValidationError('采购数量小于或等于零')
+                raise ValidationError('入库数量小于或等于零')
             return value
 
         def validate(self, attrs):

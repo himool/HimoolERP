@@ -98,7 +98,7 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
             inventory_flows.append(InventoryFlow(
                 warehouse=stock_in_record.warehouse, goods=stock_in_record_goods.goods,
-                type=InventoryFlow.Type.STOCK_IN, quantity_before=quantity_before,
+                type=InventoryFlow.Type.VOID_STOCK_IN, quantity_before=quantity_before,
                 quantity_change=quantity_change, quantity_after=quantity_after,
                 stock_in_order=stock_in_record.stock_in_order, creator=self.user, team=self.team
             ))
@@ -106,16 +106,16 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             inventory.total_quantity = quantity_after
             inventory.save(update_fields=['total_quantity'])
 
-            # 同步入库商品
-            stock_in_goods = stock_in_record_goods.stock_in_goods
-            stock_in_goods.remain_quantity = NP.plus(stock_in_goods.remain_quantity, quantity_change)
-            stock_in_goods.save(update_fields=['remain_quantity'])
-
             # 同步批次
             if batch := stock_in_record_goods.batch:
                 batch.total_quantity = NP.minus(batch.total_quantity, stock_in_record_goods.stock_in_quantity)
                 batch.remain_quantity = NP.minus(batch.remain_quantity, stock_in_record_goods.stock_in_quantity)
                 batch.save(update_fields=['total_quantity', 'remain_quantity'])
+
+            # 同步入库商品
+            stock_in_goods = stock_in_record_goods.stock_in_goods
+            stock_in_goods.remain_quantity = NP.plus(stock_in_goods.remain_quantity, quantity_change)
+            stock_in_goods.save(update_fields=['remain_quantity'])
         else:
             InventoryFlow.objects.bulk_create(inventory_flows)
             stock_in_order = stock_in_record.stock_in_order

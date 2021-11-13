@@ -98,9 +98,6 @@ class StockOutRecordGoods(Model):
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_out_record_goods_set', verbose_name='商品')
     stock_out_quantity = FloatField(default=0, verbose_name='出库数量')
     enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
-    production_date = DateField(null=True, verbose_name='生产日期')
-    shelf_life_days = IntegerField(default=0, verbose_name='保质期天数')
-    expiration_date = DateField(null=True, verbose_name='过期日期')
     batch = OneToOneField('goods.Batch', on_delete=CASCADE, null=True,
                           related_name='stock_out_record_goods', verbose_name='批次')
     is_void = BooleanField(default=False, verbose_name='作废状态')

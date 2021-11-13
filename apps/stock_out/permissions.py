@@ -1,6 +1,10 @@
 from extensions.permissions import InterfacePermission
 
 
-__all__ = [
+class StockOutPermission(InterfacePermission):
+    code = 'stock_out'
 
+
+__all__ = [
+    'StockOutPermission',
 ]
