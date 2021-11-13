@@ -68,7 +68,7 @@ class SalesOrderSerializer(BaseSerializer):
     client_name = CharField(source='client.name', read_only=True, label='客户名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    sales_goods_items = SalesGoodsSerializer(source='sales_goods_set',  many=True, label='销售商品')
+    sales_goods_items = SalesGoodsSerializer(source='sales_goods_set', many=True, label='销售商品')
     collection_account_items = CollectionAccountSerializer(source='collection_order.collection_accounts',
                                                            required=False, many=True, label='收款账户')
 

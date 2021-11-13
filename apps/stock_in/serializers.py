@@ -29,7 +29,7 @@ class StockInOrderSerializer(BaseSerializer):
     purchase_order_number = CharField(source='purchase_order.number', read_only=True, label='采购单据编号')
     sales_return_order_number = CharField(source='sales_return_order.number', read_only=True, label='销售退货单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    stock_in_goods_items = StockInGoodsSerializer(source='stock_in_goods_set',  many=True, label='入库单据商品')
+    stock_in_goods_items = StockInGoodsSerializer(source='stock_in_goods_set', many=True, label='入库单据商品')
 
     class Meta:
         model = StockInOrder
@@ -89,7 +89,7 @@ class StockInRecordSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_in_record_goods_items = StockInRecordGoodsSerializer(source='stock_in_record_goods_set',
-                                                               many=True, label='入库记录商品')
+                                                              many=True, label='入库记录商品')
 
     class Meta:
         model = StockInRecord

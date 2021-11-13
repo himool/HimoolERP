@@ -2,6 +2,7 @@ from extensions.serializers import *
 from extensions.exceptions import *
 from apps.goods.models import *
 from apps.data.models import *
+import itertools
 
 
 class GoodsSerializer(BaseSerializer):
@@ -17,7 +18,7 @@ class GoodsSerializer(BaseSerializer):
 
     category_name = CharField(source='category.name', read_only=True, label='分类名称')
     unit_name = CharField(source='unit.name', read_only=True, label='单位名称')
-    inventory_items = InventorySerializer()
+    inventory_items = InventorySerializer(source='inventories', required=False, many=True, label='库存')
 
     class Meta:
         model = Goods
@@ -43,18 +44,50 @@ class GoodsSerializer(BaseSerializer):
     def validate_unit(self, instance):
         instance = self.validate_foreign_key(GoodsUnit, instance, message='商品单位不存在')
         return instance
-    
-    def save(self, **kwargs):
-        
-        return super().save(**kwargs)
+
+    @transaction.atomic
+    def create(self, validated_data):
+        inventory_items = validated_data.pop('inventories', [])
+        goods = super().create(validated_data)
+
+        inventories = []
+        for warehouse in Warehouse.objects.filter(team=self.team):
+            for inventory_item in inventory_items:
+                if warehouse == inventory_item['warehouse']:
+                    inventories.append(Inventory(
+                        warehouse=warehouse, goods=goods,
+                        initial_quantity=inventory_item['initial_quantity'],
+                        total_quantity=inventory_item['initial_quantity'], team=self.team
+                    ))
+                    break
+            else:
+                inventories.append(Inventory(warehouse=warehouse, goods=goods, team=self.team))
+        else:
+            Inventory.objects.bulk_create(inventories)
+
+        return goods
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        if (enable_batch_control := validated_data('enable_batch_control', False)) != instance.enable_batch_control:
-            if not enable_batch_control:
-                instance.batchs.all().delete()
+        inventory_items = validated_data.pop('inventories', [])
+        enable_batch_control = validated_data('enable_batch_control', False)
+        if not enable_batch_control and enable_batch_control != instance.enable_batch_control:
+            instance.batchs.all().delete()
 
-        return super().update(instance, validated_data)
+        goods = super().update(instance, validated_data)
+
+        # 同步库存
+        for inventory in Inventory.objects.filter(goods=goods, team=self.team):
+            for inventory_item in inventory_items:
+                if (inventory.warehouse == inventory_item['warehouse'] and
+                        inventory.initial_quantity != inventory_item['initial_quantity']):
+
+                    inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
+                    inventory.initial_quantity = inventory_item['initial_quantity']
+                    inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
+                    inventory.save(update_fields=['initial_quantity', 'total_quantity'])
+
+        return goods
 
 
 class BatchSerializer(BaseSerializer):

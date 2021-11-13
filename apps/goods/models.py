@@ -44,6 +44,12 @@ class Goods(Model):
 
         return number
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.has_stock = self.remain_quantity > 0
+        if update_fields:
+            update_fields.append('has_stock')
+        return super().save(force_insert, force_update, using, update_fields)
+
 
 class Batch(Model):
     """批次"""

@@ -68,7 +68,7 @@ class PurchaseOrderSerializer(BaseSerializer):
     supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    purchase_goods_items = PurchaseGoodsSerializer(source='purchase_goods_set',  many=True, label='采购商品')
+    purchase_goods_items = PurchaseGoodsSerializer(source='purchase_goods_set', many=True, label='采购商品')
     payment_account_items = PaymentAccountSerializer(source='payment_order.payment_accounts',
                                                      required=False, many=True, label='付款账户')
 
