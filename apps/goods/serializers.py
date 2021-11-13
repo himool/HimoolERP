@@ -5,8 +5,19 @@ from apps.data.models import *
 
 
 class GoodsSerializer(BaseSerializer):
+
+    class InventorySerializer(BaseSerializer):
+        warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
+        warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
+
+        class Meta:
+            model = Inventory
+            read_only_fields = ['id', 'warehouse_number', 'warehouse_name']
+            fields = ['warehouse', 'initial_quantity', *read_only_fields]
+
     category_name = CharField(source='category.name', read_only=True, label='分类名称')
     unit_name = CharField(source='unit.name', read_only=True, label='单位名称')
+    inventory_items = InventorySerializer()
 
     class Meta:
         model = Goods
@@ -15,7 +26,7 @@ class GoodsSerializer(BaseSerializer):
                   'shelf_life_days', 'shelf_life_warning_days', 'enable_inventory_warning',
                   'inventory_upper', 'inventory_lower', 'purchase_price', 'retail_price',
                   'level_price1', 'level_price2', 'level_price3', 'remark', 'order',
-                  'is_active', *read_only_fields]
+                  'is_active', 'inventory_items', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -32,6 +43,10 @@ class GoodsSerializer(BaseSerializer):
     def validate_unit(self, instance):
         instance = self.validate_foreign_key(GoodsUnit, instance, message='商品单位不存在')
         return instance
+    
+    def save(self, **kwargs):
+        
+        return super().save(**kwargs)
 
     @transaction.atomic
     def update(self, instance, validated_data):

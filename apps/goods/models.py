@@ -75,6 +75,7 @@ class Inventory(Model):
 
     warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='inventories', verbose_name='仓库')
     goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='inventories', verbose_name='商品')
+    initial_quantity = FloatField(default=0, verbose_name='初始库存')
     total_quantity = FloatField(default=0, verbose_name='库存总数')
     has_stock = BooleanField(default=False, verbose_name='库存状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='inventories')
