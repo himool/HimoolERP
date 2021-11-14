@@ -235,8 +235,8 @@ class SalesReturnOrderSerializer(BaseSerializer):
     sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单据编号')
     warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
-    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
-    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     sales_return_goods_items = SalesReturnGoodsSerializer(
@@ -247,10 +247,10 @@ class SalesReturnOrderSerializer(BaseSerializer):
     class Meta:
         model = SalesReturnOrder
         read_only_fields = ['id', 'sales_order_number', 'warehouse_number', 'warehouse_name',
-                            'supplier_number', 'supplier_name', 'handler_name', 'total_quantity',
+                            'client_number', 'client_name', 'handler_name', 'total_quantity',
                             'total_amount', 'payment_amount', 'arrears_amount', 'is_void',
                             'enable_auto_stock_in', 'creator', 'creator_name', 'create_time']
-        fields = ['number', 'sales_order', 'warehouse', 'supplier', 'handler', 'handle_time',
+        fields = ['number', 'sales_order', 'warehouse', 'client', 'handler', 'handle_time',
                   'remark', 'other_amount', 'sales_return_goods_items',
                   'sales_return_account_items', *read_only_fields]
 
@@ -273,10 +273,10 @@ class SalesReturnOrderSerializer(BaseSerializer):
             raise ValidationError(f'仓库[{instance.name}]已锁定')
         return instance
 
-    def validate_supplier(self, instance):
-        instance = self.validate_foreign_key(Supplier, instance, message='供应商不存在')
+    def validate_client(self, instance):
+        instance = self.validate_foreign_key(Client, instance, message='客户不存在')
         if not instance.is_active:
-            raise ValidationError(f'供应商[{instance.name}]未激活')
+            raise ValidationError(f'客户[{instance.name}]未激活')
         return instance
 
     def validate_handler(self, instance):
@@ -289,6 +289,16 @@ class SalesReturnOrderSerializer(BaseSerializer):
         if value <= 0:
             raise ValidationError('其他费用小于或等于零')
         return value
+
+    def validate(self, attrs):
+        if sales_order := attrs.get('sales_order'):
+            if sales_order.warehouse != attrs['warehouse']:
+                raise ValidationError(f'销售单据[{sales_order.number}]选择错误')
+
+            if sales_order.client != attrs['client']:
+                raise ValidationError(f'销售单据[{sales_order.number}]选择错误')
+
+        return super().validate(attrs)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -310,8 +320,8 @@ class SalesReturnOrderSerializer(BaseSerializer):
 
             sales_goods = None
             if sales_order := sales_return_order.sales_order:
-                if sales_goods := sales_return_goods_item.get('purchase_goods'):
-                    raise ValidationError(f'采购单据[{sales_order.number}]不存在商品[{goods.name}]')
+                if sales_goods := sales_return_goods_item.get('sales_goods'):
+                    raise ValidationError(f'销售单据[{sales_order.number}]不存在商品[{goods.name}]')
 
                 sales_goods.return_quantity = NP.plus(sales_goods.return_quantity, return_quantity)
                 if sales_goods.return_quantity > sales_goods.total_amount:

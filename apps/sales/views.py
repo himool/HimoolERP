@@ -31,7 +31,6 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
     def perform_create(self, serializer):
         sales_order = serializer.save()
 
-        # 同步出库
         if sales_order.enable_auto_stock_out:
             # 同步库存, 流水
             inventory_flows = []
@@ -320,6 +319,12 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
 
                 inventory.total_quantity = quantity_after
                 inventory.save(update_fields=['total_quantity'])
+
+                # 同步采购商品退货数量
+                if sales_goods := sales_return_goods.sales_goods:
+                    sales_goods.return_quantity = NP.minus(sales_goods.return_quantity,
+                                                           sales_return_goods.return_quantity)
+                    sales_goods.save(update_fields=['return_quantity'])
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
@@ -364,6 +369,7 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
 
         serializer = SalesReturnOrderSerializer(instance=sales_return_order)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 __all__ = [
     'SalesOrderViewSet', 'SalesReturnOrderViewSet',

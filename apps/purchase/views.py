@@ -312,6 +312,12 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
 
                 inventory.total_quantity = quantity_after
                 inventory.save(update_fields=['total_quantity'])
+
+                # 同步采购商品退货数量
+                if purchase_goods := purchase_return_goods.purchase_goods:
+                    purchase_goods.return_quantity = NP.minus(purchase_goods.return_quantity,
+                                                              purchase_return_goods.return_quantity)
+                    purchase_goods.save(update_fields=['return_quantity'])
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:

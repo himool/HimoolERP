@@ -19,7 +19,7 @@ class SalesReturnOrderFilter(FilterSet):
 
     class Meta:
         model = SalesReturnOrder
-        fields = ['number', 'sales_order', 'warehouse', 'supplier', 'handler',
+        fields = ['number', 'sales_order', 'warehouse', 'client', 'handler',
                   'is_void', 'creator', 'start_date', 'end_date']
 
 
