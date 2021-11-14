@@ -13,10 +13,10 @@ class StockOutOrder(Model):
     number = CharField(max_length=32, verbose_name='编号')
     warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT, related_name='stock_out_orders', verbose_name='仓库')
     type = CharField(max_length=32, choices=Type.choices, verbose_name='出库类型')
-    sales_order = OneToOneField('sales.SalesOrder', on_delete=CASCADE, null=True,
-                                related_name='stock_out_order', verbose_name='销售单据')
-    purchase_return_order = OneToOneField('purchase.PurchaseReturnOrder', on_delete=CASCADE, null=True,
-                                          related_name='stock_out_order', verbose_name='采购退货单据')
+    sales_order = ForeignKey('sales.SalesOrder', on_delete=CASCADE, null=True,
+                             related_name='stock_out_orders', verbose_name='销售单据')
+    purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE, null=True,
+                                       related_name='stock_out_orders', verbose_name='采购退货单据')
     total_quantity = FloatField(verbose_name='出库总数')
     remain_quantity = FloatField(default=0, verbose_name='出库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')

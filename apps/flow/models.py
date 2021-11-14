@@ -77,6 +77,15 @@ class FinanceFlow(Model):
     class Type(TextChoices):
         """流水类型"""
 
+        PURCHASE = ('purchase', '采购')
+        VOID_PURCHASE = ('void_purchase', '作废采购')
+        PURCHASE_RETURN = ('purchase_return', '采购退货')
+        VOID_PURCHASE_RETURN = ('void_purchase_return', '作废采购退货')
+        SALES = ('sales', '销售')
+        VOID_SALES = ('void_sales', '作废销售')
+        SALES_RETURN = ('sales_return', '销售退货')
+        VOID_SALES_RETURN = ('void_sales_return', '作废销售退货')
+
         PAYMENT = ('payment', '付款')
         VOID_PAYMENT = ('void_payment', '作废付款')
         COLLECTION = ('collection', '收款')
@@ -93,6 +102,23 @@ class FinanceFlow(Model):
     amount_before = FloatField(verbose_name='变化之前余额')
     amount_change = FloatField(verbose_name='变化余额')
     amount_after = FloatField(verbose_name='变化之后余额')
+
+    purchase_order = ForeignKey('purchase.PurchaseOrder', on_delete=CASCADE, null=True,
+                                related_name='finance_flows', verbose_name='采购单据')
+    void_purchase_order = ForeignKey('purchase.PurchaseOrder', on_delete=CASCADE, null=True,
+                                     related_name='void_finance_flows', verbose_name='作废采购单据')
+    purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE, null=True,
+                                       related_name='finance_flows', verbose_name='采购退货单据')
+    void_purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE, null=True,
+                                            related_name='void_finance_flows', verbose_name='作废采购退货单据')
+    sales_order = ForeignKey('sales.SalesOrder', on_delete=CASCADE, null=True,
+                             related_name='finance_flows', verbose_name='销售单据')
+    void_sales_order = ForeignKey('sales.SalesOrder', on_delete=CASCADE, null=True,
+                                  related_name='void_finance_flows', verbose_name='作废销售单据')
+    sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
+                                    related_name='finance_flows', verbose_name='销售退货单据')
+    void_sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
+                                         related_name='void_finance_flows', verbose_name='作废销售退货单据')
 
     payment_order = ForeignKey('finance.PaymentOrder', on_delete=CASCADE, null=True,
                                related_name='finance_flows', verbose_name='付款单据')

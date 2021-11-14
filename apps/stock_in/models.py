@@ -13,13 +13,13 @@ class StockInOrder(Model):
     number = CharField(max_length=32, verbose_name='编号')
     warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT, related_name='stock_in_orders', verbose_name='仓库')
     type = CharField(max_length=32, choices=Type.choices, verbose_name='入库类型')
-    purchase_order = OneToOneField('purchase.PurchaseOrder', on_delete=CASCADE, null=True,
-                                   related_name='stock_in_order', verbose_name='采购单据')
-    sales_return_order = OneToOneField('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
-                                       related_name='stock_in_order', verbose_name='销售退货单据')
+    purchase_order = ForeignKey('purchase.PurchaseOrder', on_delete=CASCADE, null=True,
+                                related_name='stock_in_orders', verbose_name='采购单据')
+    sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
+                                    related_name='stock_in_orders', verbose_name='销售退货单据')
     total_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
-    is_completed = BooleanField(default=False, verbose_name='完成状态')
+    is_completed = BooleanField(default=False, verbose_name='入库完成状态')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_stock_in_orders', verbose_name='创建人')
@@ -97,7 +97,7 @@ class StockInRecordGoods(Model):
                                 related_name='stock_in_record_goods_set', verbose_name='入库商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_record_goods_set', verbose_name='商品')
     stock_in_quantity = FloatField(verbose_name='入库数量')
-    enable_batch_control  = BooleanField(default=False, verbose_name='启用批次控制')
+    enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
     production_date = DateField(null=True, verbose_name='生产日期')
     shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
     expiration_date = DateField(null=True, verbose_name='过期日期')

@@ -87,7 +87,7 @@ class CollectionAccount(Model):
     collection_order = ForeignKey('finance.CollectionOrder', on_delete=CASCADE,
                                   related_name='collection_accounts', verbose_name='收款单据')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='collection_accounts', verbose_name='结算账户')
-    collection_amount = AmountField(verbose_name='付款金额')
+    collection_amount = AmountField(verbose_name='收款金额')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='collection_accounts')
 

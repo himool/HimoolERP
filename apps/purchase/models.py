@@ -15,8 +15,6 @@ class PurchaseOrder(Model):
     total_amount = AmountField(null=True, verbose_name='采购总金额')
     payment_amount = AmountField(null=True, verbose_name='付款金额')
     arrears_amount = AmountField(null=True, verbose_name='欠款金额')
-    payment_order = OneToOneField('finance.PaymentOrder', on_delete=PROTECT, null=True,
-                                  related_name='purchase_order', verbose_name='付款单据')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     creator = ForeignKey('system.User', on_delete=PROTECT,
@@ -58,6 +56,20 @@ class PurchaseGoods(Model):
         unique_together = [('purchase_order', 'goods')]
 
 
+class PurchaseAccount(Model):
+    """采购结算账户"""
+
+    purchase_order = ForeignKey('purchase.PurchaseOrder', on_delete=CASCADE,
+                                related_name='purchase_accounts', verbose_name='采购单据')
+    account = ForeignKey('data.Account', on_delete=PROTECT, related_name='purchase_accounts', verbose_name='结算账户')
+    payment_amount = AmountField(verbose_name='付款金额')
+    is_void = BooleanField(default=False, verbose_name='作废状态')
+    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='purchase_accounts')
+
+    class Meta:
+        unique_together = [('purchase_order', 'account')]
+
+
 class PurchaseReturnOrder(Model):
     """采购退货单据"""
 
@@ -69,10 +81,13 @@ class PurchaseReturnOrder(Model):
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='purchase_return_orders', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    total_amount = AmountField(verbose_name='总金额')
-    total_quantity = FloatField(verbose_name='总数量')
-    enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
+    total_quantity = FloatField(verbose_name='退货总数量')
+    other_amount = AmountField(default=0, verbose_name='其他费用')
+    total_amount = AmountField(verbose_name='退货总金额')
+    collection_amount = AmountField(null=True, verbose_name='收款金额')
+    arrears_amount = AmountField(null=True, verbose_name='欠款金额')
     is_void = BooleanField(default=False, verbose_name='作废状态')
+    enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_purchase_return_orders', verbose_name='创建人')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -100,7 +115,10 @@ class PurchaseReturnGoods(Model):
 
     purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE,
                                        related_name='purchase_return_goods_set', verbose_name='采购退货单据')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='purchase_return_goods_set', verbose_name='商品')
+    purchase_goods = ForeignKey('purchase.PurchaseGoods', on_delete=CASCADE, null=True,
+                                related_name='purchase_return_goods_set', verbose_name='采购商品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT,
+                       related_name='purchase_return_goods_set', verbose_name='商品')
     return_quantity = FloatField(verbose_name='退货数量')
     return_price = AmountField(verbose_name='退货单价')
     total_amount = AmountField(verbose_name='总金额')
@@ -111,7 +129,21 @@ class PurchaseReturnGoods(Model):
         unique_together = [('purchase_return_order', 'goods')]
 
 
+class PurchaseReturnAccount(Model):
+    """采购退货结算账户"""
+
+    purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE,
+                                       related_name='purchase_return_accounts', verbose_name='采购退货单据')
+    account = ForeignKey('data.Account', on_delete=PROTECT, related_name='purchase_return_accounts', verbose_name='结算账户')
+    collection_amount = AmountField(verbose_name='收款金额')
+    is_void = BooleanField(default=False, verbose_name='作废状态')
+    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='purchase_return_accounts')
+
+    class Meta:
+        unique_together = [('purchase_return_order', 'account')]
+
+
 __all__ = [
-    'PurchaseOrder', 'PurchaseGoods',
-    'PurchaseReturnOrder', 'PurchaseReturnGoods',
+    'PurchaseOrder', 'PurchaseGoods', 'PurchaseAccount',
+    'PurchaseReturnOrder', 'PurchaseReturnGoods', 'PurchaseReturnAccount',
 ]

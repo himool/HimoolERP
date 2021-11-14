@@ -9,6 +9,7 @@ from apps.purchase.models import *
 from apps.goods.models import *
 from apps.flow.models import *
 from apps.stock_in.models import *
+from apps.stock_out.models import *
 
 
 class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
@@ -22,15 +23,13 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
     select_related_fields = ['warehouse', 'supplier', 'handler', 'creator']
     prefetch_related_fields = ['purchase_goods_set', 'purchase_goods_set__goods',
                                'purchase_goods_set__goods__unit',
-                               'payment_order__payment_accounts',
-                               'payment_order__payment_accounts__account']
+                               'purchase_accounts', 'purchase_accounts__account']
     queryset = PurchaseOrder.objects.all()
 
     @transaction.atomic
     def perform_create(self, serializer):
         purchase_order = serializer.save()
 
-        # 同步入库
         if purchase_order.enable_auto_stock_in:
             # 同步库存, 流水
             inventory_flows = []
@@ -79,17 +78,17 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         supplier.save(update_fields=['arrears_amount'])
 
         # 同步账户, 流水
-        if payment_order := purchase_order.payment_order:
+        if purchase_order.payment_amount > 0:
             finance_flows = []
-            for payment_account in payment_order.payment_accounts.all():
-                account = payment_account.account
+            for purchase_account in purchase_order.purchase_accounts.all():
+                account = purchase_account.account
                 amount_before = account.balance_amount
-                amount_change = payment_account.payment_amount
+                amount_change = purchase_account.payment_amount
                 amount_after = NP.minus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=account, type=FinanceFlow.Type.PAYMENT, amount_before=amount_before,
-                    amount_change=amount_change, amount_after=amount_after, payment_order=payment_order,
+                    account=account, type=FinanceFlow.Type.PURCHASE, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after, purchase_order=purchase_order,
                     creator=self.user, team=self.team
                 ))
 
@@ -121,7 +120,6 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         purchase_order.save(update_fields=['is_void'])
         purchase_order.purchase_goods_set.all().update(is_void=True)
 
-        # 同步入库
         if purchase_order.enable_auto_stock_in:
             # 同步库存, 流水
             inventory_flows = []
@@ -161,25 +159,21 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         supplier.save(update_fields=['arrears_amount'])
 
         # 同步账户, 流水
-        if payment_order := purchase_order.payment_order:
-            # 作废付款单据
-            payment_order.is_void = True
-            payment_order.save(update_fields=['is_void'])
-
-            # 作废付款账号
-            payment_order.payment_accounts.all().update(is_void=True)
+        if purchase_order.payment_amount > 0:
+            # 作废采购结算账户
+            purchase_order.purchase_accounts.all().update(is_void=True)
 
             finance_flows = []
-            for payment_account in payment_order.payment_accounts.all():
-                account = payment_account.account
+            for purchase_account in purchase_order.purchase_accounts.all():
+                account = purchase_account.account
                 amount_before = account.balance_amount
-                amount_change = payment_account.payment_amount
+                amount_change = purchase_account.payment_amount
                 amount_after = NP.plus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=account, type=FinanceFlow.Type.VOID_PAYMENT, amount_before=amount_before,
+                    account=account, type=FinanceFlow.Type.VOID_PURCHASE, amount_before=amount_before,
                     amount_change=amount_change, amount_after=amount_after,
-                    void_payment_order=payment_order, creator=self.user, team=self.team
+                    void_purchase_order=purchase_order, creator=self.user, team=self.team
                 ))
 
                 account.balance_amount = amount_after
@@ -191,6 +185,100 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
+    """采购退货单据"""
+
+    serializer_class = PurchaseReturnOrderSerializer
+    permission_classes = [IsAuthenticated, PurchaseReturnOrderPermission]
+    filterset_class = PurchaseReturnOrderFilter
+    search_fields = ['number', 'purchase_order__number', 'supplier__number', 'supplier__name', 'remark']
+    ordering_fields = ['id', 'number', 'total_quantity', 'total_amount', 'create_time']
+    select_related_fields = ['purchase_order', 'warehouse', 'supplier', 'handler', 'creator']
+    prefetch_related_fields = ['purchase_return_goods_set', 'purchase_return_goods_set__goods',
+                               'purchase_return_goods_set__goods__unit',
+                               'purchase_return_accounts', 'purchase_return_accounts__account']
+    queryset = PurchaseReturnOrder.objects.all()
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        purchase_return_order = serializer.save()
+
+        if purchase_return_order.enable_auto_stock_out:
+            # 同步库存, 流水
+            inventory_flows = []
+            for purchase_return_goods in purchase_return_order.purchase_return_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=purchase_return_order.warehouse,
+                                                  goods=purchase_return_goods.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = purchase_return_goods.return_quantity
+                quantity_after = NP.minus(quantity_before, quantity_change)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=purchase_return_order.warehouse, goods=purchase_return_goods.goods,
+                    type=InventoryFlow.Type.PURCHASE_RETURN, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    purchase_return_order=purchase_return_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+            else:
+                InventoryFlow.objects.bulk_create(inventory_flows)
+        else:
+            # 创建出库单据
+            stock_out_order_number = StockOutOrder.get_number(team=self.team)
+            stock_out_order = StockOutOrder.objects.create(
+                number=stock_out_order_number, warehouse=purchase_return_order.warehouse,
+                type=StockInOrder.Type.PURCHASE, purchase_return_order=purchase_return_order,
+                total_quantity=purchase_return_order.total_quantity,
+                remain_quantity=purchase_return_order.total_quantity,
+                creator=self.user, team=self.team
+            )
+
+            # 创建出库商品
+            stock_out_goods_set = []
+            for purchase_return_goods in purchase_return_order.purchase_return_goods_set.all():
+                stock_out_goods_set.append(StockOutGoods(
+                    stock_out_order=stock_out_order, goods=purchase_return_goods.goods,
+                    stock_out_quantity=purchase_return_goods.return_quantity, team=self.team
+                ))
+            else:
+                StockOutGoods.objects.bulk_create(stock_out_goods_set)
+
+        # 同步欠款
+        supplier = purchase_return_order.supplier
+        supplier.arrears_amount = NP.minus(supplier.arrears_amount, purchase_return_order.arrears_amount)
+        supplier.save(update_fields=['arrears_amount'])
+
+        # 同步账户, 流水
+        if purchase_return_order.collection_amount > 0:
+            finance_flows = []
+            for purchase_return_account in purchase_return_order.purchase_return_accounts.all():
+                account = purchase_return_account.account
+                amount_before = account.balance_amount
+                amount_change = purchase_return_account.payment_amount
+                amount_after = NP.plus(amount_before, amount_change)
+
+                finance_flows.append(FinanceFlow(
+                    account=account, type=FinanceFlow.Type.PURCHASE_RETURN, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after,
+                    purchase_return_order=purchase_return_order, creator=self.user, team=self.team
+                ))
+
+                account.balance_amount = amount_after
+                account.save(update_fields=['balance_amount'])
+            else:
+                FinanceFlow.objects.bulk_create(finance_flows)
+
+    @extend_schema(responses={200: NumberResponse})
+    @action(detail=False, methods=['get'])
+    def number(self, request, *args, **kwargs):
+        """获取编号"""
+
+        number = PurchaseReturnOrder.get_number(self.team)
+        return Response(data={'number': number}, status=status.HTTP_200_OK)
+
+
 __all__ = [
-    'PurchaseOrderViewSet',
+    'PurchaseOrderViewSet', 'PurchaseReturnOrderViewSet',
 ]
