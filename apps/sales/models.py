@@ -16,8 +16,6 @@ class SalesOrder(Model):
     total_amount = AmountField(null=True, verbose_name='销售总金额')
     collection_amount = AmountField(null=True, verbose_name='收款金额')
     arrears_amount = AmountField(null=True, verbose_name='欠款金额')
-    # collection_order = OneToOneField('finance.CollectionOrder', on_delete=PROTECT, null=True,
-    #                                  related_name='sales_order', verbose_name='收款单据')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
     creator = ForeignKey('system.User', on_delete=PROTECT,
@@ -89,8 +87,6 @@ class SalesReturnOrder(Model):
     total_amount = AmountField(null=True, verbose_name='退货总金额')
     payment_amount = AmountField(null=True, verbose_name='付款金额')
     arrears_amount = AmountField(null=True, verbose_name='欠款金额')
-    # payment_order = OneToOneField('finance.PaymentOrder', on_delete=PROTECT, null=True,
-    #                               related_name='purchase_order', verbose_name='付款单据')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     creator = ForeignKey('system.User', on_delete=PROTECT,

@@ -76,7 +76,7 @@ class PurchaseOrderSerializer(BaseSerializer):
         model = PurchaseOrder
         read_only_fields = ['id', 'warehouse_number', 'warehouse_name', 'supplier_number',
                             'supplier_name', 'handler_name', 'total_quantity', 'total_amount',
-                            'payment_amount', 'arrears_amount', 'is_completed', 'is_void',
+                            'payment_amount', 'arrears_amount', 'is_void',
                             'enable_auto_stock_in', 'creator', 'creator_name', 'create_time']
         fields = ['number', 'warehouse', 'supplier', 'handler', 'handle_time', 'remark', 'other_amount',
                   'purchase_goods_items', 'purchase_account_items', *read_only_fields]
@@ -208,7 +208,7 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
         account_name = CharField(source='account.name', read_only=True, label='账户名称')
 
         class Meta:
-            model = PurchaseAccount
+            model = PurchaseReturnAccount
             read_only_fields = ['id', 'account_number', 'account_name']
             fields = ['account', 'collection_amount', *read_only_fields]
 
@@ -237,10 +237,10 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
 
     class Meta:
         model = PurchaseReturnOrder
-        read_only_fields = ['id', 'purchase_order_number,' 'warehouse_number', 'warehouse_name',
+        read_only_fields = ['id', 'purchase_order_number', 'warehouse_number', 'warehouse_name',
                             'supplier_number', 'supplier_name', 'handler_name', 'total_quantity',
-                            'total_amount', 'payment_amount', 'arrears_amount', 'is_void',
-                            'enable_auto_stock_in', 'creator', 'creator_name', 'create_time']
+                            'total_amount', 'collection_amount', 'arrears_amount', 'is_void',
+                            'enable_auto_stock_out', 'creator', 'creator_name', 'create_time']
         fields = ['number', 'purchase_order', 'warehouse', 'supplier', 'handler', 'handle_time',
                   'remark', 'other_amount', 'purchase_return_goods_items',
                   'purchase_return_account_items', *read_only_fields]
