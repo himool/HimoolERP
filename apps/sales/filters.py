@@ -13,6 +13,16 @@ class SalesOrderFilter(FilterSet):
                   'start_date', 'end_date']
 
 
+class SalesReturnOrderFilter(FilterSet):
+    start_date = DateFilter(field_name='create_time', lookup_expr='gte', label='开始日期')
+    end_date = DateFilter(field_name='create_time', lookup_expr='lt', label='结束日期')
+
+    class Meta:
+        model = SalesReturnOrder
+        fields = ['number', 'sales_order', 'warehouse', 'supplier', 'handler',
+                  'is_void', 'creator', 'start_date', 'end_date']
+
+
 __all__ = [
-    'SalesOrderFilter',
+    'SalesOrderFilter', 'SalesReturnOrderFilter',
 ]

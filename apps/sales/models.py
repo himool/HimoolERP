@@ -116,6 +116,8 @@ class SalesReturnGoods(Model):
 
     sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE,
                                     related_name='sales_return_goods_set', verbose_name='销售退货单据')
+    sales_goods = ForeignKey('sales.SalesGoods', on_delete=CASCADE, null=True,
+                                related_name='sales_return_goods_set', verbose_name='销售商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_return_goods_set', verbose_name='商品')
     return_quantity = FloatField(verbose_name='退货数量')
     return_price = AmountField(verbose_name='退货单价')
@@ -154,7 +156,7 @@ class SalesTask(Model):
 
 
 __all__ = [
-    'SalesOrder', 'SalesGoods',
-    'SalesReturnOrder', 'SalesReturnGoods',
+    'SalesOrder', 'SalesGoods', 'SalesAccount',
+    'SalesReturnOrder', 'SalesReturnGoods', 'SalesReturnAccount',
     'SalesTask',
 ]

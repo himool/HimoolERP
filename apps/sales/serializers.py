@@ -40,14 +40,14 @@ class SalesOrderSerializer(BaseSerializer):
                 raise ValidationError('销售单价小于或等于零')
             return value
 
-    class CollectionAccountSerializer(BaseSerializer):
-        """收款账户"""
+    class SalesAccountSerializer(BaseSerializer):
+        """销售结算账户"""
 
         account_number = CharField(source='account.number', read_only=True, label='账户编号')
         account_name = CharField(source='account.name', read_only=True, label='账户名称')
 
         class Meta:
-            model = CollectionAccount
+            model = SalesAccount
             read_only_fields = ['id', 'account_number', 'account_name']
             fields = ['account', 'collection_amount', *read_only_fields]
 
@@ -69,8 +69,8 @@ class SalesOrderSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     sales_goods_items = SalesGoodsSerializer(source='sales_goods_set', many=True, label='销售商品')
-    collection_account_items = CollectionAccountSerializer(source='collection_order.collection_accounts',
-                                                           required=False, many=True, label='收款账户')
+    sales_account_items = SalesAccountSerializer(
+        source='sales_accounts', required=False, many=True, label='收款账户')
 
     class Meta:
         model = SalesOrder
@@ -79,7 +79,7 @@ class SalesOrderSerializer(BaseSerializer):
                             'arrears_amount', 'is_void', 'enable_auto_stock_out', 'creator',
                             'creator_name', 'create_time']
         fields = ['number', 'warehouse', 'client', 'handler', 'handle_time', 'discount', 'other_amount',
-                  'remark', 'sales_goods_items', 'collection_account_items', *read_only_fields]
+                  'remark', 'sales_goods_items', 'sales_account_items', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -110,7 +110,7 @@ class SalesOrderSerializer(BaseSerializer):
         if value <= 0:
             raise ValidationError('整单折扣小于或等于零')
         return value
-    
+
     def validate_other_amount(self, value):
         if value <= 0:
             raise ValidationError('其他费用小于或等于零')
@@ -119,8 +119,7 @@ class SalesOrderSerializer(BaseSerializer):
     @transaction.atomic
     def create(self, validated_data):
         sales_goods_items = validated_data.pop('sales_goods_set')
-        collection_order_item = validated_data.pop('collection_order', {})
-        collection_account_items = collection_order_item.pop('collection_accounts', [])
+        sales_account_items = validated_data.pop('sales_accounts', [])
 
         validated_data['enable_auto_stock_out'] = self.team.enable_auto_stock_out
         validated_data['creator'] = self.user
@@ -151,31 +150,19 @@ class SalesOrderSerializer(BaseSerializer):
 
         total_collection_amount = 0
 
-        # 创建收款单据
-        if collection_account_items:
-            collection_order_number = CollectionOrder.get_number(team=self.team)
-            collection_order_remark = f'销售单据: {sales_order.number}'
-            collection_order = CollectionOrder.objects.create(
-                number=collection_order_number, client=sales_order.client,
-                handler=sales_order.handler, handle_time=sales_order.handle_time,
-                remark=collection_order_remark, creator=self.user, team=self.team
-            )
-
-            # 创建收款账户
-            collection_accounts = []
-            for collection_account_item in collection_account_items:
-                collection_amount = collection_account_item['collection_amount']
-                collection_accounts.append(CollectionAccount(
-                    collection_order=collection_order, account=collection_account_item['account'],
+        if sales_account_items:
+            # 创建销售结算账户
+            sales_accounts = []
+            for sales_account_item in sales_account_items:
+                collection_amount = sales_account_item['collection_amount']
+                sales_accounts.append(SalesAccount(
+                    sales_order=sales_order, account=sales_account_item['account'],
                     collection_amount=collection_amount, team=self.team
                 ))
 
                 total_collection_amount = NP.plus(total_collection_amount, collection_amount)
             else:
-                CollectionAccount.objects.bulk_create(collection_accounts)
-                collection_order.total_amount = total_collection_amount
-                collection_order.save(update_fields=['total_amount'])
-                sales_order.collection_order = collection_order
+                SalesAccount.objects.bulk_create(sales_accounts)
 
         sales_order.collection_amount = total_collection_amount
         sales_order.arrears_amount = NP.minus(total_sales_amount, total_collection_amount)
@@ -184,6 +171,190 @@ class SalesOrderSerializer(BaseSerializer):
         return sales_order
 
 
+class SalesReturnOrderSerializer(BaseSerializer):
+    """销售退货单据"""
+
+    class SalesReturnGoodsSerializer(BaseSerializer):
+        """销售退货商品"""
+
+        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+
+        class Meta:
+            model = SalesReturnGoods
+            read_only_fields = ['id', 'goods_number', 'goods_name', 'goods_barcode',
+                                'total_amount', 'unit_name']
+            fields = ['goods', 'return_quantity', 'return_price', *read_only_fields]
+
+        def validate_goods(self, instance):
+            instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
+            if not instance.is_active:
+                raise ValidationError(f'商品[{instance.name}]未激活')
+            return instance
+
+        def validate_return_quantity(self, value):
+            if value <= 0:
+                raise ValidationError('退货数量小于或等于零')
+            return value
+
+        def validate_return_price(self, value):
+            if value <= 0:
+                raise ValidationError('退货单价小于或等于零')
+            return value
+
+    class SalesReturnAccountSerializer(BaseSerializer):
+        """销售退货结算账户"""
+
+        account_number = CharField(source='account.number', read_only=True, label='账户编号')
+        account_name = CharField(source='account.name', read_only=True, label='账户名称')
+
+        class Meta:
+            model = SalesReturnAccount
+            read_only_fields = ['id', 'account_number', 'account_name']
+            fields = ['account', 'payment_amount', *read_only_fields]
+
+        def validate_account(self, instance):
+            instance = self.validate_foreign_key(Account, instance, message='账户不存在')
+            if not instance.is_active:
+                raise ValidationError(f'账户[{instance.name}]未激活')
+            return instance
+
+        def validate_payment_amount(self, value):
+            if value <= 0:
+                raise ValidationError('付款金额小于或等于零')
+            return value
+
+    sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单据编号')
+    warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
+    warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
+    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
+    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+    handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
+    creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
+    sales_return_goods_items = SalesReturnGoodsSerializer(
+        source='sales_return_goods_set', many=True, label='销售退货商品')
+    sales_return_account_items = SalesReturnAccountSerializer(
+        source='sales_return_accounts', required=False, many=True, label='销售退货结算账户')
+
+    class Meta:
+        model = SalesReturnOrder
+        read_only_fields = ['id', 'sales_order_number', 'warehouse_number', 'warehouse_name',
+                            'supplier_number', 'supplier_name', 'handler_name', 'total_quantity',
+                            'total_amount', 'payment_amount', 'arrears_amount', 'is_void',
+                            'enable_auto_stock_in', 'creator', 'creator_name', 'create_time']
+        fields = ['number', 'sales_order', 'warehouse', 'supplier', 'handler', 'handle_time',
+                  'remark', 'other_amount', 'sales_return_goods_items',
+                  'sales_return_account_items', *read_only_fields]
+
+    def validate_number(self, value):
+        self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
+        return value
+
+    def validate_sales_order(self, instance):
+        instance = self.validate_foreign_key(SalesOrder, instance, message='销售单据不存在')
+        if instance.is_void:
+            raise ValidationError(f'销售单据[{instance.name}]已作废')
+        return instance
+
+    def validate_warehouse(self, instance):
+        instance = self.validate_foreign_key(Warehouse, instance, message='仓库不存在')
+        if not instance.is_active:
+            raise ValidationError(f'仓库[{instance.name}]未激活')
+
+        if not instance.is_locked:
+            raise ValidationError(f'仓库[{instance.name}]已锁定')
+        return instance
+
+    def validate_supplier(self, instance):
+        instance = self.validate_foreign_key(Supplier, instance, message='供应商不存在')
+        if not instance.is_active:
+            raise ValidationError(f'供应商[{instance.name}]未激活')
+        return instance
+
+    def validate_handler(self, instance):
+        instance = self.validate_foreign_key(User, instance, message='经手人不存在')
+        if not instance.is_active:
+            raise ValidationError(f'经手人[{instance.name}]未激活')
+        return instance
+
+    def validate_other_amount(self, value):
+        if value <= 0:
+            raise ValidationError('其他费用小于或等于零')
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        sales_return_goods_items = validated_data.pop('sales_return_goods_set')
+        sales_return_account_items = validated_data.pop('sales_return_accounts', [])
+
+        validated_data['enable_auto_stock_in'] = self.team.enable_auto_stock_in
+        validated_data['creator'] = self.user
+        sales_return_order = super().create(validated_data)
+
+        total_return_quantity = 0
+        total_return_amount = 0
+
+        # 创建销售退货商品
+        sales_return_goods_set = []
+        for sales_return_goods_item in sales_return_goods_items:
+            goods = sales_return_goods_item['goods']
+            return_quantity = sales_return_goods_item['return_quantity']
+
+            sales_goods = None
+            if sales_order := sales_return_order.sales_order:
+                sales_goods = sales_order.sales_goods_set.filter(goods=goods).first()
+                if not sales_goods:
+                    raise ValidationError(f'销售单据[{sales_order.number}]不存在商品[{goods.name}]')
+
+                sales_goods.return_quantity = NP.plus(sales_goods.return_quantity, return_quantity)
+                if sales_goods.return_quantity > sales_goods.total_amount:
+                    raise ValidationError(f'退货商品[{goods.name}]退货数量错误')
+
+                # 同步销售商品退货数量
+                sales_goods.save(update_fields=['return_quantity'])
+
+            return_price = sales_return_goods_item['return_price']
+            total_amount = NP.times(return_quantity, return_price)
+            sales_return_goods_set.append(SalesReturnGoods(
+                sales_return_order=sales_return_order, sales_goods=sales_goods,
+                goods=goods, return_quantity=return_quantity, return_price=return_price,
+                total_amount=total_amount, team=self.team
+            ))
+
+            total_return_quantity = NP.plus(total_return_quantity, return_quantity)
+            total_return_amount = NP.plus(total_return_amount, total_amount)
+        else:
+            SalesReturnGoods.objects.bulk_create(sales_return_goods_set)
+            total_return_amount = NP.plus(total_return_amount, sales_return_order.other_amount)
+            sales_return_order.total_quantity = total_return_quantity
+            sales_return_order.total_amount = total_return_amount
+
+        total_payment_amount = 0
+
+        if sales_return_account_items:
+            # 创建销售退货结算账户
+            sales_return_accounts = []
+            for sales_return_account_item in sales_return_account_items:
+                payment_amount = sales_return_account_item['payment_amount']
+                sales_return_accounts.append(SalesReturnAccount(
+                    sales_return_order=sales_return_order, account=sales_return_account_item['account'],
+                    payment_amount=payment_amount, team=self.team
+                ))
+
+                total_payment_amount = NP.plus(total_payment_amount, payment_amount)
+            else:
+                SalesReturnAccount.objects.bulk_create(sales_return_accounts)
+
+        sales_return_order.payment_amount = total_payment_amount
+        sales_return_order.arrears_amount = NP.minus(total_return_amount, total_payment_amount)
+        sales_return_order.save(update_fields=['total_quantity', 'total_amount', 'payment_amount',
+                                               'arrears_amount'])
+
+        return sales_return_order
+
+
 __all__ = [
-    'SalesOrderSerializer',
+    'SalesOrderSerializer', 'SalesReturnOrderSerializer',
 ]

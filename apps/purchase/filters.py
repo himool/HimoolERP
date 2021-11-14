@@ -22,6 +22,7 @@ class PurchaseReturnOrderFilter(FilterSet):
         fields = ['number', 'purchase_order', 'warehouse', 'supplier', 'handler',
                   'is_void', 'creator', 'start_date', 'end_date']
 
+
 __all__ = [
     'PurchaseOrderFilter', 'PurchaseReturnOrderFilter',
 ]

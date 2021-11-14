@@ -256,7 +256,7 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
             for purchase_return_account in purchase_return_order.purchase_return_accounts.all():
                 account = purchase_return_account.account
                 amount_before = account.balance_amount
-                amount_change = purchase_return_account.payment_amount
+                amount_change = purchase_return_account.collection_amount
                 amount_after = NP.plus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
@@ -277,6 +277,85 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
 
         number = PurchaseReturnOrder.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    @extend_schema(request=None, responses={200: PurchaseReturnOrderSerializer})
+    @action(detail=True, methods=['post'])
+    def void(self, request, *args, **kwargs):
+        """作废"""
+
+        purchase_return_order = self.get_object()
+        if purchase_return_order.is_void:
+            raise ValidationError(f'采购退货单据[{purchase_return_order.number}]已作废, 无法再次作废')
+
+        # 同步采购退货单据, 采购退货商品
+        purchase_return_order.is_void = True
+        purchase_return_order.save(update_fields=['is_void'])
+        purchase_return_order.purchase_return_goods_set.all().update(is_void=True)
+
+        if purchase_return_order.enable_auto_stock_out:
+            # 同步库存, 流水
+            inventory_flows = []
+            for purchase_return_goods in purchase_return_order.purchase_return_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=purchase_return_order.warehouse,
+                                                  goods=purchase_return_goods.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = purchase_return_goods.return_quantity
+                quantity_after = NP.plus(quantity_before, quantity_change)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=purchase_return_order.warehouse, goods=purchase_return_goods.goods,
+                    type=InventoryFlow.Type.VOID_PURCHASE_RETURN, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    void_purchase_return_order=purchase_return_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+            else:
+                InventoryFlow.objects.bulk_create(inventory_flows)
+        else:
+            # 作废出库单据
+            stock_out_order = purchase_return_order.stock_out_order
+            if stock_out_order.total_quantity != stock_out_order.remain_quantity:
+                raise ValidationError(f'采购退货单据[{purchase_return_order.number}]无法作废, 已存在出库记录')
+
+            stock_out_order.is_void = True
+            stock_out_order.save(update_fields=['is_void'])
+
+            # 作废出库商品
+            stock_out_order.stock_out_goods_set.all().update(is_void=True)
+
+        # 同步欠款
+        supplier = purchase_return_order.supplier
+        supplier.arrears_amount = NP.plus(supplier.arrears_amount, purchase_return_order.arrears_amount)
+        supplier.save(update_fields=['arrears_amount'])
+
+        if purchase_return_order.collection_amount > 0:
+            # 作废采购退货结算账户
+            purchase_return_order.purchase_return_accounts.all().update(is_void=True)
+
+            # 同步账户, 流水
+            finance_flows = []
+            for purchase_return_account in purchase_return_order.purchase_return_accounts.all():
+                account = purchase_return_account.account
+                amount_before = account.balance_amount
+                amount_change = purchase_return_account.collection_amount
+                amount_after = NP.plus(amount_before, amount_change)
+
+                finance_flows.append(FinanceFlow(
+                    account=account, type=FinanceFlow.Type.VOID_PURCHASE_RETURN, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after,
+                    void_purchase_return_order=purchase_return_order, creator=self.user, team=self.team
+                ))
+
+                account.balance_amount = amount_after
+                account.save(update_fields=['balance_amount'])
+            else:
+                FinanceFlow.objects.bulk_create(finance_flows)
+
+        serializer = PurchaseReturnOrderSerializer(instance=purchase_return_order)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 __all__ = [

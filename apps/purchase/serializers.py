@@ -117,7 +117,6 @@ class PurchaseOrderSerializer(BaseSerializer):
         purchase_account_items = validated_data.pop('purchase_accounts', [])
 
         validated_data['enable_auto_stock_in'] = self.team.enable_auto_stock_in
-        validated_data['is_completed'] = self.team.enable_auto_stock_in
         validated_data['creator'] = self.user
         purchase_order = super().create(validated_data)
 
@@ -231,7 +230,7 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     purchase_return_goods_items = PurchaseReturnGoodsSerializer(
-        source='purchase_return_goods_set', many=True, label='退货商品')
+        source='purchase_return_goods_set', many=True, label='采购退货商品')
     purchase_return_account_items = PurchaseReturnAccountSerializer(
         source='purchase_return_accounts', required=False, many=True, label='采购退货结算账户')
 

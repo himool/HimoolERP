@@ -9,6 +9,7 @@ from apps.sales.models import *
 from apps.goods.models import *
 from apps.flow.models import *
 from apps.stock_out.models import *
+from apps.stock_in.models import *
 
 
 class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
@@ -192,6 +193,178 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
+    """销售退货单据"""
+
+    serializer_class = SalesReturnOrderSerializer
+    permission_classes = [IsAuthenticated, SalesReturnOrderPermission]
+    filterset_class = SalesReturnOrderFilter
+    search_fields = ['number', 'sales_order__number', 'client__number', 'client__name', 'remark']
+    ordering_fields = ['id', 'number', 'total_quantity', 'total_amount', 'create_time']
+    select_related_fields = ['sales_order', 'warehouse', 'client', 'handler', 'creator']
+    prefetch_related_fields = ['sales_return_goods_set', 'sales_return_goods_set__goods',
+                               'sales_return_goods_set__goods__unit',
+                               'sales_return_accounts', 'sales_return_accounts__account']
+    queryset = SalesReturnOrder.objects.all()
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        sales_return_order = serializer.save()
+
+        if sales_return_order.enable_auto_stock_out:
+            # 同步库存, 流水
+            inventory_flows = []
+            for sales_return_goods in sales_return_order.sales_return_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=sales_return_order.warehouse,
+                                                  goods=sales_return_goods.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = sales_return_goods.return_quantity
+                quantity_after = NP.minus(quantity_before, quantity_change)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=sales_return_order.warehouse, goods=sales_return_goods.goods,
+                    type=InventoryFlow.Type.SALES_RETURN, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    sales_return_order=sales_return_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+            else:
+                InventoryFlow.objects.bulk_create(inventory_flows)
+        else:
+            # 创建入库单据
+            stock_in_order_number = StockInOrder.get_number(team=self.team)
+            stock_in_order = StockInOrder.objects.create(
+                number=stock_in_order_number, warehouse=sales_return_order.warehouse,
+                type=StockInOrder.Type.SALES_RETURN, sales_return_order=sales_return_order,
+                total_quantity=sales_return_order.total_quantity,
+                remain_quantity=sales_return_order.total_quantity,
+                creator=self.user, team=self.team
+            )
+
+            # 创建入库商品
+            stock_in_goods_set = []
+            for sales_return_goods in sales_return_order.sales_return_goods_set.all():
+                stock_in_goods_set.append(StockInGoods(
+                    stock_in_order=stock_in_order, goods=sales_return_goods.goods,
+                    stock_in_quantity=sales_return_goods.return_quantity, team=self.team
+                ))
+            else:
+                StockInGoods.objects.bulk_create(stock_in_goods_set)
+
+        # 同步欠款
+        client = sales_return_order.client
+        client.arrears_amount = NP.minus(client.arrears_amount, sales_return_order.arrears_amount)
+        client.save(update_fields=['arrears_amount'])
+
+        # 同步账户, 流水
+        if sales_return_order.payment_amount > 0:
+            finance_flows = []
+            for sales_return_account in sales_return_order.sales_return_accounts.all():
+                account = sales_return_account.account
+                amount_before = account.balance_amount
+                amount_change = sales_return_account.payment_amount
+                amount_after = NP.plus(amount_before, amount_change)
+
+                finance_flows.append(FinanceFlow(
+                    account=account, type=FinanceFlow.Type.SALES_RETURN, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after,
+                    sales_return_order=sales_return_order, creator=self.user, team=self.team
+                ))
+
+                account.balance_amount = amount_after
+                account.save(update_fields=['balance_amount'])
+            else:
+                FinanceFlow.objects.bulk_create(finance_flows)
+
+    @extend_schema(responses={200: NumberResponse})
+    @action(detail=False, methods=['get'])
+    def number(self, request, *args, **kwargs):
+        """获取编号"""
+
+        number = SalesReturnOrder.get_number(self.team)
+        return Response(data={'number': number}, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    @extend_schema(request=None, responses={200: SalesReturnOrderSerializer})
+    @action(detail=True, methods=['post'])
+    def void(self, request, *args, **kwargs):
+        """作废"""
+
+        sales_return_order = self.get_object()
+        if sales_return_order.is_void:
+            raise ValidationError(f'销售退货单据[{sales_return_order.number}]已作废, 无法再次作废')
+
+        # 同步销售退货单据, 采购退货商品
+        sales_return_order.is_void = True
+        sales_return_order.save(update_fields=['is_void'])
+        sales_return_order.sales_return_goods_set.all().update(is_void=True)
+
+        if sales_return_order.enable_auto_stock_in:
+            # 同步库存, 流水
+            inventory_flows = []
+            for sales_return_goods in sales_return_order.sales_return_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=sales_return_order.warehouse,
+                                                  goods=sales_return_goods.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = sales_return_goods.return_quantity
+                quantity_after = NP.plus(quantity_before, quantity_change)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=sales_return_order.warehouse, goods=sales_return_goods.goods,
+                    type=InventoryFlow.Type.VOID_SALES_RETURN, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    void_sales_return_order=sales_return_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+            else:
+                InventoryFlow.objects.bulk_create(inventory_flows)
+        else:
+            # 作废入库单据
+            stock_in_order = sales_return_order.stock_in_order
+            if stock_in_order.total_quantity != stock_in_order.remain_quantity:
+                raise ValidationError(f'销售退货单据[{sales_return_order.number}]无法作废, 已存在出库记录')
+
+            stock_in_order.is_void = True
+            stock_in_order.save(update_fields=['is_void'])
+
+            # 作废入库商品
+            stock_in_order.stock_in_goods_set.all().update(is_void=True)
+
+        # 同步欠款
+        client = sales_return_order.client
+        client.arrears_amount = NP.plus(client.arrears_amount, sales_return_order.arrears_amount)
+        client.save(update_fields=['arrears_amount'])
+
+        if sales_return_order.payment_amount > 0:
+            # 作废销售退货结算账户
+            sales_return_order.sales_return_accounts.all().update(is_void=True)
+
+            # 同步账户, 流水
+            finance_flows = []
+            for sales_return_account in sales_return_order.sales_return_accounts.all():
+                account = sales_return_account.account
+                amount_before = account.balance_amount
+                amount_change = sales_return_account.payment_amount
+                amount_after = NP.plus(amount_before, amount_change)
+
+                finance_flows.append(FinanceFlow(
+                    account=account, type=FinanceFlow.Type.VOID_SALES_RETURN, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after,
+                    void_sales_return_order=sales_return_order, creator=self.user, team=self.team
+                ))
+
+                account.balance_amount = amount_after
+                account.save(update_fields=['balance_amount'])
+            else:
+                FinanceFlow.objects.bulk_create(finance_flows)
+
+        serializer = SalesReturnOrderSerializer(instance=sales_return_order)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 __all__ = [
-    'SalesOrderViewSet',
+    'SalesOrderViewSet', 'SalesReturnOrderViewSet',
 ]
