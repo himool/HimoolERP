@@ -316,11 +316,11 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
 
             purchase_goods = None
             if purchase_order := purchase_return_order.purchase_order:
-                if purchase_goods := purchase_return_goods_item.get('purchase_goods'):
+                if not (purchase_goods := purchase_return_goods_item.get('purchase_goods')):
                     raise ValidationError(f'采购单据[{purchase_order.number}]不存在商品[{goods.name}]')
 
                 purchase_goods.return_quantity = NP.plus(purchase_goods.return_quantity, return_quantity)
-                if purchase_goods.return_quantity > purchase_goods.total_amount:
+                if purchase_goods.return_quantity > purchase_goods.purchase_quantity:
                     raise ValidationError(f'退货商品[{goods.name}]退货数量错误')
 
                 # 同步采购商品退货数量

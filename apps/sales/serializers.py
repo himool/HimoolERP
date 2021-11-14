@@ -320,11 +320,11 @@ class SalesReturnOrderSerializer(BaseSerializer):
 
             sales_goods = None
             if sales_order := sales_return_order.sales_order:
-                if sales_goods := sales_return_goods_item.get('sales_goods'):
+                if not (sales_goods := sales_return_goods_item.get('sales_goods')):
                     raise ValidationError(f'销售单据[{sales_order.number}]不存在商品[{goods.name}]')
 
                 sales_goods.return_quantity = NP.plus(sales_goods.return_quantity, return_quantity)
-                if sales_goods.return_quantity > sales_goods.total_amount:
+                if sales_goods.return_quantity > sales_goods.sales_quantity:
                     raise ValidationError(f'退货商品[{goods.name}]退货数量错误')
 
                 # 同步销售商品退货数量

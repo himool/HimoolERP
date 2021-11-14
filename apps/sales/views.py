@@ -23,8 +23,7 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
     select_related_fields = ['warehouse', 'client', 'handler', 'creator']
     prefetch_related_fields = ['sales_goods_set', 'sales_goods_set__goods',
                                'sales_goods_set__goods__unit',
-                               'collection_order__collection_accounts',
-                               'collection_order__collection_accounts__account']
+                               'sales_accounts', 'sales_accounts__account']
     queryset = SalesOrder.objects.all()
 
     @transaction.atomic
@@ -210,7 +209,7 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
     def perform_create(self, serializer):
         sales_return_order = serializer.save()
 
-        if sales_return_order.enable_auto_stock_out:
+        if sales_return_order.enable_auto_stock_in:
             # 同步库存, 流水
             inventory_flows = []
             for sales_return_goods in sales_return_order.sales_return_goods_set.all():
