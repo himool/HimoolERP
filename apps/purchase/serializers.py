@@ -182,7 +182,13 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
             model = PurchaseReturnGoods
             read_only_fields = ['id', 'goods_number', 'goods_name', 'goods_barcode',
                                 'total_amount', 'unit_name']
-            fields = ['goods', 'return_quantity', 'return_price', *read_only_fields]
+            fields = ['purchase_goods', 'goods', 'return_quantity', 'return_price', *read_only_fields]
+
+        def validate_purchase_goods(self, instance):
+            instance = self.validate_foreign_key(PurchaseGoods, instance, message='采购商品不存在')
+            if instance.is_void:
+                raise ValidationError(f'采购商品[{instance.name}]已作废')
+            return instance
 
         def validate_goods(self, instance):
             instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
@@ -300,10 +306,9 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
 
             purchase_goods = None
             if purchase_order := purchase_return_order.purchase_order:
-                purchase_goods = purchase_order.purchase_goods_set.filter(goods=goods).first()
-                if not purchase_goods:
+                if purchase_goods := purchase_return_goods_item.get('purchase_goods'):
                     raise ValidationError(f'采购单据[{purchase_order.number}]不存在商品[{goods.name}]')
-
+                
                 purchase_goods.return_quantity = NP.plus(purchase_goods.return_quantity, return_quantity)
                 if purchase_goods.return_quantity > purchase_goods.total_amount:
                     raise ValidationError(f'退货商品[{goods.name}]退货数量错误')

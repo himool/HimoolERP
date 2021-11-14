@@ -186,7 +186,13 @@ class SalesReturnOrderSerializer(BaseSerializer):
             model = SalesReturnGoods
             read_only_fields = ['id', 'goods_number', 'goods_name', 'goods_barcode',
                                 'total_amount', 'unit_name']
-            fields = ['goods', 'return_quantity', 'return_price', *read_only_fields]
+            fields = ['sales_goods', 'goods', 'return_quantity', 'return_price', *read_only_fields]
+
+        def validate_sales_goods(self, instance):
+            instance = self.validate_foreign_key(SalesGoods, instance, message='销售商品不存在')
+            if instance.is_void:
+                raise ValidationError(f'销售商品[{instance.name}]已作废')
+            return instance
 
         def validate_goods(self, instance):
             instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
@@ -304,9 +310,8 @@ class SalesReturnOrderSerializer(BaseSerializer):
 
             sales_goods = None
             if sales_order := sales_return_order.sales_order:
-                sales_goods = sales_order.sales_goods_set.filter(goods=goods).first()
-                if not sales_goods:
-                    raise ValidationError(f'销售单据[{sales_order.number}]不存在商品[{goods.name}]')
+                if sales_goods := sales_return_goods_item.get('purchase_goods'):
+                    raise ValidationError(f'采购单据[{sales_order.number}]不存在商品[{goods.name}]')
 
                 sales_goods.return_quantity = NP.plus(sales_goods.return_quantity, return_quantity)
                 if sales_goods.return_quantity > sales_goods.total_amount:
