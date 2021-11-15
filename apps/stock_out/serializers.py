@@ -27,6 +27,7 @@ class StockOutOrderSerializer(BaseSerializer):
     type_display = CharField(source='get_type_display', read_only=True, label='出库类型')
     sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单据编号')
     purchase_return_order_number = CharField(source='purchase_return_order.number', read_only=True, label='采购退货单据编号')
+    stock_transfer_order_number = CharField(source='stock_transfer_order.number', read_only=True, label='调拨单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_out_goods_items = StockOutGoodsSerializer(source='stock_out_goods_set', many=True, label='出库商品')
 
@@ -34,8 +35,9 @@ class StockOutOrderSerializer(BaseSerializer):
         model = StockOutOrder
         fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'type',
                   'type_display', 'sales_order', 'sales_order_number', 'purchase_return_order',
-                  'purchase_return_order_number', 'total_quantity', 'remain_quantity', 'is_completed',
-                  'is_void', 'creator', 'creator_name', 'create_time', 'stock_out_goods_items']
+                  'purchase_return_order_number', 'stock_transfer_order', 'stock_transfer_order_number',
+                  'total_quantity', 'remain_quantity', 'is_completed', 'is_void', 'creator',
+                  'creator_name', 'create_time', 'stock_out_goods_items']
 
 
 class StockOutRecordSerializer(BaseSerializer):
@@ -72,7 +74,6 @@ class StockOutRecordSerializer(BaseSerializer):
 
         def validate_batch(self, instance):
             instance = self.validate_foreign_key(Batch, instance, message='批次不存在')
-
             if instance and not instance.has_stock:
                 raise ValidationError(f'批次[{instance.number}]库存不足')
             return instance

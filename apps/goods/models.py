@@ -30,7 +30,7 @@ class Goods(Model):
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='goods_set')
 
     class Meta:
-        unique_together = [('number', 'team'), ('name', 'team')]
+        unique_together = [('number', 'team')]
 
     @classmethod
     def get_number(cls, team):

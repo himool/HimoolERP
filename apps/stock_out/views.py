@@ -18,7 +18,8 @@ class StockOutOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = StockOutOrderFilter
     search_fields = ['number', 'warehouse__number', 'warehouse__name']
     ordering_fields = ['id', 'number', 'total_quantity', 'remain_quantity', 'create_time']
-    select_related_fields = ['warehouse', 'sales_order', 'purchase_return_order', 'creator']
+    select_related_fields = ['warehouse', 'sales_order', 'purchase_return_order',
+                             'stock_transfer_order', 'creator']
     prefetch_related_fields = ['stock_out_goods_set', 'stock_out_goods_set__goods',
                                'stock_out_goods_set__goods__unit']
     queryset = StockOutOrder.objects.all()

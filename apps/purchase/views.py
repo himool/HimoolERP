@@ -67,7 +67,8 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             for purchase_goods in purchase_order.purchase_goods_set.all():
                 stock_in_goods_set.append(StockInGoods(
                     stock_in_order=stock_in_order, goods=purchase_goods.goods,
-                    stock_in_quantity=purchase_goods.purchase_quantity, team=self.team
+                    stock_in_quantity=purchase_goods.purchase_quantity,
+                    remain_quantity=purchase_goods.purchase_quantity, team=self.team
                 ))
             else:
                 StockInGoods.objects.bulk_create(stock_in_goods_set)

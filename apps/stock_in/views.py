@@ -18,7 +18,8 @@ class StockInOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
     filterset_class = StockInOrderFilter
     search_fields = ['number', 'warehouse__number', 'warehouse__name']
     ordering_fields = ['id', 'number', 'total_quantity', 'remain_quantity', 'create_time']
-    select_related_fields = ['warehouse', 'purchase_order', 'sales_return_order', 'creator']
+    select_related_fields = ['warehouse', 'purchase_order', 'sales_return_order',
+                             'stock_transfer_order', 'creator']
     prefetch_related_fields = ['stock_in_goods_set', 'stock_in_goods_set__goods',
                                'stock_in_goods_set__goods__unit']
     queryset = StockInOrder.objects.all()

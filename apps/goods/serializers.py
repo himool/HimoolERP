@@ -32,10 +32,6 @@ class GoodsSerializer(BaseSerializer):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
         return value
 
-    def validate_name(self, value):
-        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
-        return value
-
     def validate_category(self, instance):
         instance = self.validate_foreign_key(GoodsCategory, instance, message='商品分类不存在')
         return instance

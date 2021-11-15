@@ -246,7 +246,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
             for sales_return_goods in sales_return_order.sales_return_goods_set.all():
                 stock_in_goods_set.append(StockInGoods(
                     stock_in_order=stock_in_order, goods=sales_return_goods.goods,
-                    stock_in_quantity=sales_return_goods.return_quantity, team=self.team
+                    stock_in_quantity=sales_return_goods.return_quantity,
+                    remain_quantity=sales_return_goods.return_quantity, team=self.team
                 ))
             else:
                 StockInGoods.objects.bulk_create(stock_in_goods_set)
