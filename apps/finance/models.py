@@ -98,11 +98,18 @@ class CollectionAccount(Model):
 class ChargeOrder(Model):
     """收支单据"""
 
+    class Type(TextChoices):
+        """收支类型"""
+
+        INCOME = ('income', '收入')
+        EXPENDITURE = ('expenditure', '支出')
+
     number = CharField(max_length=32, verbose_name='编号')
-    client = ForeignKey('data.Client', on_delete=PROTECT, null=True,
-                        related_name='charge_orders', verbose_name='客户')
+    type = CharField(max_length=32, choices=Type.choices, verbose_name='收支类型')
     supplier = ForeignKey('data.Supplier', on_delete=PROTECT, null=True,
                           related_name='charge_orders', verbose_name='供应商')
+    client = ForeignKey('data.Client', on_delete=PROTECT, null=True,
+                        related_name='charge_orders', verbose_name='客户')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='charge_orders', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     charge_item = ForeignKey('data.ChargeItem', on_delete=SET_NULL, null=True,
