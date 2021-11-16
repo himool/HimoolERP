@@ -185,7 +185,7 @@ class ChargeOrderSerializer(BaseSerializer):
                             'client_name', 'handler_name', 'handler_name', 'charge_item_name',
                             'account_number', 'account_name', 'is_void', 'creator', 'creator_name',
                             'create_time']
-        fields = ['number', 'client', 'supplier', 'handler', 'handle_time', 'charge_item',
+        fields = ['number', 'type', 'client', 'supplier', 'handler', 'handle_time', 'charge_item',
                   'account', 'charge_amount', 'remark', *read_only_fields]
 
     def validate_number(self, value):
@@ -225,13 +225,68 @@ class ChargeOrderSerializer(BaseSerializer):
         client = attrs.get('client')
         if (supplier and client) or not (supplier or client):
             raise ValidationError('供应商或客户选择重复')
-        
+
+        if attrs['type'] != attrs['charge_item'].type:
+            raise ValidationError('收支类型与收支项目不匹配')
         return super().validate(attrs)
 
     def create(self, validated_data):
-        pass
+        validated_data['charge_item_name'] = validated_data['charge_item'].name
+        validated_data['creator'] = self.user
+
+        return super().create(validated_data)
+
+
+class AccountTransferRecordSerializer(BaseSerializer):
+    """收支单据"""
+
+    out_account_number = CharField(source='out_account.number', read_only=True, label='转出账户编号')
+    out_account_name = CharField(source='out_account.name', read_only=True, label='转出账户名称')
+    in_account_number = CharField(source='out_account.number', read_only=True, label='转入账户编号')
+    in_account_name = CharField(source='out_account.name', read_only=True, label='转入账户名称')
+    service_charge_payer_display = CharField(
+        source='get_service_charge_payer_display', read_only=True, label='手续费支付方')
+    handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
+    creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
+
+    class Meta:
+        model = AccountTransferRecord
+        read_only_fields = ['id', 'out_account_number', 'out_account_name', 'in_account_number',
+                            'in_account_name', 'is_void', 'creator', 'creator_name', 'create_time']
+        fields = ['out_account', 'transfer_out_time', 'in_account', 'transfer_in_time',
+                  'transfer_amount', 'service_charge_amount', 'service_charge_payer', 'handler',
+                  'handle_time', 'remark', *read_only_fields]
+
+    def validate_out_account(self, instance):
+        instance = self.validate_foreign_key(Account, instance, message='转出账户不存在')
+        if not instance.is_active:
+            raise ValidationError(f'转出账户[{instance.name}]未激活')
+        return instance
+
+    def validate_in_account(self, instance):
+        instance = self.validate_foreign_key(Account, instance, message='转入账户不存在')
+        if not instance.is_active:
+            raise ValidationError(f'转入账户[{instance.name}]未激活')
+        return instance
+
+    def validate_handler(self, instance):
+        instance = self.validate_foreign_key(User, instance, message='经手人不存在')
+        if not instance.is_active:
+            raise ValidationError(f'经手人[{instance.name}]未激活')
+        return instance
+
+    def validate(self, attrs):
+        if attrs['out_account'] == attrs['in_account']:
+            raise ValidationError('转出转入账户相同')
+        return super().validate(attrs)
+
+    def create(self, validated_data):
+        validated_data['creator'] = self.user
+
+        return super().create(validated_data)
 
 
 __all__ = [
-
+    'PaymentOrderSerializer', 'CollectionOrderSerializer',
+    'ChargeOrderSerializer', 'AccountTransferRecordSerializer',
 ]
