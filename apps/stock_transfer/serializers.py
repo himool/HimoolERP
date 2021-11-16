@@ -20,7 +20,8 @@ class StockTransferOrderSerializer(BaseSerializer):
 
         class Meta:
             model = StockTransferGoods
-            read_only_fields = ['id', 'enable_batch_control']
+            read_only_fields = ['id', 'goods_number', 'goods_name', 'goods_barcode', 'unit_name',
+                                'batch_number', 'enable_batch_control']
             fields = ['goods', 'batch', 'stock_transfer_quantity', *read_only_fields]
 
         def validate_goods(self, instance):

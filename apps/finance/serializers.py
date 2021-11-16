@@ -186,7 +186,7 @@ class ChargeOrderSerializer(BaseSerializer):
                             'account_number', 'account_name', 'is_void', 'creator', 'creator_name',
                             'create_time']
         fields = ['number', 'type', 'client', 'supplier', 'handler', 'handle_time', 'charge_item',
-                  'account', 'charge_amount', 'remark', *read_only_fields]
+                  'account', 'total_amount', 'charge_amount', 'remark', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -225,9 +225,12 @@ class ChargeOrderSerializer(BaseSerializer):
         client = attrs.get('client')
         if (supplier and client) or not (supplier or client):
             raise ValidationError('供应商或客户选择重复')
-
+        
         if attrs['type'] != attrs['charge_item'].type:
             raise ValidationError('收支类型与收支项目不匹配')
+        
+        if attrs['charge_amount'] > attrs['total_amount']:
+            raise ValidationError('实收/付金额大于应收/付金额')
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -252,7 +255,8 @@ class AccountTransferRecordSerializer(BaseSerializer):
     class Meta:
         model = AccountTransferRecord
         read_only_fields = ['id', 'out_account_number', 'out_account_name', 'in_account_number',
-                            'in_account_name', 'is_void', 'creator', 'creator_name', 'create_time']
+                            'in_account_name', 'service_charge_payer_display', 'handler_name',
+                            'is_void', 'creator', 'creator_name', 'create_time']
         fields = ['out_account', 'transfer_out_time', 'in_account', 'transfer_in_time',
                   'transfer_amount', 'service_charge_amount', 'service_charge_payer', 'handler',
                   'handle_time', 'remark', *read_only_fields]

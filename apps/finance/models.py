@@ -41,7 +41,6 @@ class PaymentAccount(Model):
                                related_name='payment_accounts', verbose_name='付款单据')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='payment_accounts', verbose_name='结算账户')
     payment_amount = AmountField(verbose_name='付款金额')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='payment_accounts')
 
     class Meta:
@@ -88,7 +87,6 @@ class CollectionAccount(Model):
                                   related_name='collection_accounts', verbose_name='收款单据')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='collection_accounts', verbose_name='结算账户')
     collection_amount = AmountField(verbose_name='收款金额')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='collection_accounts')
 
     class Meta:
@@ -116,7 +114,8 @@ class ChargeOrder(Model):
                              related_name='charge_orders', verbose_name='收支项目')
     charge_item_name = CharField(max_length=64, verbose_name='收支项目名称')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='charge_orders', verbose_name='结算账户')
-    charge_amount = AmountField(verbose_name='收支金额')
+    total_amount = AmountField(verbose_name='应收/付金额')
+    charge_amount = AmountField(verbose_name='实收/付金额')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
@@ -157,9 +156,9 @@ class AccountTransferRecord(Model):
                                      related_name='in_account_transfer_records', verbose_name='转入账户')
     transfer_in_time = DateTimeField(verbose_name='转入时间')
     transfer_amount = AmountField(verbose_name='转账金额')
-    service_charge_amount = AmountField(verbose_name='手续费金额')
+    service_charge_amount = AmountField(default=0, verbose_name='手续费金额')
     service_charge_payer = CharField(max_length=32, choices=ServiceChargePayer.choices,
-                                     null=True, verbose_name='手续费支付方')
+                                     default=ServiceChargePayer.TRANSFER_OUT, verbose_name='手续费支付方')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='account_transfer_records', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
