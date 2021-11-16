@@ -124,6 +124,77 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
     def void(self, request, *args, **kwargs):
         """作废"""
 
+        stock_transfer_order = self.get_object()
+        if stock_transfer_order.is_void:
+            raise ValidationError(f'调拨单据[{stock_transfer_order.number}]已作废, 无法再次作废')
+
+        # 同步调拨单据, 调拨商品
+        stock_transfer_order.is_void = True
+        stock_transfer_order.save(update_fields=['is_void'])
+        stock_transfer_order.stock_transfer_goods_set.all().update(is_void=True)
+
+        if stock_transfer_order.enable_auto_stock_out:
+            # 同步库存, 流水
+            inventory_flows = []
+            for stock_transfer_goods in stock_transfer_order.stock_transfer_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=stock_transfer_order.out_warehouse,
+                                                  goods=stock_transfer_order.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = stock_transfer_goods.stock_transfer_quantity
+                quantity_after = NP.plus(quantity_before, quantity_change)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=stock_transfer_order.out_warehouse, goods=stock_transfer_order.goods,
+                    type=InventoryFlow.Type.VOID_STOCK_TRANSFER_OUT, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    void_stock_transfer_order=stock_transfer_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+        else:
+            # 作废出库单据
+            stock_out_order = stock_transfer_order.stock_out_order
+            if stock_out_order.total_quantity != stock_out_order.remain_quantity:
+                raise ValidationError(f'调拨单据[{stock_transfer_order.number}]无法作废, 已存在出库记录')
+
+            stock_out_order.is_void = True
+            stock_out_order.save(update_fields=['is_void'])
+
+            # 作废出库商品
+            stock_out_order.stock_out_goods_set.all().update(is_void=True)
+
+        if stock_transfer_order.enable_auto_stock_in:
+            # 同步库存, 流水
+            inventory_flows = []
+            for stock_transfer_goods in stock_transfer_order.stock_transfer_goods_set.all():
+                inventory = Inventory.objects.get(warehouse=stock_transfer_order.in_warehouse,
+                                                  goods=stock_transfer_order.goods, team=self.team)
+                quantity_before = inventory.total_quantity
+                quantity_change = stock_transfer_goods.stock_transfer_quantity
+                quantity_after = NP.plus(quantity_before, quantity_change)
+
+                inventory_flows.append(InventoryFlow(
+                    warehouse=stock_transfer_order.in_warehouse, goods=stock_transfer_order.goods,
+                    type=InventoryFlow.Type.STOCK_TRANSFER_IN, quantity_before=quantity_before,
+                    quantity_change=quantity_change, quantity_after=quantity_after,
+                    stock_transfer_order=stock_transfer_order, creator=self.user, team=self.team
+                ))
+
+                inventory.total_quantity = quantity_after
+                inventory.save(update_fields=['total_quantity'])
+        else:
+            # 作废入库单据
+            stock_in_order = stock_transfer_order.stock_in_order
+            if stock_in_order.total_quantity != stock_in_order.remain_quantity:
+                raise ValidationError(f'调拨单据[{stock_transfer_order.number}]无法作废, 已存在入库记录')
+
+            stock_in_order.is_void = True
+            stock_in_order.save(update_fields=['is_void'])
+
+            # 作废入库商品
+            stock_in_order.stock_in_goods_set.all().update(is_void=True)
+
 
 __all__ = [
     'StockTransferOrderViewSet',
