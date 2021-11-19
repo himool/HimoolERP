@@ -177,7 +177,7 @@ SIMPLE_JWT = {
 # https://drf-spectacular.readthedocs.io/en/latest/
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'OMS API',
+    'TITLE': 'Project API',
     'SERVE_AUTHENTICATION': ['extensions.authentications.BaseAuthentication'],
 }
 
