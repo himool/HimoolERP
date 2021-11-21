@@ -148,6 +148,42 @@ export function clientDestroy(form) {
   })
 }
 
+// client_categories
+export function clientCategoriesList(params) {
+  return axios({
+    url: '/api/client_categories/',
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'get',
+    params,
+  })
+}
+
+export function clientCategoriesCreate(form) {
+  return axios({
+    url: '/api/client_categories/',
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'post',
+    data: form,
+  })
+}
+
+export function clientCategoriesUpdate(form) {
+  return axios({
+    url: `/api/client_categories/${form.id}/`,
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'put',
+    data: form,
+  })
+}
+
+export function clientCategoriesDestroy(form) {
+  return axios({
+    url: `/api/client_categories/${form.id}/`,
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'delete',
+  })
+}
+
 // SalesPaymentRecord
 export function salesPaymentRecord(params) {
   return axios({

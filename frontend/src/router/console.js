@@ -53,6 +53,12 @@ export default {
       component: () => import('@/views/client/Client'),
     },
     {
+      path: 'clientCategories',
+      name: 'clientCategories',
+      meta: { title: '客户分类' },
+      component: () => import('@/views/clientCategories/ClientCategories'),
+    },
+    {
       path: 'account',
       name: 'account',
       meta: { title: '结算账户' },

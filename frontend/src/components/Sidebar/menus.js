@@ -11,6 +11,7 @@ export default [
   {
     key: '7', name: '基础数据', icon: 'table', submenus: [
       { key: '/client', name: '客户' },
+      { key: '/clientCategories', name: '客户类型' },
       { key: '/supplier', name: '供应商' },
       { key: '/warehouse', name: '仓库' },
       { key: '/account', name: '结算账户' },
