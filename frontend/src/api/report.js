@@ -4,7 +4,7 @@ import axios from '@/config/request'
 // PurchaseReport
 export function purchaseReportList(params) {
   return axios({
-    url: '/api/purchase_reports/',
+    url: '/api/purchase_orders/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'get',
     params,

@@ -4,7 +4,7 @@ import Qs from 'qs'
 
 export function login(params) {
   return axios({
-    url: '/api/user/login/',
+    url: '/api/user/get_token/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'post',
     data: Qs.stringify(params),
@@ -39,7 +39,7 @@ export function setPassword(data) {
 
 export function getInfo() {
   return axios({
-    url: '/api/user/get_info/',
+    url: '/api/user/info/',
     method: 'get',
   })
 }

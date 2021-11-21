@@ -2,6 +2,9 @@
   <div>
     <div>
       <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 5 }" :wrapper-col="{ span: 14 }">
+        <a-form-model-item prop="number" label="序号">
+          <a-input size="large" v-model="form.number" placeholder="序号" />
+        </a-form-model-item>
         <a-form-model-item prop="username" label="用户名">
           <a-input size="large" v-model="form.username" placeholder="用户名或手机号" />
         </a-form-model-item>
@@ -39,10 +42,14 @@
         wechatCustomerService: require('@/assets/wechat_customer_service.png'),
         isLoading: false,
         form: {
+          number : '',
           username: '',
           password: '',
         },
         rules: {
+          number:[
+             { required: true, message: '请输入序号', trigger: 'change' },
+          ],
           username: [
             { required: true, message: '请输入用户名', trigger: 'change' },
           ],

@@ -5,7 +5,7 @@ import axios from '@/config/request'
 // Category
 export function categoryList(params) {
   return axios({
-    url: '/api/categories/',
+    url: '/api/goods_categories/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'get',
     params,
@@ -14,7 +14,7 @@ export function categoryList(params) {
 
 export function categoryCreate(form) {
   return axios({
-    url: '/api/categories/',
+    url: '/api/goods_categories/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'post',
     data: form,
@@ -23,7 +23,7 @@ export function categoryCreate(form) {
 
 export function categoryUpdate(form) {
   return axios({
-    url: `/api/categories/${form.id}/`,
+    url: `/api/goods_categories/${form.id}/`,
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'put',
     data: form,
@@ -32,7 +32,7 @@ export function categoryUpdate(form) {
 
 export function categoryDestroy(form) {
   return axios({
-    url: `/api/categories/${form.id}/`,
+    url: `/api/goods_categories/${form.id}/`,
     headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
     method: 'delete',
   })

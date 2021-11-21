@@ -162,7 +162,7 @@ export default {
       this.list();
 
       categoryList().then((resp) => {
-        this.categoryItems = resp.data;
+        this.categoryItems = resp.data || [];
       });
 
       window.onscroll = () => {
