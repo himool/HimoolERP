@@ -19,15 +19,8 @@ class GoodsViewSet(BaseViewSet, ReadWriteMixin):
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']
     select_related_fields = ['category', 'unit']
+    prefetch_related_fields = ['inventories', 'inventories__batchs']
     queryset = Goods.objects.all()
-
-    @transaction.atomic
-    def perform_create(self, serializer):
-        goods = serializer.save()
-
-        # 同步库存
-        Inventory.objects.bulk_create([Inventory(warehouse=warehouse, goods=goods, team=self.team)
-                                       for warehouse in Warehouse.objects.filter(team=self.team)])
 
     def perform_destroy(self, instance):
         try:

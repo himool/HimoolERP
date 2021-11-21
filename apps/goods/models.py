@@ -62,6 +62,8 @@ class Batch(Model):
     production_date = DateField(null=True, verbose_name='生产日期')
     shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
     expiration_date = DateField(null=True, verbose_name='过期日期')
+    initial_inventory = ForeignKey('goods.Inventory', on_delete=SET_NULL, null=True,
+                                   related_name='batchs', verbose_name='初始库存')
     has_stock = BooleanField(default=True, verbose_name='库存状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='batchs')

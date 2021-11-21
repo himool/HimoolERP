@@ -7,13 +7,40 @@ from apps.data.models import *
 class GoodsSerializer(BaseSerializer):
 
     class InventorySerializer(BaseSerializer):
+
+        class BatchSerializer(BaseSerializer):
+
+            class Meta:
+                model = Batch
+                read_only_fields = ['id']
+                fields = ['number', 'total_quantity', 'production_date', *read_only_fields]
+
+            def validate_number(self, value):
+                self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
+                return value
+
+            def validate_total_quantity(self, value):
+                if value <= 0:
+                    raise ValidationError('库存数量小于等于零')
+                return value
+
         warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
         warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
+        batch_items = BatchSerializer(source='batchs', required=False, many=True, label='批次')
 
         class Meta:
             model = Inventory
             read_only_fields = ['id', 'warehouse_number', 'warehouse_name']
-            fields = ['warehouse', 'initial_quantity', *read_only_fields]
+            fields = ['warehouse', 'initial_quantity', 'batch_items', *read_only_fields]
+
+        def validate_warehouse(self, instance):
+            instance = self.validate_foreign_key(Warehouse, instance, message='仓库不存在')
+            return instance
+
+        def validate_initial_quantity(self, value):
+            if value < 0:
+                raise ValidationError('库存数量小于零')
+            return value
 
     category_name = CharField(source='category.name', read_only=True, label='分类名称')
     unit_name = CharField(source='unit.name', read_only=True, label='单位名称')
@@ -46,20 +73,41 @@ class GoodsSerializer(BaseSerializer):
         goods = super().create(validated_data)
 
         # 同步库存
-        inventories = []
+        batchs = []
         for warehouse in Warehouse.objects.filter(team=self.team):
             for inventory_item in inventory_items:
                 if warehouse == inventory_item['warehouse']:
-                    inventories.append(Inventory(
+                    # 创建库存
+                    inventory = Inventory.objects.create(
                         warehouse=warehouse, goods=goods,
                         initial_quantity=inventory_item['initial_quantity'],
                         total_quantity=inventory_item['initial_quantity'], team=self.team
-                    ))
+                    )
+
+                    total_inventory_quantity = 0
+
+                    # 商品开启批次控制, 创建批次
+                    batch_items = inventory_item.get('batchs')
+                    if goods.enable_batch_control and batch_items:
+                        for batch_item in batch_items:
+                            total_quantity = batch_item['total_quantity']
+                            production_date = batch_item.get('production_date')
+                            if production_date and goods.shelf_life_days:
+                                expiration_date = pendulum.parse(str(production_date)).add(days=goods.shelf_life_days)
+
+                            batchs.append(Batch(
+                                number=batch_item['number'], warehouse=warehouse, goods=goods,
+                                total_quantity=total_quantity, remain_quantity=total_quantity,
+                                production_date=production_date, shelf_life_days=goods.shelf_life_days,
+                                expiration_date=expiration_date, initial_inventory=inventory, team=self.team,
+                            ))
+                            
+                            total_inventory_quantity = NP.plus(total_inventory_quantity, total_quantity)
                     break
             else:
-                inventories.append(Inventory(warehouse=warehouse, goods=goods, team=self.team))
+                Inventory.objects.create(warehouse=warehouse, goods=goods, team=self.team)
         else:
-            Inventory.objects.bulk_create(inventories)
+            Batch.objects.bulk_create(batchs)
 
         return goods
 
