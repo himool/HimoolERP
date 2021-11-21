@@ -193,7 +193,7 @@
       list() {
         this.loading = true;
         supplierList(this.searchForm).then(resp => {
-          this.items = resp.data;
+          this.items = resp.data.result;
         }).finally(() => {
           this.loading = false;
         });
