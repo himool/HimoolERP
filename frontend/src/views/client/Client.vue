@@ -51,8 +51,19 @@
         <a-form-model-item prop="number" label="客户编号">
           <a-input v-model="form.number" />
         </a-form-model-item>
-        <a-form-model-item prop="contacts" label="联系人">
-          <a-input v-model="form.contacts" />
+          <a-form-model-item prop="level" label="等级">
+          <a-select v-model="form.level">
+            <a-select-option :value="0">1</a-select-option>
+          <a-select-option :value="1">2</a-select-option>
+          <a-select-option :value="2">3</a-select-option>
+          <a-select-option :value="3">4</a-select-option>
+          </a-select>
+        </a-form-model-item>
+       <a-form-model-item prop="category" label="客户分类">
+         <ClientCategoriesSelect v-model="form.category"></ClientCategoriesSelect>
+        </a-form-model-item>
+        <a-form-model-item prop="contact" label="联系人">
+          <a-input v-model="form.contact" />
         </a-form-model-item>
         <a-form-model-item prop="phone" label="手机号">
           <a-input v-model="form.phone" />
@@ -63,11 +74,9 @@
         <a-form-model-item prop="address" label="地址">
           <a-input v-model="form.address" />
         </a-form-model-item>
-        <a-form-model-item prop="status" label="状态">
-          <a-select v-model="form.status">
-            <a-select-option :value="true">启用</a-select-option>
-            <a-select-option :value="false">停用</a-select-option>
-          </a-select>
+        <a-form-model-item prop="is_active" label="激活状态">
+             <a-switch checked-children="开" un-checked-children="关" 
+             v-model="form.is_active" />
         </a-form-model-item>
         <a-form-model-item prop="order" label="排序">
           <a-input-number v-model="form.order" />
@@ -107,7 +116,19 @@
           {
             title: '客户编号',
             dataIndex: 'number',
-            key: 'name',
+            key: 'number',
+            sorter: true,
+          },
+          {
+            title: '客户等级',
+            dataIndex: 'level_display',
+            key: 'level_display',
+            sorter: true,
+          },
+          {
+            title: '客户分类',
+            dataIndex: 'category_name',
+            key: 'category_name',
             sorter: true,
           },
           {
@@ -167,6 +188,9 @@
         },
         visible: false,
       };
+    },
+    components:{
+      ClientCategoriesSelect: () => import("@/components/Fields/ClientCategoriesSelect"),
     },
     methods: {
       initailize() {

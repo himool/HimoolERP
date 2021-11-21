@@ -1,7 +1,7 @@
 <template>
   <a-select v-model.number="value" :disabled="disabled">
     <a-select-option
-      v-for="(client) in clientList"
+      v-for="(client) in clientCategoriesOptions"
       :key="client.id"
       :value="client.id"
     >
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { clientList } from "@/api/sales";
+import { clientCategoriesOptions } from "@/api/sales";
 export default {
   props: ["value","disabled"],
   watch:{
@@ -21,11 +21,11 @@ export default {
   },
   data() {
     var that = this;
-    clientList().then((resp) => {
-      that.clientList = resp.data.results;
+    clientCategoriesOptions().then((resp) => {
+      that.clientCategoriesOptions = resp.data.results;
     });
     return {
-      clientList: [],
+      clientCategoriesOptions: [],
     };
   },
 };

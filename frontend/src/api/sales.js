@@ -184,6 +184,15 @@ export function clientCategoriesDestroy(form) {
   })
 }
 
+export function clientCategoriesOptions(params) {
+  return axios({
+    url: '/api/client_categories/options',
+    headers: { 'X-CSRFToken': Cookies.get('csrftoken') },
+    method: 'get',
+    params,
+  })
+}
+
 // SalesPaymentRecord
 export function salesPaymentRecord(params) {
   return axios({
