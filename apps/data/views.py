@@ -17,7 +17,7 @@ class WarehouseViewSet(BaseViewSet, ReadWriteMixin):
     filterset_fields = ['manager', 'is_active', 'is_locked']
     search_fields = ['number', 'name', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
-    ordering = ['order', 'id']
+    ordering = ['order', 'number']
     select_related_fields = ['manager']
     queryset = Warehouse.objects.all()
 

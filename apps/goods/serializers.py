@@ -9,7 +9,7 @@ class GoodsSerializer(BaseSerializer):
     class InventorySerializer(BaseSerializer):
 
         class BatchSerializer(BaseSerializer):
-
+    
             class Meta:
                 model = Batch
                 read_only_fields = ['id']
