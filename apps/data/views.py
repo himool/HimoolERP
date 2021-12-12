@@ -9,7 +9,7 @@ from apps.data.models import *
 from apps.goods.models import *
 
 
-class WarehouseViewSet(BaseViewSet, ReadWriteMixin):
+class WarehouseViewSet(ModelViewSet):
     """仓库"""
 
     serializer_class = WarehouseSerializer
@@ -68,7 +68,7 @@ class WarehouseViewSet(BaseViewSet, ReadWriteMixin):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class ClientViewSet(BaseViewSet, ReadWriteMixin):
+class ClientViewSet(ModelViewSet):
     """客户"""
 
     serializer_class = ClientSerializer
@@ -95,7 +95,7 @@ class ClientViewSet(BaseViewSet, ReadWriteMixin):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
-class SupplierViewSet(BaseViewSet, ReadWriteMixin):
+class SupplierViewSet(ModelViewSet):
     """供应商"""
 
     serializer_class = SupplierSerializer
@@ -122,7 +122,7 @@ class SupplierViewSet(BaseViewSet, ReadWriteMixin):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
-class AccountViewSet(BaseViewSet, ReadWriteMixin):
+class AccountViewSet(ModelViewSet):
     """结算账户"""
 
     serializer_class = AccountSerializer
@@ -148,7 +148,7 @@ class AccountViewSet(BaseViewSet, ReadWriteMixin):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
-class ChargeItemViewSet(BaseViewSet, ReadWriteMixin):
+class ChargeItemViewSet(ModelViewSet):
     """收支项目"""
 
     serializer_class = ChargeItemSerializer
@@ -159,7 +159,7 @@ class ChargeItemViewSet(BaseViewSet, ReadWriteMixin):
     queryset = ChargeItem.objects.all()
 
 
-class ClientCategoryViewSet(BaseViewSet, ReadWriteMixin):
+class ClientCategoryViewSet(ModelViewSet):
     """客户分类"""
 
     serializer_class = ClientCategorySerializer
@@ -169,7 +169,7 @@ class ClientCategoryViewSet(BaseViewSet, ReadWriteMixin):
     queryset = ClientCategory.objects.all()
 
 
-class SupplierCategoryViewSet(BaseViewSet, ReadWriteMixin):
+class SupplierCategoryViewSet(ModelViewSet):
     """供应商分类"""
 
     serializer_class = SupplierCategorySerializer
@@ -179,7 +179,7 @@ class SupplierCategoryViewSet(BaseViewSet, ReadWriteMixin):
     queryset = SupplierCategory.objects.all()
 
 
-class GoodsCategoryViewSet(BaseViewSet, ReadWriteMixin):
+class GoodsCategoryViewSet(ModelViewSet):
     """商品分类"""
 
     serializer_class = GoodsCategorySerializer
@@ -189,7 +189,7 @@ class GoodsCategoryViewSet(BaseViewSet, ReadWriteMixin):
     queryset = GoodsCategory.objects.all()
 
 
-class GoodsUnitViewSet(BaseViewSet, ReadWriteMixin):
+class GoodsUnitViewSet(ModelViewSet):
     """商品单位"""
 
     serializer_class = GoodsUnitSerializer

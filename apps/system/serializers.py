@@ -52,7 +52,7 @@ class UserSerializer(BaseSerializer):
         return instances
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(self.team.number)
+        validated_data['password'] = make_password(validated_data['username'])
         return super().create(validated_data)
 
     def save(self, **kwargs):

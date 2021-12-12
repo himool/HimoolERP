@@ -9,7 +9,7 @@ from apps.goods.models import *
 from apps.data.models import *
 
 
-class GoodsViewSet(BaseViewSet, ReadWriteMixin):
+class GoodsViewSet(ModelViewSet):
     """商品"""
 
     serializer_class = GoodsSerializer

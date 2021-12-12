@@ -1,6 +1,8 @@
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from extensions.common.base import *
+from extensions.common.schema import *
 from extensions.permissions import *
 from extensions.exceptions import *
 from extensions.viewsets import *
@@ -9,29 +11,54 @@ from apps.system.schemas import *
 from apps.system.models import *
 
 
-class PermissionTypeViewSet(GenericViewSet, ListModelMixin):
-    """权限类型"""
+class PermissionGroupViewSet(BaseViewSet, ListModelMixin):
+    """权限分组"""
 
-    serializer_class = PermissionTypeSerializer
+    serializer_class = PermissionGroupSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = None
-    ordering = ['id']
-    queryset = PermissionType.objects.all()
+    queryset = PermissionGroup.objects.all()
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related('permissions')
 
 
-class RoleViewSet(BaseViewSet, ReadWriteMixin):
+class RoleViewSet(ModelViewSet):
     """角色"""
 
     serializer_class = RoleSerializer
     permission_classes = [IsAuthenticated, IsManagerPermission]
-    search_fields = ['name', 'remark']
+    search_fields = ['name']
     queryset = Role.objects.all()
 
+    @transaction.atomic
+    def perform_update(self, serializer):
+        role = serializer.save()
 
-class UserViewSet(BaseViewSet, ReadWriteMixin):
+        # 同步用户权限
+        users = role.users.prefetch_related('roles', 'roles__permissions').all()
+        for user in users:
+            permissions = {permission.code for role in user.roles.all()
+                           for permission in role.permissions.all()}
+            user.permissions = list(permissions)
+        else:
+            User.objects.bulk_update(users, ['permissions'])
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        users = instance.users.all()
+        instance.delete()
+
+        # 同步用户权限
+        for user in users.prefetch_related('roles', 'roles__permissions').all():
+            permissions = {permission.code for role in user.roles.all()
+                           for permission in role.permissions.all()}
+            user.permissions = list(permissions)
+        else:
+            User.objects.bulk_update(users, ['permissions'])
+
+
+class UserViewSet(ModelViewSet):
     """用户"""
 
     serializer_class = UserSerializer
@@ -56,7 +83,7 @@ class UserViewSet(BaseViewSet, ReadWriteMixin):
         """重置密码"""
 
         instance = self.get_object()
-        instance.password = make_password(self.team.number)
+        instance.password = make_password(self.user.username)
         instance.save(update_fields=['password'])
 
         return Response(status=status.HTTP_200_OK)
@@ -131,5 +158,5 @@ class UserActionViewSet(FunctionViewSet):
 
 
 __all__ = [
-    'PermissionTypeViewSet', 'RoleViewSet', 'UserViewSet', 'UserActionViewSet',
+    'PermissionGroupViewSet', 'RoleViewSet', 'UserViewSet', 'UserActionViewSet',
 ]

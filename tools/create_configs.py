@@ -5,8 +5,8 @@ BASE_DIR = Path.cwd()
 
 def run():
     create_nginx_config()
-    create_database_config()
-    create_uwsgi_config()
+    create_django_config()
+    create_gunicorn_config()
 
 
 def create_nginx_config():
@@ -16,8 +16,8 @@ def create_nginx_config():
         server_port = input('请输入 Django 启动端口:\n')
         static_path = BASE_DIR / 'frontend/dist/'
 
-        with open('/etc/nginx/sites-enabled/default', 'w') as file:
-            file.write(f"""
+        with open('configs/nginx.conf', 'w') as file:
+            file.write(f"""\
 server {{
     listen {listen_port};
     charset utf-8;
@@ -44,17 +44,40 @@ server {{
 """)
 
 
-def create_database_config():
-    is_need_create = input('是否需要创建 数据库 配置文件吗? (y/n)\n')
-    if is_need_create == 'y':
-        database_type = input('配置数据库: (sqlite: 0, mysql: 1)\n')
-        if database_type == '1':
-            host = input('请输入 host:\n')
-            user = input('请输入 user:\n')
-            passowrd = input('请输入 passowrd:\n')
-            database_name = input('请输入 数据库名称:\n')
+def create_django_config():
+    is_production_environment = input('是否为生产环境? (y/n)\n')
+    if is_production_environment == 'y':
+        file_content = """\
+from pathlib import Path
 
-            text = f"""
+
+# SECURITY WARNING: don't run with debug turned on in production!
+
+DEBUG = False
+
+"""
+    else:
+        file_content = """\
+from pathlib import Path
+
+
+# SECURITY WARNING: don't run with debug turned on in production!
+
+DEBUG = True
+
+"""
+
+    database_type = input('配置数据库: (sqlite: 0, mysql: 1)\n')
+    if database_type == '1':
+        host = input('请输入 host:\n')
+        user = input('请输入 user:\n')
+        passowrd = input('请输入 passowrd:\n')
+        database_name = input('请输入 数据库名称:\n')
+
+        file_content += f"""
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
 DATABASES = {{
     'default': {{
         'ENGINE': 'django.db.backends.mysql',
@@ -67,10 +90,10 @@ DATABASES = {{
     }}
 }}
 """
-        else:
-            text = f"""
-from pathlib import Path
-
+    else:
+        file_content += f"""
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASES = {{
@@ -80,34 +103,23 @@ DATABASES = {{
     }}
 }}
 """
-        with open(BASE_DIR / 'configs/database.py', 'w') as file:
-            file.write(text)
+    with open(BASE_DIR / 'configs/django.py', 'w') as file:
+        file.write(file_content)
 
 
-def create_uwsgi_config():
-    is_need_create = input('是否需要创建 uwsgi 配置文件吗? (y/n)\n')
+def create_gunicorn_config():
+    is_need_create = input('是否需要创建 Gunicorn 配置文件吗? (y/n)\n')
     if is_need_create == 'y':
-        http_port = input('请输入项目端口:\n')
-        pidfile_path = BASE_DIR / 'logs/master.pid'
-        daemonize_path = BASE_DIR / 'logs/worker.log'
-        pidfile_path.touch()
-        daemonize_path.touch()
+        bind_address = input('请输入 Django 启动地址:\n')
 
-        with open(BASE_DIR / 'configs/uwsgi.ini', 'w') as file:
-            file.write(f"""
-[uwsgi]
-chdir = {BASE_DIR}
-module = project.wsgi:application
-master = True
-processes = 8
-max-requests = 5000
-harakiri = 60
-http = :{http_port}
-uid = root
-gid = root
-pidfile = {pidfile_path}
-daemonize = {daemonize_path}
-vacuum = True
+        with open('configs/gunicorn.py', 'w') as file:
+            file.write(f"""\
+import multiprocessing
+
+
+bind = '{bind_address}'
+workers = multiprocessing.cpu_count() * 2 + 1
+reload = True
 """)
 
 

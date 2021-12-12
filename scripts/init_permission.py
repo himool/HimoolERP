@@ -1,4 +1,4 @@
-from apps.system.models import PermissionType, Permission
+from apps.system.models import PermissionGroup, Permission
 
 
 PERMISSIONS = [
@@ -12,9 +12,9 @@ PERMISSIONS = [
 
 
 def run(*args):
-    PermissionType.objects.all().delete()
+    PermissionGroup.objects.all().delete()
 
-    for permission_type_item in PERMISSIONS:
-        permission_type = PermissionType.objects.create(name=permission_type_item['name'])
-        Permission.objects.bulk_create([Permission(type=permission_type, name=item['name'], code=item['code'])
-                                        for item in permission_type_item['permissions']])
+    for permission_group_item in PERMISSIONS:
+        permission_group = PermissionGroup.objects.create(name=permission_group_item['name'])
+        Permission.objects.bulk_create([Permission(group=permission_group, name=item['name'], code=item['code'])
+                                        for item in permission_group_item['permissions']])
