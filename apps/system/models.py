@@ -7,20 +7,21 @@ class Team(Model):
     number = CharField(max_length=32, unique=True, verbose_name='编号')
     expiry_time = DateTimeField(verbose_name='到期时间')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
+
     enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
 
 
-class PermissionType(Model):
-    """权限类型"""
+class PermissionGroup(Model):
+    """权限分组"""
 
-    name = CharField(max_length=64, verbose_name='类型名称')
+    name = CharField(max_length=64, verbose_name='分组名称')
 
 
 class Permission(Model):
     """权限"""
 
-    type = ForeignKey('system.PermissionType', on_delete=CASCADE, related_name='permissions', verbose_name='权限类型')
+    group = ForeignKey('system.PermissionGroup', on_delete=CASCADE, related_name='permissions', verbose_name='权限分组')
     name = CharField(max_length=64, verbose_name='权限名称')
     code = CharField(max_length=64, verbose_name='权限代码')
 
@@ -53,6 +54,7 @@ class User(Model):
     email = CharField(max_length=256, null=True, blank=True, verbose_name='邮箱')
     sex = CharField(max_length=32, choices=Sex.choices, verbose_name='性别')
     roles = ManyToManyField('system.Role', blank=True, related_name='users', verbose_name='角色')
+    permissions = JSONField(default=list, verbose_name='权限')
     is_manager = BooleanField(default=False, verbose_name='管理员状态')
     is_active = BooleanField(default=True, verbose_name='激活状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -63,5 +65,5 @@ class User(Model):
 
 
 __all__ = [
-    'Team', 'PermissionType', 'Permission', 'Role', 'User',
+    'Team', 'PermissionGroup', 'Permission', 'Role', 'User',
 ]

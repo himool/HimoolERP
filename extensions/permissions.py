@@ -1,14 +1,15 @@
-from extensions.exceptions import NotAuthenticated, ValidationError
 from rest_framework.permissions import BasePermission
-from apps.system.models import Permission, User
+from extensions.exceptions import ValidationError
+from apps.system.models import User
 import pendulum
 
 
 class IsAuthenticated(BasePermission):
+    message = '未登陆验证'
 
     def has_permission(self, request, view):
         if not isinstance(request.user, User):
-            raise NotAuthenticated
+            raise False
 
         if (expiry_time := request.user.team.expiry_time) < pendulum.now():
             raise ValidationError(f'已到期, 到期日期: {expiry_time}')
@@ -19,24 +20,55 @@ class IsAuthenticated(BasePermission):
         return True
 
 
-class IsManagerPermission(IsAuthenticated):
+class IsManagerPermission(BasePermission):
+    message = '非管理员账号'
 
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and request.user.is_manager
+        return request.user.is_manager
 
 
-class InterfacePermission(BasePermission):
+class ModelPermission(BasePermission):
+    message = '未添加操作权限'
 
     def has_permission(self, request, view):
         if request.user.is_manager:
             return True
 
-        roles = request.user.roles.all()
-        if Permission.objects.filter(roles__in=roles, code=self.code).exists():
+        if self.code in request.user.permissions:
+            return True
+
+        return False
+
+
+class FunctionPermission(BasePermission):
+    """功能权限"""
+
+    message = '未添加操作权限'
+
+    def has_permission(self, request, view):
+        if request.user.is_manager:
+            return True
+
+        if self.code in request.user.permissions:
+            return True
+
+        return False
+
+
+class DataPermission:
+    """数据权限"""
+
+    @classmethod
+    def has_permission(cls, request):
+        if request.user.is_manager:
+            return True
+
+        if cls.code in request.user.permissions:
             return True
         return False
 
 
 __all__ = [
-    'BasePermission', 'IsAuthenticated', 'IsManagerPermission', 'InterfacePermission',
+    'IsAuthenticated', 'IsManagerPermission',
+    'ModelPermission', 'FunctionPermission', 'DataPermission',
 ]

@@ -26,7 +26,7 @@ class RoleViewSet(BaseViewSet, ReadWriteMixin):
     """角色"""
 
     serializer_class = RoleSerializer
-    permission_classes = [IsManagerPermission]
+    permission_classes = [IsAuthenticated, IsManagerPermission]
     search_fields = ['name', 'remark']
     queryset = Role.objects.all()
 
@@ -35,7 +35,7 @@ class UserViewSet(BaseViewSet, ReadWriteMixin):
     """用户"""
 
     serializer_class = UserSerializer
-    permission_classes = [IsManagerPermission]
+    permission_classes = [IsAuthenticated, IsManagerPermission]
     filterset_fields = ['sex', 'is_active']
     search_fields = ['username', 'name', 'phone', 'email']
     ordering_fields = ['id', 'username', 'name']
@@ -62,7 +62,7 @@ class UserViewSet(BaseViewSet, ReadWriteMixin):
         return Response(status=status.HTTP_200_OK)
 
 
-class UserActionViewSet(ActionViewSet):
+class UserActionViewSet(FunctionViewSet):
     """用户操作"""
 
     @extend_schema(request=GetTokenRequest, responses={200: GetTokenResponse})

@@ -44,12 +44,6 @@ class Goods(Model):
 
         return number
 
-    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-    #     self.has_stock = self.remain_quantity > 0
-    #     if update_fields:
-    #         update_fields.append('has_stock')
-    #     return super().save(force_insert, force_update, using, update_fields)
-
 
 class Batch(Model):
     """批次"""
@@ -64,7 +58,7 @@ class Batch(Model):
     expiration_date = DateField(null=True, verbose_name='过期日期')
     initial_inventory = ForeignKey('goods.Inventory', on_delete=SET_NULL, null=True,
                                    related_name='batchs', verbose_name='初始库存')
-    has_stock = BooleanField(default=True, verbose_name='库存状态')
+    has_stock = BooleanField(verbose_name='库存状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='batchs')
 
