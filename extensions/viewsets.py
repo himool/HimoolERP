@@ -1,27 +1,17 @@
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from extensions.paginations import BasePagination, OptionPagination
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from extensions.paginations import LimitedPagination, InfinitePagination
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django.db.models import Sum, Count, Value, F, Q, Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models.deletion import ProtectedError
 from rest_framework.viewsets import GenericViewSet
 from extensions.exceptions import ValidationError
-from django.db.models.functions import Coalesce
-from drf_spectacular.types import OpenApiTypes
 from django.http.response import HttpResponse
-from rest_framework.response import Response
-from rest_framework.decorators import action
 from openpyxl import Workbook, load_workbook
 from rest_framework.viewsets import ViewSet
-from django.db import transaction
-from rest_framework import status
-from django.conf import settings
-from number_precision import NP
-import pendulum
-import re
 
 
-class ActionViewSet(ViewSet):
+class FunctionViewSet(ViewSet):
+    """功能视图"""
 
     @property
     def team(self):
@@ -31,9 +21,13 @@ class ActionViewSet(ViewSet):
     def user(self):
         return self.request.user
 
+    @property
+    def context(self):
+        return {'request': self.request, 'format': self.format_kwarg, 'view': self}
+
 
 class BaseViewSet(GenericViewSet):
-    pagination_class = BasePagination
+    pagination_class = LimitedPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     ordering_fields = ['id']
     ordering = ['-id']
@@ -59,18 +53,36 @@ class BaseViewSet(GenericViewSet):
         return queryset
 
 
-class OptionViewSet(BaseViewSet, ListModelMixin):
-    """选项"""
+class ModelViewSet(BaseViewSet, ListModelMixin, CreateModelMixin,
+                   RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    """模型视图"""
 
-    pagination_class = OptionPagination
+
+class PersonalViewSet(BaseViewSet):
+    """个人试图"""
+
+    def get_queryset(self):
+        return super().get_queryset().filter(creator=self.user)
+
+
+class OptionViewSet(BaseViewSet, ListModelMixin):
+    """选项视图"""
+
+    pagination_class = InfinitePagination
 
 
 class ReadOnlyMixin(RetrieveModelMixin, ListModelMixin):
     """只读"""
 
 
-class ReadWriteMixin(ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
-    """读写"""
+class DataProtectMixin:
+    """数据保护"""
+
+    def perform_destroy(self, instance):
+        try:
+            instance.delete()
+        except ProtectedError:
+            raise ValidationError('已被数据引用, 无法删除')
 
 
 class ExportMixin:
@@ -169,10 +181,7 @@ class ImportMixin:
 
 
 __all__ = [
-    'GenericViewSet', 'ViewSet', 'ActionViewSet', 'BaseViewSet', 'OptionViewSet',
-    'ListModelMixin', 'RetrieveModelMixin', 'CreateModelMixin', 'UpdateModelMixin', 'DestroyModelMixin',
-    'ReadOnlyMixin', 'ReadWriteMixin', 'ExportMixin', 'ImportMixin',
-    'action', 'transaction', 'status', 'Response', 'pendulum', 'NP', 'settings', 're',
-    'Sum', 'Count', 'Value', 'F', 'Q', 'Prefetch', 'Coalesce',
-    'extend_schema', 'OpenApiParameter', 'OpenApiResponse', 'OpenApiTypes',
+    'FunctionViewSet', 'BaseViewSet', 'ModelViewSet', 'PersonalViewSet', 'OptionViewSet',
+    'ReadOnlyMixin', 'DataProtectMixin', 'ExportMixin', 'ImportMixin',
+    'ListModelMixin', 'CreateModelMixin', 'RetrieveModelMixin', 'UpdateModelMixin', 'DestroyModelMixin',
 ]

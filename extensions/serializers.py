@@ -1,13 +1,8 @@
-from rest_framework.fields import IntegerField, FloatField, DecimalField, BooleanField, NullBooleanField
 from rest_framework.fields import SerializerMethodField, ImageField, FileField, JSONField
+from rest_framework.fields import IntegerField, FloatField, DecimalField, BooleanField
 from rest_framework.fields import CharField, DateField, DateTimeField
 from rest_framework.serializers import Serializer, ModelSerializer
-from django.db.models import Sum, Count, Value, F, Q
 from extensions.exceptions import ValidationError
-from django.db.models.functions import Coalesce
-from django.db import transaction
-from number_precision import NP
-import pendulum
 
 
 class BaseSerializer(ModelSerializer):
@@ -57,16 +52,15 @@ class AmountField(DecimalField):
 
     def __init__(self, coerce_to_string=None, max_value=None, min_value=None, localize=False,
                  rounding=None, **kwargs):
+
         kwargs['max_digits'], kwargs['decimal_places'] = 16, 2
-        super().__init__(coerce_to_string=None, max_value=None, min_value=None, localize=False,
-                         rounding=None, **kwargs)
+        super().__init__(coerce_to_string=coerce_to_string, max_value=max_value, min_value=min_value,
+                         localize=localize, rounding=rounding, **kwargs)
 
 
 __all__ = [
     'Serializer', 'ModelSerializer', 'BaseSerializer',
     'SerializerMethodField', 'ImageField', 'FileField', 'JSONField',
-    'BooleanField', 'NullBooleanField', 'IntegerField', 'FloatField', 'DecimalField', 'AmountField',
+    'BooleanField', 'IntegerField', 'FloatField', 'AmountField',
     'CharField', 'DateField', 'DateTimeField',
-    'transaction', 'pendulum', 'NP',
-    'Sum', 'Count', 'Value', 'F', 'Q', 'Coalesce',
 ]

@@ -4,18 +4,18 @@ from extensions.exceptions import *
 from apps.system.models import *
 
 
-class PermissionSerializer(BaseSerializer):
+class PermissionGroupSerializer(BaseSerializer):
 
-    class Meta:
-        model = Permission
-        fields = ['id', 'name', 'code']
+    class PermissionSerializer(BaseSerializer):
 
+        class Meta:
+            model = Permission
+            fields = ['id', 'name', 'code']
 
-class PermissionTypeSerializer(BaseSerializer):
     permission_items = PermissionSerializer(source='permissions', many=True, label='权限')
 
     class Meta:
-        model = PermissionType
+        model = PermissionGroup
         fields = ['id', 'name', 'permission_items']
 
 
@@ -28,11 +28,19 @@ class RoleSerializer(BaseSerializer):
 
 
 class UserSerializer(BaseSerializer):
+
+    class UserRoleSerializer(BaseSerializer):
+
+        class Meta:
+            model = Role
+            fields = ['id', 'name']
+
     sex_display = CharField(source='get_sex_display', read_only=True, label='性别')
+    role_items = UserRoleSerializer(source='roles', many=True, read_only=True, label='角色Item')
 
     class Meta:
         model = User
-        read_only_fields = ['id', 'sex_display', 'is_manager', 'create_time']
+        read_only_fields = ['id', 'sex_display', 'is_manager', 'role_items', 'permissions', 'create_time']
         fields = ['username', 'name', 'phone', 'email', 'sex', 'roles', 'is_active', *read_only_fields]
 
     def validate_username(self, value):
@@ -47,7 +55,17 @@ class UserSerializer(BaseSerializer):
         validated_data['password'] = make_password(self.team.number)
         return super().create(validated_data)
 
+    def save(self, **kwargs):
+        permissions = []
+        if roles := self.validated_data.get('roles'):
+            permissions = {permission.code for role in roles.prefetch_related('permissions').all()
+                           for permission in role.permissions.all()}
+
+        kwargs['permissions'] = list(permissions)
+        return super().save(**kwargs)
+
 
 __all__ = [
-    'PermissionSerializer', 'PermissionTypeSerializer', 'RoleSerializer', 'UserSerializer',
+    'PermissionGroupSerializer',
+    'RoleSerializer', 'UserSerializer',
 ]

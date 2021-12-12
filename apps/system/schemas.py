@@ -24,10 +24,7 @@ class UserInfoResponse(Serializer):
     username = CharField(label='用户名')
     name = CharField(label='名称')
     is_manager = BooleanField(label='管理员状态')
-    permissions = SerializerMethodField(label='权限')
-
-    def get_permissions(self, instance):
-        return instance.roles.all().values_list('permissions__code', flat=True)
+    permissions = JSONField(label='权限')
 
 
 class SetPasswordRequest(Serializer):
