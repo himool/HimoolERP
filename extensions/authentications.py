@@ -8,8 +8,8 @@ from django.conf import settings
 class BaseAuthentication(JWTAuthentication):
 
     def authenticate(self, request):
-        if settings.DEBUG:
-            return User.objects.all().first(), {}
+        # if settings.DEBUG:
+        #     return User.objects.all().first(), {}
 
         if (header := self.get_header(request)) is None:
             return None
