@@ -6,17 +6,24 @@ from apps.system.models import *
 
 class PermissionGroupSerializer(BaseSerializer):
 
-    class PermissionSerializer(BaseSerializer):
+    class PermissionItemSerializer(BaseSerializer):
 
         class Meta:
             model = Permission
             fields = ['id', 'name', 'code']
 
-    permission_items = PermissionSerializer(source='permissions', many=True, label='权限')
+    permission_items = PermissionItemSerializer(source='permissions', many=True, label='权限')
 
     class Meta:
         model = PermissionGroup
         fields = ['id', 'name', 'permission_items']
+
+
+class SystemConfigSerializer(BaseSerializer):
+
+    class Meta:
+        model = Team
+        fields = ['enable_auto_stock_in', 'enable_auto_stock_out']
 
 
 class RoleSerializer(BaseSerializer):
@@ -29,14 +36,14 @@ class RoleSerializer(BaseSerializer):
 
 class UserSerializer(BaseSerializer):
 
-    class UserRoleSerializer(BaseSerializer):
+    class RoleItemSerializer(BaseSerializer):
 
         class Meta:
             model = Role
             fields = ['id', 'name']
 
     sex_display = CharField(source='get_sex_display', read_only=True, label='性别')
-    role_items = UserRoleSerializer(source='roles', many=True, read_only=True, label='角色Item')
+    role_items = RoleItemSerializer(source='roles', many=True, read_only=True, label='角色Item')
 
     class Meta:
         model = User
@@ -67,5 +74,6 @@ class UserSerializer(BaseSerializer):
 
 __all__ = [
     'PermissionGroupSerializer',
+    'SystemConfigSerializer',
     'RoleSerializer', 'UserSerializer',
 ]

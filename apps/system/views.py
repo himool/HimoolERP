@@ -23,6 +23,31 @@ class PermissionGroupViewSet(BaseViewSet, ListModelMixin):
         return super().get_queryset().prefetch_related('permissions')
 
 
+class SystemConfigViewSet(FunctionViewSet):
+    """系统配置"""
+
+    permission_classes = [IsAuthenticated, IsManagerPermission]
+
+    @extend_schema(responses={200: SystemConfigSerializer})
+    @action(detail=False, methods=['get'])
+    def configs(self, request, *args, **kwargs):
+        """配置信息"""
+
+        serializer = SystemConfigSerializer(instance=self.team, context=self.context)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(request=SystemConfigSerializer, responses={200: SystemConfigSerializer})
+    @action(detail=False, methods=['post'])
+    def set_configs(self, request, *args, **kwargs):
+        """设置配置"""
+
+        serializer = SystemConfigSerializer(instance=self.team, data=request.data, context=self.context)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 class RoleViewSet(ModelViewSet):
     """角色"""
 
@@ -158,5 +183,7 @@ class UserActionViewSet(FunctionViewSet):
 
 
 __all__ = [
-    'PermissionGroupViewSet', 'RoleViewSet', 'UserViewSet', 'UserActionViewSet',
+    'PermissionGroupViewSet',
+    'SystemConfigViewSet',
+    'RoleViewSet', 'UserViewSet', 'UserActionViewSet',
 ]

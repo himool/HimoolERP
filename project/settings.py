@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     # 'apps.stock_transfer',
     # 'apps.flow',
     # 'apps.finance',
-    # 'apps.statistic',    
-    # 'apps.option',    
+    # 'apps.statistic',
+    # 'apps.option',
 ]
 
 MIDDLEWARE = [
@@ -166,3 +166,26 @@ SPECTACULAR_SETTINGS = {
 # https://django-debug-toolbar.readthedocs.io/en/latest/
 
 INTERNAL_IPS = ['127.0.0.1']
+
+
+# Logger
+# https://docs.djangoproject.com/zh-hans/3.2/topics/logging/
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
