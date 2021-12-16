@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     # 'apps.flow',
     # 'apps.finance',
     # 'apps.statistic',
-    # 'apps.option',
+    'apps.option',
 ]
 
 MIDDLEWARE = [

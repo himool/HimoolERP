@@ -38,6 +38,13 @@ class WarehouseOptionViewSet(OptionViewSet):
     queryset = Warehouse.objects.filter(is_active=True)
 
 
+class ClientCategoryOptionViewSet(OptionViewSet):
+    serializer_class = ClientCategoryOptionSerializer
+    permission_classes = [IsAuthenticated, ClientCategoryOptionPermission]
+    search_fields = ['name']
+    queryset = ClientCategory.objects.all()
+
+
 class ClientOptionViewSet(OptionViewSet):
     serializer_class = ClientOptionSerializer
     permission_classes = [IsAuthenticated, ClientOptionPermission]
@@ -46,6 +53,13 @@ class ClientOptionViewSet(OptionViewSet):
     ordering_fields = ['id', 'number', 'order']
     ordering = ['order', 'number', 'id']
     queryset = Client.objects.filter(is_active=True)
+
+
+class SupplierCategoryOptionViewSet(OptionViewSet):
+    serializer_class = SupplierCategoryOptionSerializer
+    permission_classes = [IsAuthenticated, SupplierCategoryOptionPermission]
+    search_fields = ['name']
+    queryset = SupplierCategory.objects.all()
 
 
 class SupplierOptionViewSet(OptionViewSet):
@@ -74,20 +88,7 @@ class ChargeItemOptionViewSet(OptionViewSet):
     queryset = ChargeItem.objects.all()
 
 
-class ClientCategoryOptionViewSet(OptionViewSet):
-    serializer_class = ClientCategoryOptionSerializer
-    permission_classes = [IsAuthenticated, ClientCategoryOptionPermission]
-    search_fields = ['name']
-    queryset = ClientCategory.objects.all()
-
-
-class SupplierCategoryOptionViewSet(OptionViewSet):
-    serializer_class = SupplierCategoryOptionSerializer
-    permission_classes = [IsAuthenticated, SupplierCategoryOptionPermission]
-    search_fields = ['name']
-    queryset = SupplierCategory.objects.all()
-
-
+# Goods
 class GoodsCategoryOptionViewSet(OptionViewSet):
     serializer_class = GoodsCategoryOptionSerializer
     permission_classes = [IsAuthenticated, GoodsCategoryOptionPermission]
@@ -102,7 +103,6 @@ class GoodsUnitOptionViewSet(OptionViewSet):
     queryset = GoodsUnit.objects.all()
 
 
-# Goods
 class GoodsOptionViewSet(OptionViewSet):
     serializer_class = GoodsOptionSerializer
     permission_classes = [IsAuthenticated, GoodsOptionPermission]
@@ -125,8 +125,10 @@ class BatchOptionViewSet(OptionViewSet):
 
 __all__ = [
     'RoleOptionViewSet', 'UserOptionViewSet',
-    'WarehouseOptionViewSet', 'ClientOptionViewSet', 'SupplierOptionViewSet', 'AccountOptionViewSet',
-    'ChargeItemOptionViewSet', 'ClientCategoryOptionViewSet', 'SupplierCategoryOptionViewSet',
-    'GoodsCategoryOptionViewSet', 'GoodsUnitOptionViewSet',
-    'GoodsOptionViewSet', 'BatchOptionViewSet',
+    'WarehouseOptionViewSet',
+    'ClientCategoryOptionViewSet', 'ClientOptionViewSet',
+    'SupplierCategoryOptionViewSet', 'SupplierOptionViewSet',
+    'AccountOptionViewSet', 'ChargeItemOptionViewSet',
+    'GoodsCategoryOptionViewSet', 'GoodsUnitOptionViewSet', 'GoodsOptionViewSet',
+    'BatchOptionViewSet',
 ]

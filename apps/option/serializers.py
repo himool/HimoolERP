@@ -29,11 +29,25 @@ class WarehouseOptionSerializer(ModelSerializer):
         fields = ['id', 'number', 'name', 'is_locked']
 
 
+class ClientCategoryOptionSerializer(ModelSerializer):
+
+    class Meta:
+        model = ClientCategory
+        fields = ['id', 'name']
+
+
 class ClientOptionSerializer(ModelSerializer):
 
     class Meta:
         model = Client
         fields = ['id', 'number', 'name', 'level']
+
+
+class SupplierCategoryOptionSerializer(ModelSerializer):
+
+    class Meta:
+        model = SupplierCategory
+        fields = ['id', 'name']
 
 
 class SupplierOptionSerializer(ModelSerializer):
@@ -57,20 +71,7 @@ class ChargeItemOptionSerializer(ModelSerializer):
         fields = ['id', 'name']
 
 
-class ClientCategoryOptionSerializer(ModelSerializer):
-
-    class Meta:
-        model = ClientCategory
-        fields = ['id', 'name']
-
-
-class SupplierCategoryOptionSerializer(ModelSerializer):
-
-    class Meta:
-        model = SupplierCategory
-        fields = ['id', 'name']
-
-
+# Goods
 class GoodsCategoryOptionSerializer(ModelSerializer):
 
     class Meta:
@@ -85,9 +86,8 @@ class GoodsUnitOptionSerializer(ModelSerializer):
         fields = ['id', 'name']
 
 
-# Goods
 class GoodsOptionSerializer(ModelSerializer):
-
+    
     class Meta:
         model = Goods
         fields = ['id', 'number', 'name', 'barcode', 'enable_batch_control', 'shelf_life_days',
@@ -104,8 +104,10 @@ class BatchOptionSerializer(ModelSerializer):
 
 __all__ = [
     'RoleOptionSerializer', 'UserOptionSerializer',
-    'WarehouseOptionSerializer', 'ClientOptionSerializer', 'SupplierOptionSerializer', 'AccountOptionSerializer',
-    'ChargeItemOptionSerializer', 'ClientCategoryOptionSerializer', 'SupplierCategoryOptionSerializer',
-    'GoodsCategoryOptionSerializer', 'GoodsUnitOptionSerializer',
-    'GoodsOptionSerializer', 'BatchOptionSerializer',
+    'WarehouseOptionSerializer',
+    'ClientCategoryOptionSerializer', 'ClientOptionSerializer',
+    'SupplierCategoryOptionSerializer', 'SupplierOptionSerializer',
+    'AccountOptionSerializer', 'ChargeItemOptionSerializer',
+    'GoodsCategoryOptionSerializer', 'GoodsUnitOptionSerializer', 'GoodsOptionSerializer',
+    'BatchOptionSerializer',
 ]
