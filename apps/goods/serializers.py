@@ -1,15 +1,40 @@
+from extensions.common.base import *
 from extensions.serializers import *
 from extensions.exceptions import *
 from apps.goods.models import *
 from apps.data.models import *
 
 
+class GoodsCategorySerializer(BaseSerializer):
+
+    class Meta:
+        model = GoodsCategory
+        read_only_fields = ['id']
+        fields = ['name', 'remark', *read_only_fields]
+
+    def validate_name(self, value):
+        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
+        return value
+
+
+class GoodsUnitSerializer(BaseSerializer):
+
+    class Meta:
+        model = GoodsUnit
+        read_only_fields = ['id']
+        fields = ['name', 'remark', *read_only_fields]
+
+    def validate_name(self, value):
+        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
+        return value
+
+
 class GoodsSerializer(BaseSerializer):
 
-    class InventorySerializer(BaseSerializer):
+    class InventoryItemSerializer(BaseSerializer):
 
-        class BatchSerializer(BaseSerializer):
-    
+        class BatchItemSerializer(BaseSerializer):
+
             class Meta:
                 model = Batch
                 read_only_fields = ['id']
@@ -26,7 +51,7 @@ class GoodsSerializer(BaseSerializer):
 
         warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
         warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
-        batch_items = BatchSerializer(source='batchs', required=False, many=True, label='批次')
+        batch_items = BatchItemSerializer(source='batchs', required=False, many=True, label='批次Item')
 
         class Meta:
             model = Inventory
@@ -42,18 +67,28 @@ class GoodsSerializer(BaseSerializer):
                 raise ValidationError('库存数量小于零')
             return value
 
+    class GoodsImageItemSerializer(BaseSerializer):
+
+        class Meta:
+            model = GoodsImage
+            fields = ['id', 'name', 'file']
+
     category_name = CharField(source='category.name', read_only=True, label='分类名称')
     unit_name = CharField(source='unit.name', read_only=True, label='单位名称')
-    inventory_items = InventorySerializer(source='inventories', required=False, many=True, label='库存')
+    inventory_items = InventoryItemSerializer(source='inventories', required=False,
+                                              many=True, label='库存Item')
+    goods_image_items = GoodsImageItemSerializer(source='goods_images', many=True,
+                                                 read_only=True, label='商品图片Item')
 
     class Meta:
         model = Goods
-        read_only_fields = ['id', 'category_name', 'unit_name']
+        read_only_fields = ['id', 'category_name', 'unit_name', 'goods_image_items']
         fields = ['number', 'name', 'barcode', 'category', 'unit', 'spec', 'enable_batch_control',
                   'shelf_life_days', 'shelf_life_warning_days', 'enable_inventory_warning',
                   'inventory_upper', 'inventory_lower', 'purchase_price', 'retail_price',
                   'level_price1', 'level_price2', 'level_price3', 'remark', 'order',
-                  'is_active', 'inventory_items', *read_only_fields]
+                  'is_active', 'inventory_items', 'goods_images', *read_only_fields]
+        extra_kwargs = {'goods_images': {'required': False}}
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -66,6 +101,10 @@ class GoodsSerializer(BaseSerializer):
     def validate_unit(self, instance):
         instance = self.validate_foreign_key(GoodsUnit, instance, message='商品单位不存在')
         return instance
+
+    def validate_goods_images(self, instances):
+        instances = self.validate_foreign_key_set(GoodsImage, instances, message='商品图片不存在')
+        return instances
 
     @transaction.atomic
     def create(self, validated_data):
@@ -101,7 +140,7 @@ class GoodsSerializer(BaseSerializer):
                                 production_date=production_date, shelf_life_days=goods.shelf_life_days,
                                 expiration_date=expiration_date, initial_inventory=inventory, team=self.team,
                             ))
-                            
+
                             total_inventory_quantity = NP.plus(total_inventory_quantity, total_quantity)
                     break
             else:
@@ -146,6 +185,18 @@ class GoodsSerializer(BaseSerializer):
         return goods
 
 
+class GoodsImageSerializer(BaseSerializer):
+
+    class Meta:
+        model = GoodsImage
+        read_only_fields = ['id', 'name']
+        fields = ['file', *read_only_fields]
+
+    def create(self, validated_data):
+        validated_data['name'] = validated_data['file'].name
+        return super().create(validated_data)
+
+
 class BatchSerializer(BaseSerializer):
     warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
@@ -176,5 +227,6 @@ class InventorySerializer(BaseSerializer):
 
 
 __all__ = [
-    'GoodsSerializer', 'BatchSerializer', 'InventorySerializer',
+    'GoodsCategorySerializer', 'GoodsUnitSerializer', 'GoodsSerializer', 'GoodsImageSerializer',
+    'BatchSerializer', 'InventorySerializer',
 ]

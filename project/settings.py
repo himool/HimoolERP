@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
     'apps.system',
-    # 'apps.data',
-    # 'apps.goods',
+    'apps.data',
+    'apps.goods',
     # 'apps.purchase',
     # 'apps.sales',
     # 'apps.stock_in',

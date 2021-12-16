@@ -1,7 +1,7 @@
-from extensions.permissions import InterfacePermission
+from extensions.permissions import ModelPermission
 
 
-class StockInPermission(InterfacePermission):
+class StockInPermission(ModelPermission):
     code = 'stock_in'
 
 

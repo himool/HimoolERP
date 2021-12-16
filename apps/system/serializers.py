@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from extensions.common.base import *
 from extensions.serializers import *
 from extensions.exceptions import *
 from apps.system.models import *

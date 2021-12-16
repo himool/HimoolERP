@@ -1,19 +1,19 @@
-from extensions.permissions import InterfacePermission
+from extensions.permissions import ModelPermission
 
 
-class PaymentOrderPermission(InterfacePermission):
+class PaymentOrderPermission(ModelPermission):
     code = 'payment_order'
 
 
-class CollectionOrderPermission(InterfacePermission):
+class CollectionOrderPermission(ModelPermission):
     code = 'collection_order'
 
 
-class ChargeOrderPermission(InterfacePermission):
+class ChargeOrderPermission(ModelPermission):
     code = 'charge_order'
 
 
-class AccountTransferRecordPermission(InterfacePermission):
+class AccountTransferRecordPermission(ModelPermission):
     code = 'account_transfer_record'
 
 

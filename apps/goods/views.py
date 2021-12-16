@@ -1,3 +1,5 @@
+from extensions.common.schema import *
+from extensions.common.base import *
 from extensions.permissions import *
 from extensions.exceptions import *
 from extensions.viewsets import *
@@ -9,7 +11,27 @@ from apps.goods.models import *
 from apps.data.models import *
 
 
-class GoodsViewSet(ModelViewSet):
+class GoodsCategoryViewSet(ModelViewSet):
+    """商品分类"""
+
+    serializer_class = GoodsCategorySerializer
+    permission_classes = [IsAuthenticated, GoodsCategoryPermission]
+    search_fields = ['name', 'remark']
+    ordering_fields = ['id', 'name']
+    queryset = GoodsCategory.objects.all()
+
+
+class GoodsUnitViewSet(ModelViewSet):
+    """商品单位"""
+
+    serializer_class = GoodsUnitSerializer
+    permission_classes = [IsAuthenticated, GoodsUnitPermission]
+    search_fields = ['name', 'remark']
+    ordering_fields = ['id', 'name']
+    queryset = GoodsUnit.objects.all()
+
+
+class GoodsViewSet(ModelViewSet, DataProtectMixin):
     """商品"""
 
     serializer_class = GoodsSerializer
@@ -22,12 +44,6 @@ class GoodsViewSet(ModelViewSet):
     prefetch_related_fields = ['inventories', 'inventories__batchs']
     queryset = Goods.objects.all()
 
-    def perform_destroy(self, instance):
-        try:
-            instance.delete()
-        except ProtectedError:
-            raise ValidationError(f'商品[{instance.name}]已被引用, 无法删除')
-
     @extend_schema(responses={200: NumberResponse})
     @action(detail=False, methods=['get'])
     def number(self, request, *args, **kwargs):
@@ -35,6 +51,15 @@ class GoodsViewSet(ModelViewSet):
 
         number = Goods.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
+
+
+class GoodsImageViewSet(ModelViewSet):
+    """商品图片"""
+
+    serializer_class = GoodsImageSerializer
+    permission_classes = [IsAuthenticated, GoodsPermission]
+    search_fields = ['name']
+    queryset = GoodsImage.objects.all()
 
 
 class BatchViewSet(BaseViewSet, ReadOnlyMixin):
@@ -63,5 +88,6 @@ class InventoryViewSet(BaseViewSet, ReadOnlyMixin):
 
 
 __all__ = [
-    'GoodsViewSet', 'BatchViewSet', 'InventoryViewSet',
+    'GoodsCategoryViewSet', 'GoodsUnitViewSet', 'GoodsViewSet', 'GoodsImageViewSet',
+    'BatchViewSet', 'InventoryViewSet',
 ]

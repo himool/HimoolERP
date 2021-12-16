@@ -1,18 +1,27 @@
-from extensions.permissions import InterfacePermission
+from extensions.permissions import ModelPermission
 
 
-class GoodsPermission(InterfacePermission):
+class GoodsCategoryPermission(ModelPermission):
+    code = 'goods_category'
+
+
+class GoodsUnitPermission(ModelPermission):
+    code = 'goods_unit'
+
+
+class GoodsPermission(ModelPermission):
     code = 'goods'
 
 
-class BatchPermission(InterfacePermission):
+class BatchPermission(ModelPermission):
     code = 'batch'
 
 
-class InventoryPermission(InterfacePermission):
+class InventoryPermission(ModelPermission):
     code = 'inventory'
 
 
 __all__ = [
-    'GoodsPermission', 'BatchPermission', 'InventoryPermission',
+    'GoodsCategoryPermission', 'GoodsUnitPermission', 'GoodsPermission',
+    'BatchPermission', 'InventoryPermission',
 ]

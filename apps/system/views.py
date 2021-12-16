@@ -3,6 +3,8 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from extensions.common.base import *
 from extensions.common.schema import *
+from extensions.common.schema import *
+from extensions.common.base import *
 from extensions.permissions import *
 from extensions.exceptions import *
 from extensions.viewsets import *

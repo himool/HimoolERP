@@ -1,11 +1,11 @@
-from extensions.permissions import InterfacePermission
+from extensions.permissions import ModelPermission
 
 
-class PurchaseOrderPermission(InterfacePermission):
+class PurchaseOrderPermission(ModelPermission):
     code = 'purchase_order'
 
 
-class PurchaseReturnOrderPermission(InterfacePermission):
+class PurchaseReturnOrderPermission(ModelPermission):
     code = 'purchase_return_order'
 
 

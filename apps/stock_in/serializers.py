@@ -1,4 +1,5 @@
 from apps.goods.models import Batch
+from extensions.common.base import *
 from extensions.serializers import *
 from extensions.exceptions import *
 from apps.stock_in.models import *

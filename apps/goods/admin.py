@@ -2,4 +2,4 @@ from django.contrib import admin
 from apps.goods.models import *
 
 
-admin.site.register([Goods, Batch, Inventory])
+admin.site.register([GoodsCategory, GoodsUnit, Goods, GoodsImage, Batch, Inventory])

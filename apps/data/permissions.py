@@ -1,44 +1,37 @@
-from extensions.permissions import InterfacePermission
+from extensions.permissions import ModelPermission
 
 
-class WarehousePermission(InterfacePermission):
+class WarehousePermission(ModelPermission):
     code = 'warehouse'
 
 
-class ClientPermission(InterfacePermission):
+class ClientPermission(ModelPermission):
     code = 'client'
 
 
-class SupplierPermission(InterfacePermission):
+class SupplierPermission(ModelPermission):
     code = 'supplier'
 
 
-class AccountPermission(InterfacePermission):
+class AccountPermission(ModelPermission):
     code = 'account'
 
 
-class ChargeItemPermission(InterfacePermission):
+class ChargeItemPermission(ModelPermission):
     code = 'charge_item'
 
 
-class ClientCategoryPermission(InterfacePermission):
+class ClientCategoryPermission(ModelPermission):
     code = 'client_category'
 
 
-class SupplierCategoryPermission(InterfacePermission):
+class SupplierCategoryPermission(ModelPermission):
     code = 'supplier_category'
 
 
-class GoodsCategoryPermission(InterfacePermission):
-    code = 'goods_category'
-
-
-class GoodsUnitPermission(InterfacePermission):
-    code = 'goods_unit'
 
 
 __all__ = [
     'WarehousePermission', 'ClientPermission', 'SupplierPermission', 'AccountPermission',
     'ChargeItemPermission', 'ClientCategoryPermission', 'SupplierCategoryPermission',
-    'GoodsCategoryPermission', 'GoodsUnitPermission',
 ]

@@ -1,3 +1,4 @@
+from extensions.common.base import *
 from extensions.serializers import *
 from extensions.exceptions import *
 from apps.stock_out.models import *

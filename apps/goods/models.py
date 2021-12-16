@@ -1,4 +1,27 @@
+from extensions.common.base import *
 from extensions.models import *
+
+
+class GoodsCategory(Model):
+    """商品分类"""
+
+    name = CharField(max_length=64, verbose_name='名称')
+    remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
+    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='goods_categories')
+
+    class Meta:
+        unique_together = [('name', 'team')]
+
+
+class GoodsUnit(Model):
+    """商品单位"""
+
+    name = CharField(max_length=64, verbose_name='名称')
+    remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
+    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='goods_units')
+
+    class Meta:
+        unique_together = [('name', 'team')]
 
 
 class Goods(Model):
@@ -7,9 +30,9 @@ class Goods(Model):
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
     barcode = CharField(max_length=32, null=True, blank=True, verbose_name='条码')
-    category = ForeignKey('data.GoodsCategory', on_delete=SET_NULL, null=True,
+    category = ForeignKey('goods.GoodsCategory', on_delete=SET_NULL, null=True,
                           related_name='goods_set', verbose_name='商品分类')
-    unit = ForeignKey('data.GoodsUnit', on_delete=SET_NULL, null=True,
+    unit = ForeignKey('goods.GoodsUnit', on_delete=SET_NULL, null=True,
                       related_name='goods_set', verbose_name='商品单位')
     spec = CharField(max_length=64, null=True, blank=True, verbose_name='商品规格')
     enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
@@ -45,6 +68,16 @@ class Goods(Model):
         return number
 
 
+class GoodsImage(Model):
+    """商品图片"""
+
+    goods = ForeignKey('goods.Goods', on_delete=SET_NULL, null=True,
+                       related_name='goods_images', verbose_name='商品')
+    file = ImageField(verbose_name='文件')
+    name = CharField(max_length=256, verbose_name='文件名称')
+    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='goods_images')
+
+
 class Batch(Model):
     """批次"""
 
@@ -65,12 +98,6 @@ class Batch(Model):
     class Meta:
         unique_together = [('number', 'warehouse', 'goods', 'team')]
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.has_stock = self.remain_quantity > 0
-        if update_fields:
-            update_fields.append('has_stock')
-        return super().save(force_insert, force_update, using, update_fields)
-
 
 class Inventory(Model):
     """库存"""
@@ -85,13 +112,8 @@ class Inventory(Model):
     class Meta:
         unique_together = [('warehouse', 'goods', 'team')]
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.has_stock = self.total_quantity > 0
-        if update_fields:
-            update_fields.append('has_stock')
-        return super().save(force_insert, force_update, using, update_fields)
-
 
 __all__ = [
-    'Goods', 'Batch', 'Inventory',
+    'GoodsCategory', 'GoodsUnit', 'Goods', 'GoodsImage',
+    'Batch', 'Inventory',
 ]
