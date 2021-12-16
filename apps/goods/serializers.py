@@ -34,19 +34,16 @@ class GoodsSerializer(BaseSerializer):
     class InventoryItemSerializer(BaseSerializer):
 
         class BatchItemSerializer(BaseSerializer):
+            id = IntegerField(required=False, label='批次ID')
 
             class Meta:
                 model = Batch
-                read_only_fields = ['id']
-                fields = ['number', 'total_quantity', 'production_date', *read_only_fields]
+                read_only_fields = ['total_quantity', 'remain_quantity']
+                fields = ['id', 'number', 'initial_quantity', 'production_date', *read_only_fields]
 
-            def validate_number(self, value):
-                self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
-                return value
-
-            def validate_total_quantity(self, value):
-                if value <= 0:
-                    raise ValidationError('库存数量小于等于零')
+            def validate_initial_quantity(self, value):
+                if value < 0:
+                    raise ValidationError('初始库存数量小于零')
                 return value
 
         warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
@@ -116,32 +113,41 @@ class GoodsSerializer(BaseSerializer):
         for warehouse in Warehouse.objects.filter(team=self.team):
             for inventory_item in inventory_items:
                 if warehouse == inventory_item['warehouse']:
-                    # 创建库存
+                    inventory_initial_quantity = inventory_item.get('initial_quantity', 0)
+                    has_stock = inventory_initial_quantity > 0
                     inventory = Inventory.objects.create(
-                        warehouse=warehouse, goods=goods,
-                        initial_quantity=inventory_item['initial_quantity'],
-                        total_quantity=inventory_item['initial_quantity'], team=self.team
+                        warehouse=warehouse, goods=goods, initial_quantity=inventory_initial_quantity,
+                        total_quantity=inventory_initial_quantity, has_stock=has_stock, team=self.team
                     )
 
-                    total_inventory_quantity = 0
+                    total_initial_quantity = 0
 
                     # 商品开启批次控制, 创建批次
                     batch_items = inventory_item.get('batchs')
                     if goods.enable_batch_control and batch_items:
                         for batch_item in batch_items:
-                            total_quantity = batch_item['total_quantity']
+                            batch_initial_quantity = batch_item.get('initial_quantity', 0)
                             production_date = batch_item.get('production_date')
                             if production_date and goods.shelf_life_days:
                                 expiration_date = pendulum.parse(str(production_date)).add(days=goods.shelf_life_days)
+                                expiration_date = expiration_date.to_date_string()
 
+                            has_stock = batch_initial_quantity > 0
                             batchs.append(Batch(
-                                number=batch_item['number'], warehouse=warehouse, goods=goods,
-                                total_quantity=total_quantity, remain_quantity=total_quantity,
+                                number=batch_item['number'], inventory=inventory, warehouse=warehouse,
+                                goods=goods, initial_quantity=batch_initial_quantity,
+                                total_quantity=batch_initial_quantity, remain_quantity=batch_initial_quantity,
                                 production_date=production_date, shelf_life_days=goods.shelf_life_days,
-                                expiration_date=expiration_date, initial_inventory=inventory, team=self.team,
+                                expiration_date=expiration_date, has_stock=has_stock, team=self.team
                             ))
 
-                            total_inventory_quantity = NP.plus(total_inventory_quantity, total_quantity)
+                            total_initial_quantity = NP.plus(total_initial_quantity, batch_initial_quantity)
+                        else:
+                            if total_initial_quantity != inventory_initial_quantity:
+                                inventory.initial_quantity = total_initial_quantity
+                                inventory.total_quantity = total_initial_quantity
+                                inventory.has_stock = inventory.total_quantity > 0
+                                inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
                     break
             else:
                 Inventory.objects.create(warehouse=warehouse, goods=goods, team=self.team)
@@ -156,15 +162,17 @@ class GoodsSerializer(BaseSerializer):
         goods = super().update(instance, validated_data)
 
         # 同步批次
-        if enable_batch_control := validated_data.get('enable_batch_control'):
-            if enable_batch_control != instance.enable_batch_control:
+        enable_batch_control = validated_data.get('enable_batch_control')
+        if enable_batch_control is not None:
+            if enable_batch_control != goods.enable_batch_control:
                 if enable_batch_control:
                     batch_number = 'B' + pendulum.today().format('YYYYMMDD')
                     batchs = []
                     for inventory in Inventory.objects.filter(goods=goods, has_stock=True, team=self.team):
                         batchs.append(Batch(
-                            number=batch_number, warehouse=inventory.warehouse, goods=inventory.goods,
-                            total_quantity=inventory.total_quantity, remain_quantity=inventory.total_quantity,
+                            number=batch_number, inventory=inventory, warehouse=inventory.warehouse,
+                            goods=inventory.goods, total_quantity=inventory.total_quantity,
+                            remain_quantity=inventory.total_quantity,
                             shelf_life_days=goods.shelf_life_days, team=self.team
                         ))
                     else:
@@ -173,14 +181,80 @@ class GoodsSerializer(BaseSerializer):
                     instance.batchs.all().delete()
 
         # 同步库存
+        create_batchs = []
+        update_batchs = []
         for inventory in Inventory.objects.filter(goods=goods, team=self.team):
             for inventory_item in inventory_items:
-                if (inventory.warehouse == inventory_item['warehouse'] and
-                        inventory.initial_quantity != inventory_item['initial_quantity']):
-                    inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
-                    inventory.initial_quantity = inventory_item['initial_quantity']
-                    inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
-                    inventory.save(update_fields=['initial_quantity', 'total_quantity'])
+                warehouse = inventory.warehouse
+                if warehouse == inventory_item['warehouse']:
+                    inventory_initial_quantity = inventory_item.get('initial_quantity', 0)
+
+                    if goods.enable_batch_control:
+                        total_initial_quantity = 0
+                        batch_items = inventory_item.get('batchs', [])
+                        for batch_item in batch_items:
+                            batch_initial_quantity = batch_item.get('initial_quantity', 0)
+                            production_date = batch_item.get('production_date')
+                            if production_date and goods.shelf_life_days:
+                                expiration_date = pendulum.parse(str(production_date)) \
+                                    .add(days=goods.shelf_life_days)
+                                expiration_date = expiration_date.to_date_string()
+
+                            if batch_id := batch_item.get('id'):
+                                batch = Batch.objects.filter(id=batch_id, warehouse=warehouse,
+                                                             goods=goods, team=self.team).first()
+                                if not batch:
+                                    batch_number = batch_item['number']
+                                    raise ValidationError(f'批次[{batch_number}]不存在')
+
+                                batch.number = batch_item['number']
+                                batch.total_quantity = NP.minus(batch.total_quantity, batch.initial_quantity)
+                                batch.remain_quantity = NP.minus(batch.remain_quantity, batch.initial_quantity)
+                                batch.initial_quantity = batch_initial_quantity
+                                batch.total_quantity = NP.plus(batch.total_quantity, batch.initial_quantity)
+                                batch.remain_quantity = NP.plus(batch.remain_quantity, batch.initial_quantity)
+                                batch.production_date = production_date
+                                batch.expiration_date = expiration_date
+                                batch.has_stock = batch.total_quantity > 0
+
+                                update_batchs.append(batch)
+                            else:
+                                if Batch.objects.filter(number=batch_item['number'], warehouse=warehouse,
+                                                        goods=goods, team=self.team).exists():
+                                    batch_number = batch_item['number']
+                                    raise ValidationError(f'批次[{batch_number}]已存在')
+
+                                has_stock = batch_initial_quantity > 0
+                                create_batchs.append(Batch(
+                                    number=batch_item['number'], inventory=inventory, warehouse=warehouse,
+                                    goods=goods, initial_quantity=batch_initial_quantity,
+                                    total_quantity=batch_initial_quantity, remain_quantity=batch_initial_quantity,
+                                    production_date=production_date, shelf_life_days=goods.shelf_life_days,
+                                    expiration_date=expiration_date, has_stock=has_stock, team=self.team,
+                                ))
+
+                            total_initial_quantity = NP.plus(total_initial_quantity, batch_initial_quantity)
+                        else:
+                            inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
+                            inventory.initial_quantity = total_initial_quantity
+                            inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
+                            inventory.has_stock = inventory.total_quantity > 0
+                            inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
+                    else:
+                        inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
+                        inventory.initial_quantity = inventory_initial_quantity
+                        inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
+                        inventory.has_stock = inventory.total_quantity > 0
+                        inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
+
+                    break
+        else:
+            Batch.objects.filter(goods=goods, team=self.team) \
+                .exclude(id__in=[batch.id for batch in update_batchs]).delete()
+            Batch.objects.bulk_create(create_batchs)
+            Batch.objects.bulk_update(update_batchs,
+                                      ['number', 'initial_quantity', 'total_quantity', 'remain_quantity',
+                                       'production_date', 'expiration_date', 'has_stock'])
 
         return goods
 
