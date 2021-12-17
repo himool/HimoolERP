@@ -145,9 +145,12 @@ class SalesTask(Model):
 
     warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='sales_tasks', verbose_name='仓库')
     goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='sales_tasks', verbose_name='商品')
-    sales_quantity = FloatField(verbose_name='销售数量')
+    salesperson = ForeignKey('system.User', on_delete=CASCADE, related_name='sales_tasks', verbose_name='销售员')
+    total_quantity = FloatField(verbose_name='任务总量')
+    sales_quantity = FloatField(default=0, verbose_name='销售数量')
     start_time = DateTimeField(verbose_name='开始时间')
     end_time = DateTimeField(verbose_name='结束时间')
+    is_completed = BooleanField(default=False, verbose_name='完成状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='sales_tasks')
 

@@ -1,3 +1,4 @@
+from apps.option.views import PurchaseOrderOptionViewSet
 from extensions.routers import *
 from apps.option.views import *
 
@@ -22,5 +23,8 @@ router.register('goods_categories/options', GoodsCategoryOptionViewSet, 'goods_c
 router.register('goods_units/options', GoodsUnitOptionViewSet, 'goods_unit_option')
 router.register('goods/options', GoodsOptionViewSet, 'goods_option')
 router.register('batchs/options', BatchOptionViewSet, 'batch_option')
+
+# Purchase
+router.register('purchase_orders/options', PurchaseOrderOptionViewSet, 'purchase_order_option')
 
 urlpatterns = router.urls

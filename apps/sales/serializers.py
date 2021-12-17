@@ -11,7 +11,7 @@ from apps.finance.models import *
 class SalesOrderSerializer(BaseSerializer):
     """销售单据"""
 
-    class SalesGoodsSerializer(BaseSerializer):
+    class SalesGoodsItemSerializer(BaseSerializer):
         """销售商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
@@ -41,7 +41,7 @@ class SalesOrderSerializer(BaseSerializer):
                 raise ValidationError('销售单价小于或等于零')
             return value
 
-    class SalesAccountSerializer(BaseSerializer):
+    class SalesAccountItemSerializer(BaseSerializer):
         """销售结算账户"""
 
         account_number = CharField(source='account.number', read_only=True, label='账户编号')
@@ -69,9 +69,10 @@ class SalesOrderSerializer(BaseSerializer):
     client_name = CharField(source='client.name', read_only=True, label='客户名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    sales_goods_items = SalesGoodsSerializer(source='sales_goods_set', many=True, label='销售商品')
-    sales_account_items = SalesAccountSerializer(
-        source='sales_accounts', required=False, many=True, label='收款账户')
+    sales_goods_items = SalesGoodsItemSerializer(
+        source='sales_goods_set', many=True, label='销售商品Item')
+    sales_account_items = SalesAccountItemSerializer(
+        source='sales_accounts', required=False, many=True, label='销售结算账户Item')
 
     class Meta:
         model = SalesOrder
@@ -175,7 +176,7 @@ class SalesOrderSerializer(BaseSerializer):
 class SalesReturnOrderSerializer(BaseSerializer):
     """销售退货单据"""
 
-    class SalesReturnGoodsSerializer(BaseSerializer):
+    class SalesReturnGoodsItemSerializer(BaseSerializer):
         """销售退货商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
@@ -211,7 +212,7 @@ class SalesReturnOrderSerializer(BaseSerializer):
                 raise ValidationError('退货单价小于或等于零')
             return value
 
-    class SalesReturnAccountSerializer(BaseSerializer):
+    class SalesReturnAccountItemSerializer(BaseSerializer):
         """销售退货结算账户"""
 
         account_number = CharField(source='account.number', read_only=True, label='账户编号')
@@ -240,9 +241,9 @@ class SalesReturnOrderSerializer(BaseSerializer):
     client_name = CharField(source='client.name', read_only=True, label='客户名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    sales_return_goods_items = SalesReturnGoodsSerializer(
+    sales_return_goods_items = SalesReturnGoodsItemSerializer(
         source='sales_return_goods_set', many=True, label='销售退货商品')
-    sales_return_account_items = SalesReturnAccountSerializer(
+    sales_return_account_items = SalesReturnAccountItemSerializer(
         source='sales_return_accounts', required=False, many=True, label='销售退货结算账户')
 
     class Meta:
@@ -371,6 +372,49 @@ class SalesReturnOrderSerializer(BaseSerializer):
         return sales_return_order
 
 
+class SalesTaskSerializer(BaseSerializer):
+    """销售任务"""
+
+    warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
+    warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
+    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+    unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+    salesperson_name = CharField(source='salesperson.name', read_only=True, label='销售员名称')
+
+    class Meta:
+        model = SalesTask
+        read_only_fields = ['id', 'warehouse_number', 'warehouse_name', 'goods_number', 'goods_name',
+                            'goods_barcode', 'unit_name', 'salesperson_name', 'sales_quantity',
+                            'is_completed', 'create_time']
+        fields = ['warehouse', 'goods', 'salesperson', 'total_quantity', 'start_time', 'end_time',
+                  *read_only_fields]
+
+    def validate_total_quantity(self, value):
+        if value <= 0:
+            raise ValidationError('任务总数小于或等于零')
+        return value
+
+    def validate_warehouse(self, instance):
+        instance = self.validate_foreign_key(Warehouse, instance, message='仓库不存在')
+        if not instance.is_active:
+            raise ValidationError(f'仓库[{instance.name}]未激活')
+        return instance
+
+    def validate_goods(self, instance):
+        instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
+        if not instance.is_active:
+            raise ValidationError(f'商品[{instance.name}]未激活')
+        return instance
+
+    def validate_salesperson(self, instance):
+        instance = self.validate_foreign_key(User, instance, message='销售员不存在')
+        if not instance.is_active:
+            raise ValidationError(f'销售员[{instance.name}]未激活')
+        return instance
+
+
 __all__ = [
-    'SalesOrderSerializer', 'SalesReturnOrderSerializer',
+    'SalesOrderSerializer', 'SalesReturnOrderSerializer', 'SalesTaskSerializer',
 ]

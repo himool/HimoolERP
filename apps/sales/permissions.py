@@ -9,6 +9,10 @@ class SalesReturnOrderPermission(ModelPermission):
     code = 'sales_return_order'
 
 
+class SalesTaskPermission(ModelPermission):
+    code = 'sales_task'
+
+
 __all__ = [
-    'SalesOrderPermission', 'SalesReturnOrderPermission',
+    'SalesOrderPermission', 'SalesReturnOrderPermission', 'SalesTaskPermission',
 ]
