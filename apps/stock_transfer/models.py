@@ -1,3 +1,4 @@
+from extensions.common.base import *
 from extensions.models import *
 
 
@@ -26,14 +27,14 @@ class StockTransferOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = get_today(), get_tomorrow()
+        start_date, end_date = pendulum.today(), pendulum.tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'DB' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'DB' + pendulum.today().format('YYYYMMDD') + '0001'
 
         return number
 
@@ -48,7 +49,6 @@ class StockTransferGoods(Model):
                        related_name='stock_transfer_goods_set', verbose_name='批次')
     stock_transfer_quantity = FloatField(verbose_name='调拨数量')
     enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_transfer_goods_set')
 
     class Meta:

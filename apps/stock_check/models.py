@@ -1,3 +1,4 @@
+from extensions.common.base import *
 from extensions.models import *
 
 
@@ -19,7 +20,8 @@ class StockCheckOrder(Model):
     status = CharField(max_length=32, choices=Status.choices, null=True, verbose_name='盘点状态')
     total_book_quantity = FloatField(verbose_name='账面总数量')
     total_actual_quantity = FloatField(verbose_name='实际总数量')
-    total_surplus_quantity = AmountField(verbose_name='盘盈总金额')
+    total_surplus_quantity = FloatField(verbose_name='盘盈总数量')
+    total_surplus_amount = AmountField(verbose_name='盘盈总金额')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='created_stock_check_orders', verbose_name='创建人')
@@ -31,14 +33,14 @@ class StockCheckOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = get_today(), get_tomorrow()
+        start_date, end_date = pendulum.today(), pendulum.tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'PD' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'PD' + pendulum.today().format('YYYYMMDD') + '0001'
 
         return number
 
@@ -60,11 +62,10 @@ class StockCheckGoods(Model):
                        related_name='stock_check_goods_set', verbose_name='批次')
     book_quantity = FloatField(verbose_name='账面数量')
     actual_quantity = FloatField(verbose_name='实际数量')
-    status = CharField(max_length=32, choices=Status.choices, verbose_name='盘点状态')
     surplus_quantity = FloatField(verbose_name='盘盈数量')
-    purchase_price = AmountField(verbose_name='采购单价')
+    purchase_price = FloatField(verbose_name='采购单价')
     surplus_amount = AmountField(verbose_name='盘盈金额')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
+    status = CharField(max_length=32, choices=Status.choices, verbose_name='盘点状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_check_goods_set')
 
     class Meta:

@@ -121,9 +121,7 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         # 同步销售单据, 销售商品
         sales_order.is_void = True
         sales_order.save(update_fields=['is_void'])
-        sales_order.sales_goods_set.all().update(is_void=True)
 
-        # 同步出库
         if sales_order.enable_auto_stock_out:
             # 同步库存, 流水
             inventory_flows = []
@@ -154,9 +152,6 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
             stock_out_order.is_void = True
             stock_out_order.save(update_fields=['is_void'])
 
-            # 作废出库商品
-            stock_out_order.stock_out_goods_set.all().update(is_void=True)
-
         # 同步欠款
         client = sales_order.client
         client.arrears_amount = NP.minus(client.arrears_amount, sales_order.arrears_amount)
@@ -167,9 +162,6 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
             # 作废收款单据
             collection_order.is_void = True
             collection_order.save(update_fields=['is_void'])
-
-            # 作废收款账号
-            collection_order.collection_accounts.all().update(is_void=True)
 
             finance_flows = []
             for collection_account in collection_order.collection_accounts.all():
@@ -300,7 +292,6 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
         # 同步销售退货单据, 采购退货商品
         sales_return_order.is_void = True
         sales_return_order.save(update_fields=['is_void'])
-        sales_return_order.sales_return_goods_set.all().update(is_void=True)
 
         if sales_return_order.enable_auto_stock_in:
             # 同步库存, 流水
@@ -338,19 +329,13 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
             stock_in_order.is_void = True
             stock_in_order.save(update_fields=['is_void'])
 
-            # 作废入库商品
-            stock_in_order.stock_in_goods_set.all().update(is_void=True)
-
         # 同步欠款
         client = sales_return_order.client
         client.arrears_amount = NP.plus(client.arrears_amount, sales_return_order.arrears_amount)
         client.save(update_fields=['arrears_amount'])
 
+        # 同步账户, 流水
         if sales_return_order.payment_amount > 0:
-            # 作废销售退货结算账户
-            sales_return_order.sales_return_accounts.all().update(is_void=True)
-
-            # 同步账户, 流水
             finance_flows = []
             for sales_return_account in sales_return_order.sales_return_accounts.all():
                 account = sales_return_account.account

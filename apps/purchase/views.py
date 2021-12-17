@@ -121,7 +121,6 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         # 同步采购单据, 采购商品
         purchase_order.is_void = True
         purchase_order.save(update_fields=['is_void'])
-        purchase_order.purchase_goods_set.all().update(is_void=True)
 
         if purchase_order.enable_auto_stock_in:
             # 同步库存, 流水
@@ -153,9 +152,6 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             stock_in_order.is_void = True
             stock_in_order.save(update_fields=['is_void'])
 
-            # 作废入库商品
-            stock_in_order.stock_in_goods_set.all().update(is_void=True)
-
         # 同步欠款
         supplier = purchase_order.supplier
         supplier.arrears_amount = NP.minus(supplier.arrears_amount, purchase_order.arrears_amount)
@@ -163,9 +159,6 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
         # 同步账户, 流水
         if purchase_order.payment_amount > 0:
-            # 作废采购结算账户
-            purchase_order.purchase_accounts.all().update(is_void=True)
-
             finance_flows = []
             for purchase_account in purchase_order.purchase_accounts.all():
                 account = purchase_account.account
@@ -294,7 +287,6 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
         # 同步采购退货单据, 采购退货商品
         purchase_return_order.is_void = True
         purchase_return_order.save(update_fields=['is_void'])
-        purchase_return_order.purchase_return_goods_set.all().update(is_void=True)
 
         if purchase_return_order.enable_auto_stock_out:
             # 同步库存, 流水
@@ -332,18 +324,12 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
             stock_out_order.is_void = True
             stock_out_order.save(update_fields=['is_void'])
 
-            # 作废出库商品
-            stock_out_order.stock_out_goods_set.all().update(is_void=True)
-
         # 同步欠款
         supplier = purchase_return_order.supplier
         supplier.arrears_amount = NP.plus(supplier.arrears_amount, purchase_return_order.arrears_amount)
         supplier.save(update_fields=['arrears_amount'])
 
         if purchase_return_order.collection_amount > 0:
-            # 作废采购退货结算账户
-            purchase_return_order.purchase_return_accounts.all().update(is_void=True)
-
             # 同步账户, 流水
             finance_flows = []
             for purchase_return_account in purchase_return_order.purchase_return_accounts.all():

@@ -108,8 +108,8 @@ class PurchaseOrderSerializer(BaseSerializer):
         return instance
 
     def validate_other_amount(self, value):
-        if value <= 0:
-            raise ValidationError('其他费用小于或等于零')
+        if value < 0:
+            raise ValidationError('其他费用小于零')
         return value
 
     @transaction.atomic

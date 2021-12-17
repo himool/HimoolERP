@@ -133,7 +133,6 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
         # 同步调拨单据, 调拨商品
         stock_transfer_order.is_void = True
         stock_transfer_order.save(update_fields=['is_void'])
-        stock_transfer_order.stock_transfer_goods_set.all().update(is_void=True)
 
         if stock_transfer_order.enable_auto_stock_out:
             # 同步库存, 流水
@@ -163,9 +162,6 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
             stock_out_order.is_void = True
             stock_out_order.save(update_fields=['is_void'])
 
-            # 作废出库商品
-            stock_out_order.stock_out_goods_set.all().update(is_void=True)
-
         if stock_transfer_order.enable_auto_stock_in:
             # 同步库存, 流水
             inventory_flows = []
@@ -193,9 +189,6 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
 
             stock_in_order.is_void = True
             stock_in_order.save(update_fields=['is_void'])
-
-            # 作废入库商品
-            stock_in_order.stock_in_goods_set.all().update(is_void=True)
 
 
 __all__ = [

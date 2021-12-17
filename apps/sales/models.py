@@ -1,3 +1,4 @@
+from extensions.common.base import *
 from extensions.models import *
 
 
@@ -28,14 +29,14 @@ class SalesOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = get_today(), get_tomorrow()
+        start_date, end_date = pendulum.today(), pendulum.tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'XS' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'XS' + pendulum.today().format('YYYYMMDD') + '0001'
 
         return number
 
@@ -47,10 +48,9 @@ class SalesGoods(Model):
                              related_name='sales_goods_set', verbose_name='销售单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_goods_set', verbose_name='商品')
     sales_quantity = FloatField(verbose_name='销售数量')
-    sales_price = AmountField(verbose_name='销售单价')
+    sales_price = FloatField(verbose_name='销售单价')
     total_amount = AmountField(verbose_name='总金额')
     return_quantity = FloatField(default=0, verbose_name='退货数量')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='sales_goods_set')
 
     class Meta:
@@ -64,7 +64,6 @@ class SalesAccount(Model):
                              related_name='sales_accounts', verbose_name='销售单据')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='sales_accounts', verbose_name='结算账户')
     collection_amount = AmountField(verbose_name='收款金额')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='sales_accounts')
 
     class Meta:
@@ -99,14 +98,14 @@ class SalesReturnOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = get_today(), get_tomorrow()
+        start_date, end_date = pendulum.today(), pendulum.tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'SR' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'SR' + pendulum.today().format('YYYYMMDD') + '0001'
 
         return number
 
@@ -120,9 +119,8 @@ class SalesReturnGoods(Model):
                                 related_name='sales_return_goods_set', verbose_name='销售商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_return_goods_set', verbose_name='商品')
     return_quantity = FloatField(verbose_name='退货数量')
-    return_price = AmountField(verbose_name='退货单价')
+    return_price = FloatField(verbose_name='退货单价')
     total_amount = AmountField(verbose_name='总金额')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='sales_return_goods_set')
 
     class Meta:
@@ -136,7 +134,6 @@ class SalesReturnAccount(Model):
                                     related_name='sales_return_accounts', verbose_name='销售退货单据')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='sales_return_accounts', verbose_name='结算账户')
     payment_amount = AmountField(verbose_name='付款金额')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='sales_return_accounts')
 
     class Meta:

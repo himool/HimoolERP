@@ -93,7 +93,6 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
         # 同步出库记录, 出库记录商品
         stock_out_record.is_void = True
         stock_out_record.save(update_fields=['is_void'])
-        stock_out_record.stock_out_record_goods_set.all().update(is_void=True)
 
         # 同步库存, 流水
         inventory_flows = []

@@ -1,3 +1,4 @@
+from extensions.common.base import *
 from extensions.models import *
 
 
@@ -34,22 +35,16 @@ class StockOutOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = get_today(), get_tomorrow()
+        start_date, end_date = pendulum.today(), pendulum.tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'CK' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'CK' + pendulum.today().format('YYYYMMDD') + '0001'
 
         return number
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.is_completed = self.remain_quantity == 0
-        if update_fields:
-            update_fields.append('is_completed')
-        return super().save(force_insert, force_update, using, update_fields)
 
 
 class StockOutGoods(Model):
@@ -61,17 +56,10 @@ class StockOutGoods(Model):
     stock_out_quantity = FloatField(verbose_name='出库总数')
     remain_quantity = FloatField(default=0, verbose_name='出库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_out_goods_set')
 
     class Meta:
         unique_together = [('stock_out_order', 'goods')]
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.is_completed = self.remain_quantity == 0
-        if update_fields:
-            update_fields.append('is_completed')
-        return super().save(force_insert, force_update, using, update_fields)
 
 
 class StockOutRecord(Model):
@@ -103,7 +91,6 @@ class StockOutRecordGoods(Model):
     enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
     batch = OneToOneField('goods.Batch', on_delete=CASCADE, null=True,
                           related_name='stock_out_record_goods', verbose_name='批次')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_out_record_goods_set')
 
     class Meta:

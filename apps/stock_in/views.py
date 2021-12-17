@@ -88,7 +88,6 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         # 同步入库记录, 入库记录商品
         stock_in_record.is_void = True
         stock_in_record.save(update_fields=['is_void'])
-        stock_in_record.stock_in_record_goods_set.all().update(is_void=True)
 
         # 同步库存, 流水
         inventory_flows = []

@@ -1,3 +1,4 @@
+from extensions.common.base import *
 from extensions.models import *
 
 
@@ -19,7 +20,7 @@ class StockInOrder(Model):
     sales_return_order = OneToOneField('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
                                        related_name='stock_in_order', verbose_name='销售退货单据')
     stock_transfer_order = OneToOneField('stock_transfer.StockTransferOrder', on_delete=CASCADE, null=True,
-                                       related_name='stock_in_order', verbose_name='调拨单据')
+                                         related_name='stock_in_order', verbose_name='调拨单据')
     total_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='入库完成状态')
@@ -34,22 +35,16 @@ class StockInOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = get_today(), get_tomorrow()
+        start_date, end_date = pendulum.today(), pendulum.tomorrow()
         instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
             number = result.group(1) + str(int(result.group(2)) + 1)
         except AttributeError:
-            number = 'RK' + pendulum.today(settings.TIME_ZONE).format('YYYYMMDD') + '0001'
+            number = 'RK' + pendulum.today().format('YYYYMMDD') + '0001'
 
         return number
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.is_completed = self.remain_quantity == 0
-        if update_fields:
-            update_fields.append('is_completed')
-        return super().save(force_insert, force_update, using, update_fields)
 
 
 class StockInGoods(Model):
@@ -61,17 +56,10 @@ class StockInGoods(Model):
     stock_in_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_in_goods_set')
 
     class Meta:
         unique_together = [('stock_in_order', 'goods')]
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.is_completed = self.remain_quantity == 0
-        if update_fields:
-            update_fields.append('is_completed')
-        return super().save(force_insert, force_update, using, update_fields)
 
 
 class StockInRecord(Model):
@@ -106,7 +94,6 @@ class StockInRecordGoods(Model):
     expiration_date = DateField(null=True, verbose_name='过期日期')
     batch = OneToOneField('goods.Batch', on_delete=CASCADE, null=True,
                           related_name='stock_in_record_goods', verbose_name='批次')
-    is_void = BooleanField(default=False, verbose_name='作废状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_in_record_goods_set')
 
     class Meta:
