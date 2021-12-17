@@ -23,6 +23,12 @@ GoodsUnitOptionPermission = BasePermission
 GoodsOptionPermission = BasePermission
 BatchOptionPermission = BasePermission
 
+# Purchase
+PurchaseOrderOptionPermission = BasePermission
+
+# Sales
+SalesOrderOptionPermission = BasePermission
+
 
 __all__ = [
     'RoleOptionPermission', 'UserOptionPermission',
@@ -30,4 +36,6 @@ __all__ = [
     'ChargeItemOptionPermission', 'ClientCategoryOptionPermission', 'SupplierCategoryOptionPermission',
     'GoodsCategoryOptionPermission', 'GoodsUnitOptionPermission',
     'GoodsOptionPermission', 'BatchOptionPermission',
+    'PurchaseOrderOptionPermission',
+    'SalesOrderOptionPermission',
 ]

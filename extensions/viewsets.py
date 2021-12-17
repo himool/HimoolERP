@@ -65,8 +65,12 @@ class PersonalViewSet(BaseViewSet):
         return super().get_queryset().filter(creator=self.user)
 
 
-class OptionViewSet(BaseViewSet, ListModelMixin):
-    """选项视图"""
+class LimitedOptionViewSet(BaseViewSet, ListModelMixin):
+    """有限选项视图"""
+
+
+class InfiniteOptionViewSet(BaseViewSet, ListModelMixin):
+    """无限选项视图"""
 
     pagination_class = InfinitePagination
 
@@ -181,7 +185,8 @@ class ImportMixin:
 
 
 __all__ = [
-    'FunctionViewSet', 'BaseViewSet', 'ModelViewSet', 'PersonalViewSet', 'OptionViewSet',
+    'FunctionViewSet', 'BaseViewSet', 'ModelViewSet', 'PersonalViewSet',
+    'LimitedOptionViewSet', 'InfiniteOptionViewSet',
     'ReadOnlyMixin', 'DataProtectMixin', 'ExportMixin', 'ImportMixin',
     'ListModelMixin', 'CreateModelMixin', 'RetrieveModelMixin', 'UpdateModelMixin', 'DestroyModelMixin',
 ]

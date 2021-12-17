@@ -11,7 +11,7 @@ from apps.system.models import *
 class PurchaseOrderSerializer(BaseSerializer):
     """采购单据"""
 
-    class PurchaseGoodsSerializer(BaseSerializer):
+    class PurchaseGoodsItemSerializer(BaseSerializer):
         """采购商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
@@ -41,7 +41,7 @@ class PurchaseOrderSerializer(BaseSerializer):
                 raise ValidationError('采购单价小于或等于零')
             return value
 
-    class PurchaseAccountSerializer(BaseSerializer):
+    class PurchaseAccountItemSerializer(BaseSerializer):
         """采购结算账户"""
 
         account_number = CharField(source='account.number', read_only=True, label='账户编号')
@@ -69,9 +69,10 @@ class PurchaseOrderSerializer(BaseSerializer):
     supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    purchase_goods_items = PurchaseGoodsSerializer(source='purchase_goods_set', many=True, label='采购商品')
-    purchase_account_items = PurchaseAccountSerializer(
-        source='purchase_accounts', required=False, many=True, label='采购结算账户')
+    purchase_goods_items = PurchaseGoodsItemSerializer(
+        source='purchase_goods_set', many=True, label='采购商品Item')
+    purchase_account_items = PurchaseAccountItemSerializer(
+        source='purchase_accounts', required=False, many=True, label='采购结算账户Item')
 
     class Meta:
         model = PurchaseOrder
@@ -171,7 +172,7 @@ class PurchaseOrderSerializer(BaseSerializer):
 class PurchaseReturnOrderSerializer(BaseSerializer):
     """采购退货单据"""
 
-    class PurchaseReturnGoodsSerializer(BaseSerializer):
+    class PurchaseReturnGoodsItemSerializer(BaseSerializer):
         """采购退货商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
@@ -207,7 +208,7 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
                 raise ValidationError('退货单价小于或等于零')
             return value
 
-    class PurchaseReturnAccountSerializer(BaseSerializer):
+    class PurchaseReturnAccountItemSerializer(BaseSerializer):
         """采购退货结算账户"""
 
         account_number = CharField(source='account.number', read_only=True, label='账户编号')
@@ -236,10 +237,10 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
     supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    purchase_return_goods_items = PurchaseReturnGoodsSerializer(
-        source='purchase_return_goods_set', many=True, label='采购退货商品')
-    purchase_return_account_items = PurchaseReturnAccountSerializer(
-        source='purchase_return_accounts', required=False, many=True, label='采购退货结算账户')
+    purchase_return_goods_items = PurchaseReturnGoodsItemSerializer(
+        source='purchase_return_goods_set', many=True, label='采购退货商品Item')
+    purchase_return_account_items = PurchaseReturnAccountItemSerializer(
+        source='purchase_return_accounts', required=False, many=True, label='采购退货结算账户Item')
 
     class Meta:
         model = PurchaseReturnOrder
