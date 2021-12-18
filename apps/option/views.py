@@ -141,6 +141,20 @@ class PurchaseOrderOptionViewSet(LimitedOptionViewSet):
     queryset = PurchaseOrder.objects.all()
 
 
+# Sales
+class SalesOrderOptionViewSet(LimitedOptionViewSet):
+    serializer_class = SalesOrderOptionSerializer
+    permission_classes = [IsAuthenticated, SalesOrderOptionPermission]
+    filterset_class = SalesOrderOptionFilter
+    ordering_fields = ['id', 'number']
+    ordering = ['-number', 'id']
+    select_related_fields = ['warehouse', 'client', 'handler', 'creator']
+    prefetch_related_fields = ['sales_goods_set', 'sales_goods_set__goods',
+                               'sales_goods_set__goods__unit',
+                               'sales_accounts', 'sales_accounts__account']
+    queryset = SalesOrder.objects.all()
+
+
 __all__ = [
     'RoleOptionViewSet', 'UserOptionViewSet',
     'WarehouseOptionViewSet',
@@ -149,4 +163,6 @@ __all__ = [
     'AccountOptionViewSet', 'ChargeItemOptionViewSet',
     'GoodsCategoryOptionViewSet', 'GoodsUnitOptionViewSet', 'GoodsOptionViewSet',
     'BatchOptionViewSet',
+    'PurchaseOrderOptionViewSet',
+    'SalesOrderOptionViewSet',
 ]

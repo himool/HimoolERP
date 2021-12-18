@@ -26,7 +26,19 @@ class PurchaseOrderOptionFilter(FilterSet):
                   'start_date', 'end_date']
 
 
+# Sales
+class SalesOrderOptionFilter(FilterSet):
+    start_date = DateFilter(field_name='create_time', lookup_expr='gte', label='开始日期')
+    end_date = DateFilter(field_name='create_time', lookup_expr='lt', label='结束日期')
+
+    class Meta:
+        model = SalesOrder
+        fields = ['number', 'warehouse', 'client', 'handler', 'is_void', 'creator',
+                  'start_date', 'end_date']
+
+
 __all__ = [
     'BatchOptionFilter',
     'PurchaseOrderOptionFilter',
+    'SalesOrderOptionFilter',
 ]

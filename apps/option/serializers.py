@@ -147,6 +147,48 @@ class PurchaseOrderOptionSerializer(ModelSerializer):
                   'creator_name', 'create_time', 'purchase_goods_items', 'purchase_account_items']
 
 
+# Sales
+class SalesOrderOptionSerializer(ModelSerializer):
+
+    class SalesGoodsItemSerializer(ModelSerializer):
+        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+
+        class Meta:
+            model = SalesGoods
+            fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'sales_quantity',
+                      'sales_price', 'total_amount', 'return_quantity', 'unit_name']
+
+    class SalesAccountItemSerializer(ModelSerializer):
+        account_number = CharField(source='account.number', read_only=True, label='账户编号')
+        account_name = CharField(source='account.name', read_only=True, label='账户名称')
+
+        class Meta:
+            model = SalesAccount
+            fields = ['id', 'account', 'account_number', 'account_name', 'collection_amount']
+
+    warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
+    warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
+    handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
+    creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
+    sales_goods_items = SalesGoodsItemSerializer(
+        source='sales_goods_set', many=True, label='采购商品Item')
+    sales_account_items = SalesAccountItemSerializer(
+        source='sales_accounts', required=False, many=True, label='采购结算账户Item')
+
+    class Meta:
+        model = SalesOrder
+        fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'supplier',
+                  'client_number', 'client_name', 'handler', 'handler_name', 'handler',
+                  'handle_time', 'remark', 'total_quantity', 'discount', 'other_amount', 'total_amount',
+                  'collection_amount', 'arrears_amount', 'is_void', 'enable_auto_stock_in', 'creator',
+                  'creator_name', 'create_time', 'sales_goods_items', 'sales_account_items']
+
+
 __all__ = [
     'RoleOptionSerializer', 'UserOptionSerializer',
     'WarehouseOptionSerializer',
@@ -156,4 +198,5 @@ __all__ = [
     'GoodsCategoryOptionSerializer', 'GoodsUnitOptionSerializer', 'GoodsOptionSerializer',
     'BatchOptionSerializer',
     'PurchaseOrderOptionSerializer',
+    'SalesOrderOptionSerializer',
 ]

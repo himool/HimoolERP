@@ -27,4 +27,7 @@ router.register('batchs/options', BatchOptionViewSet, 'batch_option')
 # Purchase
 router.register('purchase_orders/options', PurchaseOrderOptionViewSet, 'purchase_order_option')
 
+# Sales
+router.register('sales_orders/options', SalesOrderOptionViewSet, 'sales_order_option')
+
 urlpatterns = router.urls
