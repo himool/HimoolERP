@@ -13,7 +13,8 @@ class StockInOrder(Model):
         STOCK_TRANSFER = ('stock_transfer', '调拨')
 
     number = CharField(max_length=32, verbose_name='编号')
-    warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT, related_name='stock_in_orders', verbose_name='仓库')
+    warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
+                           related_name='stock_in_orders', verbose_name='仓库')
     type = CharField(max_length=32, choices=Type.choices, verbose_name='入库类型')
     purchase_order = OneToOneField('purchase.PurchaseOrder', on_delete=CASCADE, null=True,
                                    related_name='stock_in_order', verbose_name='采购单据')

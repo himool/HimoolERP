@@ -9,29 +9,34 @@ from apps.system.models import *
 class StockInOrderSerializer(BaseSerializer):
     """入库单据"""
 
-    class StockInGoodsSerializer(BaseSerializer):
+    class StockInGoodsItemSerializer(BaseSerializer):
         """入库商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
         goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
         goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
-        enable_batch_control = BooleanField(source='goods.enable_batch_control', read_only=True, label='启用批次控制')
+        enable_batch_control = BooleanField(source='goods.enable_batch_control',
+                                            read_only=True, label='启用批次控制')
         shelf_life_days = CharField(source='goods.shelf_life_days', read_only=True, label='保质期天数')
 
         class Meta:
             model = StockInGoods
-            fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'stock_in_quantity',
-                      'remain_quantity', 'unit_name', 'enable_batch_control', 'shelf_life_days', 'is_completed']
+            fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode',
+                      'stock_in_quantity', 'remain_quantity', 'unit_name', 'enable_batch_control',
+                      'shelf_life_days', 'is_completed']
 
     warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
     type_display = CharField(source='get_type_display', read_only=True, label='入库类型')
     purchase_order_number = CharField(source='purchase_order.number', read_only=True, label='采购单据编号')
-    sales_return_order_number = CharField(source='sales_return_order.number', read_only=True, label='销售退货单据编号')
-    stock_transfer_order_number = CharField(source='stock_transfer_order.number', read_only=True, label='调拨单据编号')
+    sales_return_order_number = CharField(source='sales_return_order.number',
+                                          read_only=True, label='销售退货单据编号')
+    stock_transfer_order_number = CharField(source='stock_transfer_order.number',
+                                            read_only=True, label='调拨单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    stock_in_goods_items = StockInGoodsSerializer(source='stock_in_goods_set', many=True, label='入库商品')
+    stock_in_goods_items = StockInGoodsItemSerializer(
+        source='stock_in_goods_set', many=True, label='入库商品Item')
 
     class Meta:
         model = StockInOrder
@@ -45,7 +50,7 @@ class StockInOrderSerializer(BaseSerializer):
 class StockInRecordSerializer(BaseSerializer):
     """入库记录"""
 
-    class StockInRecordGoodsSerializer(BaseSerializer):
+    class StockInRecordGoodsItemSerializer(BaseSerializer):
         """入库记录商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
@@ -58,7 +63,8 @@ class StockInRecordSerializer(BaseSerializer):
             model = StockInRecordGoods
             read_only_fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'unit_name',
                                 'enable_batch_control', 'shelf_life_days', 'expiration_date']
-            fields = ['stock_in_goods', 'stock_in_quantity', 'production_date', 'batch_number', *read_only_fields]
+            fields = ['stock_in_goods', 'stock_in_quantity', 'production_date', 'batch_number',
+                      *read_only_fields]
 
         def validate_stock_in_goods(self, instance):
             instance = self.validate_foreign_key(StockInGoods, instance, message='入库商品不存在')
@@ -91,8 +97,8 @@ class StockInRecordSerializer(BaseSerializer):
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    stock_in_record_goods_items = StockInRecordGoodsSerializer(source='stock_in_record_goods_set',
-                                                              many=True, label='入库记录商品')
+    stock_in_record_goods_items = StockInRecordGoodsItemSerializer(
+        source='stock_in_record_goods_set', many=True, label='入库记录商品')
 
     class Meta:
         model = StockInRecord

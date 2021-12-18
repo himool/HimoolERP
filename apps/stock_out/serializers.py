@@ -9,14 +9,15 @@ from apps.system.models import *
 class StockOutOrderSerializer(BaseSerializer):
     """出库单据"""
 
-    class StockOutGoodsSerializer(BaseSerializer):
+    class StockOutGoodsItemSerializer(BaseSerializer):
         """出库商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
         goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
         goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
-        enable_batch_control = BooleanField(source='goods.enable_batch_control', read_only=True, label='启用批次控制')
+        enable_batch_control = BooleanField(source='goods.enable_batch_control',
+                                            read_only=True, label='启用批次控制')
 
         class Meta:
             model = StockOutGoods
@@ -27,10 +28,13 @@ class StockOutOrderSerializer(BaseSerializer):
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
     type_display = CharField(source='get_type_display', read_only=True, label='出库类型')
     sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单据编号')
-    purchase_return_order_number = CharField(source='purchase_return_order.number', read_only=True, label='采购退货单据编号')
-    stock_transfer_order_number = CharField(source='stock_transfer_order.number', read_only=True, label='调拨单据编号')
+    purchase_return_order_number = CharField(source='purchase_return_order.number',
+                                             read_only=True, label='采购退货单据编号')
+    stock_transfer_order_number = CharField(source='stock_transfer_order.number',
+                                            read_only=True, label='调拨单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    stock_out_goods_items = StockOutGoodsSerializer(source='stock_out_goods_set', many=True, label='出库商品')
+    stock_out_goods_items = StockOutGoodsItemSerializer(
+        source='stock_out_goods_set', many=True, label='出库商品')
 
     class Meta:
         model = StockOutOrder
