@@ -29,6 +29,51 @@ class WarehouseSerializer(BaseSerializer):
         return instance
 
 
+class WarehouseExportSerializer(BaseSerializer):
+    number = CharField(label='仓库编号')
+    name = CharField(label='仓库名称')
+    manager_username = CharField(source='manager.username', label='管理员用户名')
+    manager_name = CharField(source='manager.name', label='管理员名称')
+    phone = CharField(label='电话')
+    address = CharField(label='地址')
+    remark = CharField(label='备注')
+    order = IntegerField(label='排序')
+    is_active = BooleanField(label='激活状态[TRUE/FALSE]')
+
+    class Meta:
+        model = Warehouse
+        fields = ['number', 'name', 'manager_username', 'manager_name', 'phone', 'address',
+                  'remark', 'order', 'is_active']
+
+
+class WarehouseImportSerializer(BaseSerializer):
+    number = CharField(label='仓库编号(必填)')
+    name = CharField(label='仓库名称(必填)')
+    manager_username = CharField(required=False, label='管理员用户名')
+    phone = CharField(required=False, label='电话')
+    address = CharField(required=False, label='地址')
+    remark = CharField(required=False, label='备注')
+    order = IntegerField(required=False, label='排序(默认: 100)')
+    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
+
+    class Meta:
+        model = Warehouse
+        fields = ['number', 'name', 'manager_username', 'phone', 'address', 'remark',
+                  'order', 'is_active']
+
+    def validate(self, attrs):
+        if manager_username := attrs.pop('manager_username', None):
+            manager = User.objects.filter(username=manager_username, team=self.team).first()
+            if not manager:
+                raise ValidationError(f'管理员[{manager_username}]不存在')
+
+            attrs['manager'] = manager
+        else:
+            attrs['manager'] = None
+
+        return super().validate(attrs)
+
+
 class ClientCategorySerializer(BaseSerializer):
 
     class Meta:
@@ -39,6 +84,25 @@ class ClientCategorySerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
+
+
+class ClientCategoryExportSerializer(BaseSerializer):
+    name = CharField(label='客户分类名称')
+    remark = CharField(label='备注')
+
+    class Meta:
+        model = ClientCategory
+        fields = ['name', 'remark']
+
+
+class ClientCategoryImportSerializer(BaseSerializer):
+    name = CharField(label='客户分类名称(必填)')
+    remark = CharField(required=False, label='备注')
+
+    class Meta:
+        model = ClientCategory
+        fields = ['name', 'remark']
+
 
 class ClientSerializer(BaseSerializer):
     level_display = CharField(source='get_level_display', read_only=True, label='等级')
@@ -74,6 +138,7 @@ class ClientSerializer(BaseSerializer):
 
         return super().update(instance, validated_data)
 
+
 class SupplierCategorySerializer(BaseSerializer):
 
     class Meta:
@@ -84,6 +149,24 @@ class SupplierCategorySerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
+
+
+class SupplierCategoryExportSerializer(BaseSerializer):
+    name = CharField(label='供应商分类名称')
+    remark = CharField(label='备注')
+
+    class Meta:
+        model = SupplierCategory
+        fields = ['name', 'remark']
+
+
+class SupplierCategoryImportSerializer(BaseSerializer):
+    name = CharField(label='供应商分类名称(必填)')
+    remark = CharField(required=False, label='备注')
+
+    class Meta:
+        model = SupplierCategory
+        fields = ['name', 'remark']
 
 
 class SupplierSerializer(BaseSerializer):
@@ -163,12 +246,32 @@ class ChargeItemSerializer(BaseSerializer):
         return value
 
 
+class ChargeItemExportSerializer(BaseSerializer):
+    name = CharField(label='收支项目名称')
+    type_display = CharField(source='get_type_display', label='收支项目名称')
+    remark = CharField(label='备注')
 
+    class Meta:
+        model = ChargeItem
+        fields = ['name', 'remark']
+
+
+class ChargeItemImportSerializer(BaseSerializer):
+    name = CharField(label='收支项目名称(必填)')
+    type = CharField(label='收支类型[income/expenditure](必填)')
+    remark = CharField(required=False, label='备注')
+
+    class Meta:
+        model = ChargeItem
+        fields = ['name', 'type', 'remark']
 
 
 __all__ = [
     'WarehouseSerializer',
-    'ClientCategorySerializer', 'ClientSerializer',
-    'SupplierCategorySerializer','SupplierSerializer',
-    'AccountSerializer', 'ChargeItemSerializer',
+    'ClientCategorySerializer', 'ClientCategoryExportSerializer', 'ClientCategoryImportSerializer',
+    'ClientSerializer',
+    'SupplierCategorySerializer', 'SupplierCategoryExportSerializer', 'SupplierCategoryImportSerializer',
+    'SupplierSerializer',
+    'AccountSerializer',
+    'ChargeItemSerializer', 'ChargeItemExportSerializer', 'ChargeItemImportSerializer',
 ]

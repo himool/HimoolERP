@@ -17,6 +17,24 @@ class GoodsCategorySerializer(BaseSerializer):
         return value
 
 
+class GoodsCategoryExportSerializer(BaseSerializer):
+    name = CharField(label='商品分类名称')
+    remark = CharField(label='备注')
+
+    class Meta:
+        model = GoodsCategory
+        fields = ['name', 'remark']
+
+
+class GoodsCategoryImportSerializer(BaseSerializer):
+    name = CharField(label='商品分类名称(必填)')
+    remark = CharField(required=False, label='备注')
+
+    class Meta:
+        model = GoodsCategory
+        fields = ['name', 'remark']
+
+
 class GoodsUnitSerializer(BaseSerializer):
 
     class Meta:
@@ -27,6 +45,24 @@ class GoodsUnitSerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
+
+
+class GoodsUnitExportSerializer(BaseSerializer):
+    name = CharField(label='商品单位名称')
+    remark = CharField(label='备注')
+
+    class Meta:
+        model = GoodsUnit
+        fields = ['name', 'remark']
+
+
+class GoodsUnitImportSerializer(BaseSerializer):
+    name = CharField(label='商品单位名称(必填)')
+    remark = CharField(required=False, label='备注')
+
+    class Meta:
+        model = GoodsUnit
+        fields = ['name', 'remark']
 
 
 class GoodsSerializer(BaseSerializer):
@@ -301,6 +337,9 @@ class InventorySerializer(BaseSerializer):
 
 
 __all__ = [
-    'GoodsCategorySerializer', 'GoodsUnitSerializer', 'GoodsSerializer', 'GoodsImageSerializer',
+    'GoodsCategorySerializer', 'GoodsCategoryExportSerializer', 'GoodsCategoryImportSerializer',
+    'GoodsUnitSerializer', 'GoodsUnitExportSerializer', 'GoodsUnitImportSerializer',
+    'GoodsSerializer',
+    'GoodsImageSerializer',
     'BatchSerializer', 'InventorySerializer',
 ]

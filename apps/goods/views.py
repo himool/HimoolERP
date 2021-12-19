@@ -11,7 +11,7 @@ from apps.goods.models import *
 from apps.data.models import *
 
 
-class GoodsCategoryViewSet(ModelViewSet):
+class GoodsCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """商品分类"""
 
     serializer_class = GoodsCategorySerializer
@@ -20,8 +20,49 @@ class GoodsCategoryViewSet(ModelViewSet):
     ordering_fields = ['id', 'name']
     queryset = GoodsCategory.objects.all()
 
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def export(self, request, *args, **kwargs):
+        """导出"""
 
-class GoodsUnitViewSet(ModelViewSet):
+        return self.get_export_response(GoodsCategoryExportSerializer)
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def import_template(self, request, *args, **kwargs):
+        """导入模板"""
+
+        return self.get_template_response(GoodsCategoryImportSerializer)
+
+    @extend_schema(request=UploadRequest, responses={200: GoodsCategorySerializer(many=True)})
+    @action(detail=False, methods=['post'])
+    @transaction.atomic
+    def import_data(self, request, *args, **kwargs):
+        """导入数据"""
+
+        request_serializer = UploadRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+
+        goods_categories = []
+        for import_serializer in self.load_data(validated_data['file'], GoodsCategoryImportSerializer):
+            validated_data = import_serializer.validated_data
+            if goods_category := GoodsCategory.objects.filter(name=validated_data['name'],
+                                                              team=self.team).first():
+                serializer = GoodsCategorySerializer(instance=goods_category, data=validated_data,
+                                                     context=self.context)
+            else:
+                serializer = GoodsCategorySerializer(data=validated_data, context=self.context)
+
+            serializer.is_valid(raise_exception=True)
+            goods_category = serializer.save()
+            goods_categories.append(goods_category)
+
+        serializer = GoodsCategorySerializer(instance=goods_categories, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """商品单位"""
 
     serializer_class = GoodsUnitSerializer
@@ -30,8 +71,49 @@ class GoodsUnitViewSet(ModelViewSet):
     ordering_fields = ['id', 'name']
     queryset = GoodsUnit.objects.all()
 
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def export(self, request, *args, **kwargs):
+        """导出"""
 
-class GoodsViewSet(ModelViewSet, DataProtectMixin):
+        return self.get_export_response(GoodsUnitExportSerializer)
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def import_template(self, request, *args, **kwargs):
+        """导入模板"""
+
+        return self.get_template_response(GoodsUnitImportSerializer)
+
+    @extend_schema(request=UploadRequest, responses={200: GoodsUnitSerializer(many=True)})
+    @action(detail=False, methods=['post'])
+    @transaction.atomic
+    def import_data(self, request, *args, **kwargs):
+        """导入数据"""
+
+        request_serializer = UploadRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+
+        goods_units = []
+        for import_serializer in self.load_data(validated_data['file'], GoodsUnitImportSerializer):
+            validated_data = import_serializer.validated_data
+            if goods_unit := GoodsUnit.objects.filter(name=validated_data['name'],
+                                                      team=self.team).first():
+                serializer = GoodsUnitSerializer(instance=goods_unit, data=validated_data,
+                                                 context=self.context)
+            else:
+                serializer = GoodsUnitSerializer(data=validated_data, context=self.context)
+
+            serializer.is_valid(raise_exception=True)
+            goods_unit = serializer.save()
+            goods_units.append(goods_unit)
+
+        serializer = GoodsUnitSerializer(instance=goods_units, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """商品"""
 
     serializer_class = GoodsSerializer

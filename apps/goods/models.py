@@ -48,7 +48,7 @@ class Goods(Model):
     level_price3 = FloatField(verbose_name='等级价三')
 
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    order = IntegerField(default=100, verbose_name='顺序')
+    order = IntegerField(default=100, verbose_name='排序')
     is_active = BooleanField(default=True, verbose_name='激活状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='goods_set')
 

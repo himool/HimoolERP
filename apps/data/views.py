@@ -11,7 +11,7 @@ from apps.data.models import *
 from apps.goods.models import *
 
 
-class WarehouseViewSet(ModelViewSet, DataProtectMixin):
+class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """仓库"""
 
     serializer_class = WarehouseSerializer
@@ -64,7 +64,7 @@ class WarehouseViewSet(ModelViewSet, DataProtectMixin):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class ClientCategoryViewSet(ModelViewSet):
+class ClientCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """客户分类"""
 
     serializer_class = ClientCategorySerializer
@@ -73,8 +73,49 @@ class ClientCategoryViewSet(ModelViewSet):
     ordering_fields = ['id', 'name']
     queryset = ClientCategory.objects.all()
 
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def export(self, request, *args, **kwargs):
+        """导出"""
 
-class ClientViewSet(ModelViewSet, DataProtectMixin):
+        return self.get_export_response(ClientCategoryExportSerializer)
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def import_template(self, request, *args, **kwargs):
+        """导入模板"""
+
+        return self.get_template_response(ClientCategoryImportSerializer)
+
+    @extend_schema(request=UploadRequest, responses={200: ClientCategorySerializer(many=True)})
+    @action(detail=False, methods=['post'])
+    @transaction.atomic
+    def import_data(self, request, *args, **kwargs):
+        """导入数据"""
+
+        request_serializer = UploadRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+
+        client_categories = []
+        for import_serializer in self.load_data(validated_data['file'], ClientCategoryImportSerializer):
+            validated_data = import_serializer.validated_data
+            if client_category := ClientCategory.objects.filter(name=validated_data['name'],
+                                                                team=self.team).first():
+                serializer = ClientCategorySerializer(instance=client_category, data=validated_data,
+                                                      context=self.context)
+            else:
+                serializer = ClientCategorySerializer(data=validated_data, context=self.context)
+
+            serializer.is_valid(raise_exception=True)
+            client_category = serializer.save()
+            client_categories.append(client_category)
+
+        serializer = ClientCategorySerializer(instance=client_categories, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """客户"""
 
     serializer_class = ClientSerializer
@@ -95,7 +136,7 @@ class ClientViewSet(ModelViewSet, DataProtectMixin):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
-class SupplierCategoryViewSet(ModelViewSet):
+class SupplierCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """供应商分类"""
 
     serializer_class = SupplierCategorySerializer
@@ -104,8 +145,49 @@ class SupplierCategoryViewSet(ModelViewSet):
     ordering_fields = ['id', 'name']
     queryset = SupplierCategory.objects.all()
 
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def export(self, request, *args, **kwargs):
+        """导出"""
 
-class SupplierViewSet(ModelViewSet, DataProtectMixin):
+        return self.get_export_response(SupplierCategoryExportSerializer)
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def import_template(self, request, *args, **kwargs):
+        """导入模板"""
+
+        return self.get_template_response(SupplierCategoryImportSerializer)
+
+    @extend_schema(request=UploadRequest, responses={200: SupplierCategorySerializer(many=True)})
+    @action(detail=False, methods=['post'])
+    @transaction.atomic
+    def import_data(self, request, *args, **kwargs):
+        """导入数据"""
+
+        request_serializer = UploadRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+
+        supplier_categories = []
+        for import_serializer in self.load_data(validated_data['file'], SupplierCategoryImportSerializer):
+            validated_data = import_serializer.validated_data
+            if supplier_category := SupplierCategory.objects.filter(name=validated_data['name'],
+                                                                    team=self.team).first():
+                serializer = SupplierCategorySerializer(instance=supplier_category, data=validated_data,
+                                                        context=self.context)
+            else:
+                serializer = SupplierCategorySerializer(data=validated_data, context=self.context)
+
+            serializer.is_valid(raise_exception=True)
+            supplier_category = serializer.save()
+            supplier_categories.append(supplier_category)
+
+        serializer = SupplierCategorySerializer(instance=supplier_categories, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """供应商"""
 
     serializer_class = SupplierSerializer
@@ -126,7 +208,7 @@ class SupplierViewSet(ModelViewSet, DataProtectMixin):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
-class AccountViewSet(ModelViewSet, DataProtectMixin):
+class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """结算账户"""
 
     serializer_class = AccountSerializer
@@ -146,7 +228,7 @@ class AccountViewSet(ModelViewSet, DataProtectMixin):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
 
-class ChargeItemViewSet(ModelViewSet):
+class ChargeItemViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """收支项目"""
 
     serializer_class = ChargeItemSerializer
@@ -155,6 +237,47 @@ class ChargeItemViewSet(ModelViewSet):
     search_fields = ['name', 'remark']
     ordering_fields = ['id', 'name']
     queryset = ChargeItem.objects.all()
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def export(self, request, *args, **kwargs):
+        """导出"""
+
+        return self.get_export_response(ChargeItemExportSerializer)
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def import_template(self, request, *args, **kwargs):
+        """导入模板"""
+
+        return self.get_template_response(ChargeItemImportSerializer)
+
+    @extend_schema(request=UploadRequest, responses={200: ChargeItemSerializer(many=True)})
+    @action(detail=False, methods=['post'])
+    @transaction.atomic
+    def import_data(self, request, *args, **kwargs):
+        """导入数据"""
+
+        request_serializer = UploadRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+
+        charge_items = []
+        for import_serializer in self.load_data(validated_data['file'], ChargeItemImportSerializer):
+            validated_data = import_serializer.validated_data
+            if charge_item := ChargeItem.objects.filter(name=validated_data['name'],
+                                                        team=self.team).first():
+                serializer = ChargeItemSerializer(instance=charge_item, data=validated_data,
+                                                  context=self.context)
+            else:
+                serializer = ChargeItemSerializer(data=validated_data, context=self.context)
+
+            serializer.is_valid(raise_exception=True)
+            charge_item = serializer.save()
+            charge_items.append(charge_item)
+
+        serializer = ChargeItemSerializer(instance=charge_items, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 __all__ = [
