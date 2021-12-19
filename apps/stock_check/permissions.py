@@ -1,6 +1,10 @@
 from extensions.permissions import ModelPermission
 
 
-__all__ = [
+class StockCheckPermission(ModelPermission):
+    code = 'stock_check'
 
+
+__all__ = [
+    'StockCheckPermission',
 ]

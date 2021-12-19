@@ -182,10 +182,10 @@ class SalesOrderOptionSerializer(ModelSerializer):
 
     class Meta:
         model = SalesOrder
-        fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'supplier',
-                  'client_number', 'client_name', 'handler', 'handler_name', 'handler',
+        fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'client',
+                  'client_number', 'client_name', 'handler', 'handler_name',
                   'handle_time', 'remark', 'total_quantity', 'discount', 'other_amount', 'total_amount',
-                  'collection_amount', 'arrears_amount', 'is_void', 'enable_auto_stock_in', 'creator',
+                  'collection_amount', 'arrears_amount', 'is_void', 'enable_auto_stock_out', 'creator',
                   'creator_name', 'create_time', 'sales_goods_items', 'sales_account_items']
 
 

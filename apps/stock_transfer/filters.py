@@ -9,7 +9,7 @@ class StockTransferOrderFilter(FilterSet):
 
     class Meta:
         model = StockTransferOrder
-        fields = ['number', 'out_warehouse', 'in_warehouse', 'is_void', 'creator',
+        fields = ['number', 'out_warehouse', 'in_warehouse', 'handler', 'is_void', 'creator',
                   'start_date', 'end_date']
 
 

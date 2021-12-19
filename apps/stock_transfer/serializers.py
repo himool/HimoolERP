@@ -10,7 +10,7 @@ from apps.system.models import *
 class StockTransferOrderSerializer(BaseSerializer):
     """调拨单据"""
 
-    class StockTransferGoodsSerializer(BaseSerializer):
+    class StockTransferGoodsItemSerializer(BaseSerializer):
         """调拨商品"""
 
         goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
@@ -62,8 +62,8 @@ class StockTransferOrderSerializer(BaseSerializer):
     in_warehouse_name = CharField(source='in_warehouse.name', read_only=True, label='入库库仓库名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
-    stock_transfer_goods_items = StockTransferGoodsSerializer(source='stock_transfer_goods_set',
-                                                              many=True, label='调拨商品')
+    stock_transfer_goods_items = StockTransferGoodsItemSerializer(
+        source='stock_transfer_goods_set', many=True, label='调拨商品')
 
     class Meta:
         model = StockTransferOrder
