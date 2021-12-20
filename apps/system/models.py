@@ -61,7 +61,7 @@ class User(Model):
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='users')
 
     class Meta:
-        unique_together = [('username', 'team')]
+        unique_together = [('username', 'team'), ('name', 'team')]
 
 
 __all__ = [

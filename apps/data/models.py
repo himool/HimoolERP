@@ -150,7 +150,7 @@ class Account(Model):
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
-    type = CharField(max_length=32, choices=Type.choices, verbose_name='账户类型')
+    type = CharField(max_length=32, choices=Type.choices, default=Type.CASH, verbose_name='账户类型')
     holder = CharField(max_length=64, null=True, blank=True, verbose_name='开户人')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     order = IntegerField(default=100, verbose_name='排序')

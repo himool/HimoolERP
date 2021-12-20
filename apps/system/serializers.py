@@ -34,6 +34,10 @@ class RoleSerializer(BaseSerializer):
         read_only_fields = ['id']
         fields = ['name', 'remark', 'permissions', *read_only_fields]
 
+    def validate_name(self, value):
+        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
+        return value
+
 
 class UserSerializer(BaseSerializer):
 
@@ -53,6 +57,10 @@ class UserSerializer(BaseSerializer):
 
     def validate_username(self, value):
         self.validate_unique({'username': value}, message=f'用户名[{value}]已存在')
+        return value
+
+    def validate_name(self, value):
+        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
 
     def validate_roles(self, instances):

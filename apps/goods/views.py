@@ -134,6 +134,47 @@ class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         number = Goods.get_number(self.team)
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def export(self, request, *args, **kwargs):
+        """导出"""
+
+        return self.get_export_response(GoodsExportSerializer)
+
+    @extend_schema(responses={200: DownloadResponse})
+    @action(detail=False, methods=['get'])
+    def import_template(self, request, *args, **kwargs):
+        """导入模板"""
+
+        return self.get_template_response(GoodsImportSerializer)
+
+    @extend_schema(request=UploadRequest, responses={200: GoodsSerializer(many=True)})
+    @action(detail=False, methods=['post'])
+    @transaction.atomic
+    def import_data(self, request, *args, **kwargs):
+        """导入数据"""
+
+        request_serializer = UploadRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+
+        goods_set = []
+        for import_serializer in self.load_data(validated_data['file'], GoodsImportSerializer):
+            validated_data = import_serializer.validated_data
+            if goods := Goods.objects.filter(name=validated_data['name'],
+                                             team=self.team).first():
+                serializer = GoodsSerializer(instance=goods, data=validated_data,
+                                             context=self.context)
+            else:
+                serializer = GoodsSerializer(data=validated_data, context=self.context)
+
+            serializer.is_valid(raise_exception=True)
+            goods = serializer.save()
+            goods_set.append(goods)
+
+        serializer = GoodsSerializer(instance=goods_set, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class GoodsImageViewSet(ModelViewSet):
     """商品图片"""

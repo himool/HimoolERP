@@ -34,7 +34,7 @@ class Goods(Model):
                           related_name='goods_set', verbose_name='商品分类')
     unit = ForeignKey('goods.GoodsUnit', on_delete=SET_NULL, null=True,
                       related_name='goods_set', verbose_name='商品单位')
-    spec = CharField(max_length=64, null=True, blank=True, verbose_name='商品规格')
+    spec = CharField(max_length=64, null=True, blank=True, verbose_name='规格')
     enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
     shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
     shelf_life_warning_days = IntegerField(default=0, verbose_name='保质期预警天数')
