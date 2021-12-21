@@ -22,7 +22,7 @@ class PermissionGroupViewSet(BaseViewSet, ListModelMixin):
     queryset = PermissionGroup.objects.all()
 
     def get_queryset(self):
-        return super().get_queryset().prefetch_related('permissions')
+        return self.queryset.prefetch_related('permissions').all()
 
 
 class SystemConfigViewSet(FunctionViewSet):
