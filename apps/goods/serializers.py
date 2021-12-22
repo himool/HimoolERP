@@ -135,6 +135,11 @@ class GoodsSerializer(BaseSerializer):
         instance = self.validate_foreign_key(GoodsUnit, instance, message='商品单位不存在')
         return instance
 
+    def validate_enable_batch_control(self, value):
+        if value and (self.team.enable_auto_stock_in or self.team.enable_auto_stock_out):
+            raise ValidationError('只有同时关闭自动入库、自动出库, 才可以开启商品的批次控制')
+        return value
+
     def validate_goods_images(self, instances):
         instances = self.validate_foreign_key_set(GoodsImage, instances, message='商品图片不存在')
         return instances
