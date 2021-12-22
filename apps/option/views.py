@@ -117,14 +117,24 @@ class GoodsOptionViewSet(LimitedOptionViewSet):
     queryset = Goods.objects.all()
 
 
-class BatchOptionViewSet(LimitedOptionViewSet):
+class BatchOptionViewSet(InfiniteOptionViewSet):
     serializer_class = BatchOptionSerializer
     permission_classes = [IsAuthenticated, BatchOptionPermission]
     filterset_class = BatchOptionFilter
     ordering_fields = ['id', 'number']
     ordering = ['-number', 'id']
     select_related_fields = ['goods__unit']
-    queryset = Batch.objects.all()
+    queryset = Batch.objects.filter(has_stock=True)
+
+
+class InventoryOptionViewSet(LimitedOptionViewSet):
+    serializer_class = InventoryOptionSerializer
+    permission_classes = [IsAuthenticated, InventoryOptionPermission]
+    filterset_class = InventoryOptionFilter
+    ordering_fields = ['id', 'total_quantity']
+    ordering = ['id']
+    select_related_fields = ['goods__unit']
+    queryset = Inventory.objects.filter(has_stock=True)
 
 
 # Purchase
@@ -162,7 +172,7 @@ __all__ = [
     'SupplierCategoryOptionViewSet', 'SupplierOptionViewSet',
     'AccountOptionViewSet', 'ChargeItemOptionViewSet',
     'GoodsCategoryOptionViewSet', 'GoodsUnitOptionViewSet', 'GoodsOptionViewSet',
-    'BatchOptionViewSet',
+    'BatchOptionViewSet', 'InventoryOptionViewSet',
     'PurchaseOrderOptionViewSet',
     'SalesOrderOptionViewSet',
 ]

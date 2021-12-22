@@ -15,6 +15,16 @@ class BatchOptionFilter(FilterSet):
         fields = ['warehouse', 'goods', 'has_stock']
 
 
+class InventoryOptionFilter(FilterSet):
+    warehouse = NumberFilter(field_name='warehouse', required=True, label='仓库')
+    category = NumberFilter(field_name='goods__category', label='商品分类')
+    is_active = BooleanFilter(field_name='goods__is_active', label='商品激活状态')
+
+    class Meta:
+        model = Inventory
+        fields = ['warehouse', 'category', 'is_active', 'has_stock']
+
+
 # Purchase
 class PurchaseOrderOptionFilter(FilterSet):
     start_date = DateFilter(field_name='create_time', lookup_expr='gte', label='开始日期')
@@ -38,7 +48,7 @@ class SalesOrderOptionFilter(FilterSet):
 
 
 __all__ = [
-    'BatchOptionFilter',
+    'BatchOptionFilter', 'InventoryOptionFilter',
     'PurchaseOrderOptionFilter',
     'SalesOrderOptionFilter',
 ]

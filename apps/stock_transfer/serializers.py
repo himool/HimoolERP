@@ -17,13 +17,11 @@ class StockTransferOrderSerializer(BaseSerializer):
         goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
         goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
-        batch_number = CharField(source='batch.number', required=False, label='批次编号')
 
         class Meta:
             model = StockTransferGoods
-            read_only_fields = ['id', 'goods_number', 'goods_name', 'goods_barcode', 'unit_name',
-                                'batch_number', 'enable_batch_control']
-            fields = ['goods', 'batch', 'stock_transfer_quantity', *read_only_fields]
+            read_only_fields = ['id', 'goods_number', 'goods_name', 'goods_barcode', 'unit_name']
+            fields = ['goods', 'stock_transfer_quantity', *read_only_fields]
 
         def validate_goods(self, instance):
             instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
@@ -31,30 +29,10 @@ class StockTransferOrderSerializer(BaseSerializer):
                 raise ValidationError(f'入库商品[{instance.goods.name}]已作废')
             return instance
 
-        def validate_batch(self, instance):
-            instance = self.validate_foreign_key(Batch, instance, message='批次不存在')
-            if instance and not instance.has_stock:
-                raise ValidationError(f'批次[{instance.number}]库存不足')
-            return instance
-
         def validate_stock_transfer_quantity(self, value):
             if value <= 0:
                 raise ValidationError('调拨数量小于或等于零')
             return value
-
-        def validate(self, attrs):
-            goods = attrs['goods']
-            if goods.enable_batch_control:
-                if not (batch := attrs.get('batch')):
-                    raise ValidationError(f'商品[{goods.name}]未选择批次')
-
-                if batch.goods != goods:
-                    raise ValidationError(f'批次[{batch.number}]选择错误')
-
-                if batch.remain_quantity < attrs['stock_transfer_quantity']:
-                    raise ValidationError(f'批次[{batch.number}]库存不足')
-
-            return super().validate(attrs)
 
     out_warehouse_number = CharField(source='out_warehouse.number', read_only=True, label='出库仓库编号')
     out_warehouse_name = CharField(source='out_warehouse.name', read_only=True, label='出库仓库名称')
@@ -123,12 +101,10 @@ class StockTransferOrderSerializer(BaseSerializer):
         for stock_transfer_goods_item in stock_transfer_goods_items:
             goods = stock_transfer_goods_item['goods']
             stock_transfer_quantity = stock_transfer_goods_item['stock_transfer_quantity']
-            batch = stock_transfer_goods_item.get('batch')
 
             stock_transfer_goods_set.append(StockTransferGoods(
-                stock_transfer_order=stock_transfer_order, goods=goods, batch=batch,
-                stock_transfer_quantity=stock_transfer_quantity,
-                enable_batch_control=goods.enable_batch_control, team=self.team
+                stock_transfer_order=stock_transfer_order, goods=goods,
+                stock_transfer_quantity=stock_transfer_quantity, team=self.team
             ))
 
             total_stock_transfer_quantity = NP.plus(total_stock_transfer_quantity, stock_transfer_quantity)

@@ -55,6 +55,8 @@ class StockOutRecordSerializer(BaseSerializer):
         goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
         goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+        enable_batch_control = BooleanField(source='goods.enable_batch_control',
+                                            read_only=True, label='启用批次控制')
         batch_number = CharField(source='batch.number', read_only=True, label='批次编号')
 
         class Meta:
@@ -157,8 +159,7 @@ class StockOutRecordSerializer(BaseSerializer):
 
             stock_out_record_goods_set.append(StockOutRecordGoods(
                 stock_out_record=stock_out_record, stock_out_goods=stock_out_goods, goods=goods,
-                stock_out_quantity=stock_out_quantity, enable_batch_control=goods.enable_batch_control,
-                batch=batch, team=self.team
+                stock_out_quantity=stock_out_quantity, batch=batch, team=self.team
             ))
 
             total_stock_out_quantity = NP.plus(total_stock_out_quantity, stock_out_quantity)

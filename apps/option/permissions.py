@@ -16,12 +16,13 @@ AccountOptionPermission = BasePermission
 ChargeItemOptionPermission = BasePermission
 ClientCategoryOptionPermission = BasePermission
 SupplierCategoryOptionPermission = BasePermission
-GoodsCategoryOptionPermission = BasePermission
-GoodsUnitOptionPermission = BasePermission
 
 # Goods
+GoodsCategoryOptionPermission = BasePermission
+GoodsUnitOptionPermission = BasePermission
 GoodsOptionPermission = BasePermission
 BatchOptionPermission = BasePermission
+InventoryOptionPermission = BasePermission
 
 # Purchase
 PurchaseOrderOptionPermission = BasePermission
@@ -34,8 +35,8 @@ __all__ = [
     'RoleOptionPermission', 'UserOptionPermission',
     'WarehouseOptionPermission', 'ClientOptionPermission', 'SupplierOptionPermission', 'AccountOptionPermission',
     'ChargeItemOptionPermission', 'ClientCategoryOptionPermission', 'SupplierCategoryOptionPermission',
-    'GoodsCategoryOptionPermission', 'GoodsUnitOptionPermission',
-    'GoodsOptionPermission', 'BatchOptionPermission',
+    'GoodsCategoryOptionPermission', 'GoodsUnitOptionPermission', 'GoodsOptionPermission',
+    'BatchOptionPermission', 'InventoryOptionPermission',
     'PurchaseOrderOptionPermission',
     'SalesOrderOptionPermission',
 ]

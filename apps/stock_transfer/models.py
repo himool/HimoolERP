@@ -47,14 +47,11 @@ class StockTransferGoods(Model):
                                       related_name='stock_transfer_goods_set', verbose_name='采购单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
                        related_name='stock_transfer_goods_set', verbose_name='商品')
-    batch = ForeignKey('goods.Batch', on_delete=SET_NULL, null=True,
-                       related_name='stock_transfer_goods_set', verbose_name='批次')
     stock_transfer_quantity = FloatField(verbose_name='调拨数量')
-    enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_transfer_goods_set')
 
     class Meta:
-        unique_together = [('stock_transfer_order', 'goods', 'batch')]
+        unique_together = [('stock_transfer_order', 'goods')]
 
 
 __all__ = [

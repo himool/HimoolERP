@@ -105,6 +105,19 @@ class BatchOptionSerializer(ModelSerializer):
         fields = ['id', 'number', 'remain_quantity', 'unit_name', 'production_date', 'expiration_date']
 
 
+class InventoryOptionSerializer(ModelSerializer):
+    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+    goods_spec = CharField(source='goods.spec', read_only=True, label='商品规格')
+    unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+
+    class Meta:
+        model = Inventory
+        fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'goods_spec',
+                  'total_quantity', 'unit_name']
+
+
 # Purchase
 class PurchaseOrderOptionSerializer(ModelSerializer):
 
@@ -196,7 +209,7 @@ __all__ = [
     'SupplierCategoryOptionSerializer', 'SupplierOptionSerializer',
     'AccountOptionSerializer', 'ChargeItemOptionSerializer',
     'GoodsCategoryOptionSerializer', 'GoodsUnitOptionSerializer', 'GoodsOptionSerializer',
-    'BatchOptionSerializer',
+    'BatchOptionSerializer', 'InventoryOptionSerializer',
     'PurchaseOrderOptionSerializer',
     'SalesOrderOptionSerializer',
 ]

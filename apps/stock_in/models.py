@@ -53,7 +53,8 @@ class StockInGoods(Model):
 
     stock_in_order = ForeignKey('stock_in.StockInOrder', on_delete=CASCADE,
                                 related_name='stock_in_goods_set', verbose_name='入库单据')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_goods_set', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT,
+                       related_name='stock_in_goods_set', verbose_name='商品')
     stock_in_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
@@ -68,8 +69,10 @@ class StockInRecord(Model):
 
     stock_in_order = ForeignKey('stock_in.StockInOrder', on_delete=CASCADE,
                                 related_name='stock_in_records', verbose_name='入库单据')
-    warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT, related_name='stock_in_records', verbose_name='仓库')
-    handler = ForeignKey('system.User', on_delete=PROTECT, related_name='stock_in_records', verbose_name='经手人')
+    warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
+                           related_name='stock_in_records', verbose_name='仓库')
+    handler = ForeignKey('system.User', on_delete=PROTECT,
+                         related_name='stock_in_records', verbose_name='经手人')
     handle_time = DateTimeField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_quantity = FloatField(null=True, verbose_name='入库总数')
@@ -87,14 +90,11 @@ class StockInRecordGoods(Model):
                                  related_name='stock_in_record_goods_set', verbose_name='入库记录')
     stock_in_goods = ForeignKey('stock_in.StockInGoods', on_delete=CASCADE,
                                 related_name='stock_in_record_goods_set', verbose_name='入库商品')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='stock_in_record_goods_set', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT,
+                       related_name='stock_in_record_goods_set', verbose_name='商品')
     stock_in_quantity = FloatField(verbose_name='入库数量')
-    enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
-    production_date = DateField(null=True, verbose_name='生产日期')
-    shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
-    expiration_date = DateField(null=True, verbose_name='过期日期')
-    batch = OneToOneField('goods.Batch', on_delete=CASCADE, null=True,
-                          related_name='stock_in_record_goods', verbose_name='批次')
+    batch = ForeignKey('goods.Batch', on_delete=CASCADE, null=True,
+                       related_name='stock_in_record_goods_set', verbose_name='批次')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_in_record_goods_set')
 
     class Meta:

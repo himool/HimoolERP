@@ -57,13 +57,18 @@ class StockInRecordSerializer(BaseSerializer):
         goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
         goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+        enable_batch_control = BooleanField(source='goods.enable_batch_control',
+                                            read_only=True, label='启用批次控制')
         batch_number = CharField(source='batch.number', required=False, label='批次编号')
+        production_date = DateField(source='batch.production_date', required=False, label='生产日期')
+        shelf_life_days = IntegerField(source='batch.shelf_life_days', read_only=True, label='保质期天数')
+        expiration_date = DateField(source='batch.expiration_date', read_only=True, label='过期日期')
 
         class Meta:
             model = StockInRecordGoods
             read_only_fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'unit_name',
                                 'enable_batch_control', 'shelf_life_days', 'expiration_date']
-            fields = ['stock_in_goods', 'stock_in_quantity', 'production_date', 'batch_number',
+            fields = ['stock_in_goods', 'stock_in_quantity', 'batch_number', 'production_date',
                       *read_only_fields]
 
         def validate_stock_in_goods(self, instance):
@@ -148,7 +153,7 @@ class StockInRecordSerializer(BaseSerializer):
             expiration_date = None
             batch = None
             if goods.enable_batch_control:
-                production_date = stock_in_record_goods_item.get('production_date')
+                production_date = stock_in_record_goods_item['batch']['production_date']
                 if production_date and goods.shelf_life_days:
                     expiration_date = pendulum.parse(str(production_date)).add(days=goods.shelf_life_days)
 
@@ -169,9 +174,7 @@ class StockInRecordSerializer(BaseSerializer):
 
             stock_in_record_goods_set.append(StockInRecordGoods(
                 stock_in_record=stock_in_record, stock_in_goods=stock_in_goods, goods=goods,
-                stock_in_quantity=stock_in_quantity, enable_batch_control=goods.enable_batch_control,
-                production_date=production_date, shelf_life_days=goods.shelf_life_days,
-                expiration_date=expiration_date, batch=batch, team=self.team
+                stock_in_quantity=stock_in_quantity, batch=batch, team=self.team
             ))
 
             total_stock_in_quantity = NP.plus(total_stock_in_quantity, stock_in_quantity)

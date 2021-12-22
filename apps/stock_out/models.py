@@ -93,9 +93,8 @@ class StockOutRecordGoods(Model):
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
                        related_name='stock_out_record_goods_set', verbose_name='商品')
     stock_out_quantity = FloatField(verbose_name='出库数量')
-    enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
-    batch = OneToOneField('goods.Batch', on_delete=CASCADE, null=True,
-                          related_name='stock_out_record_goods', verbose_name='批次')
+    batch = ForeignKey('goods.Batch', on_delete=CASCADE, null=True,
+                       related_name='stock_out_record_goods_set', verbose_name='批次')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_out_record_goods_set')
 
     class Meta:
