@@ -1,6 +1,14 @@
 from extensions.permissions import ModelPermission
 
 
-__all__ = [
+class InventoryFlowPermission(ModelPermission):
+    code = 'inventory_flow'
 
+
+class FinanceFlowPermission(ModelPermission):
+    code = 'finance_flow'
+
+
+__all__ = [
+    'InventoryFlowPermission', 'FinanceFlowPermission',
 ]
