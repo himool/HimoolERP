@@ -62,7 +62,8 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             ))
 
             inventory.total_quantity = quantity_after
-            inventory.save(update_fields=['total_quantity'])
+            inventory.has_stock = inventory.total_quantity > 0
+            inventory.save(update_fields=['total_quantity', 'has_stock'])
 
             # 同步批次
             if batch := stock_out_record_goods.batch:
@@ -111,7 +112,8 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             ))
 
             inventory.total_quantity = quantity_after
-            inventory.save(update_fields=['total_quantity'])
+            inventory.has_stock = inventory.total_quantity > 0
+            inventory.save(update_fields=['total_quantity', 'has_stock'])
 
             # 同步批次
             if batch := stock_out_record_goods.batch:

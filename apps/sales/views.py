@@ -50,7 +50,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
@@ -140,7 +141,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
@@ -221,7 +223,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
@@ -311,7 +314,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
 
                 # 同步采购商品退货数量
                 if sales_goods := sales_return_goods.sales_goods:

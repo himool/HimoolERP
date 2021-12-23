@@ -74,7 +74,8 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
                 # 创建出库商品
                 stock_out_goods_set.append(StockOutGoods(
@@ -99,7 +100,8 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
                 # 创建入库商品
                 stock_in_goods_set.append(StockInGoods(
@@ -152,7 +154,8 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
         else:
             # 作废出库单据
             stock_out_order = stock_transfer_order.stock_out_order
@@ -180,7 +183,8 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 ))
 
                 inventory.total_quantity = quantity_after
-                inventory.save(update_fields=['total_quantity'])
+                inventory.has_stock = inventory.total_quantity > 0
+                inventory.save(update_fields=['total_quantity', 'has_stock'])
         else:
             # 作废入库单据
             stock_in_order = stock_transfer_order.stock_in_order
