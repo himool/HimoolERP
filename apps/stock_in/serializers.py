@@ -163,7 +163,8 @@ class StockInRecordSerializer(BaseSerializer):
                                                  goods=goods, team=self.team).first():
                     batch.total_quantity = NP.plus(batch.total_quantity, stock_in_quantity)
                     batch.remain_quantity = NP.plus(batch.remain_quantity, stock_in_quantity)
-                    batch.save(update_fields=['total_quantity', 'remain_quantity'])
+                    batch.has_stock = batch.remain_quantity > 0
+                    batch.save(update_fields=['total_quantity', 'remain_quantity', 'has_stock'])
                 else:
                     batch = Batch.objects.create(
                         number=batch_number, warehouse=stock_in_record.warehouse, goods=goods,

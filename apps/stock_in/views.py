@@ -74,7 +74,8 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             stock_in_order = stock_in_record.stock_in_order
             stock_in_order.remain_quantity = NP.minus(stock_in_order.remain_quantity,
                                                       stock_in_record.total_quantity)
-            stock_in_order.save(update_fields=['remain_quantity'])
+            stock_in_order.is_completed = stock_in_order.remain_quantity == 0
+            stock_in_order.save(update_fields=['remain_quantity', 'is_completed'])
 
     @transaction.atomic
     @extend_schema(request=None, responses={200: StockInRecordSerializer})
@@ -114,7 +115,8 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             if batch := stock_in_record_goods.batch:
                 batch.total_quantity = NP.minus(batch.total_quantity, stock_in_record_goods.stock_in_quantity)
                 batch.remain_quantity = NP.minus(batch.remain_quantity, stock_in_record_goods.stock_in_quantity)
-                batch.save(update_fields=['total_quantity', 'remain_quantity'])
+                batch.has_stock = batch.remain_quantity > 0
+                batch.save(update_fields=['total_quantity', 'remain_quantity', 'has_stock'])
 
             # 同步入库商品
             stock_in_goods = stock_in_record_goods.stock_in_goods
@@ -125,7 +127,8 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             stock_in_order = stock_in_record.stock_in_order
             stock_in_order.remain_quantity = NP.plus(stock_in_order.remain_quantity,
                                                      stock_in_record.total_quantity)
-            stock_in_order.save(update_fields=['remain_quantity'])
+            stock_in_order.is_completed = stock_in_order.remain_quantity == 0
+            stock_in_order.save(update_fields=['remain_quantity', 'is_completed'])
 
         serializer = StockInRecordSerializer(instance=stock_in_record)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

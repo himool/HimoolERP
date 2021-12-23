@@ -68,7 +68,8 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             # 同步批次
             if batch := stock_out_record_goods.batch:
                 batch.remain_quantity = NP.minus(batch.remain_quantity, quantity_change)
-                batch.save(update_fields=['remain_quantity'])
+                batch.has_stock = batch.remain_quantity > 0
+                batch.save(update_fields=['remain_quantity', 'has_stock'])
 
             # 同步出库商品
             stock_out_goods = stock_out_record_goods.stock_out_goods
@@ -79,7 +80,8 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             stock_out_order = stock_out_record.stock_out_order
             stock_out_order.remain_quantity = NP.minus(stock_out_order.remain_quantity,
                                                        stock_out_record.total_quantity)
-            stock_out_order.save(update_fields=['remain_quantity'])
+            stock_out_order.is_completed = stock_out_order.remain_quantity == 0
+            stock_out_order.save(update_fields=['remain_quantity', 'is_completed'])
 
     @transaction.atomic
     @extend_schema(request=None, responses={200: StockOutRecordSerializer})
@@ -119,7 +121,8 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             if batch := stock_out_record_goods.batch:
                 batch.total_quantity = NP.minus(batch.total_quantity, stock_out_record_goods.stock_out_quantity)
                 batch.remain_quantity = NP.minus(batch.remain_quantity, stock_out_record_goods.stock_out_quantity)
-                batch.save(update_fields=['total_quantity', 'remain_quantity'])
+                batch.has_stock = batch.remain_quantity > 0
+                batch.save(update_fields=['total_quantity', 'remain_quantity', 'has_stock'])
 
             # 同步出库商品
             stock_out_goods = stock_out_record_goods.stock_out_goods
@@ -130,7 +133,8 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
             stock_out_order = stock_out_record.stock_out_order
             stock_out_order.remain_quantity = NP.plus(stock_out_order.remain_quantity,
                                                       stock_out_record.total_quantity)
-            stock_out_order.save(update_fields=['remain_quantity'])
+            stock_out_order.is_completed = stock_out_order.remain_quantity == 0
+            stock_out_order.save(update_fields=['remain_quantity', 'is_completed'])
 
         serializer = StockOutRecordSerializer(instance=stock_out_record)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
