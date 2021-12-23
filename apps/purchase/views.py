@@ -79,7 +79,8 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         # 同步欠款
         supplier = purchase_order.supplier
         supplier.arrears_amount = NP.plus(supplier.arrears_amount, purchase_order.arrears_amount)
-        supplier.save(update_fields=['arrears_amount'])
+        supplier.has_arrears = supplier.arrears_amount > 0
+        supplier.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if purchase_order.payment_amount > 0:
@@ -97,7 +98,8 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -157,7 +159,8 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         # 同步欠款
         supplier = purchase_order.supplier
         supplier.arrears_amount = NP.minus(supplier.arrears_amount, purchase_order.arrears_amount)
-        supplier.save(update_fields=['arrears_amount'])
+        supplier.has_arrears = supplier.arrears_amount > 0
+        supplier.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if purchase_order.payment_amount > 0:
@@ -175,7 +178,8 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -247,7 +251,8 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
         # 同步欠款
         supplier = purchase_return_order.supplier
         supplier.arrears_amount = NP.minus(supplier.arrears_amount, purchase_return_order.arrears_amount)
-        supplier.save(update_fields=['arrears_amount'])
+        supplier.has_arrears = supplier.arrears_amount > 0
+        supplier.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if purchase_return_order.collection_amount > 0:
@@ -265,7 +270,8 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -331,7 +337,8 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
         # 同步欠款
         supplier = purchase_return_order.supplier
         supplier.arrears_amount = NP.plus(supplier.arrears_amount, purchase_return_order.arrears_amount)
-        supplier.save(update_fields=['arrears_amount'])
+        supplier.has_arrears = supplier.arrears_amount > 0
+        supplier.save(update_fields=['arrears_amount', 'has_arrears'])
 
         if purchase_return_order.collection_amount > 0:
             # 同步账户, 流水
@@ -349,7 +356,8 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 

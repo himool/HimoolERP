@@ -79,7 +79,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         # 同步欠款
         client = sales_order.client
         client.arrears_amount = NP.plus(client.arrears_amount, client.arrears_amount)
-        client.save(update_fields=['arrears_amount'])
+        client.has_arrears = client.arrears_amount > 0
+        client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if collection_order := sales_order.collection_order:
@@ -97,7 +98,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -157,7 +159,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         # 同步欠款
         client = sales_order.client
         client.arrears_amount = NP.minus(client.arrears_amount, sales_order.arrears_amount)
-        client.save(update_fields=['arrears_amount'])
+        client.has_arrears = client.arrears_amount > 0
+        client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if collection_order := sales_order.collection_order:
@@ -179,7 +182,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -252,7 +256,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
         # 同步欠款
         client = sales_return_order.client
         client.arrears_amount = NP.minus(client.arrears_amount, sales_return_order.arrears_amount)
-        client.save(update_fields=['arrears_amount'])
+        client.has_arrears = client.arrears_amount > 0
+        client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if sales_return_order.payment_amount > 0:
@@ -270,7 +275,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -336,7 +342,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
         # 同步欠款
         client = sales_return_order.client
         client.arrears_amount = NP.plus(client.arrears_amount, sales_return_order.arrears_amount)
-        client.save(update_fields=['arrears_amount'])
+        client.has_arrears = client.arrears_amount > 0
+        client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
         if sales_return_order.payment_amount > 0:
@@ -354,7 +361,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
                 ))
 
                 account.balance_amount = amount_after
-                account.save(update_fields=['balance_amount'])
+                account.has_balance = account.balance_amount > 0
+                account.save(update_fields=['balance_amount', 'has_balance'])
             else:
                 FinanceFlow.objects.bulk_create(finance_flows)
 

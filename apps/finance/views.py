@@ -30,7 +30,8 @@ class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Creat
         # 同步欠款
         supplier = payment_order.supplier
         supplier.arrears_amount = NP.minus(supplier.arrears_amount, payment_order.total_amount)
-        supplier.save(update_fields=['arrears_amount'])
+        supplier.has_arrears = supplier.arrears_amount > 0
+        supplier.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步余额, 流水
         finance_flows = []
@@ -47,7 +48,8 @@ class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Creat
             ))
 
             account.balance_amount = amount_after
-            account.save(update_fields=['balance_amount'])
+            account.has_balance = account.balance_amount > 0
+            account.save(update_fields=['balance_amount', 'has_balance'])
         else:
             FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -72,7 +74,8 @@ class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Creat
         # 同步欠款
         supplier = payment_order.supplier
         supplier.arrears_amount = NP.plus(supplier.arrears_amount, payment_order.total_amount)
-        supplier.save(update_fields=['arrears_amount'])
+        supplier.has_arrears = supplier.arrears_amount > 0
+        supplier.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步余额, 流水
         finance_flows = []
@@ -89,7 +92,8 @@ class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Creat
             ))
 
             account.balance_amount = amount_after
-            account.save(update_fields=['balance_amount'])
+            account.has_balance = account.balance_amount > 0
+            account.save(update_fields=['balance_amount', 'has_balance'])
         else:
             FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -116,7 +120,8 @@ class CollectionOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
         # 同步欠款
         client = collection_order.client
         client.arrears_amount = NP.minus(client.arrears_amount, collection_order.total_amount)
-        client.save(update_fields=['arrears_amount'])
+        client.has_arrears = client.arrears_amount > 0
+        client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步余额, 流水
         finance_flows = []
@@ -133,7 +138,8 @@ class CollectionOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
             ))
 
             account.balance_amount = amount_after
-            account.save(update_fields=['balance_amount'])
+            account.has_balance = account.balance_amount > 0
+            account.save(update_fields=['balance_amount', 'has_balance'])
         else:
             FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -158,7 +164,8 @@ class CollectionOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
         # 同步欠款
         client = collection_order.client
         client.arrears_amount = NP.plus(client.arrears_amount, collection_order.total_amount)
-        client.save(update_fields=['arrears_amount'])
+        client.has_arrears = client.arrears_amount > 0
+        client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步余额, 流水
         finance_flows = []
@@ -175,7 +182,8 @@ class CollectionOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
             ))
 
             account.balance_amount = amount_after
-            account.save(update_fields=['balance_amount'])
+            account.has_balance = account.balance_amount > 0
+            account.save(update_fields=['balance_amount', 'has_balance'])
         else:
             FinanceFlow.objects.bulk_create(finance_flows)
 
@@ -208,20 +216,24 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
             # 同步欠款
             if supplier := charge_order.supplier:
                 supplier.arrears_amount = NP.minus(supplier.arrears_amount, arrears_amount)
-                supplier.save(update_fields=['arrears_amount'])
+                supplier.has_arrears = supplier.arrears_amount > 0
+                supplier.save(update_fields=['arrears_amount', 'has_arrears'])
             elif client := charge_order.client:
                 client.arrears_amount = NP.plus(client.arrears_amount, arrears_amount)
-                client.save(update_fields=['arrears_amount'])
+                client.has_arrears = client.arrears_amount > 0
+                client.save(update_fields=['arrears_amount', 'has_arrears'])
         elif charge_order.type == ChargeOrder.Type.EXPENDITURE:
             amount_change = -charge_order.charge_amount
 
             # 同步欠款
             if supplier := charge_order.supplier:
                 supplier.arrears_amount = NP.plus(supplier.arrears_amount, arrears_amount)
-                supplier.save(update_fields=['arrears_amount'])
+                supplier.has_arrears = supplier.arrears_amount > 0
+                supplier.save(update_fields=['arrears_amount', 'has_arrears'])
             elif client := charge_order.client:
                 client.arrears_amount = NP.minus(client.arrears_amount, arrears_amount)
-                client.save(update_fields=['arrears_amount'])
+                client.has_arrears = client.arrears_amount > 0
+                client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         amount_after = NP.plus(amount_before, amount_change)
         FinanceFlow.objects.create(
@@ -231,7 +243,8 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         )
 
         account.balance_amount = amount_after
-        account.save(update_fields=['balance_amount'])
+        account.has_balance = account.balance_amount > 0
+        account.save(update_fields=['balance_amount', 'has_balance'])
 
     @extend_schema(responses={200: NumberResponse})
     @action(detail=False, methods=['get'])
@@ -258,20 +271,24 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
             # 同步欠款
             if supplier := charge_order.supplier:
                 supplier.arrears_amount = NP.plus(supplier.arrears_amount, arrears_amount)
-                supplier.save(update_fields=['arrears_amount'])
+                supplier.has_arrears = supplier.arrears_amount > 0
+                supplier.save(update_fields=['arrears_amount', 'has_arrears'])
             elif client := charge_order.client:
                 client.arrears_amount = NP.minus(client.arrears_amount, arrears_amount)
-                client.save(update_fields=['arrears_amount'])
+                client.has_arrears = client.arrears_amount > 0
+                client.save(update_fields=['arrears_amount', 'has_arrears'])
         elif charge_order.type == ChargeOrder.Type.EXPENDITURE:
             amount_change = -charge_order.charge_amount
 
             # 同步欠款
             if supplier := charge_order.supplier:
                 supplier.arrears_amount = NP.minus(supplier.arrears_amount, arrears_amount)
-                supplier.save(update_fields=['arrears_amount'])
+                supplier.has_arrears = supplier.arrears_amount > 0
+                supplier.save(update_fields=['arrears_amount', 'has_arrears'])
             elif client := charge_order.client:
                 client.arrears_amount = NP.plus(client.arrears_amount, arrears_amount)
-                client.save(update_fields=['arrears_amount'])
+                client.has_arrears = client.arrears_amount > 0
+                client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         amount_after = NP.minus(amount_before, amount_change)
         FinanceFlow.objects.create(
@@ -281,7 +298,8 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         )
 
         account.balance_amount = amount_after
-        account.save(update_fields=['balance_amount'])
+        account.has_balance = account.balance_amount > 0
+        account.save(update_fields=['balance_amount', 'has_balance'])
 
         serializer = ChargeOrderPermission(instance=charge_order)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -328,7 +346,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         out_account.balance_amount = amount_after
-        out_account.save(update_fields=['balance_amount'])
+        out_account.has_balance = out_account.balance_amount > 0
+        out_account.save(update_fields=['balance_amount', 'has_balance'])
 
         amount_before = in_account.balance_amount
         amount_change = transfer_in_amount
@@ -340,7 +359,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         in_account.balance_amount = amount_after
-        in_account.save(update_fields=['balance_amount'])
+        in_account.has_balance = in_account.balance_amount > 0
+        in_account.save(update_fields=['balance_amount', 'has_balance'])
 
     @transaction.atomic
     @extend_schema(request=None, responses={200: AccountTransferRecordSerializer})
@@ -375,7 +395,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         out_account.balance_amount = amount_after
-        out_account.save(update_fields=['balance_amount'])
+        out_account.has_balance = out_account.balance_amount > 0
+        out_account.save(update_fields=['balance_amount', 'has_balance'])
 
         amount_before = in_account.balance_amount
         amount_change = transfer_in_amount
@@ -387,7 +408,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         in_account.balance_amount = amount_after
-        in_account.save(update_fields=['balance_amount'])
+        in_account.has_balance = in_account.balance_amount > 0
+        in_account.save(update_fields=['balance_amount', 'has_balance'])
 
         serializer = AccountTransferRecordSerializer(instance=account_transfer_record)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
