@@ -161,7 +161,7 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
 
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated, ClientPermission]
-    filterset_fields = ['level', 'category', 'has_arrears', 'is_active']
+    filterset_fields = ['level', 'category', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']
@@ -274,7 +274,7 @@ class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
 
     serializer_class = SupplierSerializer
     permission_classes = [IsAuthenticated, SupplierPermission]
-    filterset_fields = ['category', 'has_arrears', 'is_active']
+    filterset_fields = ['category', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']

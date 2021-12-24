@@ -202,6 +202,26 @@ class SalesOrderOptionSerializer(ModelSerializer):
                   'creator_name', 'create_time', 'sales_goods_items', 'sales_account_items']
 
 
+# Finance
+class ClientArrearsOptionSerializer(BaseSerializer):
+    category_name = CharField(source='category.name', read_only=True, label='分类名称')
+
+    class Meta:
+        model = Client
+        fields = ['id', 'number', 'name', 'category', 'category_name', 'contact', 'phone', 'email',
+                  'address', 'remark',  'is_active', 'arrears_amount', 'has_arrears']
+
+
+class SupplierArrearsOptionSerializer(BaseSerializer):
+    category_name = CharField(source='category.name', read_only=True, label='分类名称')
+
+    class Meta:
+        model = Supplier
+        fields = ['id', 'number', 'name', 'category', 'category_name', 'contact', 'phone', 'email',
+                  'address', 'remark', 'is_active', 'arrears_amount', 'has_arrears']
+
+
+
 __all__ = [
     'RoleOptionSerializer', 'UserOptionSerializer',
     'WarehouseOptionSerializer',
@@ -212,4 +232,5 @@ __all__ = [
     'BatchOptionSerializer', 'InventoryOptionSerializer',
     'PurchaseOrderOptionSerializer',
     'SalesOrderOptionSerializer',
+    'ClientArrearsOptionSerializer', 'SupplierArrearsOptionSerializer',
 ]

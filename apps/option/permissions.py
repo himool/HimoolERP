@@ -30,6 +30,10 @@ PurchaseOrderOptionPermission = BasePermission
 # Sales
 SalesOrderOptionPermission = BasePermission
 
+# Finance
+ClientArrearsOptionPermission = BasePermission
+SupplierArrearsOptionPermission = BasePermission
+
 
 __all__ = [
     'RoleOptionPermission', 'UserOptionPermission',
@@ -39,4 +43,5 @@ __all__ = [
     'BatchOptionPermission', 'InventoryOptionPermission',
     'PurchaseOrderOptionPermission',
     'SalesOrderOptionPermission',
+    'ClientArrearsOptionPermission', 'SupplierArrearsOptionPermission',
 ]

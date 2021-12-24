@@ -107,7 +107,7 @@ class ClientSerializer(BaseSerializer):
 
     class Meta:
         model = Client
-        read_only_fields = ['id', 'level_display', 'category_name', 'arrears_amount', 'has_arrears']
+        read_only_fields = ['id', 'level_display', 'category_name']
         fields = ['number', 'name', 'level', 'category', 'contact', 'phone', 'email', 'address',
                   'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
@@ -221,7 +221,7 @@ class SupplierSerializer(BaseSerializer):
 
     class Meta:
         model = Supplier
-        read_only_fields = ['id', 'category_name', 'arrears_amount', 'has_arrears']
+        read_only_fields = ['id', 'category_name']
         fields = ['number', 'name', 'category', 'contact', 'phone', 'email', 'address', 'bank_account',
                   'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 

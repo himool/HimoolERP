@@ -165,6 +165,29 @@ class SalesOrderOptionViewSet(LimitedOptionViewSet):
     queryset = SalesOrder.objects.all()
 
 
+# Finance
+class ClientArrearsOptionViewSet(InfiniteOptionViewSet):
+    serializer_class = ClientArrearsOptionSerializer
+    permission_classes = [IsAuthenticated, ClientArrearsOptionPermission]
+    filterset_fields = ['category', 'level', 'is_active', 'has_arrears']
+    search_fields = ['number', 'name', 'contact', 'remark']
+    ordering_fields = ['id', 'number', 'name', 'order', 'arrears_amount']
+    ordering = ['order', 'id']
+    select_related_fields = ['category']
+    queryset = Client.objects.all()
+
+
+class SupplierArrearsOptionViewSet(InfiniteOptionViewSet):
+    serializer_class = SupplierArrearsOptionSerializer
+    permission_classes = [IsAuthenticated, SupplierArrearsOptionPermission]
+    filterset_fields = ['category', 'is_active', 'has_arrears']
+    search_fields = ['number', 'name', 'contact', 'remark']
+    ordering_fields = ['id', 'number', 'name', 'order', 'arrears_amount']
+    ordering = ['order', 'id']
+    select_related_fields = ['category']
+    queryset = Supplier.objects.all()
+
+
 __all__ = [
     'RoleOptionViewSet', 'UserOptionViewSet',
     'WarehouseOptionViewSet',
@@ -175,4 +198,5 @@ __all__ = [
     'BatchOptionViewSet', 'InventoryOptionViewSet',
     'PurchaseOrderOptionViewSet',
     'SalesOrderOptionViewSet',
+    'ClientArrearsOptionViewSet', 'SupplierArrearsOptionViewSet',
 ]

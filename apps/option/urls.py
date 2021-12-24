@@ -31,4 +31,8 @@ router.register('purchase_orders/options', PurchaseOrderOptionViewSet, 'purchase
 # Sales
 router.register('sales_orders/options', SalesOrderOptionViewSet, 'sales_order_option')
 
+# Finance
+router.register('client_arrears/options', ClientArrearsOptionViewSet, 'client_arrear_option')
+router.register('supplier_arrears/options', SupplierArrearsOptionViewSet, 'supplier_arrear_option')
+
 urlpatterns = router.urls

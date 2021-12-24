@@ -9,6 +9,33 @@ from apps.finance.filters import *
 from apps.finance.schemas import *
 from apps.finance.models import *
 from apps.flow.models import *
+from apps.data.models import *
+
+
+class ClientArrearsViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
+    """应收欠款"""
+
+    serializer_class = ClientArrearsSerializer
+    permission_classes = [IsAuthenticated, ClientArrearsPermission]
+    filterset_fields = ['category', 'level', 'is_active', 'has_arrears']
+    search_fields = ['number', 'name', 'contact', 'remark']
+    ordering_fields = ['id', 'number', 'name', 'order', 'initial_arrears_amount', 'arrears_amount']
+    ordering = ['order', 'id']
+    select_related_fields = ['category']
+    queryset = Client.objects.all()
+
+
+class SupplierArrearsViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
+    """应付欠款"""
+
+    serializer_class = SupplierArrearsSerializer
+    permission_classes = [IsAuthenticated, SupplierArrearsPermission]
+    filterset_fields = ['category', 'is_active', 'has_arrears']
+    search_fields = ['number', 'name', 'contact', 'remark']
+    ordering_fields = ['id', 'number', 'name', 'order', 'initial_arrears_amount', 'arrears_amount']
+    ordering = ['order', 'id']
+    select_related_fields = ['category']
+    queryset = Supplier.objects.all()
 
 
 class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin):
@@ -416,6 +443,7 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
 
 
 __all__ = [
+    'ClientArrearsViewSet', 'SupplierArrearsViewSet',
     'PaymentOrderViewSet', 'CollectionOrderViewSet',
     'ChargeOrderViewSet', 'AccountTransferRecordViewSet',
 ]

@@ -6,6 +6,31 @@ from apps.data.models import *
 from apps.system.models import *
 
 
+class ClientArrearsSerializer(BaseSerializer):
+    """应收欠款"""
+
+    level_display = CharField(source='get_level_display', read_only=True, label='等级')
+    category_name = CharField(source='category.name', read_only=True, label='分类名称')
+
+    class Meta:
+        model = Client
+        fields = ['id', 'number', 'name', 'level', 'level_display', 'category', 'category_name',
+                  'contact', 'phone', 'email', 'address', 'remark', 'order', 'is_active',
+                  'initial_arrears_amount', 'arrears_amount', 'has_arrears']
+
+
+class SupplierArrearsSerializer(BaseSerializer):
+    """应付欠款"""
+
+    category_name = CharField(source='category.name', read_only=True, label='分类名称')
+
+    class Meta:
+        model = Supplier
+        fields = ['id', 'number', 'name', 'category', 'category_name', 'contact', 'phone', 'email',
+                  'address', 'bank_account', 'bank_name', 'remark', 'order', 'is_active',
+                  'initial_arrears_amount', 'arrears_amount', 'has_arrears']
+
+
 class PaymentOrderSerializer(BaseSerializer):
     """付款单据"""
 
@@ -226,10 +251,10 @@ class ChargeOrderSerializer(BaseSerializer):
         client = attrs.get('client')
         if (supplier and client) or not (supplier or client):
             raise ValidationError('供应商或客户选择重复')
-        
+
         if attrs['type'] != attrs['charge_item'].type:
             raise ValidationError('收支类型与收支项目不匹配')
-        
+
         if attrs['charge_amount'] > attrs['total_amount']:
             raise ValidationError('实收/付金额大于应收/付金额')
         return super().validate(attrs)
@@ -292,6 +317,7 @@ class AccountTransferRecordSerializer(BaseSerializer):
 
 
 __all__ = [
+    'ClientArrearsSerializer', 'SupplierArrearsSerializer',
     'PaymentOrderSerializer', 'CollectionOrderSerializer',
     'ChargeOrderSerializer', 'AccountTransferRecordSerializer',
 ]
