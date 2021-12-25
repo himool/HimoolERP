@@ -7,6 +7,7 @@ def run():
     create_nginx_config()
     create_django_config()
     create_gunicorn_config()
+    create_supervisor_config()
 
 
 def create_nginx_config():
@@ -120,6 +121,19 @@ import multiprocessing
 bind = '{bind_address}'
 workers = multiprocessing.cpu_count() * 2 + 1
 reload = True
+""")
+
+
+def create_supervisor_config():
+    is_need_create = input('是否需要创建 Supervisor 配置文件吗? (y/n)\n')
+    if is_need_create == 'y':
+        with open('configs/supervisor.conf', 'w') as file:
+            file.write(f"""\
+[program:django]
+command=gunicorn project.asgi:application -c f{BASE_DIR}/configs/gunicorn.py -k uvicorn.workers.UvicornWorker
+directory=f{BASE_DIR}
+autostart=true
+autorestart=true
 """)
 
 
