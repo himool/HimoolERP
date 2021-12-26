@@ -1,4 +1,4 @@
-from apps.goods.models import Batch
+from apps.goods.models import Batch, Inventory
 from extensions.common.base import *
 from extensions.serializers import *
 from extensions.exceptions import *
@@ -164,9 +164,11 @@ class StockInRecordSerializer(BaseSerializer):
                     batch.has_stock = batch.remain_quantity > 0
                     batch.save(update_fields=['total_quantity', 'remain_quantity', 'has_stock'])
                 else:
+                    inventory = Inventory.objects.get(warehouse=stock_in_record.warehouse,
+                                                      goods=goods, team=self.team)
                     batch = Batch.objects.create(
-                        number=batch_number, warehouse=stock_in_record.warehouse, goods=goods,
-                        total_quantity=stock_in_quantity, remain_quantity=stock_in_quantity,
+                        number=batch_number, inventory=inventory, warehouse=stock_in_record.warehouse,
+                        goods=goods, total_quantity=stock_in_quantity, remain_quantity=stock_in_quantity,
                         production_date=production_date, shelf_life_days=goods.shelf_life_days,
                         expiration_date=expiration_date, team=self.team
                     )
