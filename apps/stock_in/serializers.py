@@ -153,6 +153,7 @@ class StockInRecordSerializer(BaseSerializer):
                 production_date = stock_in_record_goods_item['batch']['production_date']
                 if production_date and goods.shelf_life_days:
                     expiration_date = pendulum.parse(str(production_date)).add(days=goods.shelf_life_days)
+                    expiration_date = expiration_date.to_date_string()
 
                 # 同步批次
                 batch_number = stock_in_record_goods_item['batch']['number']
