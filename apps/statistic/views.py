@@ -10,6 +10,7 @@ from apps.statistic.filters import *
 from apps.statistic.schemas import *
 from apps.statistic.models import *
 from apps.purchase.models import *
+from apps.sales.models import *
 
 
 class PurchaseReportViewSet(BaseViewSet):
@@ -43,7 +44,8 @@ class PurchaseReportViewSet(BaseViewSet):
 
         queryset = self.filter_queryset(self.get_queryset())
         queryset = queryset.select_related('goods', 'goods__category', 'goods__unit', 'purchase_order',
-                                           'purchase_order__supplier')
+                                           'purchase_order__warehouse', 'purchase_order__supplier',
+                                           'purchase_order__creator')
         queryset = self.paginate_queryset(queryset)
 
         serializer = PurchaseReportDetialSerializer(instance=queryset, many=True)
@@ -71,6 +73,66 @@ class PurchaseReportViewSet(BaseViewSet):
         return self.get_paginated_response(queryset)
 
 
+class SalesReportViewSet(BaseViewSet):
+    """销售报表"""
+
+    permission_classes = [IsAuthenticated, SalesReportPermission]
+    filterset_class = SalesReportFilter
+    search_fields = ['goods__number', 'goods__name']
+    queryset = SalesGoods.objects.all()
+
+    @extend_schema(parameters=[SalesReportParameter],
+                   responses={200: SalesReportStatisticResponse})
+    @action(detail=False, methods=['get'])
+    def statistics(self, request, *args, **kwargs):
+        """统计"""
+
+        queryset = self.filter_queryset(self.get_queryset())
+        result = queryset.aggregate(
+            total_count=Count('sales_order', distinct=True),
+            total_quantity=Coalesce(Sum('sales_quantity'), Value(0.0)),
+            total_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField()))
+        )
+
+        return Response(data=result, status=status.HTTP_200_OK)
+
+    @extend_schema(parameters=[SalesReportParameter],
+                   responses={200: SalesReportDetialSerializer})
+    @action(detail=False, methods=['get'])
+    def detials(self, request, *args, **kwargs):
+        """明细"""
+
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.select_related('goods', 'goods__category', 'goods__unit', 'sales_order',
+                                           'sales_order__warehouse', 'sales_order__supplier',
+                                           'sales_order__creator')
+        queryset = self.paginate_queryset(queryset)
+
+        serializer = SalesReportDetialSerializer(instance=queryset, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    @extend_schema(parameters=[SalesReportParameter],
+                   responses={200: SalesReportGroupByGoodsResponse})
+    @action(detail=False, methods=['get'])
+    def group_by_goods(self, request, *args, **kwargs):
+        """商品汇总"""
+
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.select_related('goods', 'goods__category', 'goods__unit')
+        queryset = queryset.values('goods').annotate(
+            goods_number=F('goods__number'), goods_name=F('goods__name'),
+            goods_barcode=F('goods__barcode'), goods_spec=F('goods__spec'),
+            category_name=F('goods__category__name'), unit_name=F('goods__unit__name'),
+            total_sales_quantity=Coalesce(Sum('sales_quantity'), Value(0.0)),
+            total_sales_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())),
+            min_sales_price=Min('sales_price'), avg_sales_price=Avg('sales_price'),
+            max_sales_price=Max('sales_price')
+        )
+        queryset = self.paginate_queryset(queryset)
+
+        return self.get_paginated_response(queryset)
+
+
 __all__ = [
-    'PurchaseReportViewSet',
+    'PurchaseReportViewSet', 'SalesReportViewSet',
 ]
