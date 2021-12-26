@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.flow',
     'apps.finance',
     'apps.statistic',
+    'apps.message',
     'apps.option',
 ]
 

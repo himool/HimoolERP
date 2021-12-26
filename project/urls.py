@@ -43,5 +43,6 @@ urlpatterns = [
     path('api/', include('apps.flow.urls')),
     path('api/', include('apps.finance.urls')),
     path('api/', include('apps.statistic.urls')),
+    path('api/', include('apps.message.urls')),
     path('api/', include('apps.option.urls')),
 ]

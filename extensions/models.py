@@ -1,9 +1,9 @@
 from django.db.models import CharField, DateField, DateTimeField, JSONField, FileField, ImageField
 from django.db.models import BooleanField, IntegerField, FloatField, DecimalField
+from django.db.models import Sum, Count, Min, Avg, Max, Value, F, Q, Prefetch
 from django.db.models.deletion import CASCADE, SET_NULL, SET_DEFAULT, PROTECT
 from django.db.models import OneToOneField, ForeignKey, ManyToManyField
 from django.db.models import Model, IntegerChoices, TextChoices
-from django.db.models import Sum, Count, Value, F, Q, Prefetch
 from django.db.models.functions import Coalesce
 from django.db import connection
 
@@ -22,5 +22,6 @@ __all__ = [
     'OneToOneField', 'ForeignKey', 'ManyToManyField',
     'BooleanField', 'IntegerField', 'FloatField', 'AmountField',
     'CharField', 'DateField', 'DateTimeField', 'JSONField', 'FileField', 'ImageField',
-    'Sum', 'Count', 'Value', 'F', 'Q', 'Prefetch', 'Coalesce', 'connection',
+    'Sum', 'Count', 'Min', 'Avg', 'Max', 'Value', 
+    'F', 'Q', 'Prefetch', 'Coalesce', 'connection',
 ]

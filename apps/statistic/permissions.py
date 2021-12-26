@@ -1,6 +1,14 @@
 from extensions.permissions import ModelPermission
 
 
-__all__ = [
+class PurchaseReportPermission(ModelPermission):
+    code = 'purchase_report'
 
+
+class SalesReportPermission(ModelPermission):
+    code = 'sales_report'
+
+
+__all__ = [
+    'PurchaseReportPermission', 'SalesReportPermission',
 ]
