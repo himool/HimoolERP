@@ -83,18 +83,18 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
-        if collection_order := sales_order.collection_order:
+        if sales_order.collection_amount > 0:
             finance_flows = []
-            for collection_account in collection_order.collection_accounts.all():
-                account = collection_account.account
+            for sales_account in sales_order.sales_accounts.all():
+                account = sales_account.account
                 amount_before = account.balance_amount
-                amount_change = collection_account.collection_amount
+                amount_change = sales_account.collection_amount
                 amount_after = NP.plus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=account, type=FinanceFlow.Type.COLLECTION, amount_before=amount_before,
-                    amount_change=amount_change, amount_after=amount_after,
-                    collection_order=collection_order, creator=self.user, team=self.team
+                    account=account, type=FinanceFlow.Type.SALES, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after, sales_order=sales_order,
+                    creator=self.user, team=self.team
                 ))
 
                 account.balance_amount = amount_after
@@ -163,22 +163,18 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
-        if collection_order := sales_order.collection_order:
-            # 作废收款单据
-            collection_order.is_void = True
-            collection_order.save(update_fields=['is_void'])
-
+        if sales_order.payment_amount > 0:
             finance_flows = []
-            for collection_account in collection_order.collection_accounts.all():
-                account = collection_account.account
+            for sales_account in sales_order.sales_accounts.all():
+                account = sales_account.account
                 amount_before = account.balance_amount
-                amount_change = collection_account.collection_amount
+                amount_change = sales_account.collection_amount
                 amount_after = NP.minus(amount_before, amount_change)
 
                 finance_flows.append(FinanceFlow(
-                    account=account, type=FinanceFlow.Type.VOID_PAYMENT, amount_before=amount_before,
-                    amount_change=amount_change, amount_after=amount_after,
-                    void_collection_order=collection_order, creator=self.user, team=self.team
+                    account=account, type=FinanceFlow.Type.VOID_SALES, amount_before=amount_before,
+                    amount_change=amount_change, amount_after=amount_after, void_sales_order=sales_order,
+                    creator=self.user, team=self.team
                 ))
 
                 account.balance_amount = amount_after

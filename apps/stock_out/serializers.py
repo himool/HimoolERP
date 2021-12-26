@@ -67,9 +67,6 @@ class StockOutRecordSerializer(BaseSerializer):
 
         def validate_stock_out_goods(self, instance):
             instance = self.validate_foreign_key(StockOutGoods, instance, message='出库商品不存在')
-            if instance.is_void:
-                raise ValidationError(f'出库商品[{instance.goods.name}]已作废')
-
             if instance.is_completed:
                 raise ValidationError(f'出库商品[{instance.goods.name}]已完成')
             return instance

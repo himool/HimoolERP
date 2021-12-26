@@ -73,9 +73,6 @@ class StockInRecordSerializer(BaseSerializer):
 
         def validate_stock_in_goods(self, instance):
             instance = self.validate_foreign_key(StockInGoods, instance, message='入库商品不存在')
-            if instance.is_void:
-                raise ValidationError(f'入库商品[{instance.goods.name}]已作废')
-
             if instance.is_completed:
                 raise ValidationError(f'入库商品[{instance.goods.name}]已完成')
             return instance

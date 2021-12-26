@@ -169,7 +169,7 @@ class SalesOrderSerializer(BaseSerializer):
         sales_order.collection_amount = total_collection_amount
         sales_order.arrears_amount = NP.minus(total_sales_amount, total_collection_amount)
         sales_order.save(update_fields=['total_quantity', 'total_amount', 'collection_amount',
-                                        'arrears_amount', 'collection_order'])
+                                        'arrears_amount'])
         return sales_order
 
 
@@ -192,8 +192,6 @@ class SalesReturnOrderSerializer(BaseSerializer):
 
         def validate_sales_goods(self, instance):
             instance = self.validate_foreign_key(SalesGoods, instance, message='销售商品不存在')
-            if instance.is_void:
-                raise ValidationError(f'销售商品[{instance.name}]已作废')
             return instance
 
         def validate_goods(self, instance):

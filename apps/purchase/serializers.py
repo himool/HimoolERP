@@ -188,8 +188,6 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
 
         def validate_purchase_goods(self, instance):
             instance = self.validate_foreign_key(PurchaseGoods, instance, message='采购商品不存在')
-            if instance.is_void:
-                raise ValidationError(f'采购商品[{instance.name}]已作废')
             return instance
 
         def validate_goods(self, instance):
