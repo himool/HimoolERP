@@ -2,6 +2,7 @@ from extensions.common.base import *
 from extensions.serializers import *
 from extensions.exceptions import *
 from apps.purchase.models import *
+from apps.sales.models import *
 
 
 class PurchaseReportDetialSerializer(BaseSerializer):
@@ -47,7 +48,7 @@ class SalesReportDetialSerializer(BaseSerializer):
     create_time = DateTimeField(source='sales_order.create_time', read_only=True, label='创建时间')
 
     class Meta:
-        model = PurchaseGoods
+        model = SalesGoods
         fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'goods_spec',
                   'sales_quantity', 'category_name', 'unit_name', 'sales_price', 'total_amount',
                   'sales_order', 'sales_order_number', 'warehouse_number', 'warehouse_name',

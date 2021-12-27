@@ -61,7 +61,7 @@ class StockTransferOrderSerializer(BaseSerializer):
         if not instance.is_active:
             raise ValidationError(f'仓库[{instance.name}]未激活')
 
-        if not instance.is_locked:
+        if instance.is_locked:
             raise ValidationError(f'仓库[{instance.name}]已锁定')
         return instance
 
@@ -70,7 +70,7 @@ class StockTransferOrderSerializer(BaseSerializer):
         if not instance.is_active:
             raise ValidationError(f'仓库[{instance.name}]未激活')
 
-        if not instance.is_locked:
+        if instance.is_locked:
             raise ValidationError(f'仓库[{instance.name}]已锁定')
         return instance
 

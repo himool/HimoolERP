@@ -110,6 +110,8 @@ class PaymentOrderSerializer(BaseSerializer):
             payment_order.total_amount = total_payment_amount
             payment_order.save(update_fields=['total_amount'])
 
+        return payment_order
+
 
 class CollectionOrderSerializer(BaseSerializer):
     """收款单据"""
@@ -190,6 +192,8 @@ class CollectionOrderSerializer(BaseSerializer):
             total_collection_amount = NP.plus(total_collection_amount, collection_order.discount_amount)
             collection_order.total_amount = total_collection_amount
             collection_order.save(update_fields=['total_amount'])
+
+        return collection_order
 
 
 class ChargeOrderSerializer(BaseSerializer):

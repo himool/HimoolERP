@@ -79,7 +79,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
             else:
                 # 创建出库商品
                 stock_out_goods_set.append(StockOutGoods(
-                    stock_out_order=stock_out_order, goods=stock_transfer_order.goods,
+                    stock_out_order=stock_out_order, goods=stock_transfer_goods.goods,
                     stock_out_quantity=stock_transfer_goods.stock_transfer_quantity,
                     remain_quantity=stock_transfer_goods.stock_transfer_quantity, team=self.team
                 ))
@@ -105,7 +105,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
             else:
                 # 创建入库商品
                 stock_in_goods_set.append(StockInGoods(
-                    stock_in_order=stock_in_order, goods=stock_transfer_order.goods,
+                    stock_in_order=stock_in_order, goods=stock_transfer_goods.goods,
                     stock_in_quantity=stock_transfer_goods.stock_transfer_quantity,
                     remain_quantity=stock_transfer_goods.stock_transfer_quantity, team=self.team
                 ))

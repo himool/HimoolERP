@@ -111,11 +111,13 @@ class InventoryOptionSerializer(ModelSerializer):
     goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
     goods_spec = CharField(source='goods.spec', read_only=True, label='商品规格')
     unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+    enable_batch_control = BooleanField(source='goods.enable_batch_control',
+                                        read_only=True, label='启用批次控制')
 
     class Meta:
         model = Inventory
         fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'goods_spec',
-                  'total_quantity', 'unit_name']
+                  'total_quantity', 'unit_name', 'enable_batch_control']
 
 
 # Purchase
@@ -219,7 +221,6 @@ class SupplierArrearsOptionSerializer(BaseSerializer):
         model = Supplier
         fields = ['id', 'number', 'name', 'category', 'category_name', 'contact', 'phone', 'email',
                   'address', 'remark', 'is_active', 'arrears_amount', 'has_arrears']
-
 
 
 __all__ = [

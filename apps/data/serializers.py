@@ -24,7 +24,7 @@ class WarehouseSerializer(BaseSerializer):
 
     def validate_manager(self, instance):
         instance = self.validate_foreign_key(User, instance, message='管理员不存在')
-        if not instance.is_active:
+        if instance and not instance.is_active:
             raise ValidationError(f'管理员[{instance.name}]未激活')
         return instance
 

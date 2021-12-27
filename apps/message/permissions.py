@@ -1,10 +1,10 @@
 from extensions.permissions import ModelPermission
 
 
-class InventoryMessagePermission(ModelPermission):
-    code = 'inventory_message'
+class InventoryWarningPermission(ModelPermission):
+    code = 'inventory_warning'
 
 
 __all__ = [
-    'InventoryMessagePermission',
+    'InventoryWarningPermission',
 ]
