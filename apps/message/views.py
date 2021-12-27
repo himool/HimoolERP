@@ -10,6 +10,7 @@ from apps.message.filters import *
 from apps.message.schemas import *
 from apps.message.models import *
 from apps.goods.models import *
+from apps.sales.models import *
 
 
 class InventoryWarningViewSet(BaseViewSet, ListModelMixin):
@@ -22,6 +23,7 @@ class InventoryWarningViewSet(BaseViewSet, ListModelMixin):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         queryset = queryset.filter(goods__enable_inventory_warning=True, goods__is_active=True)
+        queryset = queryset.select_related('goods', 'goods__unit')
         queryset = queryset.values('goods').annotate(
             goods_number=F('goods__number'), goods_name=F('goods__name'),
             goods_barcode=F('goods__barcode'), unit_name=F('goods__unit__name'),
@@ -39,6 +41,20 @@ class InventoryWarningViewSet(BaseViewSet, ListModelMixin):
         return self.get_paginated_response(queryset)
 
 
+class SalesTaskReminderViewSet(BaseViewSet, ListModelMixin):
+    """销售任务提醒"""
+
+    serializer_class = SalesTaskReminderSerializer
+    permission_classes = [IsAuthenticated]
+    select_related_fields = ['warehouse', 'goods', 'goods__unit']
+    queryset = SalesTask.objects.all()
+
+    def get_queryset(self):
+        now_time = pendulum.now()
+        return super().get_queryset().filter(start_time__lte=now_time, end_time__gt=now_time,
+                                             salesperson=self.user, is_completed=False)
+
+
 __all__ = [
-    'InventoryWarningViewSet',
+    'InventoryWarningViewSet', 'SalesTaskReminderViewSet',
 ]

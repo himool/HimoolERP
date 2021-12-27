@@ -17,13 +17,11 @@ class SalesTaskReminderSerializer(BaseSerializer):
 
     class Meta:
         model = SalesTask
-        read_only_fields = ['id', 'warehouse_number', 'warehouse_name', 'goods_number', 'goods_name',
-                            'goods_barcode', 'unit_name', 'salesperson_name', 'sales_quantity',
-                            'is_completed', 'create_time']
-        fields = ['warehouse', 'goods', 'salesperson', 'total_quantity', 'start_time', 'end_time',
-                  *read_only_fields]
+        fields = ['id', 'warehouse', 'warehouse_number', 'warehouse_name', 'goods', 'goods_number',
+                  'goods_name', 'goods_barcode', 'unit_name', 'total_quantity', 'sales_quantity',
+                  'start_time', 'end_time']
 
 
 __all__ = [
-
+    'SalesTaskReminderSerializer',
 ]
