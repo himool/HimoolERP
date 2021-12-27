@@ -11,6 +11,8 @@ from apps.message.schemas import *
 from apps.message.models import *
 from apps.goods.models import *
 from apps.sales.models import *
+from apps.stock_in.models import *
+from apps.stock_out.models import *
 
 
 class InventoryWarningViewSet(BaseViewSet, ListModelMixin):
@@ -55,6 +57,31 @@ class SalesTaskReminderViewSet(BaseViewSet, ListModelMixin):
                                              salesperson=self.user, is_completed=False)
 
 
+class StockInOrderReminderViewSet(BaseViewSet, ListModelMixin):
+    """入库任务提醒"""
+
+    serializer_class = StockInOrderReminderSerializer
+    permission_classes = [IsAuthenticated, StockInReminderPermission]
+    select_related_fields = ['warehouse']
+    queryset = StockInOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_completed=False, is_void=False)
+
+
+class StockOutOrderReminderViewSet(BaseViewSet, ListModelMixin):
+    """出库任务提醒"""
+
+    serializer_class = StockOutOrderReminderSerializer
+    permission_classes = [IsAuthenticated, StockOutReminderPermission]
+    select_related_fields = ['warehouse']
+    queryset = StockOutOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_completed=False, is_void=False)
+
+
 __all__ = [
     'InventoryWarningViewSet', 'SalesTaskReminderViewSet',
+    'StockInOrderReminderViewSet', 'StockOutOrderReminderViewSet',
 ]
