@@ -9,6 +9,15 @@ class SalesReportPermission(ModelPermission):
     code = 'sales_report'
 
 
+class SalesHotGoodsPermission(ModelPermission):
+    code = 'sales_hot_goods'
+
+
+class SalesTrendPermission(ModelPermission):
+    code = 'sales_trend'
+
+
 __all__ = [
     'PurchaseReportPermission', 'SalesReportPermission',
+    'SalesHotGoodsPermission', 'SalesTrendPermission',
 ]

@@ -133,6 +133,50 @@ class SalesReportViewSet(BaseViewSet):
         return self.get_paginated_response(queryset)
 
 
+class SalesHotGoodsViewSet(BaseViewSet, ListModelMixin):
+    """销售前十商品"""
+
+    permission_classes = [IsAuthenticated, SalesHotGoodsPermission]
+    pagination_class = None
+    filterset_class = SalesHotGoodsFilter
+    queryset = SalesGoods.objects.all()
+
+    @extend_schema(parameters=[SalesHotGoodsParameter], responses={200: SalesHotGoodsResponse})
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.select_related('goods', 'goods__category', 'goods__unit')
+        queryset = queryset.values('goods').annotate(
+            goods_number=F('goods__number'), goods_name=F('goods__name'),
+            goods_barcode=F('goods__barcode'), goods_spec=F('goods__spec'),
+            category_name=F('goods__category__name'), unit_name=F('goods__unit__name'),
+            total_sales_quantity=Coalesce(Sum('sales_quantity'), Value(0.0)),
+        ).order_by('-total_sales_quantity')[:10]
+
+        return Response(data=queryset, status=status.HTTP_200_OK)
+
+
+class SalesTrendViewSet(BaseViewSet, ListModelMixin):
+    """销售走势"""
+
+    permission_classes = [IsAuthenticated, SalesTrendPermission]
+    pagination_class = None
+    filterset_class = SalesTrendFilter
+    queryset = SalesOrder.objects.all()
+
+    @extend_schema(parameters=[SalesTrendParameter], responses={200: SalesTrendResponse})
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.select_related('warehouse')
+        queryset = queryset.extra(select={'date': connection.ops.date_trunc_sql('day', 'create_time')})
+        queryset = queryset.values('warehouse', 'date').annotate(
+            warehouse_number=F('warehouse__number'), warehouse_name=F('warehouse__name'),
+            total_sales_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())),
+        )
+
+        return Response(data=queryset, status=status.HTTP_200_OK)
+
+
 __all__ = [
     'PurchaseReportViewSet', 'SalesReportViewSet',
+    'SalesHotGoodsViewSet', 'SalesTrendViewSet',
 ]

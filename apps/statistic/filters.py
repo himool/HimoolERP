@@ -26,6 +26,25 @@ class SalesReportFilter(FilterSet):
         fields = ['category', 'creator', 'start_date', 'end_date']
 
 
+class SalesHotGoodsFilter(FilterSet):
+    start_date = DateFilter(field_name='sales_order__create_time', required=True, lookup_expr='gte', label='开始日期')
+    end_date = DateFilter(field_name='sales_order__create_time', required=True, lookup_expr='lt', label='结束日期')
+
+    class Meta:
+        model = SalesGoods
+        fields = ['start_date', 'end_date']
+
+
+class SalesTrendFilter(FilterSet):
+    start_date = DateFilter(field_name='create_time', required=True, lookup_expr='gte', label='开始日期')
+    end_date = DateFilter(field_name='create_time', required=True, lookup_expr='lt', label='结束日期')
+
+    class Meta:
+        model = SalesOrder
+        fields = ['start_date', 'end_date']
+
+
 __all__ = [
     'PurchaseReportFilter', 'SalesReportFilter',
+    'SalesHotGoodsFilter', 'SalesTrendFilter',
 ]

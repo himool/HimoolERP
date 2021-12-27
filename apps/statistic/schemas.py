@@ -56,7 +56,37 @@ class SalesReportGroupByGoodsResponse(Serializer):
     max_sales_price = FloatField(label='最高销售价')
 
 
+class SalesHotGoodsParameter(Serializer):
+    start_date = DateField(required=True, label='开始日期')
+    end_date = DateField(required=True, label='结束日期')
+
+
+class SalesHotGoodsResponse(Serializer):
+    goods = IntegerField(label='商品ID')
+    goods_number = CharField(label='商品编号')
+    goods_name = CharField(label='商品名称')
+    goods_barcode = CharField(label='商品条码')
+    goods_spec = CharField(label='商品规格')
+    category_name = CharField(label='分类名称')
+    unit_name = CharField(label='单位名称')
+    total_sales_quantity = FloatField(label='销售总数量')
+
+
+class SalesTrendParameter(Serializer):
+    start_date = DateField(required=True, label='开始日期')
+    end_date = DateField(required=True, label='结束日期')
+
+
+class SalesTrendResponse(Serializer):
+    warehouse = IntegerField(label='仓库ID')
+    warehouse_number = CharField(label='商品编号')
+    warehouse_name = CharField(label='商品名称')
+    total_sales_amount = AmountField(label='销售总金额')
+    date = DateField(label='商品ID')
+
+
 __all__ = [
     'PurchaseReportParameter', 'PurchaseReportStatisticResponse', 'PurchaseReportGroupByGoodsResponse',
     'SalesReportParameter', 'SalesReportStatisticResponse', 'SalesReportGroupByGoodsResponse',
+    'SalesHotGoodsParameter', 'SalesHotGoodsResponse', 'SalesTrendParameter', 'SalesTrendResponse',
 ]
