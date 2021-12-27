@@ -15,7 +15,7 @@ class PurchaseReportStatisticResponse(Serializer):
 
 
 class PurchaseReportGroupByGoodsResponse(Serializer):
-    goods = CharField(label='商品ID')
+    goods = IntegerField(label='商品ID')
     goods_number = CharField(label='商品编号')
     goods_name = CharField(label='商品名称')
     goods_barcode = CharField(label='商品条码')
@@ -42,7 +42,7 @@ class SalesReportStatisticResponse(Serializer):
 
 
 class SalesReportGroupByGoodsResponse(Serializer):
-    goods = CharField(label='商品ID')
+    goods = IntegerField(label='商品ID')
     goods_number = CharField(label='商品编号')
     goods_name = CharField(label='商品名称')
     goods_barcode = CharField(label='商品条码')
