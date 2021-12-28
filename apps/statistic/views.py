@@ -18,6 +18,7 @@ class PurchaseReportViewSet(BaseViewSet):
     """采购报表"""
 
     permission_classes = [IsAuthenticated, PurchaseReportPermission]
+    filter_backends = [DjangoFilterBackend]
     filterset_class = PurchaseReportFilter
     search_fields = ['goods__number', 'goods__name']
     queryset = PurchaseGoods.objects.all()
@@ -194,11 +195,12 @@ class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
 
     permission_classes = [IsAuthenticated, ProfitTrendPermission]
     pagination_class = None
+    filter_backends = [DjangoFilterBackend]
     filterset_class = ProfitTrendFilter
     queryset = SalesGoods.objects.all()
 
-    # def get_queryset(self):
-    #     return super().get_queryset().filter(sales_order__is_void=False)
+    def get_queryset(self):
+        return super().get_queryset().filter(sales_order__is_void=False)
 
     @extend_schema(parameters=[ProfitTrendParameter], responses={200: ProfitTrendResponse})
     def list(self, request, *args, **kwargs):
