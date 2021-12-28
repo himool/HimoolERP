@@ -212,9 +212,8 @@ class ChargeOrderSerializer(BaseSerializer):
     class Meta:
         model = ChargeOrder
         read_only_fields = ['id', 'type_display', 'supplier_number', 'supplier_name', 'client_number',
-                            'client_name', 'handler_name', 'handler_name', 'charge_item_name',
-                            'account_number', 'account_name', 'is_void', 'creator', 'creator_name',
-                            'create_time']
+                            'client_name', 'handler_name', 'charge_item_name', 'account_number',
+                            'account_name', 'is_void', 'creator', 'creator_name', 'create_time']
         fields = ['number', 'type', 'client', 'supplier', 'handler', 'handle_time', 'charge_item',
                   'account', 'total_amount', 'charge_amount', 'remark', *read_only_fields]
 

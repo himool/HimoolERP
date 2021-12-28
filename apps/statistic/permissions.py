@@ -21,8 +21,12 @@ class ProfitTrendPermission(ModelPermission):
     code = 'profit_trend'
 
 
+class FinanceStatisticPermission(ModelPermission):
+    code = 'finance_statistic'
+
+
 __all__ = [
     'PurchaseReportPermission', 'SalesReportPermission',
     'SalesHotGoodsPermission', 'SalesTrendPermission',
-    'ProfitTrendPermission',
+    'ProfitTrendPermission', 'FinanceStatisticPermission',
 ]

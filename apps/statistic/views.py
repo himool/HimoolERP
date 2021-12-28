@@ -18,7 +18,7 @@ class PurchaseReportViewSet(BaseViewSet):
     """采购报表"""
 
     permission_classes = [IsAuthenticated, PurchaseReportPermission]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = PurchaseReportFilter
     search_fields = ['goods__number', 'goods__name']
     queryset = PurchaseGoods.objects.all()
@@ -82,6 +82,7 @@ class SalesReportViewSet(BaseViewSet):
     """销售报表"""
 
     permission_classes = [IsAuthenticated, SalesReportPermission]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = SalesReportFilter
     search_fields = ['goods__number', 'goods__name']
     queryset = SalesGoods.objects.all()
@@ -146,6 +147,7 @@ class SalesHotGoodsViewSet(BaseViewSet, ListModelMixin):
 
     permission_classes = [IsAuthenticated, SalesHotGoodsPermission]
     pagination_class = None
+    filter_backends = [DjangoFilterBackend]
     filterset_class = SalesHotGoodsFilter
     queryset = SalesGoods.objects.all()
 
@@ -171,6 +173,7 @@ class SalesTrendViewSet(BaseViewSet, ListModelMixin):
 
     permission_classes = [IsAuthenticated, SalesTrendPermission]
     pagination_class = None
+    filter_backends = [DjangoFilterBackend]
     filterset_class = SalesTrendFilter
     queryset = SalesOrder.objects.all()
 
@@ -222,16 +225,143 @@ class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
 class FinanceStatisticViewSet(FunctionViewSet):
     """收支统计"""
 
+    @extend_schema(parameters=[FinanceStatisticParameter], responses={200: FinanceStatisticResponse})
     def list(self, request, *args, **kwargs):
-        PaymentOrder.objects.filter().values('number', 'create_time', 'total_amount',
-                                             suppliser_number=F('suppier__number'),
-                                             supplier_name=F('supplier__name'))
+        serializer = FinanceStatisticParameter(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
 
-        return Response()
+        query_filters = (
+            Q(create_time__gte=serializer.data['start_date']) &
+            Q(create_time__lt=serializer.data['end_date']) &
+            Q(is_void=False) & Q(team=self.team)
+        )
+
+        result = {}
+        result |= SalesOrder.objects.filter(query_filters).aggregate(
+            total_sales_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())))
+        result |= SalesReturnOrder.objects.filter(query_filters).aggregate(
+            total_sales_reutrn_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())))
+        result |= PurchaseOrder.objects.filter(query_filters).aggregate(
+            total_purchase_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())))
+        result |= PurchaseReturnOrder.objects.filter(query_filters).aggregate(
+            total_purchase_return_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())))
+        result |= ChargeOrder.objects.filter(query_filters).filter(type=ChargeOrder.Type.INCOME).aggregate(
+            total_income_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())))
+        result |= ChargeOrder.objects.filter(query_filters).filter(type=ChargeOrder.Type.EXPENDITURE).aggregate(
+            total_expenditure_amount=Coalesce(Sum('total_amount'), Value(0, output_field=AmountField())))
+
+        return Response(data=result, status=status.HTTP_200_OK)
+
+
+class PaymentOrderDetialViewSet(BaseViewSet, ListModelMixin):
+    """付款明细"""
+
+    serializer_class = PaymentOrderDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PaymentOrderDetialFilter
+    queryset = PaymentOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
+
+
+class CollectionOrderDetialViewSet(BaseViewSet, ListModelMixin):
+    """收款明细"""
+
+    serializer_class = CollectionOrderDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = CollectionOrderDetialFilter
+    queryset = CollectionOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
+
+
+class IncomeChargeOrderDetialViewSet(BaseViewSet, ListModelMixin):
+    """收入费用明细"""
+
+    serializer_class = IncomeChargeOrderDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = IncomeChargeOrderDetialFilter
+    queryset = ChargeOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(type=ChargeOrder.Type.INCOME, is_void=False)
+
+
+class ExpenditureChargeOrderDetialViewSet(BaseViewSet, ListModelMixin):
+    """支出费用明细"""
+
+    serializer_class = ExpenditureChargeOrderDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ExpenditureChargeOrderDetialFilter
+    queryset = ChargeOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(type=ChargeOrder.Type.EXPENDITURE, is_void=False)
+
+
+class PurchasePaymentDetialViewSet(BaseViewSet, ListModelMixin):
+    """采购付款明细"""
+
+    serializer_class = PurchasePaymentDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PurchasePaymentDetialFilter
+    queryset = PurchaseOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
+
+
+class PurchaseReturnCollectionDetialViewSet(BaseViewSet, ListModelMixin):
+    """采购退货收款明细"""
+
+    serializer_class = PurchaseReturnCollectionDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PurchaseReturnCollectionDetialFilter
+    queryset = PurchaseReturnOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
+
+
+class SalesCollectionDetialViewSet(BaseViewSet, ListModelMixin):
+    """销售收款明细"""
+
+    serializer_class = SalesCollectionDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = SalesCollectionDetialFilter
+    queryset = SalesOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
+
+
+class SalesReturnPaymentDetialViewSet(BaseViewSet, ListModelMixin):
+    """销售退货付款明细"""
+
+    serializer_class = SalesReturnPaymentDetialSerializer
+    permission_classes = [IsAuthenticated, FinanceStatisticPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = SalesReturnPaymentDetialFilter
+    queryset = SalesReturnOrder.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
 
 
 __all__ = [
-    'PurchaseReportViewSet', 'SalesReportViewSet',
-    'SalesHotGoodsViewSet', 'SalesTrendViewSet', 'ProfitTrendViewSet',
-    'FinanceStatisticViewSet',
+    'PurchaseReportViewSet', 'SalesReportViewSet', 'SalesHotGoodsViewSet',
+    'SalesTrendViewSet', 'ProfitTrendViewSet', 'FinanceStatisticViewSet',
+    'PaymentOrderDetialViewSet', 'CollectionOrderDetialViewSet',
+    'IncomeChargeOrderDetialViewSet', 'ExpenditureChargeOrderDetialViewSet',
+    'PurchasePaymentDetialViewSet', 'PurchaseReturnCollectionDetialViewSet',
+    'SalesCollectionDetialViewSet', 'SalesReturnPaymentDetialViewSet',
 ]

@@ -98,9 +98,24 @@ class ProfitTrendResponse(Serializer):
     date = DateField(label='日期')
 
 
+class FinanceStatisticParameter(Serializer):
+    start_date = DateField(required=True, label='开始日期')
+    end_date = DateField(required=True, label='结束日期')
+
+
+class FinanceStatisticResponse(Serializer):
+    total_sales_amount = AmountField(label='销售金额')
+    total_sales_reutrn_amount = AmountField(label='销售退货金额')
+    total_purchase_amount = AmountField(label='采购金额')
+    total_purchase_return_amount = AmountField(label='采购退货金额')
+    total_income_amount = AmountField(label='收入金额')
+    total_expenditure_amount = AmountField(label='支出金额')
+
+
 __all__ = [
     'PurchaseReportParameter', 'PurchaseReportStatisticResponse', 'PurchaseReportGroupByGoodsResponse',
     'SalesReportParameter', 'SalesReportStatisticResponse', 'SalesReportGroupByGoodsResponse',
     'SalesHotGoodsParameter', 'SalesHotGoodsResponse', 'SalesTrendParameter', 'SalesTrendResponse',
     'ProfitTrendParameter', 'ProfitTrendResponse',
+    'FinanceStatisticParameter', 'FinanceStatisticResponse',
 ]

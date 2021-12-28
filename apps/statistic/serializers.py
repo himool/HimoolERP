@@ -3,6 +3,7 @@ from extensions.serializers import *
 from extensions.exceptions import *
 from apps.purchase.models import *
 from apps.sales.models import *
+from apps.finance.models import *
 
 
 class PurchaseReportDetialSerializer(BaseSerializer):
@@ -55,6 +56,112 @@ class SalesReportDetialSerializer(BaseSerializer):
                   'client_number', 'client_name', 'creator_name', 'create_time']
 
 
+class PaymentOrderDetialSerializer(BaseSerializer):
+    """付款明细"""
+
+    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
+    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+
+    class Meta:
+        model = PaymentOrder
+        fields = ['id', 'number', 'supplier', 'supplier_number', 'supplier_name', 'discount_amount',
+                  'total_amount', 'create_time']
+
+
+class CollectionOrderDetialSerializer(BaseSerializer):
+    """收款单据"""
+
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
+
+    class Meta:
+        model = CollectionOrder
+        fields = ['id', 'number', 'client', 'client_number', 'client_name', 'discount_amount',
+                  'total_amount', 'create_time']
+
+
+class IncomeChargeOrderDetialSerializer(BaseSerializer):
+    """收入费用明细"""
+
+    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
+    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
+
+    class Meta:
+        model = ChargeOrder
+        fields = ['id', 'number', 'client', 'client_number', 'client_name', 'supplier',
+                  'supplier_number', 'supplier_name', 'charge_item_name', 'total_amount',
+                  'charge_amount', 'create_time']
+
+
+class ExpenditureChargeOrderDetialSerializer(BaseSerializer):
+    """支出费用明细"""
+
+    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
+    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
+
+    class Meta:
+        model = ChargeOrder
+        fields = ['id', 'number', 'client', 'client_number', 'client_name', 'supplier',
+                  'supplier_number', 'supplier_name', 'charge_item_name', 'total_amount',
+                  'charge_amount', 'create_time']
+
+
+class PurchasePaymentDetialSerializer(BaseSerializer):
+    """采购付款明细"""
+
+    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
+    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+
+    class Meta:
+        model = PurchaseOrder
+        fields = ['id', 'number', 'supplier', 'supplier_number', 'supplier_name', 'total_amount',
+                  'payment_amount', 'create_time']
+
+
+class PurchaseReturnCollectionDetialSerializer(BaseSerializer):
+    """采购退货收款明细"""
+
+    supplier_number = CharField(source='supplier.number', read_only=True, label='供应商编号')
+    supplier_name = CharField(source='supplier.name', read_only=True, label='供应商名称')
+
+    class Meta:
+        model = PurchaseReturnOrder
+        fields = ['id', 'number', 'supplier', 'supplier_number', 'supplier_name', 'total_amount',
+                  'collection_amount', 'create_time']
+
+
+class SalesCollectionDetialSerializer(BaseSerializer):
+    """销售收款明细"""
+
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
+
+    class Meta:
+        model = SalesOrder
+        fields = ['id', 'number', 'client', 'client_number', 'client_name', 'total_amount',
+                  'collection_amount', 'create_time']
+
+
+class SalesReturnPaymentDetialSerializer(BaseSerializer):
+    """销售退货付款明细"""
+
+    client_number = CharField(source='client.number', read_only=True, label='客户编号')
+    client_name = CharField(source='client.name', read_only=True, label='客户名称')
+
+    class Meta:
+        model = SalesReturnOrder
+        fields = ['id', 'number', 'client', 'client_number', 'client_name', 'total_amount',
+                  'payment_amount', 'create_time']
+
+
 __all__ = [
     'PurchaseReportDetialSerializer', 'SalesReportDetialSerializer',
+    'PaymentOrderDetialSerializer', 'CollectionOrderDetialSerializer',
+    'IncomeChargeOrderDetialSerializer', 'ExpenditureChargeOrderDetialSerializer',
+    'PurchasePaymentDetialSerializer', 'PurchaseReturnCollectionDetialSerializer',
+    'SalesCollectionDetialSerializer', 'SalesReturnPaymentDetialSerializer',
 ]
