@@ -86,7 +86,7 @@ class SalesReportViewSet(BaseViewSet):
     queryset = SalesGoods.objects.all()
 
     def get_queryset(self):
-        return super().get_queryset().filter(sales__order__is_void=False)
+        return super().get_queryset().filter(sales_order__is_void=False)
 
     @extend_schema(parameters=[SalesReportParameter],
                    responses={200: SalesReportStatisticResponse})
@@ -149,7 +149,7 @@ class SalesHotGoodsViewSet(BaseViewSet, ListModelMixin):
     queryset = SalesGoods.objects.all()
 
     def get_queryset(self):
-        return super().get_queryset().filter(sales__order__is_void=False)
+        return super().get_queryset().filter(sales_order__is_void=False)
 
     @extend_schema(parameters=[SalesHotGoodsParameter], responses={200: SalesHotGoodsResponse})
     def list(self, request, *args, **kwargs):
@@ -198,7 +198,7 @@ class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
     queryset = SalesGoods.objects.all()
 
     def get_queryset(self):
-        return super().get_queryset().filter(sales__order__is_void=False)
+        return super().get_queryset().filter(sales_order__is_void=False)
 
     @extend_schema(parameters=[ProfitTrendParameter], responses={200: ProfitTrendResponse})
     def list(self, request, *args, **kwargs):
