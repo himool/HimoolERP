@@ -23,7 +23,7 @@ class PurchaseReportViewSet(BaseViewSet):
     queryset = PurchaseGoods.objects.all()
 
     def get_queryset(self):
-        return super().get_queryset().filter(purchase__order__is_void=False)
+        return super().get_queryset().filter(purchase_order__is_void=False)
 
     @extend_schema(parameters=[PurchaseReportParameter],
                    responses={200: PurchaseReportStatisticResponse})
@@ -111,7 +111,7 @@ class SalesReportViewSet(BaseViewSet):
 
         queryset = self.filter_queryset(self.get_queryset())
         queryset = queryset.select_related('goods', 'goods__category', 'goods__unit', 'sales_order',
-                                           'sales_order__warehouse', 'sales_order__supplier',
+                                           'sales_order__warehouse', 'sales_order__client',
                                            'sales_order__creator')
         queryset = self.paginate_queryset(queryset)
 
@@ -197,8 +197,8 @@ class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
     filterset_class = ProfitTrendFilter
     queryset = SalesGoods.objects.all()
 
-    def get_queryset(self):
-        return super().get_queryset().filter(sales_order__is_void=False)
+    # def get_queryset(self):
+    #     return super().get_queryset().filter(sales_order__is_void=False)
 
     @extend_schema(parameters=[ProfitTrendParameter], responses={200: ProfitTrendResponse})
     def list(self, request, *args, **kwargs):
