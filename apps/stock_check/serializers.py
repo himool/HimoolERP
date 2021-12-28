@@ -16,18 +16,12 @@ class StockCheckOrderSerializer(BaseSerializer):
         class StockCheckBatchItemSerializer(BaseSerializer):
             """盘点批次"""
 
-            batch_number = CharField(source='batch.number', required=False, label='批次编号')
             status_display = CharField(source='get_status_display', read_only=True, label='盘点状态')
 
             class Meta:
                 model = StockCheckBatch
-                read_only_fields = ['id', 'batch_number', 'book_quantity', 'surplus_quantity',
-                                    'status', 'status_display']
-                fields = ['batch', 'actual_quantity', *read_only_fields]
-
-            def validate_batch(self, instance):
-                instance = self.validate_foreign_key(Batch, instance, message='批次不存在')
-                return instance
+                read_only_fields = ['id', 'book_quantity', 'surplus_quantity', 'status', 'status_display']
+                fields = ['batch_number', 'production_date', 'actual_quantity', *read_only_fields]
 
             def validate_actual_quantity(self, value):
                 if value < 0:
@@ -69,7 +63,8 @@ class StockCheckOrderSerializer(BaseSerializer):
                     raise ValidationError(f'商品[{goods.name}]批次为空')
 
                 total_actual_quantity = reduce(lambda total, item: NP.plus(total, item['actual_quantity']),
-                                               stock_check_batch_items)
+                                               stock_check_batch_items, 0)
+
                 if total_actual_quantity != attrs['actual_quantity']:
                     raise ValidationError(f'商品[{goods.name}]盘点数量错误')
 
@@ -101,8 +96,8 @@ class StockCheckOrderSerializer(BaseSerializer):
         if not instance.is_active:
             raise ValidationError(f'仓库[{instance.name}]未激活')
 
-        if instance.is_locked:
-            raise ValidationError(f'仓库[{instance.name}]已锁定')
+        if not instance.is_locked:
+            raise ValidationError(f'仓库[{instance.name}]未锁定')
         return instance
 
     def validate_handler(self, instance):
@@ -154,9 +149,26 @@ class StockCheckOrderSerializer(BaseSerializer):
 
             # 创建盘点批次
             if goods.enable_batch_control:
-                stock_check_batch_items = validated_data['stock_check_batchs']
-                for stock_check_batch_item in stock_check_batch_items:
-                    batch = stock_check_batch_item['batch']
+                for stock_check_batch_item in stock_check_goods_item['stock_check_batchs']:
+                    batch_number = stock_check_batch_item['batch_number']
+                    batch = Batch.objects.filter(number=batch_number, warehouse=warehouse,
+                                                 goods=goods, team=self.team).first()
+
+                    if not batch:
+                        production_date = stock_check_batch_item.get('production_date')
+                        expiration_date = None
+                        if production_date and goods.shelf_life_days:
+                            expiration_date = pendulum.parse(str(production_date)) \
+                                .add(days=goods.shelf_life_days).to_date_string()
+
+                        inventory = Inventory.objects.get(warehouse=warehouse, goods=goods, team=self.team)
+                        batch = Batch.objects.create(
+                            number=batch_number, inventory=inventory, warehouse=warehouse, goods=goods,
+                            total_quantity=0, remain_quantity=0, production_date=production_date,
+                            shelf_life_days=goods.shelf_life_days, expiration_date=expiration_date,
+                            has_stock=False, team=self.team
+                        )
+
                     book_quantity = batch.remain_quantity
                     actual_quantity = stock_check_batch_item['actual_quantity']
                     surplus_quantity = NP.minus(actual_quantity, book_quantity)
@@ -170,8 +182,9 @@ class StockCheckOrderSerializer(BaseSerializer):
 
                     stock_check_batchs.append(StockCheckBatch(
                         stock_check_order=stock_check_order, stock_check_goods=stock_check_goods,
-                        goods=goods, book_quantity=book_quantity, actual_quantity=actual_quantity,
-                        surplus_quantity=surplus_quantity, status=status, team=self.team
+                        batch_number=batch_number, goods=goods, book_quantity=book_quantity,
+                        actual_quantity=actual_quantity, surplus_quantity=surplus_quantity,
+                        status=status, team=self.team
                     ))
         else:
             StockCheckBatch.objects.bulk_create(stock_check_batchs)

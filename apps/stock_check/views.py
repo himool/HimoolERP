@@ -59,7 +59,8 @@ class StockCheckOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
             # 同步批次
             if goods.enable_batch_control:
                 for stock_check_batch in stock_check_goods.stock_check_batchs.all():
-                    batch = stock_check_batch.batch
+                    batch = Batch.objects.get(number=stock_check_batch.batch_number, warehouse=warehouse,
+                                              goods=goods, team=self.team)
                     batch.remain_quantity = stock_check_batch.actual_quantity
                     batch.has_stock = batch.remain_quantity > 0
                     update_batchs.append(batch)

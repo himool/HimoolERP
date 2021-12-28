@@ -8,4 +8,5 @@ router.register('sales_reports', SalesReportViewSet, 'sales_report')
 router.register('sales_hot_goods', SalesHotGoodsViewSet, 'sales_hot_goods')
 router.register('sales_trends', SalesTrendViewSet, 'sales_trend')
 router.register('profit_trends', ProfitTrendViewSet, 'profit_trend')
+router.register('finance_statistics', FinanceStatisticViewSet, 'finance_statistic')
 urlpatterns = router.urls

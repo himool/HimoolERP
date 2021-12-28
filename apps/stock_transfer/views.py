@@ -194,6 +194,9 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
             stock_in_order.is_void = True
             stock_in_order.save(update_fields=['is_void'])
 
+        serializer = StockTransferOrderSerializer(instance=stock_transfer_order)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 __all__ = [
     'StockTransferOrderViewSet',

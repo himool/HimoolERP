@@ -282,7 +282,7 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    @extend_schema(request=None, responses={200: ChargeOrderPermission})
+    @extend_schema(request=None, responses={200: ChargeOrderSerializer})
     @action(detail=True, methods=['post'])
     def void(self, request, *args, **kwargs):
         """作废"""
@@ -328,7 +328,7 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         account.has_balance = account.balance_amount > 0
         account.save(update_fields=['balance_amount', 'has_balance'])
 
-        serializer = ChargeOrderPermission(instance=charge_order)
+        serializer = ChargeOrderSerializer(instance=charge_order)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 

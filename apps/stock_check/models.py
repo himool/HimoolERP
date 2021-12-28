@@ -87,8 +87,8 @@ class StockCheckBatch(Model):
                                    related_name='stock_check_batchs', verbose_name='盘点单据')
     stock_check_goods = ForeignKey('stock_check.StockCheckGoods', on_delete=CASCADE,
                                    related_name='stock_check_batchs', verbose_name='盘点商品')
-    batch = ForeignKey('goods.Batch', on_delete=CASCADE,
-                       related_name='stock_check_batchs', verbose_name='批次')
+    batch_number = CharField(max_length=32, verbose_name='批次编号')
+    production_date = DateField(null=True, verbose_name='生产日期')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
                        related_name='stock_check_batchs', verbose_name='商品')
     book_quantity = FloatField(verbose_name='账面数量')
@@ -98,7 +98,7 @@ class StockCheckBatch(Model):
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_check_batchs')
 
     class Meta:
-        unique_together = [('stock_check_goods', 'batch')]
+        unique_together = [('stock_check_goods', 'batch_number')]
 
 
 __all__ = [

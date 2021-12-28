@@ -11,6 +11,7 @@ from apps.statistic.schemas import *
 from apps.statistic.models import *
 from apps.purchase.models import *
 from apps.sales.models import *
+from apps.finance.models import *
 
 
 class PurchaseReportViewSet(BaseViewSet):
@@ -201,7 +202,18 @@ class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
         return Response(data=queryset, status=status.HTTP_200_OK)
 
 
+class FinanceStatisticViewSet(FunctionViewSet):
+    """收支统计"""
+
+    def list(self, request, *args, **kwargs):
+        PaymentOrder.objects.filter().values('number', 'create_time', 'total_amount', suppliser_)
+
+        return Response()
+
+    
+
 __all__ = [
     'PurchaseReportViewSet', 'SalesReportViewSet',
     'SalesHotGoodsViewSet', 'SalesTrendViewSet', 'ProfitTrendViewSet',
+    'FinanceStatisticViewSet',
 ]

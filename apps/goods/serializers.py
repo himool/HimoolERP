@@ -169,9 +169,10 @@ class GoodsSerializer(BaseSerializer):
                         for batch_item in batch_items:
                             batch_initial_quantity = batch_item.get('initial_quantity', 0)
                             production_date = batch_item.get('production_date')
+                            expiration_date = None
                             if production_date and goods.shelf_life_days:
-                                expiration_date = pendulum.parse(str(production_date)).add(days=goods.shelf_life_days)
-                                expiration_date = expiration_date.to_date_string()
+                                expiration_date = pendulum.parse(str(production_date)) \
+                                    .add(days=goods.shelf_life_days).to_date_string()
 
                             has_stock = batch_initial_quantity > 0
                             batchs.append(Batch(
@@ -236,10 +237,10 @@ class GoodsSerializer(BaseSerializer):
                         for batch_item in batch_items:
                             batch_initial_quantity = batch_item.get('initial_quantity', 0)
                             production_date = batch_item.get('production_date')
+                            expiration_date = None
                             if production_date and goods.shelf_life_days:
                                 expiration_date = pendulum.parse(str(production_date)) \
-                                    .add(days=goods.shelf_life_days)
-                                expiration_date = expiration_date.to_date_string()
+                                    .add(days=goods.shelf_life_days).to_date_string()
 
                             if batch_id := batch_item.get('id'):
                                 batch = Batch.objects.filter(id=batch_id, warehouse=warehouse,
