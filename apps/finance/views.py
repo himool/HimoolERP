@@ -288,6 +288,8 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         """作废"""
 
         charge_order = self.get_object()
+        charge_order.is_void = True
+        charge_order.save(update_fields=['is_void'])
 
         account = charge_order.account
         amount_before = account.balance_amount
@@ -396,6 +398,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         """作废"""
 
         account_transfer_record = self.get_object()
+        account_transfer_record.is_void = True
+        account_transfer_record.save(update_fields=['is_void'])
 
         out_account = account_transfer_record.out_account
         transfer_out_amount = account_transfer_record.transfer_amount

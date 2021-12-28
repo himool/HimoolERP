@@ -21,10 +21,12 @@ class InventoryWarningViewSet(BaseViewSet, ListModelMixin):
     permission_classes = [IsAuthenticated, InventoryWarningPermission]
     queryset = Inventory.objects.all()
 
+    def get_queryset(self):
+        return super().get_queryset().filter(goods__enable_inventory_warning=True, goods__is_active=True)
+
     @extend_schema(responses={200: InventoryWarningResponse})
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        queryset = queryset.filter(goods__enable_inventory_warning=True, goods__is_active=True)
         queryset = queryset.select_related('goods', 'goods__unit')
         queryset = queryset.values('goods').annotate(
             goods_number=F('goods__number'), goods_name=F('goods__name'),
@@ -41,6 +43,17 @@ class InventoryWarningViewSet(BaseViewSet, ListModelMixin):
         queryset = self.paginate_queryset(queryset)
 
         return self.get_paginated_response(queryset)
+
+
+class ShelfLifeWarningViewSet(BaseViewSet, ListModelMixin):
+    """保质期预警"""
+
+    permission_classes = [IsAuthenticated, ShelfLifeWarningPermission]
+    queryset = Batch.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(goods__enable_batch_control=True, goods__is_active=True,
+                                             goods__shelf_life_days__isnull=False, has_stock=True)
 
 
 class SalesTaskReminderViewSet(BaseViewSet, ListModelMixin):

@@ -22,6 +22,9 @@ class PurchaseReportViewSet(BaseViewSet):
     search_fields = ['goods__number', 'goods__name']
     queryset = PurchaseGoods.objects.all()
 
+    def get_queryset(self):
+        return super().get_queryset().filter(purchase__order__is_void=False)
+
     @extend_schema(parameters=[PurchaseReportParameter],
                    responses={200: PurchaseReportStatisticResponse})
     @action(detail=False, methods=['get'])
@@ -81,6 +84,9 @@ class SalesReportViewSet(BaseViewSet):
     filterset_class = SalesReportFilter
     search_fields = ['goods__number', 'goods__name']
     queryset = SalesGoods.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(sales__order__is_void=False)
 
     @extend_schema(parameters=[SalesReportParameter],
                    responses={200: SalesReportStatisticResponse})
@@ -142,6 +148,9 @@ class SalesHotGoodsViewSet(BaseViewSet, ListModelMixin):
     filterset_class = SalesHotGoodsFilter
     queryset = SalesGoods.objects.all()
 
+    def get_queryset(self):
+        return super().get_queryset().filter(sales__order__is_void=False)
+
     @extend_schema(parameters=[SalesHotGoodsParameter], responses={200: SalesHotGoodsResponse})
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -164,6 +173,9 @@ class SalesTrendViewSet(BaseViewSet, ListModelMixin):
     filterset_class = SalesTrendFilter
     queryset = SalesOrder.objects.all()
 
+    def get_queryset(self):
+        return super().get_queryset().filter(is_void=False)
+
     @extend_schema(parameters=[SalesTrendParameter], responses={200: SalesTrendResponse})
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -184,6 +196,9 @@ class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
     pagination_class = None
     filterset_class = ProfitTrendFilter
     queryset = SalesGoods.objects.all()
+
+    def get_queryset(self):
+        return super().get_queryset().filter(sales__order__is_void=False)
 
     @extend_schema(parameters=[ProfitTrendParameter], responses={200: ProfitTrendResponse})
     def list(self, request, *args, **kwargs):
@@ -206,11 +221,12 @@ class FinanceStatisticViewSet(FunctionViewSet):
     """收支统计"""
 
     def list(self, request, *args, **kwargs):
-        PaymentOrder.objects.filter().values('number', 'create_time', 'total_amount', suppliser_)
+        PaymentOrder.objects.filter().values('number', 'create_time', 'total_amount',
+                                             suppliser_number=F('suppier__number'),
+                                             supplier_name=F('supplier__name'))
 
         return Response()
 
-    
 
 __all__ = [
     'PurchaseReportViewSet', 'SalesReportViewSet',

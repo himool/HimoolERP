@@ -5,6 +5,10 @@ class InventoryWarningPermission(ModelPermission):
     code = 'inventory_warning'
 
 
+class ShelfLifeWarningPermission(ModelPermission):
+    code = 'shelf_life_warning'
+
+
 class StockInReminderPermission(ModelPermission):
     code = 'stock_in_reminder'
 
@@ -14,6 +18,6 @@ class StockOutReminderPermission(ModelPermission):
 
 
 __all__ = [
-    'InventoryWarningPermission',
+    'InventoryWarningPermission', 'ShelfLifeWarningPermission',
     'StockInReminderPermission', 'StockOutReminderPermission',
 ]

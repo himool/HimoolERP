@@ -24,8 +24,7 @@ class StockCheckOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
     select_related_fields = ['warehouse', 'handler', 'creator']
     prefetch_related_fields = ['stock_check_goods_set', 'stock_check_goods_set__goods',
                                'stock_check_goods_set__goods__unit',
-                               'stock_check_goods_set__stock_check_batchs',
-                               'stock_check_goods_set__stock_check_batchs__batch']
+                               'stock_check_goods_set__stock_check_batchs']
     queryset = StockCheckOrder.objects.all()
 
     @transaction.atomic
