@@ -47,6 +47,10 @@ export function goodsUnitOption(params) {
 export function inventoriesOption(params) {
   return request({ url: `/inventories/options/`, method: 'get', params })
 }
+// 商品选项
+export function goodsOption(params) {
+  return request({ url: `/goods/options/`, method: 'get', params })
+}
 // 结算账户
 export function accountsOption(params) {
   return request({ url: `/accounts/options/`, method: 'get', params })
@@ -54,6 +58,26 @@ export function accountsOption(params) {
 // 采购单据
 export function purchaseOrdersOption(params) {
   return request({ url: `/purchase_orders/options/`, method: 'get', params })
+}
+// 销售单据
+export function saleOrdersOption(params) {
+  return request({ url: `/sales_orders/options/`, method: 'get', params })
+}
+// 批次
+export function batchsOption(params) {
+  return request({ url: `/batchs/options/`, method: 'get', params })
+}
+// 供应商
+export function supplierArrearsOption(params) {
+  return request({ url: `/supplier_arrears/options/`, method: 'get', params })
+}
+// 客户
+export function clientArrearsOption(params) {
+  return request({ url: `/client_arrears/options/`, method: 'get', params })
+}
+// 结算项目
+export function chargeItemsOption(params) {
+  return request({ url: `/charge_items/options/`, method: 'get', params })
 }
 // // 业务经理
 // export function managerOption(params) {

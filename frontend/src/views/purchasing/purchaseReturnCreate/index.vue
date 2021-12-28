@@ -29,7 +29,7 @@
             </a-col>
             <a-col :span="6" style="width: 320px;">
               <a-form-model-item prop="warehouse" label="仓库">
-                <a-select v-model="form.warehouse" style="width: 100%">
+                <a-select v-model="form.warehouse" style="width: 100%" @change="changeWarehouse">
                   <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">
                     {{ item.name }}
                   </a-select-option>
@@ -69,10 +69,10 @@
             </a-space>
           </a-row>
           <div style="margin-top: 16px;">
-              <a-table rowKey="id" size="middle" :columns="columnsAccount" :data-source="purchase_return_account_items"
+              <a-table rowKey="id" size="middle" :columns="columnsAccount" :data-source="accountsData"
                 :pagination="false">
                 <div slot="account" slot-scope="value, item, index">
-                  <a-select v-model="item.account" style="width: 100%" @change="(value) => changeAccount(value, item, index)">
+                  <a-select v-if="!item.isTotal" v-model="item.account" style="width: 100%" @change="(value) => changeAccount(value, item, index)">
                     <a-select-option v-for="Account in accountsItems" :key="Account.id"
                       :value="Account.id">
                       {{ Account.name }}
@@ -80,13 +80,14 @@
                   </a-select>
                 </div>
                 <div slot="collection_amount" slot-scope="value, item, index">
-                  <a-input-number style="width: 100%"
+                  <div v-if="item.isTotal">{{ value }}</div>
+                  <a-input-number v-if="!item.isTotal" style="width: 100%"
                     v-model="item.collection_amount"
                     :min="0"
                     :precision="2"></a-input-number>
                 </div>
                 <div slot="action" slot-scope="value, item, index">
-                  <a-button-group size="small">
+                  <a-button-group v-if="!item.isTotal" size="small">
                     <a-button type="danger" @click="removeAccount(item)">移除</a-button>
                   </a-button-group>
                 </div>
@@ -102,16 +103,17 @@
             </a-space>
           </a-row>
           <div style="margin-top: 16px;">
-              <a-table rowKey="id" size="middle" :columns="columns" :data-source="materialItems"
+              <a-table rowKey="id" size="middle" :columns="columns" :data-source="goodsData"
                 :pagination="false">
                 <div slot="return_quantity" slot-scope="value, item, index">
-                  <a-input-number v-model="item.return_quantity" :min="0" size="small"></a-input-number>
+                  <div v-if="item.isTotal">{{ value }}</div>
+                  <a-input-number v-else v-model="item.return_quantity" :min="0" size="small"></a-input-number>
                 </div>
                 <div slot="return_price" slot-scope="value, item, index">
-                  <a-input-number v-model="item.return_price" :min="0" size="small"></a-input-number>
+                  <a-input-number v-if="!item.isTotal" v-model="item.return_price" :min="0" size="small"></a-input-number>
                 </div>
                 <div slot="action" slot-scope="value, item, index">
-                  <a-button-group size="small">
+                  <a-button-group v-if="!item.isTotal" size="small">
                     <a-button type="danger" @click="removeMaterial(item)">移除</a-button>
                   </a-button-group>
                 </div>
@@ -179,7 +181,7 @@
             key: 'index',
             width: 45,
             customRender: (value, item, index) => {
-              return index + 1
+              return item.isTotal ? '合计' : (index + 1)
             },
           },
           {
@@ -221,10 +223,15 @@
             scopedSlots: { customRender: 'return_price' },
           },
           {
-            title: '库存数量',
-            dataIndex: 'total_quantity',
-            key: 'total_quantity',
-            width: 150,
+            title: '金额',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            width: 200,
+            customRender: (value, item) => {
+              if (item.isTotal) return value;
+              value = NP.times(item.return_quantity, item.return_price);
+              return item.id ? NP.round(value, 2) : ''
+            },
           },
           {
             title: '操作',
@@ -242,7 +249,7 @@
             key: 'index',
             width: 45,
             customRender: (value, item, index) => {
-              return index + 1
+              return item.isTotal ? '合计' : (index + 1)
             },
           },
           {
@@ -271,6 +278,41 @@
       }
     },
     computed: {
+      goodsData() {
+        // 统计合计
+        let totalQuantity = 0,
+          totalAmount = 0;
+        for (let item of this.materialItems) {
+          totalQuantity = NP.plus(totalQuantity, item.return_quantity);
+          let amount = NP.times(item.return_quantity, item.return_price);
+          totalAmount = NP.plus(totalAmount, amount);
+        }
+        return [
+          ...this.materialItems,
+          {
+            id: '-1',
+            isTotal: true,
+            name: '',
+            return_quantity: totalQuantity,
+            totalAmount: totalAmount,
+          },
+        ];
+      },
+      accountsData() {
+        // 统计合计
+        let totalAmount = 0;
+        for (let item of this.purchase_return_account_items) {
+          totalAmount = NP.plus(totalAmount, item.collection_amount);
+        }
+        return [
+          ...this.purchase_return_account_items,
+          {
+            id: '-1',
+            isTotal: true,
+            collection_amount: totalAmount,
+          },
+        ];
+      },
     },
     methods: {
       moment,
@@ -296,7 +338,7 @@
         this.purchase_return_account_items.push({
           id: this.purchase_return_account_items.length + 1,
           account: '',
-          collection_amount: ''
+          collection_amount: 0
         });
       },
       removeAccount(item) {
@@ -310,6 +352,9 @@
           this.$message.warn('已添加过改结算账户!');
           this.purchase_return_account_items[idx].account = '';
         }
+      },
+      changeWarehouse() {
+        this.materialItems = [];
       },
       openMaterialModal() {
         if (!this.form.warehouse) {
@@ -342,17 +387,30 @@
       create() {
         this.$refs.form.validate(async (valid) => {
           if (valid) {
-            let ifHasEmpty = false;
+            let ifHasEmptyGoods = false;
+            let ifHasEmptyAccounts = false;
+            
+            this.purchase_return_account_items.map(item => {
+              console.log(item.collection_amount)
+              if (!item.account || item.collection_amount === '' || item.collection_amount === null ) {
+                ifHasEmptyAccounts = true;
+              }
+            })
+            if (ifHasEmptyAccounts) {
+              this.$message.warn('请将结算账户信息填写完整');
+              return false
+            }
+
             if (this.materialItems.length == 0) {
               this.$message.warn('未添加商品');
               return false
             }
             this.materialItems.map(item => {
-              if (!item.return_quantity || !item.return_price) {
-                ifHasEmpty = true;
+              if (item.return_price === null || !item.return_quantity) {
+                ifHasEmptyGoods = true;
               }
             })
-            if (ifHasEmpty) {
+            if (ifHasEmptyGoods) {
               this.$message.warn('退货单价退货数量必填');
               return false
             }

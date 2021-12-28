@@ -80,10 +80,15 @@
             width: 120
           },
           {
+            title: '其他费用',
+            dataIndex: 'other_amount',
+            width: 120
+          },
+          {
             title: '操作',
             dataIndex: 'action',
             scopedSlots: { customRender: 'action' },
-            width: 200
+            width: 147
           },
         ],
         searchForm: { page: 1 },
@@ -122,7 +127,7 @@
         this.list();
       },
       detial(item) {
-        this.$router.push({ path: '/purchasing/purchase_record_detail', query: { item: JSON.stringify(item) } });
+        this.$router.push({ path: '/purchasing/purchase_record_detail', query: { id: item.id } });
       },
       voidItem(item) {
         purchaseOrdersVoid({ id: item.id }).then(() => {

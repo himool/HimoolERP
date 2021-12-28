@@ -51,6 +51,7 @@
 </template>
 
 <script>
+  import { purchaseReturnOrderDetail } from '@/api/purchasing'
   
   export default {
     data() {
@@ -66,7 +67,7 @@
             key: 'index',
             width: 45,
             customRender: (value, item, index) => {
-              return index + 1
+              return item.isTotal ? '合计' : (index + 1)
             },
           },
           {
@@ -100,10 +101,15 @@
             width: 120,
           },
           {
-            title: '库存数量',
-            dataIndex: 'total_amount',
-            key: 'total_amount',
-            width: 150,
+            title: '金额',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount',
+            width: 200,
+            customRender: (value, item) => {
+              if (item.isTotal) return value;
+              value = NP.times(item.return_quantity, item.return_price);
+              return item.id ? NP.round(value, 2) : ''
+            },
           }
         ],
         columnsAccount: [
@@ -113,7 +119,7 @@
             key: 'index',
             width: 45,
             customRender: (value, item, index) => {
-              return index + 1
+              return item.isTotal ? '合计' : (index + 1)
             },
           },
           {
@@ -136,8 +142,29 @@
     },
     methods: {
       initData() {
-        console.log()
-        this.info = JSON.parse(this.$route.query.item);
+        this.loading = true;
+        purchaseReturnOrderDetail({ id: this.$route.query.id }).then(data => {
+          this.info = data;
+          this.info.purchase_return_account_items = [
+            ...this.info.purchase_return_account_items,
+            {
+              id: '-1',
+              isTotal: true,
+              collection_amount: this.info.collection_amount,
+            },
+          ];
+          this.info.purchase_return_goods_items = [
+            ...this.info.purchase_return_goods_items,
+            {
+              id: '-1',
+              isTotal: true,
+              purchase_quantity: this.info.total_quantity,
+              totalAmount: this.info.total_amount,
+            },
+          ];
+        }).finally(() => {
+          this.loading = false;
+        });
       },
     },
     mounted() {

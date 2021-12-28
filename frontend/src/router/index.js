@@ -3,9 +3,13 @@ import user from './user'
 import account from './account'
 import manage from './manage'
 import system from './system'
+import report from './report'
 import basicData from './basicData'
 import goods from './goods'
 import purchasing from './purchasing'
+import sale from './sale'
+import warehouse from './warehouse'
+import finance from './finance'
 
 const index = {
   path: '/',
@@ -21,6 +25,6 @@ const index = {
   ]
 }
 
-const routes = [index, user, account, manage, system, basicData, goods, purchasing];
+const routes = [index, user, account, manage, system, report, basicData, goods, purchasing, sale, warehouse, finance];
 
 export default new VueRouter({ mode: 'history', routes })
