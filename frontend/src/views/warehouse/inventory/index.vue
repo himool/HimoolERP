@@ -15,6 +15,7 @@
           @change="tableChange">
           <div slot="action" slot-scope="value, item">
             <a-button-group size="small">
+              <a-button size="small" @click="detial(item)">详情</a-button>
               <a-popconfirm title="确定作废吗?" @confirm="voidItem(item)">
                 <a-button type="danger" :disabled="item.is_void">{{ item.is_void ? '已作废' : '作废'}}</a-button>
               </a-popconfirm>
@@ -55,15 +56,32 @@
             dataIndex: 'warehouse_name',
           },
           {
-            title: '入库类型',
-            dataIndex: 'type_display',
+            title: '经手人',
+            dataIndex: 'handler_name',
           },
           {
-            title: '入库完成状态',
-            dataIndex: 'is_completed',
-            customRender: (value, item, index) => {
-              return item.is_completed ? '完成' : '待入库'
-            },
+            title: '处理日期',
+            dataIndex: 'handle_time',
+          },
+          {
+            title: '账面总数量',
+            dataIndex: 'total_book_quantity',
+          },
+          {
+            title: '实际总数量',
+            dataIndex: 'total_actual_quantity',
+          },
+          {
+            title: '盘盈总数量',
+            dataIndex: 'total_surplus_quantity',
+          },
+          {
+            title: '盘盈总金额',
+            dataIndex: 'total_surplus_amount',
+          },
+          {
+            title: '盘点状态',
+            dataIndex: 'status_display',
           },
           {
             title: '处理日期',
@@ -114,6 +132,9 @@
       },
       handelAdd(item) {
         this.$router.push({ path: '/warehouse/inventory_create' });
+      },
+      detial(item) {
+        this.$router.push({ path: '/warehouse/inventory_detail', query: { id: item.id } });
       },
       voidItem(item) {
         stockCheckOrdersVoid({ id: item.id }).then(() => {

@@ -35,4 +35,7 @@
     color: #2c3e50;
     height: 100%;
   }
+  .panel .ant-table {
+    min-height: 220px !important;
+  }
 </style>

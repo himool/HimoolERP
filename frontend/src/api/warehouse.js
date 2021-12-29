@@ -80,6 +80,10 @@ export function stockCheckOrdersVoid(data) {
 export function stockCheckCreate(data) {
   return request({ url: `/stock_check_orders/`, method: 'post', data })
 }
+// 调拨详情
+export function stockCheckDetail(params) {
+  return request({ url: `/stock_check_orders/${params.id}/`, method: 'get', params })
+}
 
 // 库存流水
 export function inventoryFlowsList(params) {

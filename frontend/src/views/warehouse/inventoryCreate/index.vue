@@ -81,47 +81,47 @@
     </a-card>
     <materials-select-modal v-model="materialsSelectModalVisible" :warehouse="form.warehouse" @select="onSelectMaterial"></materials-select-modal>
     <!-- 批次 -->
-      <a-modal
-        :title="batchTitle"
-        v-model="batchVisible"
-        width="750px"
-        cancelText="关闭"
-        :maskClosable="false"
-        @cancel="batchVisible=false"
-        @ok="confirmChoosed">
-        <div style="margin-bottom: 16px">
-          <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="addLine">添加</a-button>
+    <a-modal
+      :title="batchTitle"
+      v-model="batchVisible"
+      width="750px"
+      cancelText="关闭"
+      :maskClosable="false"
+      @cancel="batchVisible=false"
+      @ok="confirmChoosed">
+      <div style="margin-bottom: 16px">
+        <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="addLine">添加</a-button>
+      </div>
+      <a-table
+        rowkey="id"
+        :columns="columnsBatch"
+        :data-source="stockCheckBatchItems"
+        :pagination="false"
+        style="width: 100%" >
+        <div slot="actual_quantity" slot-scope="value, item">
+          <a-input-number
+            :value="item.actual_quantity"
+            min="1"
+            @change="(value) => changeQuantityBatch(value, item, 'actual_quantity')" />
         </div>
-        <a-table
-          rowkey="id"
-          :columns="columnsBatch"
-          :data-source="stockCheckBatchItems"
-          :pagination="false"
-          style="width: 100%" >
-          <div slot="actual_quantity" slot-scope="value, item">
-            <a-input-number
-              :value="item.actual_quantity"
-              min="1"
-              @change="(value) => changeQuantityBatch(value, item, 'actual_quantity')" />
-          </div>
-          <div slot="batch_number" slot-scope="value, item">
-            <a-select v-model="item.batch_number" @change="(e) => changeQuantityBatch(e, item, 'batch_number')" style="width: 100%">
-              <a-select-option v-for="Batch in curBatchOptions" :key="Batch.number" :value="Batch.number">
-                {{ Batch.number }}
-              </a-select-option>
-            </a-select>
-          </div>
-          <div slot="production_date" slot-scope="value, item">
-            <a-date-picker
-              :value="item.production_date"
-              valueFormat="YYYY-MM-DD"
-              @change="(value) => changeQuantityBatch(value, item, 'production_date')" />
-          </div>
-          <div slot="action" slot-scope="value,item">
-            <a-button icon="minus" @click="removeLine(item)"></a-button>
-          </div>
-        </a-table>
-      </a-modal>
+        <div slot="batch_number" slot-scope="value, item">
+          <a-select v-model="item.batch_number" @change="(e) => changeQuantityBatch(e, item, 'batch_number')" style="width: 100%">
+            <a-select-option v-for="Batch in curBatchOptions" :key="Batch.number" :value="Batch.number">
+              {{ Batch.number }}
+            </a-select-option>
+          </a-select>
+        </div>
+        <div slot="production_date" slot-scope="value, item">
+          <a-date-picker
+            :value="item.production_date"
+            valueFormat="YYYY-MM-DD"
+            @change="(value) => changeQuantityBatch(value, item, 'production_date')" />
+        </div>
+        <div slot="action" slot-scope="value,item">
+          <a-button icon="minus" @click="removeLine(item)"></a-button>
+        </div>
+      </a-table>
+    </a-modal>
   </div>
 </template>
 

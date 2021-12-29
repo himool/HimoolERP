@@ -66,8 +66,13 @@ export default {
     },
     {
       path: 'inventory_create',
-      meta: { title: '调拨创建', permission: 'inventory_create' },
+      meta: { title: '盘点创建', permission: 'inventory_create' },
       component: () => import('@/views/warehouse/inventoryCreate/index'),
+    },
+    {
+      path: 'inventory_detail',
+      meta: { title: '盘点详情', permission: 'inventory_detail' },
+      component: () => import('@/views/warehouse/inventoryDetail/index'),
     },
     {
       path: 'flow',
