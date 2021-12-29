@@ -32,7 +32,7 @@ class WarehouseSerializer(BaseSerializer):
 class WarehouseExportSerializer(BaseSerializer):
     number = CharField(label='编号')
     name = CharField(label='名称')
-    manager_name = CharField(source='manager.name', label='管理员')
+    manager_name = CharField(source='manager.name', default=None, label='管理员')
     phone = CharField(label='电话')
     address = CharField(label='地址')
     remark = CharField(label='备注')
@@ -140,7 +140,7 @@ class ClientExportSerializer(BaseSerializer):
     number = CharField(label='编号')
     name = CharField(label='名称')
     level_display = CharField(source='get_level_display', label='等级')
-    category_name = CharField(label='分类')
+    category_name = CharField(source='category.name', default=None, label='分类')
     contact = CharField(label='联系人')
     phone = CharField(label='手机号')
     email = CharField(label='邮箱')
@@ -253,7 +253,7 @@ class SupplierSerializer(BaseSerializer):
 class SupplierExportSerializer(BaseSerializer):
     number = CharField(label='编号')
     name = CharField(label='名称')
-    category_name = CharField(label='分类')
+    category_name = CharField(source='category.name', default=None, label='分类')
     contact = CharField(label='联系人')
     phone = CharField(label='手机号')
     email = CharField(label='邮箱')

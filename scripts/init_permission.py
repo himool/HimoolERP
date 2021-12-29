@@ -3,8 +3,12 @@ from apps.system.models import PermissionGroup, Permission
 
 PERMISSIONS = [
     {
-        'name': '数据报表',
+        'name': '报表统计',
         'permissions': [
+            {'name': '销售报表', 'code': 'warehouse_inventory'},
+            {'name': '采购报表', 'code': 'warehouse_inventory'},
+            {'name': '库存报表', 'code': 'warehouse_inventory'},
+            {'name': '收支统计', 'code': 'warehouse_inventory'},
             {'name': '库存报表', 'code': 'warehouse_inventory'},
         ],
     },
