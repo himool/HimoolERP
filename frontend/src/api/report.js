@@ -40,3 +40,28 @@ export function batchsReportList(params) {
 export function profitTrends(params) {
   return request({ url: `/profit_trends/`, method: 'get', params })
 }
+
+// 收支统计
+export function financialStatistics(params) {
+  return request({ url: `/finance_statistics/`, method: 'get', params })
+}
+
+// 订单收款明细
+export function salesPaymentRecord(params) {
+  return request({ url: `/sales_collection_detials/`, method: 'get', params })
+}
+
+// 销售退款明细
+export function salesReturnPaymentRecord(params) {
+  return request({ url: `/sales_return_payment_detials/`, method: 'get', params })
+}
+
+// 采购支出明细
+export function purchasePaymentRecord(params) {
+  return request({ url: `/purchase_payment_detials/`, method: 'get', params })
+}
+
+// 采购退款明细
+export function purchaseReturnPaymentRecord(params) {
+  return request({ url: `/purchase_return_collection_detials/`, method: 'get', params })
+}
