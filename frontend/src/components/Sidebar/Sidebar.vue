@@ -2,7 +2,7 @@
   <div style="height: 100vh;">
     <div class="logo" @click="$router.push('/inventory_report')" style="width: 256px">
       <img :src="logo" width="36" style="margin-top: -6px; margin-left: 8px;" />
-      <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px;">联友</span>
+      <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px;">海鸥云</span>
       <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px; font-size: 18px;">ERP</span>
     </div>
     <a-menu theme="light" mode="inline" :selectedKeys="selectedKeys" :openKeys="openKeys" :inline-collapsed="collapsed"
