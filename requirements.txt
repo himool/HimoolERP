@@ -2,7 +2,7 @@ asgiref==3.4.1
 attrs==21.2.0
 autopep8==1.6.0
 click==8.0.3
-Django==4.0
+Django==3.2
 django-debug-toolbar==3.2.2
 django-extensions==3.1.5
 django-filter==21.1
