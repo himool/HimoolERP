@@ -3,7 +3,7 @@
 #### 开源ERP管理系统，该前后端分离，api使用restful协议，方便二次开发，后端使用Python，Django，DRF等技术，前端代码使用AntD进行构建，包含采购管理，销售管理，库存管理等业务管理流程。
 * Gitee地址: [Gitee](https://gitee.com/haioucloud/erp)
 * Github地址: [Github](https://github.com/lianzhanshu/oms)
-* Demo地址: [Demo](http://erp.haioucloud.com/) &nbsp;&nbsp;测试帐号：admin  密码：admin
+* Demo地址: [Demo](http://114.218.158.78:12222/) &nbsp;&nbsp;公司编号: admin  测试帐号：admin  密码：admin
 
 ### 使用前须知
 * 软件开放源码(发行协议:GPL-3.0)，用户可免费使用，但禁止任何单位或个人修改软件后再次发行的行为。
