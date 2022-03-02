@@ -15,7 +15,7 @@
    ![微信](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%BE%AE%E4%BF%A1.png)
 
 ### 项目背景
-#### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的海鸥云ERP系统，支持高自由度的开发，来支持企业的自定义需求。我们的代码将持续更新，并且保持与[Demo](http://erp.haioucloud.com/)地址的同步。
+#### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的海鸥云ERP系统，支持高自由度的开发，来支持企业的自定义需求。我们的代码将持续更新，并且保持与[Demo](http://114.218.158.78:12222/)地址的同步。
 
 ### 开发环境
 * Python版本为V3.9+
@@ -30,14 +30,14 @@
 
 * pip install -r requirements.txt
 * cd frontend  #进入frontend文件夹
-* npm install -g @vue/cli
-* npm install
+* npm install -g @vue/cli  #安装vue脚手架
+* npm install  #安装依赖包
 
 ### 配置 MySQL
 
 1. 数据库字符集设置为 utf8mb4
-2. 创建 oms-db 数据库(先设置字符集, 再创建数据库)
-    CREATE DATABASE oms_db;
+2. 创建 erp-db 数据库(先设置字符集, 再创建数据库)
+    CREATE DATABASE erp_db;
 3. 迁移数据库
     * python manage.py makemigrations
     * python manage.py migrate
