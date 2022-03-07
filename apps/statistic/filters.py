@@ -45,15 +45,6 @@ class SalesTrendFilter(FilterSet):
         fields = ['start_date', 'end_date']
 
 
-class ProfitTrendFilter(FilterSet):
-    start_date = DateFilter(field_name='sales_order__create_time', required=True, lookup_expr='gte', label='开始日期')
-    end_date = DateFilter(field_name='sales_order__create_time', required=True, lookup_expr='lt', label='结束日期')
-
-    class Meta:
-        model = SalesGoods
-        fields = ['start_date', 'end_date']
-
-
 class PaymentOrderDetialFilter(FilterSet):
     start_date = DateFilter(field_name='create_time', required=True, lookup_expr='gte', label='开始日期')
     end_date = DateFilter(field_name='create_time', required=True, lookup_expr='lt', label='结束日期')
@@ -128,7 +119,7 @@ class SalesReturnPaymentDetialFilter(FilterSet):
 
 __all__ = [
     'PurchaseReportFilter', 'SalesReportFilter',
-    'SalesHotGoodsFilter', 'SalesTrendFilter', 'ProfitTrendFilter',
+    'SalesHotGoodsFilter', 'SalesTrendFilter',
     'PaymentOrderDetialFilter', 'CollectionOrderDetialFilter',
     'IncomeChargeOrderDetialFilter', 'ExpenditureChargeOrderDetialFilter',
     'PurchasePaymentDetialFilter', 'PurchaseReturnCollectionDetialFilter',

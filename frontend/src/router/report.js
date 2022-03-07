@@ -24,10 +24,5 @@ export default {
       meta: { title: '收支统计', permission: 'income_expense_statistics' },
       component: () => import('@/views/report/incomeExpenseStatistics/index'),
     },
-    {
-      path: 'profit_trend',
-      meta: { title: '收支统计', permission: 'profit_trend' },
-      component: () => import('@/views/report/profitTrend/index'),
-    },
   ],
 }
