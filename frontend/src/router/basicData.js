@@ -5,19 +5,9 @@ export default {
   redirect: '/basicData/client_classification',
   children: [
     {
-      path: 'client_classification',
-      meta: { title: '客户分类', permission: 'client_classification' },
-      component: () => import('@/views/basicData/clientClassification/index'),
-    },
-    {
       path: 'client',
       meta: { title: '客户', permission: 'client' },
       component: () => import('@/views/basicData/client/index'),
-    },
-    {
-      path: 'supplier_classification',
-      meta: { title: '供应商分类', permission: 'supplier_classification' },
-      component: () => import('@/views/basicData/supplierClassification/index'),
     },
     {
       path: 'supplier',

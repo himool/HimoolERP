@@ -1,4 +1,3 @@
-from apps.option.views import PurchaseOrderOptionViewSet
 from extensions.routers import *
 from apps.option.views import *
 
@@ -11,9 +10,7 @@ router.register('users/options', UserOptionViewSet, 'user_option')
 
 # Data
 router.register('warehouses/options', WarehouseOptionViewSet, 'warehouse_option')
-router.register('client_categories/options', ClientCategoryOptionViewSet, 'client_category_option')
 router.register('clients/options', ClientOptionViewSet, 'client_option')
-router.register('supplier_categories/options', SupplierCategoryOptionViewSet, 'supplier_category_option')
 router.register('suppliers/options', SupplierOptionViewSet, 'supplier_option')
 router.register('accounts/options', AccountOptionViewSet, 'account_option')
 router.register('charge_items/options', ChargeItemOptionViewSet, 'charge_item_option')

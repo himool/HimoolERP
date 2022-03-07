@@ -21,17 +21,7 @@ class ChargeItemPermission(ModelPermission):
     code = 'charge_item'
 
 
-class ClientCategoryPermission(ModelPermission):
-    code = 'client_category'
-
-
-class SupplierCategoryPermission(ModelPermission):
-    code = 'supplier_category'
-
-
-
-
 __all__ = [
     'WarehousePermission', 'ClientPermission', 'SupplierPermission', 'AccountPermission',
-    'ChargeItemPermission', 'ClientCategoryPermission', 'SupplierCategoryPermission',
+    'ChargeItemPermission',
 ]

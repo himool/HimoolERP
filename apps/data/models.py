@@ -33,16 +33,6 @@ class Warehouse(Model):
         return number
 
 
-class ClientCategory(Model):
-    """客户分类"""
-
-    name = CharField(max_length=64, verbose_name='名称')
-    remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='client_categories')
-
-    class Meta:
-        unique_together = [('name', 'team')]
-
 
 class Client(Model):
     """客户"""
@@ -58,8 +48,6 @@ class Client(Model):
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
     level = CharField(max_length=32, choices=Level.choices, default=Level.LEVEL0, verbose_name='等级')
-    category = ForeignKey('data.ClientCategory', on_delete=SET_NULL, null=True,
-                          related_name='clients', verbose_name='客户分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
     phone = CharField(max_length=32, null=True, blank=True, verbose_name='手机号')
     email = CharField(max_length=256, null=True, blank=True, verbose_name='邮箱')
@@ -88,24 +76,11 @@ class Client(Model):
         return number
 
 
-class SupplierCategory(Model):
-    """供应商分类"""
-
-    name = CharField(max_length=64, verbose_name='名称')
-    remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
-    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='supplier_categories')
-
-    class Meta:
-        unique_together = [('name', 'team')]
-
-
 class Supplier(Model):
     """供应商"""
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
-    category = ForeignKey('data.SupplierCategory', on_delete=SET_NULL, null=True,
-                          related_name='suppliers', verbose_name='供应商分类')
     contact = CharField(max_length=64, null=True, blank=True, verbose_name='联系人')
     phone = CharField(max_length=32, null=True, blank=True, verbose_name='手机号')
     email = CharField(max_length=256, null=True, blank=True, verbose_name='邮箱')
@@ -195,6 +170,5 @@ class ChargeItem(Model):
 
 
 __all__ = [
-    'Warehouse', 'ClientCategory', 'Client', 'SupplierCategory', 'Supplier',
-    'Account', 'ChargeItem',
+    'Warehouse', 'Client', 'Supplier', 'Account', 'ChargeItem',
 ]

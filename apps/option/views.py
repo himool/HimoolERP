@@ -41,13 +41,6 @@ class WarehouseOptionViewSet(InfiniteOptionViewSet):
     queryset = Warehouse.objects.all()
 
 
-class ClientCategoryOptionViewSet(InfiniteOptionViewSet):
-    serializer_class = ClientCategoryOptionSerializer
-    permission_classes = [IsAuthenticated, ClientCategoryOptionPermission]
-    search_fields = ['name']
-    queryset = ClientCategory.objects.all()
-
-
 class ClientOptionViewSet(InfiniteOptionViewSet):
     serializer_class = ClientOptionSerializer
     permission_classes = [IsAuthenticated, ClientOptionPermission]
@@ -56,13 +49,6 @@ class ClientOptionViewSet(InfiniteOptionViewSet):
     ordering_fields = ['id', 'number', 'order']
     ordering = ['order', 'number', 'id']
     queryset = Client.objects.all()
-
-
-class SupplierCategoryOptionViewSet(InfiniteOptionViewSet):
-    serializer_class = SupplierCategoryOptionSerializer
-    permission_classes = [IsAuthenticated, SupplierCategoryOptionPermission]
-    search_fields = ['name']
-    queryset = SupplierCategory.objects.all()
 
 
 class SupplierOptionViewSet(InfiniteOptionViewSet):
@@ -190,9 +176,7 @@ class SupplierArrearsOptionViewSet(InfiniteOptionViewSet):
 
 __all__ = [
     'RoleOptionViewSet', 'UserOptionViewSet',
-    'WarehouseOptionViewSet',
-    'ClientCategoryOptionViewSet', 'ClientOptionViewSet',
-    'SupplierCategoryOptionViewSet', 'SupplierOptionViewSet',
+    'WarehouseOptionViewSet', 'ClientOptionViewSet', 'SupplierOptionViewSet',
     'AccountOptionViewSet', 'ChargeItemOptionViewSet',
     'GoodsCategoryOptionViewSet', 'GoodsUnitOptionViewSet', 'GoodsOptionViewSet',
     'BatchOptionViewSet', 'InventoryOptionViewSet',

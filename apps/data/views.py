@@ -105,67 +105,15 @@ class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class ClientCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
-    """客户分类"""
-
-    serializer_class = ClientCategorySerializer
-    permission_classes = [IsAuthenticated, ClientCategoryPermission]
-    search_fields = ['name', 'remark']
-    ordering_fields = ['id', 'name']
-    queryset = ClientCategory.objects.all()
-
-    @extend_schema(responses={200: DownloadResponse})
-    @action(detail=False, methods=['get'])
-    def export(self, request, *args, **kwargs):
-        """导出"""
-
-        return self.get_export_response(ClientCategoryExportSerializer)
-
-    @extend_schema(responses={200: DownloadResponse})
-    @action(detail=False, methods=['get'])
-    def import_template(self, request, *args, **kwargs):
-        """导入模板"""
-
-        return self.get_template_response(ClientCategoryImportSerializer)
-
-    @extend_schema(request=UploadRequest, responses={200: ClientCategorySerializer(many=True)})
-    @action(detail=False, methods=['post'])
-    @transaction.atomic
-    def import_data(self, request, *args, **kwargs):
-        """导入数据"""
-
-        request_serializer = UploadRequest(data=request.data)
-        request_serializer.is_valid(raise_exception=True)
-        validated_data = request_serializer.validated_data
-
-        client_categories = []
-        for import_serializer in self.load_data(validated_data['file'], ClientCategoryImportSerializer):
-            validated_data = import_serializer.validated_data
-            if client_category := ClientCategory.objects.filter(name=validated_data['name'],
-                                                                team=self.team).first():
-                serializer = ClientCategorySerializer(instance=client_category, data=validated_data,
-                                                      context=self.context)
-            else:
-                serializer = ClientCategorySerializer(data=validated_data, context=self.context)
-
-            serializer.is_valid(raise_exception=True)
-            client_category = serializer.save()
-            client_categories.append(client_category)
-
-        serializer = ClientCategorySerializer(instance=client_categories, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-
 class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """客户"""
 
     serializer_class = ClientSerializer
     permission_classes = [IsAuthenticated, ClientPermission]
-    filterset_fields = ['level', 'category', 'is_active']
+    filterset_fields = ['level', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']
-    select_related_fields = ['category']
     queryset = Client.objects.all()
 
     @extend_schema(responses={200: NumberResponse})
@@ -218,67 +166,15 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class SupplierCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
-    """供应商分类"""
-
-    serializer_class = SupplierCategorySerializer
-    permission_classes = [IsAuthenticated, SupplierCategoryPermission]
-    search_fields = ['name', 'remark']
-    ordering_fields = ['id', 'name']
-    queryset = SupplierCategory.objects.all()
-
-    @extend_schema(responses={200: DownloadResponse})
-    @action(detail=False, methods=['get'])
-    def export(self, request, *args, **kwargs):
-        """导出"""
-
-        return self.get_export_response(SupplierCategoryExportSerializer)
-
-    @extend_schema(responses={200: DownloadResponse})
-    @action(detail=False, methods=['get'])
-    def import_template(self, request, *args, **kwargs):
-        """导入模板"""
-
-        return self.get_template_response(SupplierCategoryImportSerializer)
-
-    @extend_schema(request=UploadRequest, responses={200: SupplierCategorySerializer(many=True)})
-    @action(detail=False, methods=['post'])
-    @transaction.atomic
-    def import_data(self, request, *args, **kwargs):
-        """导入数据"""
-
-        request_serializer = UploadRequest(data=request.data)
-        request_serializer.is_valid(raise_exception=True)
-        validated_data = request_serializer.validated_data
-
-        supplier_categories = []
-        for import_serializer in self.load_data(validated_data['file'], SupplierCategoryImportSerializer):
-            validated_data = import_serializer.validated_data
-            if supplier_category := SupplierCategory.objects.filter(name=validated_data['name'],
-                                                                    team=self.team).first():
-                serializer = SupplierCategorySerializer(instance=supplier_category, data=validated_data,
-                                                        context=self.context)
-            else:
-                serializer = SupplierCategorySerializer(data=validated_data, context=self.context)
-
-            serializer.is_valid(raise_exception=True)
-            supplier_category = serializer.save()
-            supplier_categories.append(supplier_category)
-
-        serializer = SupplierCategorySerializer(instance=supplier_categories, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-
 class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     """供应商"""
 
     serializer_class = SupplierSerializer
     permission_classes = [IsAuthenticated, SupplierPermission]
-    filterset_fields = ['category', 'is_active']
+    filterset_fields = ['is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order']
     ordering = ['order', 'id']
-    select_related_fields = ['category']
     queryset = Supplier.objects.all()
 
     @extend_schema(responses={200: NumberResponse})
@@ -445,8 +341,6 @@ class ChargeItemViewSet(ModelViewSet, ExportMixin, ImportMixin):
 
 
 __all__ = [
-    'WarehouseViewSet',
-    'ClientCategoryViewSet', 'ClientViewSet',
-    'SupplierCategoryViewSet', 'SupplierViewSet',
+    'WarehouseViewSet', 'ClientViewSet', 'SupplierViewSet',
     'AccountViewSet', 'ChargeItemViewSet',
 ]

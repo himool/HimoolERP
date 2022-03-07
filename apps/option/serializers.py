@@ -31,25 +31,11 @@ class WarehouseOptionSerializer(ModelSerializer):
         fields = ['id', 'number', 'name', 'is_locked', 'is_active']
 
 
-class ClientCategoryOptionSerializer(ModelSerializer):
-
-    class Meta:
-        model = ClientCategory
-        fields = ['id', 'name']
-
-
 class ClientOptionSerializer(ModelSerializer):
 
     class Meta:
         model = Client
         fields = ['id', 'number', 'name', 'level', 'is_active']
-
-
-class SupplierCategoryOptionSerializer(ModelSerializer):
-
-    class Meta:
-        model = SupplierCategory
-        fields = ['id', 'name']
 
 
 class SupplierOptionSerializer(ModelSerializer):
@@ -225,9 +211,7 @@ class SupplierArrearsOptionSerializer(BaseSerializer):
 
 __all__ = [
     'RoleOptionSerializer', 'UserOptionSerializer',
-    'WarehouseOptionSerializer',
-    'ClientCategoryOptionSerializer', 'ClientOptionSerializer',
-    'SupplierCategoryOptionSerializer', 'SupplierOptionSerializer',
+    'WarehouseOptionSerializer', 'ClientOptionSerializer', 'SupplierOptionSerializer',
     'AccountOptionSerializer', 'ChargeItemOptionSerializer',
     'GoodsCategoryOptionSerializer', 'GoodsUnitOptionSerializer', 'GoodsOptionSerializer',
     'BatchOptionSerializer', 'InventoryOptionSerializer',

@@ -71,44 +71,13 @@ class WarehouseImportSerializer(BaseSerializer):
         return super().validate(attrs)
 
 
-class ClientCategorySerializer(BaseSerializer):
-
-    class Meta:
-        model = ClientCategory
-        read_only_fields = ['id']
-        fields = ['name', 'remark', *read_only_fields]
-
-    def validate_name(self, value):
-        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
-        return value
-
-
-class ClientCategoryExportSerializer(BaseSerializer):
-    name = CharField(label='名称')
-    remark = CharField(label='备注')
-
-    class Meta:
-        model = ClientCategory
-        fields = ['name', 'remark']
-
-
-class ClientCategoryImportSerializer(BaseSerializer):
-    name = CharField(label='名称(必填)')
-    remark = CharField(required=False, label='备注')
-
-    class Meta:
-        model = ClientCategory
-        fields = ['name', 'remark']
-
-
 class ClientSerializer(BaseSerializer):
     level_display = CharField(source='get_level_display', read_only=True, label='等级')
-    category_name = CharField(source='category.name', read_only=True, label='分类名称')
 
     class Meta:
         model = Client
-        read_only_fields = ['id', 'level_display', 'category_name']
-        fields = ['number', 'name', 'level', 'category', 'contact', 'phone', 'email', 'address',
+        read_only_fields = ['id', 'level_display']
+        fields = ['number', 'name', 'level', 'contact', 'phone', 'email', 'address',
                   'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
@@ -118,10 +87,6 @@ class ClientSerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
-
-    def validate_category(self, instance):
-        instance = self.validate_foreign_key(ClientCategory, instance, message='客户分类不存在')
-        return instance
 
     def create(self, validated_data):
         validated_data['arrears_amount'] = validated_data.get('initial_arrears_amount', 0)
@@ -185,44 +150,12 @@ class ClientImportSerializer(BaseSerializer):
 
         return super().validate(attrs)
 
-
-class SupplierCategorySerializer(BaseSerializer):
-
-    class Meta:
-        model = SupplierCategory
-        read_only_fields = ['id']
-        fields = ['name', 'remark', *read_only_fields]
-
-    def validate_name(self, value):
-        self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
-        return value
-
-
-class SupplierCategoryExportSerializer(BaseSerializer):
-    name = CharField(label='名称')
-    remark = CharField(label='备注')
-
-    class Meta:
-        model = SupplierCategory
-        fields = ['name', 'remark']
-
-
-class SupplierCategoryImportSerializer(BaseSerializer):
-    name = CharField(label='名称(必填)')
-    remark = CharField(required=False, label='备注')
-
-    class Meta:
-        model = SupplierCategory
-        fields = ['name', 'remark']
-
-
 class SupplierSerializer(BaseSerializer):
-    category_name = CharField(source='category.name', read_only=True, label='分类名称')
 
     class Meta:
         model = Supplier
-        read_only_fields = ['id', 'category_name']
-        fields = ['number', 'name', 'category', 'contact', 'phone', 'email', 'address', 'bank_account',
+        read_only_fields = ['id']
+        fields = ['number', 'name', 'contact', 'phone', 'email', 'address', 'bank_account',
                   'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
@@ -232,10 +165,6 @@ class SupplierSerializer(BaseSerializer):
     def validate_name(self, value):
         self.validate_unique({'name': value}, message=f'名称[{value}]已存在')
         return value
-
-    def validate_category(self, instance):
-        instance = self.validate_foreign_key(SupplierCategory, instance, message='供应商分类不存在')
-        return instance
 
     def create(self, validated_data):
         validated_data['arrears_amount'] = validated_data.get('initial_arrears_amount', 0)
@@ -399,9 +328,7 @@ class ChargeItemImportSerializer(BaseSerializer):
 
 __all__ = [
     'WarehouseSerializer', 'WarehouseExportSerializer', 'WarehouseImportSerializer',
-    'ClientCategorySerializer', 'ClientCategoryExportSerializer', 'ClientCategoryImportSerializer',
     'ClientSerializer', 'ClientExportSerializer', 'ClientImportSerializer',
-    'SupplierCategorySerializer', 'SupplierCategoryExportSerializer', 'SupplierCategoryImportSerializer',
     'SupplierSerializer', 'SupplierExportSerializer', 'SupplierImportSerializer',
     'AccountSerializer', 'AccountExportSerializer', 'AccountImportSerializer',
     'ChargeItemSerializer', 'ChargeItemExportSerializer', 'ChargeItemImportSerializer',
