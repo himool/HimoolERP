@@ -1,22 +1,5 @@
 import request from '@/utils/request';
 
-// 客户分类
-export function clientClassificationList(params) {
-  return request({ url: `/client_categories/`, method: 'get', params })
-}
-
-export function clientClassificationCreate(data) {
-  return request({ url: `/client_categories/`, method: 'post', data })
-}
-
-export function clientClassificationUpdate(data) {
-  return request({ url: `/client_categories/${data.id}/`, method: 'put', data })
-}
-
-export function clientClassificationDestroy(data) {
-  return request({ url: `/client_categories/${data.id}/`, method: 'delete', data })
-}
-
 // 客户
 export function clientList(params) {
   return request({ url: `/clients/`, method: 'get', params })
@@ -32,23 +15,6 @@ export function clientUpdate(data) {
 
 export function clientDestroy(data) {
   return request({ url: `/clients/${data.id}/`, method: 'delete', data })
-}
-
-// 供应商分类
-export function supplierClassificationList(params) {
-  return request({ url: `/supplier_categories/`, method: 'get', params })
-}
-
-export function supplierClassificationCreate(data) {
-  return request({ url: `/supplier_categories/`, method: 'post', data })
-}
-
-export function supplierClassificationUpdate(data) {
-  return request({ url: `/supplier_categories/${data.id}/`, method: 'put', data })
-}
-
-export function supplierClassificationDestroy(data) {
-  return request({ url: `/supplier_categories/${data.id}/`, method: 'delete', data })
 }
 
 // 供应商
