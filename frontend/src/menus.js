@@ -4,9 +4,7 @@ export default [
       { key: '/report/sale_report', name: '销售报表' },
       { key: '/report/purchase_report', name: '采购报表' },
       { key: '/report/stock_report', name: '库存报表' },
-      { key: '/report/batch_report', name: '批次报表' },
       { key: '/report/income_expense_statistics', name: '收支统计' },
-      { key: '/report/profit_trend', name: '利润走势' },
     ]
   },
   {

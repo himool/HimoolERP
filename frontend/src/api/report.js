@@ -31,16 +31,6 @@ export function inventoryReportList(params) {
   return request({ url: `/inventories/`, method: 'get', params })
 }
 
-// 批次报表
-export function batchsReportList(params) {
-  return request({ url: `/batchs/`, method: 'get', params })
-}
-
-// 利润走势
-export function profitTrends(params) {
-  return request({ url: `/profit_trends/`, method: 'get', params })
-}
-
 // 收支统计
 export function financialStatistics(params) {
   return request({ url: `/finance_statistics/`, method: 'get', params })

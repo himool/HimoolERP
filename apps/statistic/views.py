@@ -193,35 +193,6 @@ class SalesTrendViewSet(BaseViewSet, ListModelMixin):
         return Response(data=queryset, status=status.HTTP_200_OK)
 
 
-class ProfitTrendViewSet(BaseViewSet, ListModelMixin):
-    """利润走势"""
-
-    permission_classes = [IsAuthenticated, ProfitTrendPermission]
-    pagination_class = None
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = ProfitTrendFilter
-    queryset = SalesGoods.objects.all()
-
-    def get_queryset(self):
-        return super().get_queryset().filter(sales_order__is_void=False)
-
-    @extend_schema(parameters=[ProfitTrendParameter], responses={200: ProfitTrendResponse})
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset.select_related('sales_order__warehouse')
-        queryset = queryset.extra(select={'date': connection.ops.date_trunc_sql('day', 'create_time')})
-        queryset = queryset.values('sales_order__warehouse', 'date').annotate(
-            warehouse=F('sales_order__warehouse'),
-            warehouse_number=F('sales_order__warehouse__number'),
-            warehouse_name=F('sales_order__warehouse__name'),
-            total_profit_amount=Coalesce(Sum(
-                F('total_amount') - F('sales_quantity') * F('goods__purchase_price'),
-                output_field=AmountField()), Value(0, output_field=AmountField())),
-        ).values('warehouse', 'warehouse_number', 'warehouse_name', 'total_profit_amount', 'date')
-
-        return Response(data=queryset, status=status.HTTP_200_OK)
-
-
 class FinanceStatisticViewSet(FunctionViewSet):
     """收支统计"""
 
@@ -359,7 +330,7 @@ class SalesReturnPaymentDetialViewSet(BaseViewSet, ListModelMixin):
 
 __all__ = [
     'PurchaseReportViewSet', 'SalesReportViewSet', 'SalesHotGoodsViewSet',
-    'SalesTrendViewSet', 'ProfitTrendViewSet', 'FinanceStatisticViewSet',
+    'SalesTrendViewSet', 'FinanceStatisticViewSet',
     'PaymentOrderDetialViewSet', 'CollectionOrderDetialViewSet',
     'IncomeChargeOrderDetialViewSet', 'ExpenditureChargeOrderDetialViewSet',
     'PurchasePaymentDetialViewSet', 'PurchaseReturnCollectionDetialViewSet',

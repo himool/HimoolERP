@@ -20,11 +20,6 @@ export default {
       component: () => import('@/views/report/stockReport/index'),
     },
     {
-      path: 'batch_report',
-      meta: { title: '批次报表', permission: 'batch_report' },
-      component: () => import('@/views/report/batchReport/index'),
-    },
-    {
       path: 'income_expense_statistics',
       meta: { title: '收支统计', permission: 'income_expense_statistics' },
       component: () => import('@/views/report/incomeExpenseStatistics/index'),

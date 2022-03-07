@@ -85,19 +85,6 @@ class SalesTrendResponse(Serializer):
     date = DateField(label='日期')
 
 
-class ProfitTrendParameter(Serializer):
-    start_date = DateField(required=True, label='开始日期')
-    end_date = DateField(required=True, label='结束日期')
-
-
-class ProfitTrendResponse(Serializer):
-    warehouse = IntegerField(label='仓库ID')
-    warehouse_number = CharField(label='商品编号')
-    warehouse_name = CharField(label='商品名称')
-    total_profit_amount = AmountField(label='销售总利润')
-    date = DateField(label='日期')
-
-
 class FinanceStatisticParameter(Serializer):
     start_date = DateField(required=True, label='开始日期')
     end_date = DateField(required=True, label='结束日期')
@@ -116,6 +103,5 @@ __all__ = [
     'PurchaseReportParameter', 'PurchaseReportStatisticResponse', 'PurchaseReportGroupByGoodsResponse',
     'SalesReportParameter', 'SalesReportStatisticResponse', 'SalesReportGroupByGoodsResponse',
     'SalesHotGoodsParameter', 'SalesHotGoodsResponse', 'SalesTrendParameter', 'SalesTrendResponse',
-    'ProfitTrendParameter', 'ProfitTrendResponse',
     'FinanceStatisticParameter', 'FinanceStatisticResponse',
 ]
