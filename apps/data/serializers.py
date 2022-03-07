@@ -140,16 +140,6 @@ class ClientImportSerializer(BaseSerializer):
         fields = ['number', 'name', 'level', 'category_name', 'contact', 'phone',
                   'email', 'address', 'remark', 'order', 'is_active', 'initial_arrears_amount']
 
-    def validate(self, attrs):
-        if category_name := attrs.pop('category_name', None):
-            client_category = ClientCategory.objects.filter(name=category_name, team=self.team).first()
-            if not client_category:
-                raise ValidationError(f'客户分类[{category_name}]不存在')
-
-            attrs['category'] = client_category
-
-        return super().validate(attrs)
-
 class SupplierSerializer(BaseSerializer):
 
     class Meta:
@@ -219,16 +209,6 @@ class SupplierImportSerializer(BaseSerializer):
         model = Supplier
         fields = ['number', 'name', 'category_name', 'contact', 'phone', 'email', 'address',
                   'bank_account', 'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount']
-
-    def validate(self, attrs):
-        if category_name := attrs.pop('category_name', None):
-            supplier_category = SupplierCategory.objects.filter(name=category_name, team=self.team).first()
-            if not supplier_category:
-                raise ValidationError(f'供应商分类[{category_name}]不存在')
-
-            attrs['category'] = supplier_category
-
-        return super().validate(attrs)
 
 
 class AccountSerializer(BaseSerializer):
