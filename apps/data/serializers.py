@@ -125,7 +125,6 @@ class SupplierSerializer(BaseSerializer):
 class SupplierImportExportSerializer(BaseSerializer):
     number = CharField(label='编号(必填唯一)')
     name = CharField(label='名称(必填唯一)')
-    level = CharField(required=False, label='等级[0/1/2/3](默认: 0)')
     contact = CharField(required=False, label='联系人')
     phone = CharField(required=False, label='手机号')
     email = CharField(required=False, label='邮箱')
@@ -138,7 +137,7 @@ class SupplierImportExportSerializer(BaseSerializer):
 
     class Meta:
         model = Supplier
-        fields = ['number', 'name', 'level', 'contact', 'phone', 'email', 'address', 'bank_account',
+        fields = ['number', 'name', 'contact', 'phone', 'email', 'address', 'bank_account',
                   'bank_name', 'remark', 'order', 'is_active']
 
 

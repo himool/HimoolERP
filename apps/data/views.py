@@ -189,7 +189,7 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
 
         client_items = import_serializer.validated_data
         client_numbers = {item['number'] for item in client_items}
-        client_set = client.objects.filter(number__in=client_numbers, team=self.team)
+        client_set = Client.objects.filter(number__in=client_numbers, team=self.team)
 
         create_client_set = []
         update_client_set = []

@@ -205,7 +205,7 @@ class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         for goods_item in goods_items:
             goods_item['team'] = self.team
 
-            category_item = goods_items.pop('category', None)
+            category_item = goods_item.pop('category', None)
             if category_item:
                 for category in category_set:
                     if category.name == category_item['name']:
@@ -214,7 +214,7 @@ class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
                 else:
                     raise ValidationError(f'分类缺失[{category_item["name"]}]')
 
-            unit_item = goods_items.pop('unit', None)
+            unit_item = goods_item.pop('unit', None)
             if unit_item:
                 for unit in unit_set:
                     if unit.name == unit_item['name']:
