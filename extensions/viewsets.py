@@ -118,15 +118,12 @@ class ExportMixin:
         field_items = serializer_class().get_fields().items()
 
         # 创建表头
-        work_sheet.cell(row=1, column=1, value='序号')
-        for index, (field_name, field_class) in enumerate(field_items, start=2):
+        for index, (field_name, field_class) in enumerate(field_items, start=1):
             work_sheet.cell(row=1, column=index, value=field_class.label)
 
         # 填充数据
         for row, item in enumerate(results, start=2):
-            work_sheet.cell(row=row, column=1, value=row - 1)
-
-            for column, (field_name, field_class) in enumerate(field_items, start=2):
+            for column, (field_name, field_class) in enumerate(field_items, start=1):
                 work_sheet.cell(row=row, column=column, value=item.get(field_name, ''))
 
         response = HttpResponse(content_type='application/vnd.ms-excel')
@@ -166,22 +163,23 @@ class ImportMixin:
     def load_data(self, file, serializer_class):
         workbook = load_workbook(file)
         work_sheet = workbook.active
-
         field_items = serializer_class().get_fields().items()
+
+        for column, (field_name, field_class) in enumerate(field_items):
+            if work_sheet[1][column].value != field_class.label:
+                raise ValidationError('格式错误')
+
+        data = []
         for row in range(2, work_sheet.max_row + 1):
-            data = {}
-
+            instance_item = {}
             for column, (field_name, field_class) in enumerate(field_items):
-                if work_sheet[1][column].value != field_class.label:
-                    raise ValidationError('格式错误')
-
                 if work_sheet[row][column].value is not None:
-                    data[field_name] = work_sheet[row][column].value
-
+                    instance_item[field_name] = work_sheet[row][column].value
             else:
-                serializer = serializer_class(data=data, context=self.context)
-                serializer.is_valid(raise_exception=True)
-                yield serializer
+                data.append(instance_item)
+
+        serializer = serializer_class(data=data, many=True, context=self.context)
+        return serializer
 
 
 __all__ = [

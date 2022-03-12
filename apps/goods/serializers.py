@@ -17,17 +17,8 @@ class GoodsCategorySerializer(BaseSerializer):
         return value
 
 
-class GoodsCategoryExportSerializer(BaseSerializer):
-    name = CharField(label='商品分类名称')
-    remark = CharField(label='备注')
-
-    class Meta:
-        model = GoodsCategory
-        fields = ['name', 'remark']
-
-
-class GoodsCategoryImportSerializer(BaseSerializer):
-    name = CharField(label='商品分类名称(必填)')
+class GoodsCategoryImportExportSerializer(BaseSerializer):
+    name = CharField(label='名称(必填唯一)')
     remark = CharField(required=False, label='备注')
 
     class Meta:
@@ -47,17 +38,8 @@ class GoodsUnitSerializer(BaseSerializer):
         return value
 
 
-class GoodsUnitExportSerializer(BaseSerializer):
-    name = CharField(label='商品单位名称')
-    remark = CharField(label='备注')
-
-    class Meta:
-        model = GoodsUnit
-        fields = ['name', 'remark']
-
-
-class GoodsUnitImportSerializer(BaseSerializer):
-    name = CharField(label='商品单位名称(必填)')
+class GoodsUnitImportExportSerializer(BaseSerializer):
+    name = CharField(label='名称(必填唯一)')
     remark = CharField(required=False, label='备注')
 
     class Meta:
@@ -301,43 +283,12 @@ class GoodsSerializer(BaseSerializer):
         return goods
 
 
-class GoodsExportSerializer(BaseSerializer):
-    number = CharField(label='编号')
-    name = CharField(label='名称')
-    barcode = CharField(label='条码')
-    category_name = CharField(label='分类')
-    unit_name = CharField(label='单位')
-    spec = CharField(label='规格')
-    enable_batch_control = BooleanField(label='启用批次控制[TRUE/FALSE]')
-    shelf_life_days = IntegerField(label='保质期天数')
-    shelf_life_warning_days = IntegerField(label='保质期预警天数')
-    enable_inventory_warning = BooleanField(label='启用库存警告[TRUE/FALSE]')
-    inventory_upper = FloatField(label='库存上限')
-    inventory_lower = FloatField(label='库存下限')
-    purchase_price = FloatField(label='采购价')
-    retail_price = FloatField(label='零售价')
-    level_price1 = FloatField(label='等级价一')
-    level_price2 = FloatField(label='等级价二')
-    level_price3 = FloatField(label='等级价三')
-    remark = CharField(label='备注')
-    order = IntegerField(label='排序')
-    is_active = BooleanField(label='激活状态[TRUE/FALSE]')
-
-    class Meta:
-        model = Goods
-        fields = ['number', 'name', 'barcode', 'category_name', 'unit_name', 'spec',
-                  'enable_batch_control', 'shelf_life_days', 'shelf_life_warning_days',
-                  'enable_inventory_warning', 'inventory_upper', 'inventory_lower',
-                  'purchase_price', 'retail_price', 'level_price1', 'level_price2',
-                  'level_price3', 'remark', 'order', 'is_active']
-
-
-class GoodsImportSerializer(BaseSerializer):
-    number = CharField(label='编号')
-    name = CharField(label='名称')
+class GoodsImportExportSerializer(BaseSerializer):
+    number = CharField(label='编号(唯一必填)')
+    name = CharField(label='名称(必填)')
     barcode = CharField(required=False, label='条码')
-    category_name = CharField(required=False, label='分类')
-    unit_name = CharField(required=False, label='单位')
+    category = CharField(source='category.name', required=False, label='分类')
+    unit = CharField(source='unit.name', required=False, label='单位')
     spec = CharField(required=False, label='规格')
     enable_batch_control = BooleanField(required=False, label='启用批次控制[TRUE/FALSE](默认: FALSE)')
     shelf_life_days = IntegerField(required=False, label='保质期天数')
@@ -345,39 +296,22 @@ class GoodsImportSerializer(BaseSerializer):
     enable_inventory_warning = BooleanField(required=False, label='启用库存警告[TRUE/FALSE](默认: FALSE)')
     inventory_upper = FloatField(required=False, label='库存上限')
     inventory_lower = FloatField(required=False, label='库存下限')
-    purchase_price = FloatField(label='采购价')
-    retail_price = FloatField(label='零售价')
-    level_price1 = FloatField(label='等级价一')
-    level_price2 = FloatField(label='等级价二')
-    level_price3 = FloatField(label='等级价三')
+    purchase_price = FloatField(label='采购价(必填)')
+    retail_price = FloatField(label='零售价(必填)')
+    level_price1 = FloatField(label='等级价一(必填)')
+    level_price2 = FloatField(label='等级价二(必填)')
+    level_price3 = FloatField(label='等级价三(必填)')
     remark = CharField(required=False, label='备注')
     order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
         model = Goods
-        fields = ['number', 'name', 'barcode', 'category_name', 'unit_name', 'spec',
+        fields = ['number', 'name', 'barcode', 'category', 'unit', 'spec',
                   'enable_batch_control', 'shelf_life_days', 'shelf_life_warning_days',
                   'enable_inventory_warning', 'inventory_upper', 'inventory_lower',
                   'purchase_price', 'retail_price', 'level_price1', 'level_price2',
                   'level_price3', 'remark', 'order', 'is_active']
-
-    def validate(self, attrs):
-        if category_name := attrs.pop('category_name', None):
-            goods_category = GoodsCategory.objects.filter(name=category_name, team=self.team).first()
-            if not goods_category:
-                raise ValidationError(f'商品分类[{category_name}]不存在')
-
-            attrs['category'] = goods_category
-
-        if unit_name := attrs.pop('unit_name', None):
-            goods_unit = GoodsUnit.objects.filter(name=unit_name, team=self.team).first()
-            if not goods_unit:
-                raise ValidationError(f'商品分类[{unit_name}]不存在')
-
-            attrs['unit'] = goods_unit
-
-        return super().validate(attrs)
 
 
 class GoodsImageSerializer(BaseSerializer):
@@ -422,9 +356,9 @@ class InventorySerializer(BaseSerializer):
 
 
 __all__ = [
-    'GoodsCategorySerializer', 'GoodsCategoryExportSerializer', 'GoodsCategoryImportSerializer',
-    'GoodsUnitSerializer', 'GoodsUnitExportSerializer', 'GoodsUnitImportSerializer',
-    'GoodsSerializer', 'GoodsExportSerializer', 'GoodsImportSerializer',
+    'GoodsCategorySerializer', 'GoodsCategoryImportExportSerializer',
+    'GoodsUnitSerializer', 'GoodsUnitImportExportSerializer',
+    'GoodsSerializer', 'GoodsImportExportSerializer',
     'GoodsImageSerializer',
     'BatchSerializer', 'InventorySerializer',
 ]

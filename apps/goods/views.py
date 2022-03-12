@@ -25,16 +25,16 @@ class GoodsCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(GoodsCategoryExportSerializer)
+        return self.get_export_response(GoodsCategoryImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(GoodsCategoryImportSerializer)
+        return self.get_template_response(GoodsCategoryImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: GoodsCategorySerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -44,22 +44,36 @@ class GoodsCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        goods_categories = []
-        for import_serializer in self.load_data(validated_data['file'], GoodsCategoryImportSerializer):
-            validated_data = import_serializer.validated_data
-            if goods_category := GoodsCategory.objects.filter(name=validated_data['name'],
-                                                              team=self.team).first():
-                serializer = GoodsCategorySerializer(instance=goods_category, data=validated_data,
-                                                     context=self.context)
+        import_serializer = self.load_data(validated_data['file'], GoodsCategoryImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        goods_category_items = import_serializer.validated_data
+        goods_category_names = {item['name'] for item in goods_category_items}
+        goods_category_set = GoodsCategory.objects.filter(name__in=goods_category_names, team=self.team)
+
+        create_goods_category_set = []
+        update_goods_category_set = []
+        for goods_category_item in goods_category_items:
+            goods_category_item['team'] = self.team
+
+            for goods_category in goods_category_set:
+                if goods_category.name == goods_category_item['name']:
+                    update_goods_category_set.append(goods_category)
+                    for key, value in goods_category_item.items():
+                        setattr(goods_category, key, value)
+                    break
             else:
-                serializer = GoodsCategorySerializer(data=validated_data, context=self.context)
+                create_goods_category_set.append(GoodsCategory(**goods_category_item))
+        else:
+            try:
+                GoodsCategory.objects.bulk_create(create_goods_category_set)
+                GoodsCategory.objects.bulk_update(update_goods_category_set,
+                                                  GoodsCategoryImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            goods_category = serializer.save()
-            goods_categories.append(goods_category)
-
-        serializer = GoodsCategorySerializer(instance=goods_categories, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
@@ -76,16 +90,16 @@ class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(GoodsUnitExportSerializer)
+        return self.get_export_response(GoodsUnitImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(GoodsUnitImportSerializer)
+        return self.get_template_response(GoodsUnitImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: GoodsUnitSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -95,22 +109,36 @@ class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        goods_units = []
-        for import_serializer in self.load_data(validated_data['file'], GoodsUnitImportSerializer):
-            validated_data = import_serializer.validated_data
-            if goods_unit := GoodsUnit.objects.filter(name=validated_data['name'],
-                                                      team=self.team).first():
-                serializer = GoodsUnitSerializer(instance=goods_unit, data=validated_data,
-                                                 context=self.context)
+        import_serializer = self.load_data(validated_data['file'], GoodsUnitImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        goods_unit_items = import_serializer.validated_data
+        goods_unit_names = {item['name'] for item in goods_unit_items}
+        goods_unit_set = GoodsUnit.objects.filter(name__in=goods_unit_names, team=self.team)
+
+        create_goods_unit_set = []
+        update_goods_unit_set = []
+        for goods_unit_item in goods_unit_items:
+            goods_unit_item['team'] = self.team
+
+            for goods_unit in goods_unit_set:
+                if goods_unit.name == goods_unit_item['name']:
+                    update_goods_unit_set.append(goods_unit)
+                    for key, value in goods_unit_item.items():
+                        setattr(goods_unit, key, value)
+                    break
             else:
-                serializer = GoodsUnitSerializer(data=validated_data, context=self.context)
+                create_goods_unit_set.append(GoodsUnit(**goods_unit_item))
+        else:
+            try:
+                GoodsUnit.objects.bulk_create(create_goods_unit_set)
+                GoodsUnit.objects.bulk_update(update_goods_unit_set,
+                                              GoodsUnitImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            goods_unit = serializer.save()
-            goods_units.append(goods_unit)
-
-        serializer = GoodsUnitSerializer(instance=goods_units, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
@@ -139,16 +167,16 @@ class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(GoodsExportSerializer)
+        return self.get_export_response(GoodsImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(GoodsImportSerializer)
+        return self.get_template_response(GoodsImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: GoodsSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -158,22 +186,67 @@ class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        goods_set = []
-        for import_serializer in self.load_data(validated_data['file'], GoodsImportSerializer):
-            validated_data = import_serializer.validated_data
-            if goods := Goods.objects.filter(name=validated_data['name'],
-                                             team=self.team).first():
-                serializer = GoodsSerializer(instance=goods, data=validated_data,
-                                             context=self.context)
+        import_serializer = self.load_data(validated_data['file'], GoodsImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        goods_items = import_serializer.validated_data
+        category_names = {item['category']['name'] for item in goods_items if 'category' in item}
+        category_set = GoodsCategory.objects.filter(name__in=category_names, team=self.team)
+
+        unit_names = {item['unit']['name'] for item in goods_items if 'unit' in item}
+        unit_set = GoodsUnit.objects.filter(name__in=unit_names, team=self.team)
+
+        goods_numbers = {item['number'] for item in goods_items}
+        goods_set = Goods.objects.filter(number__in=goods_numbers, team=self.team)
+
+        create_goods_set = []
+        update_goods_set = []
+        for goods_item in goods_items:
+            goods_item['team'] = self.team
+
+            category_item = goods_items.pop('category', None)
+            if category_item:
+                for category in category_set:
+                    if category.name == category_item['name']:
+                        goods_item['category'] = category
+                        break
+                else:
+                    raise ValidationError(f'分类缺失[{category_item["name"]}]')
+
+            unit_item = goods_items.pop('unit', None)
+            if unit_item:
+                for unit in unit_set:
+                    if unit.name == unit_item['name']:
+                        goods_item['unit'] = unit
+                        break
+                else:
+                    raise ValidationError(f'单位缺失[{unit_item["name"]}]')
+
+            for goods in goods_set:
+                if goods.number == goods_item['number']:
+                    update_goods_set.append(goods)
+                    for key, value in goods_item.items():
+                        setattr(goods, key, value)
+                    break
             else:
-                serializer = GoodsSerializer(data=validated_data, context=self.context)
+                create_goods_set.append(Goods(**goods_item))
+        else:
+            try:
+                Goods.objects.bulk_create(create_goods_set)
+                Goods.objects.bulk_update(update_goods_set,
+                                          GoodsImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('编号重复')
 
-            serializer.is_valid(raise_exception=True)
-            goods = serializer.save()
-            goods_set.append(goods)
+        new_goods_numbers = [instance.number for instance in create_goods_set]
+        new_goods_set = Goods.objects.filter(number__in=new_goods_numbers, team=self.team)
+        warehouse_set = Warehouse.objects.filter(team=self.team)
+        Inventory.objects.bulk_create([Inventory(warehouse=warehouse, goods=goods, team=self.team)
+                                       for goods in new_goods_set
+                                       for warehouse in warehouse_set])
 
-        serializer = GoodsSerializer(instance=goods_set, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class GoodsImageViewSet(ModelViewSet):

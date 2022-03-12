@@ -9,6 +9,7 @@ from apps.data.filters import *
 from apps.data.schemas import *
 from apps.data.models import *
 from apps.goods.models import *
+from apps.system.models import *
 
 
 class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
@@ -68,16 +69,16 @@ class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin)
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(WarehouseExportSerializer)
+        return self.get_export_response(WarehouseImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(WarehouseImportSerializer)
+        return self.get_template_response(WarehouseImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: WarehouseSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -87,22 +88,56 @@ class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin)
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        warehouses = []
-        for import_serializer in self.load_data(validated_data['file'], WarehouseImportSerializer):
-            validated_data = import_serializer.validated_data
-            if warehouse := Warehouse.objects.filter(name=validated_data['name'],
-                                                     team=self.team).first():
-                serializer = WarehouseSerializer(instance=warehouse, data=validated_data,
-                                                 context=self.context)
+        import_serializer = self.load_data(validated_data['file'], WarehouseImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        warehouse_items = import_serializer.validated_data
+
+        manager_names = {item['manager']['name'] for item in warehouse_items if 'manager' in item}
+        manager_set = User.objects.filter(name__in=manager_names, team=self.team)
+
+        warehouse_numbers = {item['number'] for item in warehouse_items}
+        warehouse_set = Warehouse.objects.filter(number__in=warehouse_numbers, team=self.team)
+
+        create_warehouse_set = []
+        update_warehouse_set = []
+        for warehouse_item in warehouse_items:
+            warehouse_item['team'] = self.team
+
+            manager_item = warehouse_item.pop('manager', None)
+            if manager_item:
+                for manager in manager_set:
+                    if manager.name == manager_item['name']:
+                        warehouse_item['manager'] = manager
+                        break
+                else:
+                    raise ValidationError(f'管理员缺失[{manager_item["name"]}]')
+
+            for warehouse in warehouse_set:
+                if warehouse.number == warehouse_item['number']:
+                    update_warehouse_set.append(warehouse)
+                    for key, value in warehouse_item.items():
+                        setattr(warehouse, key, value)
+                    break
             else:
-                serializer = WarehouseSerializer(data=validated_data, context=self.context)
+                create_warehouse_set.append(Warehouse(**warehouse_item))
+        else:
+            try:
+                Warehouse.objects.bulk_create(create_warehouse_set)
+                Warehouse.objects.bulk_update(update_warehouse_set,
+                                              WarehouseImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('编号, 名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            warehouse = serializer.save()
-            warehouses.append(warehouse)
+        new_warehouse_numbers = [instance.number for instance in create_warehouse_set]
+        new_warehouse_set = Warehouse.objects.filter(number__in=new_warehouse_numbers, team=self.team)
+        goods_set = Goods.objects.filter(team=self.team)
+        Inventory.objects.bulk_create([Inventory(warehouse=warehouse, goods=goods, team=self.team)
+                                       for warehouse in new_warehouse_set
+                                       for goods in goods_set])
 
-        serializer = WarehouseSerializer(instance=warehouses, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
@@ -129,16 +164,16 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(ClientExportSerializer)
+        return self.get_export_response(ClientImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(ClientImportSerializer)
+        return self.get_template_response(ClientImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: ClientSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -148,22 +183,36 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        clients = []
-        for import_serializer in self.load_data(validated_data['file'], ClientImportSerializer):
-            validated_data = import_serializer.validated_data
-            if client := Client.objects.filter(name=validated_data['name'],
-                                               team=self.team).first():
-                serializer = ClientSerializer(instance=client, data=validated_data,
-                                              context=self.context)
+        import_serializer = self.load_data(validated_data['file'], ClientImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        client_items = import_serializer.validated_data
+        client_numbers = {item['number'] for item in client_items}
+        client_set = client.objects.filter(number__in=client_numbers, team=self.team)
+
+        create_client_set = []
+        update_client_set = []
+        for client_item in client_items:
+            client_item['team'] = self.team
+
+            for client in client_set:
+                if client.number == client_item['number']:
+                    update_client_set.append(client)
+                    for key, value in client_item.items():
+                        setattr(client, key, value)
+                    break
             else:
-                serializer = ClientSerializer(data=validated_data, context=self.context)
+                create_client_set.append(Client(**client_item))
+        else:
+            try:
+                Client.objects.bulk_create(create_client_set)
+                Client.objects.bulk_update(update_client_set,
+                                           ClientImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('编号, 名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            client = serializer.save()
-            clients.append(client)
-
-        serializer = ClientSerializer(instance=clients, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
@@ -190,16 +239,16 @@ class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(SupplierExportSerializer)
+        return self.get_export_response(SupplierImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(SupplierImportSerializer)
+        return self.get_template_response(SupplierImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: SupplierSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -209,22 +258,36 @@ class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        suppliers = []
-        for import_serializer in self.load_data(validated_data['file'], SupplierImportSerializer):
-            validated_data = import_serializer.validated_data
-            if supplier := Supplier.objects.filter(name=validated_data['name'],
-                                                   team=self.team).first():
-                serializer = SupplierSerializer(instance=supplier, data=validated_data,
-                                                context=self.context)
+        import_serializer = self.load_data(validated_data['file'], SupplierImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        supplier_items = import_serializer.validated_data
+        supplier_numbers = {item['number'] for item in supplier_items}
+        supplier_set = Supplier.objects.filter(number__in=supplier_numbers, team=self.team)
+
+        create_supplier_set = []
+        update_supplier_set = []
+        for supplier_item in supplier_items:
+            supplier_item['team'] = self.team
+
+            for supplier in supplier_set:
+                if supplier.number == supplier_item['number']:
+                    update_supplier_set.append(supplier)
+                    for key, value in supplier_item.items():
+                        setattr(supplier, key, value)
+                    break
             else:
-                serializer = SupplierSerializer(data=validated_data, context=self.context)
+                create_supplier_set.append(Supplier(**supplier_item))
+        else:
+            try:
+                Supplier.objects.bulk_create(create_supplier_set)
+                Supplier.objects.bulk_update(update_supplier_set,
+                                             SupplierImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('编号, 名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            supplier = serializer.save()
-            suppliers.append(supplier)
-
-        serializer = SupplierSerializer(instance=suppliers, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
@@ -251,16 +314,16 @@ class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(AccountExportSerializer)
+        return self.get_export_response(AccountImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(AccountImportSerializer)
+        return self.get_template_response(AccountImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: AccountSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -270,22 +333,36 @@ class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        accounts = []
-        for import_serializer in self.load_data(validated_data['file'], AccountImportSerializer):
-            validated_data = import_serializer.validated_data
-            if account := Account.objects.filter(name=validated_data['name'],
-                                                 team=self.team).first():
-                serializer = AccountSerializer(instance=account, data=validated_data,
-                                               context=self.context)
+        import_serializer = self.load_data(validated_data['file'], AccountImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        account_items = import_serializer.validated_data
+        account_numbers = {item['number'] for item in account_items}
+        account_set = Account.objects.filter(number__in=account_numbers, team=self.team)
+
+        create_account_set = []
+        update_account_set = []
+        for account_item in account_items:
+            account_item['team'] = self.team
+
+            for account in account_set:
+                if account.number == account_item['number']:
+                    update_account_set.append(account)
+                    for key, value in account_item.items():
+                        setattr(account, key, value)
+                    break
             else:
-                serializer = AccountSerializer(data=validated_data, context=self.context)
+                create_account_set.append(Account(**account_item))
+        else:
+            try:
+                Account.objects.bulk_create(create_account_set)
+                Account.objects.bulk_update(update_account_set,
+                                            AccountImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('编号, 名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            account = serializer.save()
-            accounts.append(account)
-
-        serializer = AccountSerializer(instance=accounts, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ChargeItemViewSet(ModelViewSet, ExportMixin, ImportMixin):
@@ -303,16 +380,16 @@ class ChargeItemViewSet(ModelViewSet, ExportMixin, ImportMixin):
     def export(self, request, *args, **kwargs):
         """导出"""
 
-        return self.get_export_response(ChargeItemExportSerializer)
+        return self.get_export_response(ChargeItemImportExportSerializer)
 
     @extend_schema(responses={200: DownloadResponse})
     @action(detail=False, methods=['get'])
     def import_template(self, request, *args, **kwargs):
         """导入模板"""
 
-        return self.get_template_response(ChargeItemImportSerializer)
+        return self.get_template_response(ChargeItemImportExportSerializer)
 
-    @extend_schema(request=UploadRequest, responses={200: ChargeItemSerializer(many=True)})
+    @extend_schema(request=UploadRequest, responses={204: None})
     @action(detail=False, methods=['post'])
     @transaction.atomic
     def import_data(self, request, *args, **kwargs):
@@ -322,22 +399,36 @@ class ChargeItemViewSet(ModelViewSet, ExportMixin, ImportMixin):
         request_serializer.is_valid(raise_exception=True)
         validated_data = request_serializer.validated_data
 
-        charge_items = []
-        for import_serializer in self.load_data(validated_data['file'], ChargeItemImportSerializer):
-            validated_data = import_serializer.validated_data
-            if charge_item := ChargeItem.objects.filter(name=validated_data['name'],
-                                                        team=self.team).first():
-                serializer = ChargeItemSerializer(instance=charge_item, data=validated_data,
-                                                  context=self.context)
+        import_serializer = self.load_data(validated_data['file'], ChargeItemImportExportSerializer)
+        if not import_serializer.is_valid(raise_exception=False):
+            raise ValidationError('数据错误')
+
+        charge_item_items = import_serializer.validated_data
+        charge_item_names = {item['name'] for item in charge_item_items}
+        charge_item_set = ChargeItem.objects.filter(name__in=charge_item_names, team=self.team)
+
+        create_charge_item_set = []
+        update_charge_item_set = []
+        for charge_item_item in charge_item_items:
+            charge_item_item['team'] = self.team
+
+            for charge_item in charge_item_set:
+                if charge_item.name == charge_item_item['name']:
+                    update_charge_item_set.append(charge_item)
+                    for key, value in charge_item_item.items():
+                        setattr(charge_item, key, value)
+                    break
             else:
-                serializer = ChargeItemSerializer(data=validated_data, context=self.context)
+                create_charge_item_set.append(ChargeItem(**charge_item_item))
+        else:
+            try:
+                ChargeItem.objects.bulk_create(create_charge_item_set)
+                ChargeItem.objects.bulk_update(update_charge_item_set,
+                                               ChargeItemImportExportSerializer.Meta.fields)
+            except IntegrityError:
+                raise ValidationError('名称重复')
 
-            serializer.is_valid(raise_exception=True)
-            charge_item = serializer.save()
-            charge_items.append(charge_item)
-
-        serializer = ChargeItemSerializer(instance=charge_items, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 __all__ = [

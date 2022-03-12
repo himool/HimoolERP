@@ -29,26 +29,10 @@ class WarehouseSerializer(BaseSerializer):
         return instance
 
 
-class WarehouseExportSerializer(BaseSerializer):
-    number = CharField(label='编号')
-    name = CharField(label='名称')
-    manager_name = CharField(source='manager.name', default=None, label='管理员')
-    phone = CharField(label='电话')
-    address = CharField(label='地址')
-    remark = CharField(label='备注')
-    order = IntegerField(label='排序')
-    is_active = BooleanField(label='激活状态[TRUE/FALSE]')
-
-    class Meta:
-        model = Warehouse
-        fields = ['number', 'name', 'manager_name', 'phone', 'address', 'remark',
-                  'order', 'is_active']
-
-
-class WarehouseImportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填)')
-    name = CharField(label='名称(必填)')
-    manager_name = CharField(required=False, label='管理员')
+class WarehouseImportExportSerializer(BaseSerializer):
+    number = CharField(label='编号(必填唯一)')
+    name = CharField(label='名称(必填唯一)')
+    manager = CharField(source='manager.name', required=False, label='管理员')
     phone = CharField(required=False, label='电话')
     address = CharField(required=False, label='地址')
     remark = CharField(required=False, label='备注')
@@ -57,18 +41,8 @@ class WarehouseImportSerializer(BaseSerializer):
 
     class Meta:
         model = Warehouse
-        fields = ['number', 'name', 'manager_name', 'phone', 'address', 'remark',
+        fields = ['number', 'name', 'manager', 'phone', 'address', 'remark',
                   'order', 'is_active']
-
-    def validate(self, attrs):
-        if manager_name := attrs.pop('manager_name', None):
-            manager = User.objects.filter(name=manager_name, team=self.team).first()
-            if not manager:
-                raise ValidationError(f'管理员[{manager_name}]不存在')
-
-            attrs['manager'] = manager
-
-        return super().validate(attrs)
 
 
 class ClientSerializer(BaseSerializer):
@@ -101,31 +75,10 @@ class ClientSerializer(BaseSerializer):
         return super().update(instance, validated_data)
 
 
-class ClientExportSerializer(BaseSerializer):
-    number = CharField(label='编号')
-    name = CharField(label='名称')
-    level_display = CharField(source='get_level_display', label='等级')
-    category_name = CharField(source='category.name', default=None, label='分类')
-    contact = CharField(label='联系人')
-    phone = CharField(label='手机号')
-    email = CharField(label='邮箱')
-    address = CharField(label='地址')
-    remark = CharField(label='备注')
-    order = IntegerField(label='排序')
-    is_active = BooleanField(label='激活状态[TRUE/FALSE]')
-    initial_arrears_amount = AmountField(label='初期欠款金额')
-
-    class Meta:
-        model = Client
-        fields = ['number', 'name', 'level_display', 'category_name', 'contact', 'phone',
-                  'email', 'address', 'remark', 'order', 'is_active', 'initial_arrears_amount']
-
-
-class ClientImportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填)')
-    name = CharField(label='名称(必填)')
+class ClientImportExportSerializer(BaseSerializer):
+    number = CharField(label='编号(必填唯一)')
+    name = CharField(label='名称(必填唯一)')
     level = CharField(required=False, label='等级[0/1/2/3](默认: 0)')
-    category_name = CharField(required=False, label='分类')
     contact = CharField(required=False, label='联系人')
     phone = CharField(required=False, label='手机号')
     email = CharField(required=False, label='邮箱')
@@ -133,12 +86,12 @@ class ClientImportSerializer(BaseSerializer):
     remark = CharField(required=False, label='备注')
     order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
-    initial_arrears_amount = AmountField(required=False, label='初期欠款金额(默认: 0)')
 
     class Meta:
         model = Client
-        fields = ['number', 'name', 'level', 'category_name', 'contact', 'phone',
-                  'email', 'address', 'remark', 'order', 'is_active', 'initial_arrears_amount']
+        fields = ['number', 'name', 'level', 'contact', 'phone', 'email', 'address', 'remark',
+                  'order', 'is_active']
+
 
 class SupplierSerializer(BaseSerializer):
 
@@ -169,31 +122,10 @@ class SupplierSerializer(BaseSerializer):
         return super().update(instance, validated_data)
 
 
-class SupplierExportSerializer(BaseSerializer):
-    number = CharField(label='编号')
-    name = CharField(label='名称')
-    category_name = CharField(source='category.name', default=None, label='分类')
-    contact = CharField(label='联系人')
-    phone = CharField(label='手机号')
-    email = CharField(label='邮箱')
-    address = CharField(label='地址')
-    bank_account = CharField(label='银行账户')
-    bank_name = CharField(label='开户行')
-    remark = CharField(label='备注')
-    order = IntegerField(label='排序')
-    is_active = BooleanField(label='激活状态[TRUE/FALSE]')
-    initial_arrears_amount = AmountField(label='初期欠款金额')
-
-    class Meta:
-        model = Supplier
-        fields = ['number', 'name', 'category_name', 'contact', 'phone', 'email', 'address',
-                  'bank_account', 'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount']
-
-
-class SupplierImportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填)')
-    name = CharField(label='名称(必填)')
-    category_name = CharField(required=False, label='分类')
+class SupplierImportExportSerializer(BaseSerializer):
+    number = CharField(label='编号(必填唯一)')
+    name = CharField(label='名称(必填唯一)')
+    level = CharField(required=False, label='等级[0/1/2/3](默认: 0)')
     contact = CharField(required=False, label='联系人')
     phone = CharField(required=False, label='手机号')
     email = CharField(required=False, label='邮箱')
@@ -203,12 +135,11 @@ class SupplierImportSerializer(BaseSerializer):
     remark = CharField(required=False, label='备注')
     order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
-    initial_arrears_amount = AmountField(required=False, label='初期欠款金额(默认: 0)')
 
     class Meta:
         model = Supplier
-        fields = ['number', 'name', 'category_name', 'contact', 'phone', 'email', 'address',
-                  'bank_account', 'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount']
+        fields = ['number', 'name', 'level', 'contact', 'phone', 'email', 'address', 'bank_account',
+                  'bank_name', 'remark', 'order', 'is_active']
 
 
 class AccountSerializer(BaseSerializer):
@@ -241,36 +172,18 @@ class AccountSerializer(BaseSerializer):
         return super().update(instance, validated_data)
 
 
-class AccountExportSerializer(BaseSerializer):
-    number = CharField(label='编号')
-    name = CharField(label='名称')
-    type_display = CharField(source='get_type_display', label='账户类型')
-    holder = CharField(label='开户人')
-    remark = CharField(label='备注')
-    order = IntegerField(label='排序')
-    is_active = BooleanField(label='激活状态[TRUE/FALSE]')
-    initial_balance_amount = AmountField(label='初期余额')
-
-    class Meta:
-        model = Account
-        fields = ['number', 'name', 'type_display', 'holder', 'remark', 'order', 'is_active',
-                  'initial_balance_amount']
-
-
-class AccountImportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填)')
-    name = CharField(label='名称(必填)')
+class AccountImportExportSerializer(BaseSerializer):
+    number = CharField(label='编号(必填唯一)')
+    name = CharField(label='名称(必填唯一)')
     type = CharField(required=False, label='账户类型[cash/alipay/wechat/bank_account/other](默认: cash)')
     holder = CharField(required=False, label='开户人')
     remark = CharField(required=False, label='备注')
     order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
-    initial_balance_amount = AmountField(required=False, label='初期余额(默认: 0)')
 
     class Meta:
         model = Account
-        fields = ['number', 'name', 'type', 'holder', 'remark', 'order', 'is_active',
-                  'initial_balance_amount']
+        fields = ['number', 'name', 'type', 'holder', 'remark', 'order', 'is_active']
 
 
 class ChargeItemSerializer(BaseSerializer):
@@ -286,18 +199,8 @@ class ChargeItemSerializer(BaseSerializer):
         return value
 
 
-class ChargeItemExportSerializer(BaseSerializer):
-    name = CharField(label='收支项目名称')
-    type_display = CharField(source='get_type_display', label='收支项目名称')
-    remark = CharField(label='备注')
-
-    class Meta:
-        model = ChargeItem
-        fields = ['name', 'remark']
-
-
-class ChargeItemImportSerializer(BaseSerializer):
-    name = CharField(label='收支项目名称(必填)')
+class ChargeItemImportExportSerializer(BaseSerializer):
+    name = CharField(label='名称(必填唯一)')
     type = CharField(label='收支类型[income/expenditure](必填)')
     remark = CharField(required=False, label='备注')
 
@@ -307,9 +210,9 @@ class ChargeItemImportSerializer(BaseSerializer):
 
 
 __all__ = [
-    'WarehouseSerializer', 'WarehouseExportSerializer', 'WarehouseImportSerializer',
-    'ClientSerializer', 'ClientExportSerializer', 'ClientImportSerializer',
-    'SupplierSerializer', 'SupplierExportSerializer', 'SupplierImportSerializer',
-    'AccountSerializer', 'AccountExportSerializer', 'AccountImportSerializer',
-    'ChargeItemSerializer', 'ChargeItemExportSerializer', 'ChargeItemImportSerializer',
+    'WarehouseSerializer', 'WarehouseImportExportSerializer',
+    'ClientSerializer', 'ClientImportExportSerializer',
+    'SupplierSerializer', 'SupplierImportExportSerializer',
+    'AccountSerializer', 'AccountImportExportSerializer',
+    'ChargeItemSerializer', 'ChargeItemImportExportSerializer',
 ]
