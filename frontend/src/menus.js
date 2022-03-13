@@ -37,7 +37,6 @@ export default [
       { key: '/sale/sale_record', name: '销售记录' },
       { key: '/sale/sale_return_create', name: '销售退货' },
       { key: '/sale/sale_return_record', name: '退货记录' },
-      { key: '/sale/sale_task', name: '销售任务' },
     ]
   },
   {

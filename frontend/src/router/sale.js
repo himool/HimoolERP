@@ -34,10 +34,5 @@ export default {
       meta: { title: '退货记录详情', permission: 'sale_return_detail' },
       component: () => import('@/views/sale/saleReturnDetail/index'),
     },
-    {
-      path: 'sale_task',
-      meta: { title: '销售任务', permission: 'sale_task' },
-      component: () => import('@/views/sale/saleTask/index'),
-    },
   ],
 }
