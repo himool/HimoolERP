@@ -16,7 +16,6 @@
   import moment from 'moment'
 
   export default {
-    name: 'SalesTask',
     data() {
       return {
         searchForm: {

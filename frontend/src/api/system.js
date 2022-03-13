@@ -19,10 +19,7 @@ export function configUpdate(data) {
 export function inventoryWarningsList(params) {
   return request({ url: `/inventory_warnings/`, method: 'get', params })
 }
-// 销售任务提醒
-export function salesTaskList(params) {
-  return request({ url: `/sales_task_reminders/`, method: 'get', params })
-}
+
 // 入库任务提醒
 export function stockInList(params) {
   return request({ url: `/stock_in_order_reminders/`, method: 'get', params })

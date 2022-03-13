@@ -366,18 +366,6 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class SalesTaskViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, DestroyModelMixin):
-    """销售任务"""
-
-    serializer_class = SalesTaskSerializer
-    permission_classes = [IsAuthenticated, SalesTaskPermission]
-    filterset_class = SalesTaskFilter
-    search_fields = ['goods__number', 'goods__name']
-    ordering_fields = ['id', 'total_quantity', 'sales_quantity', 'create_time']
-    select_related_fields = ['warehouse', 'goods', 'salesperson']
-    queryset = SalesTask.objects.all()
-
-
 __all__ = [
-    'SalesOrderViewSet', 'SalesReturnOrderViewSet', 'SalesTaskViewSet',
+    'SalesOrderViewSet', 'SalesReturnOrderViewSet',
 ]

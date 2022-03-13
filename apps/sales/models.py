@@ -59,7 +59,7 @@ class SalesGoods(Model):
 
 class SalesAccount(Model):
     """销售结算账户"""
-    
+
     sales_order = ForeignKey('sales.SalesOrder', on_delete=CASCADE,
                              related_name='sales_accounts', verbose_name='销售单据')
     account = ForeignKey('data.Account', on_delete=PROTECT, related_name='sales_accounts', verbose_name='结算账户')
@@ -116,7 +116,7 @@ class SalesReturnGoods(Model):
     sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE,
                                     related_name='sales_return_goods_set', verbose_name='销售退货单据')
     sales_goods = ForeignKey('sales.SalesGoods', on_delete=CASCADE, null=True,
-                                related_name='sales_return_goods_set', verbose_name='销售商品')
+                             related_name='sales_return_goods_set', verbose_name='销售商品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_return_goods_set', verbose_name='商品')
     return_quantity = FloatField(verbose_name='退货数量')
     return_price = FloatField(verbose_name='退货单价')
@@ -140,23 +140,7 @@ class SalesReturnAccount(Model):
         unique_together = [('sales_return_order', 'account')]
 
 
-class SalesTask(Model):
-    """销售任务"""
-
-    warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='sales_tasks', verbose_name='仓库')
-    goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='sales_tasks', verbose_name='商品')
-    salesperson = ForeignKey('system.User', on_delete=CASCADE, related_name='sales_tasks', verbose_name='销售员')
-    total_quantity = FloatField(verbose_name='任务总量')
-    sales_quantity = FloatField(default=0, verbose_name='销售数量')
-    start_time = DateTimeField(verbose_name='开始时间')
-    end_time = DateTimeField(verbose_name='结束时间')
-    is_completed = BooleanField(default=False, verbose_name='完成状态')
-    create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    team = ForeignKey('system.Team', on_delete=CASCADE, related_name='sales_tasks')
-
-
 __all__ = [
     'SalesOrder', 'SalesGoods', 'SalesAccount',
     'SalesReturnOrder', 'SalesReturnGoods', 'SalesReturnAccount',
-    'SalesTask',
 ]

@@ -7,9 +7,6 @@
       </a-col>
       <a-col :span="24">
         <a-col :span="12">
-          <sales-task style="margin-top: 12px;"/>
-        </a-col>
-        <a-col :span="12">
           <stock-out-task style="margin-top: 12px;"/>
         </a-col>
         <a-col :span="12">
@@ -27,7 +24,6 @@
   export default {
     name: 'Home',
     components: {
-      SalesTask: () => import('./salesTask.vue'),
       SalesTrend: () => import('./salesTrend.vue'),
       StockOutTask: () => import('./stockOutTask.vue'),
       StockInTask: () => import('./stockInTask.vue'),

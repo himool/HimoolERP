@@ -370,49 +370,6 @@ class SalesReturnOrderSerializer(BaseSerializer):
         return sales_return_order
 
 
-class SalesTaskSerializer(BaseSerializer):
-    """销售任务"""
-
-    warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
-    warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
-    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
-    unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
-    salesperson_name = CharField(source='salesperson.name', read_only=True, label='销售员名称')
-
-    class Meta:
-        model = SalesTask
-        read_only_fields = ['id', 'warehouse_number', 'warehouse_name', 'goods_number', 'goods_name',
-                            'goods_barcode', 'unit_name', 'salesperson_name', 'sales_quantity',
-                            'is_completed', 'create_time']
-        fields = ['warehouse', 'goods', 'salesperson', 'total_quantity', 'start_time', 'end_time',
-                  *read_only_fields]
-
-    def validate_total_quantity(self, value):
-        if value <= 0:
-            raise ValidationError('任务总数小于或等于零')
-        return value
-
-    def validate_warehouse(self, instance):
-        instance = self.validate_foreign_key(Warehouse, instance, message='仓库不存在')
-        if not instance.is_active:
-            raise ValidationError(f'仓库[{instance.name}]未激活')
-        return instance
-
-    def validate_goods(self, instance):
-        instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
-        if not instance.is_active:
-            raise ValidationError(f'商品[{instance.name}]未激活')
-        return instance
-
-    def validate_salesperson(self, instance):
-        instance = self.validate_foreign_key(User, instance, message='销售员不存在')
-        if not instance.is_active:
-            raise ValidationError(f'销售员[{instance.name}]未激活')
-        return instance
-
-
 __all__ = [
-    'SalesOrderSerializer', 'SalesReturnOrderSerializer', 'SalesTaskSerializer',
+    'SalesOrderSerializer', 'SalesReturnOrderSerializer',
 ]

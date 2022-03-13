@@ -56,20 +56,6 @@ class ShelfLifeWarningViewSet(BaseViewSet, ListModelMixin):
                                              goods__shelf_life_days__isnull=False, has_stock=True)
 
 
-class SalesTaskReminderViewSet(BaseViewSet, ListModelMixin):
-    """销售任务提醒"""
-
-    serializer_class = SalesTaskReminderSerializer
-    permission_classes = [IsAuthenticated]
-    select_related_fields = ['warehouse', 'goods', 'goods__unit']
-    queryset = SalesTask.objects.all()
-
-    def get_queryset(self):
-        now_time = pendulum.now()
-        return super().get_queryset().filter(start_time__lte=now_time, end_time__gt=now_time,
-                                             salesperson=self.user, is_completed=False)
-
-
 class StockInOrderReminderViewSet(BaseViewSet, ListModelMixin):
     """入库任务提醒"""
 
@@ -95,6 +81,5 @@ class StockOutOrderReminderViewSet(BaseViewSet, ListModelMixin):
 
 
 __all__ = [
-    'InventoryWarningViewSet', 'SalesTaskReminderViewSet',
-    'StockInOrderReminderViewSet', 'StockOutOrderReminderViewSet',
+    'InventoryWarningViewSet', 'StockInOrderReminderViewSet', 'StockOutOrderReminderViewSet',
 ]
