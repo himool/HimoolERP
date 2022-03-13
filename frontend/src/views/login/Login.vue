@@ -20,14 +20,14 @@
       </a-col>
     </a-row>
 
-    <!-- <div style="text-align: center; width: 100%; margin-top: 24px;">
+    <div style="text-align: center; width: 100%; margin-top: 24px;">
       <div>
         试用或购买请扫描下方客服经理微信二维码咨询
       </div>
       <div>
         <img :src="wechatCustomerService" width="100" style="margin-top: 8px;" />
       </div>
-    </div> -->
+    </div>
 
   </div>
 </template>
