@@ -17,13 +17,6 @@
               </a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item prop="category" label="客户分类">
-            <a-select v-model="form.category" style="width: 100%">
-              <a-select-option v-for="item in clientsClassificationOptions" :key="item.id" :value="item.id">
-                {{ item.name }}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
           <a-form-model-item prop="contact" label="联系人">
             <a-input v-model="form.contact" />
           </a-form-model-item>

@@ -63,10 +63,6 @@
             dataIndex: 'name',
           },
           {
-            title: '分类',
-            dataIndex: 'category_name',
-          },
-          {
             title: '联系人',
             dataIndex: 'contact',
           },

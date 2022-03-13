@@ -108,7 +108,6 @@ export default {
     return {
       searchForm: {
         dateRange: [moment().startOf("day"), moment().startOf("day")],
-        category: null,
         page: 1,
       },
       moment,
@@ -152,7 +151,6 @@ export default {
           this.searchForm.dateRange.length > 0
             ? this.searchForm.dateRange[1].format("YYYY-MM-DD")
             : null,
-        category: this.searchForm.category,
         page: this.searchForm.page,
         type: this.currentTab,
       };

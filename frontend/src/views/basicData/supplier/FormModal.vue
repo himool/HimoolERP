@@ -10,13 +10,6 @@
           <a-form-model-item prop="number" label="供应商编号">
             <a-input v-model="form.number" />
           </a-form-model-item>
-          <a-form-model-item prop="category" label="供应商分类">
-            <a-select v-model="form.category" style="width: 100%">
-              <a-select-option v-for="item in suppliersClassificationOptions" :key="item.id" :value="item.id">
-                {{ item.name }}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
           <a-form-model-item prop="contact" label="联系人">
             <a-input v-model="form.contact" />
           </a-form-model-item>

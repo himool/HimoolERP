@@ -44,7 +44,7 @@ class WarehouseOptionViewSet(InfiniteOptionViewSet):
 class ClientOptionViewSet(InfiniteOptionViewSet):
     serializer_class = ClientOptionSerializer
     permission_classes = [IsAuthenticated, ClientOptionPermission]
-    filterset_fields = ['level', 'category', 'has_arrears', 'is_active']
+    filterset_fields = ['level', 'has_arrears', 'is_active']
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number', 'order']
     ordering = ['order', 'number', 'id']
@@ -54,7 +54,7 @@ class ClientOptionViewSet(InfiniteOptionViewSet):
 class SupplierOptionViewSet(InfiniteOptionViewSet):
     serializer_class = SupplierOptionSerializer
     permission_classes = [IsAuthenticated, SupplierOptionPermission]
-    filterset_fields = ['category', 'has_arrears', 'is_active']
+    filterset_fields = ['has_arrears', 'is_active']
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number', 'order']
     ordering = ['order', 'number', 'id']
@@ -155,22 +155,20 @@ class SalesOrderOptionViewSet(LimitedOptionViewSet):
 class ClientArrearsOptionViewSet(InfiniteOptionViewSet):
     serializer_class = ClientArrearsOptionSerializer
     permission_classes = [IsAuthenticated, ClientArrearsOptionPermission]
-    filterset_fields = ['category', 'level', 'is_active', 'has_arrears']
+    filterset_fields = ['level', 'is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order', 'arrears_amount']
     ordering = ['order', 'id']
-    select_related_fields = ['category']
     queryset = Client.objects.all()
 
 
 class SupplierArrearsOptionViewSet(InfiniteOptionViewSet):
     serializer_class = SupplierArrearsOptionSerializer
     permission_classes = [IsAuthenticated, SupplierArrearsOptionPermission]
-    filterset_fields = ['category', 'is_active', 'has_arrears']
+    filterset_fields = ['is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order', 'arrears_amount']
     ordering = ['order', 'id']
-    select_related_fields = ['category']
     queryset = Supplier.objects.all()
 
 

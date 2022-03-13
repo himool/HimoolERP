@@ -17,11 +17,10 @@ class ClientArrearsViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
 
     serializer_class = ClientArrearsSerializer
     permission_classes = [IsAuthenticated, ClientArrearsPermission]
-    filterset_fields = ['category', 'level', 'is_active', 'has_arrears']
+    filterset_fields = ['level', 'is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order', 'initial_arrears_amount', 'arrears_amount']
     ordering = ['order', 'id']
-    select_related_fields = ['category']
     queryset = Client.objects.all()
 
 
@@ -30,11 +29,10 @@ class SupplierArrearsViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
 
     serializer_class = SupplierArrearsSerializer
     permission_classes = [IsAuthenticated, SupplierArrearsPermission]
-    filterset_fields = ['category', 'is_active', 'has_arrears']
+    filterset_fields = ['is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
     ordering_fields = ['id', 'number', 'name', 'order', 'initial_arrears_amount', 'arrears_amount']
     ordering = ['order', 'id']
-    select_related_fields = ['category']
     queryset = Supplier.objects.all()
 
 
