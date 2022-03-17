@@ -19,8 +19,8 @@ class ClientArrearsViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = [IsAuthenticated, ClientArrearsPermission]
     filterset_fields = ['level', 'is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order', 'initial_arrears_amount', 'arrears_amount']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name', 'initial_arrears_amount', 'arrears_amount']
+    ordering = ['id']
     queryset = Client.objects.all()
 
 
@@ -31,8 +31,8 @@ class SupplierArrearsViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = [IsAuthenticated, SupplierArrearsPermission]
     filterset_fields = ['is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order', 'initial_arrears_amount', 'arrears_amount']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name', 'initial_arrears_amount', 'arrears_amount']
+    ordering = ['id']
     queryset = Supplier.objects.all()
 
 

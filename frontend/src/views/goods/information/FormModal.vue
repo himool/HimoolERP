@@ -96,15 +96,6 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="24" :md="12">
-              <a-form-model-item prop="order" label="排序">
-                <a-input-number
-                  v-model.number="form.order"
-                  :precision="0"
-                  style="width: 100%"
-                />
-              </a-form-model-item>
-            </a-col>
-            <a-col :span="24" :md="12">
               <a-form-model-item prop="is_active" label="状态">
                 <a-select v-model="form.is_active" style="width: 100%;">
                   <a-select-option :value="true">激活</a-select-option>

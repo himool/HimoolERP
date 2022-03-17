@@ -29,9 +29,6 @@
           <a-form-model-item prop="address" label="地址">
             <a-input v-model="form.address" />
           </a-form-model-item>
-          <a-form-model-item prop="order" label="排序">
-            <a-input-number v-model="form.order" style="width: 100%;" />
-          </a-form-model-item>
           <a-form-model-item prop="remark" label="备注">
             <a-textarea v-model="form.remark" allowClear :rows="4" />
           </a-form-model-item>

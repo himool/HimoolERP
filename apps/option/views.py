@@ -36,8 +36,8 @@ class WarehouseOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, WarehouseOptionPermission]
     filterset_fields = ['manager', 'is_active']
     search_fields = ['number', 'name']
-    ordering_fields = ['id', 'number', 'order']
-    ordering = ['order', 'number', 'id']
+    ordering_fields = ['id', 'number']
+    ordering = ['number', 'id']
     queryset = Warehouse.objects.all()
 
 
@@ -46,8 +46,8 @@ class ClientOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, ClientOptionPermission]
     filterset_fields = ['level', 'has_arrears', 'is_active']
     search_fields = ['number', 'name']
-    ordering_fields = ['id', 'number', 'order']
-    ordering = ['order', 'number', 'id']
+    ordering_fields = ['id', 'number']
+    ordering = ['number', 'id']
     queryset = Client.objects.all()
 
 
@@ -56,8 +56,8 @@ class SupplierOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, SupplierOptionPermission]
     filterset_fields = ['has_arrears', 'is_active']
     search_fields = ['number', 'name']
-    ordering_fields = ['id', 'number', 'order']
-    ordering = ['order', 'number', 'id']
+    ordering_fields = ['id', 'number']
+    ordering = ['number', 'id']
     queryset = Supplier.objects.all()
 
 
@@ -66,8 +66,8 @@ class AccountOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, AccountOptionPermission]
     filterset_fields = ['is_active']
     search_fields = ['number', 'name']
-    ordering_fields = ['id', 'number', 'order']
-    ordering = ['order', 'number', 'id']
+    ordering_fields = ['id', 'number']
+    ordering = ['number', 'id']
     queryset = Account.objects.all()
 
 
@@ -98,8 +98,8 @@ class GoodsOptionViewSet(LimitedOptionViewSet):
     permission_classes = [IsAuthenticated, GoodsOptionPermission]
     filterset_fields = ['category', 'is_active']
     search_fields = ['number', 'name']
-    ordering_fields = ['id', 'number', 'order']
-    ordering = ['order', 'number', 'id']
+    ordering_fields = ['id', 'number']
+    ordering = ['number', 'id']
     queryset = Goods.objects.all()
 
 
@@ -157,8 +157,8 @@ class ClientArrearsOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, ClientArrearsOptionPermission]
     filterset_fields = ['level', 'is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order', 'arrears_amount']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name', 'arrears_amount']
+    ordering = ['id']
     queryset = Client.objects.all()
 
 
@@ -167,8 +167,8 @@ class SupplierArrearsOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, SupplierArrearsOptionPermission]
     filterset_fields = ['is_active', 'has_arrears']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order', 'arrears_amount']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name', 'arrears_amount']
+    ordering = ['id']
     queryset = Supplier.objects.all()
 
 

@@ -94,11 +94,6 @@
             dataIndex: 'phone',
           },
           {
-            title: '排序',
-            dataIndex: 'order',
-            sorter: true,
-          },
-          {
             title: '状态',
             dataIndex: 'is_active',
             scopedSlots: { customRender: 'is_active' }
@@ -195,6 +190,12 @@
               this.importLoading = false;
             });
         }, 1000);
+      },
+      tableChange(pagination, filters, sorter) {
+        this.searchForm.page = pagination.current;
+        this.pagination.current = pagination.current;
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
     },
     mounted() {

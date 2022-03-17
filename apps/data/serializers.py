@@ -11,7 +11,7 @@ class WarehouseSerializer(BaseSerializer):
     class Meta:
         model = Warehouse
         read_only_fields = ['id', 'manager_name']
-        fields = ['number', 'name', 'manager', 'phone', 'address', 'remark', 'order', 'is_active',
+        fields = ['number', 'name', 'manager', 'phone', 'address', 'remark', 'is_active',
                   'is_locked', *read_only_fields]
 
     def validate_number(self, value):
@@ -36,13 +36,12 @@ class WarehouseImportExportSerializer(BaseSerializer):
     phone = CharField(required=False, label='电话')
     address = CharField(required=False, label='地址')
     remark = CharField(required=False, label='备注')
-    order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
         model = Warehouse
         fields = ['number', 'name', 'manager', 'phone', 'address', 'remark',
-                  'order', 'is_active']
+                  'is_active']
 
 
 class ClientSerializer(BaseSerializer):
@@ -52,7 +51,7 @@ class ClientSerializer(BaseSerializer):
         model = Client
         read_only_fields = ['id', 'level_display']
         fields = ['number', 'name', 'level', 'contact', 'phone', 'email', 'address',
-                  'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
+                  'remark', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -84,13 +83,12 @@ class ClientImportExportSerializer(BaseSerializer):
     email = CharField(required=False, label='邮箱')
     address = CharField(required=False, label='地址')
     remark = CharField(required=False, label='备注')
-    order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
         model = Client
         fields = ['number', 'name', 'level', 'contact', 'phone', 'email', 'address', 'remark',
-                  'order', 'is_active']
+                  'is_active']
 
 
 class SupplierSerializer(BaseSerializer):
@@ -99,7 +97,7 @@ class SupplierSerializer(BaseSerializer):
         model = Supplier
         read_only_fields = ['id']
         fields = ['number', 'name', 'contact', 'phone', 'email', 'address', 'bank_account',
-                  'bank_name', 'remark', 'order', 'is_active', 'initial_arrears_amount', *read_only_fields]
+                  'bank_name', 'remark', 'is_active', 'initial_arrears_amount', *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
@@ -132,13 +130,12 @@ class SupplierImportExportSerializer(BaseSerializer):
     bank_account = CharField(required=False, label='银行账户')
     bank_name = CharField(required=False, label='开户行')
     remark = CharField(required=False, label='备注')
-    order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
         model = Supplier
         fields = ['number', 'name', 'contact', 'phone', 'email', 'address', 'bank_account',
-                  'bank_name', 'remark', 'order', 'is_active']
+                  'bank_name', 'remark', 'is_active']
 
 
 class AccountSerializer(BaseSerializer):
@@ -147,7 +144,7 @@ class AccountSerializer(BaseSerializer):
     class Meta:
         model = Account
         read_only_fields = ['id', 'type_display', 'balance_amount', 'has_balance']
-        fields = ['number', 'name', 'type', 'holder', 'remark', 'order', 'is_active',
+        fields = ['number', 'name', 'type', 'holder', 'remark', 'is_active',
                   'initial_balance_amount', *read_only_fields]
 
     def validate_number(self, value):
@@ -177,12 +174,11 @@ class AccountImportExportSerializer(BaseSerializer):
     type = CharField(required=False, label='账户类型[cash/alipay/wechat/bank_account/other](默认: cash)')
     holder = CharField(required=False, label='开户人')
     remark = CharField(required=False, label='备注')
-    order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
         model = Account
-        fields = ['number', 'name', 'type', 'holder', 'remark', 'order', 'is_active']
+        fields = ['number', 'name', 'type', 'holder', 'remark', 'is_active']
 
 
 class ChargeItemSerializer(BaseSerializer):

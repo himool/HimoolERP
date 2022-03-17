@@ -14,7 +14,7 @@ class ClientArrearsSerializer(BaseSerializer):
     class Meta:
         model = Client
         fields = ['id', 'number', 'name', 'level', 'level_display',
-                  'contact', 'phone', 'email', 'address', 'remark', 'order', 'is_active',
+                  'contact', 'phone', 'email', 'address', 'remark', 'is_active',
                   'initial_arrears_amount', 'arrears_amount', 'has_arrears']
 
 
@@ -25,7 +25,7 @@ class SupplierArrearsSerializer(BaseSerializer):
     class Meta:
         model = Supplier
         fields = ['id', 'number', 'name', 'contact', 'phone', 'email',
-                  'address', 'bank_account', 'bank_name', 'remark', 'order', 'is_active',
+                  'address', 'bank_account', 'bank_name', 'remark', 'is_active',
                   'initial_arrears_amount', 'arrears_amount', 'has_arrears']
 
 

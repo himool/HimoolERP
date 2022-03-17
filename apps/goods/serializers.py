@@ -101,7 +101,7 @@ class GoodsSerializer(BaseSerializer):
         fields = ['number', 'name', 'barcode', 'category', 'unit', 'spec', 'enable_batch_control',
                   'shelf_life_days', 'shelf_life_warning_days', 'enable_inventory_warning',
                   'inventory_upper', 'inventory_lower', 'purchase_price', 'retail_price',
-                  'level_price1', 'level_price2', 'level_price3', 'remark', 'order',
+                  'level_price1', 'level_price2', 'level_price3', 'remark',
                   'is_active', 'inventory_items', 'goods_images', *read_only_fields]
         extra_kwargs = {'goods_images': {'required': False}}
 
@@ -302,7 +302,6 @@ class GoodsImportExportSerializer(BaseSerializer):
     level_price2 = FloatField(label='等级价二(必填)')
     level_price3 = FloatField(label='等级价三(必填)')
     remark = CharField(required=False, label='备注')
-    order = IntegerField(required=False, label='排序(默认: 100)')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
@@ -311,7 +310,7 @@ class GoodsImportExportSerializer(BaseSerializer):
                   'enable_batch_control', 'shelf_life_days', 'shelf_life_warning_days',
                   'enable_inventory_warning', 'inventory_upper', 'inventory_lower',
                   'purchase_price', 'retail_price', 'level_price1', 'level_price2',
-                  'level_price3', 'remark', 'order', 'is_active']
+                  'level_price3', 'remark', 'is_active']
 
 
 class GoodsImageSerializer(BaseSerializer):

@@ -148,8 +148,8 @@ class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     permission_classes = [IsAuthenticated, GoodsPermission]
     filterset_fields = ['number', 'category', 'is_active']
     search_fields = ['number', 'name', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name']
+    ordering = ['id']
     select_related_fields = ['category', 'unit']
     prefetch_related_fields = ['inventories', 'inventories__batchs']
     queryset = Goods.objects.all()

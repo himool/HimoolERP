@@ -87,19 +87,9 @@
             dataIndex: 'remark',
           },
           {
-            title: '排序',
-            dataIndex: 'order',
-          },
-          {
             title: '激活状态',
             dataIndex: 'is_active',
           },
-          // {
-          //   title: '操作',
-          //   dataIndex: 'action',
-          //   scopedSlots: { customRender: 'action' },
-          //   width: 80
-          // },
         ],
         searchForm: { page: 1,has_arrears: true },
         pagination: { current: 1, total: 0, pageSize: 15 },

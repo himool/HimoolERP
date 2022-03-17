@@ -19,8 +19,8 @@ class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin)
     permission_classes = [IsAuthenticated, WarehousePermission]
     filterset_fields = ['manager', 'is_active', 'is_locked']
     search_fields = ['number', 'name', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order']
-    ordering = ['order', 'number']
+    ordering_fields = ['id', 'number', 'name']
+    ordering = ['number']
     select_related_fields = ['manager']
     queryset = Warehouse.objects.all()
 
@@ -147,8 +147,8 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     permission_classes = [IsAuthenticated, ClientPermission]
     filterset_fields = ['level', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name']
+    ordering = ['id']
     queryset = Client.objects.all()
 
     @extend_schema(responses={200: NumberResponse})
@@ -222,8 +222,8 @@ class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     permission_classes = [IsAuthenticated, SupplierPermission]
     filterset_fields = ['is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name']
+    ordering = ['id']
     queryset = Supplier.objects.all()
 
     @extend_schema(responses={200: NumberResponse})
@@ -297,8 +297,8 @@ class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     permission_classes = [IsAuthenticated, AccountPermission]
     filterset_fields = ['type', 'is_active']
     search_fields = ['number', 'name', 'contact', 'remark']
-    ordering_fields = ['id', 'number', 'name', 'order']
-    ordering = ['order', 'id']
+    ordering_fields = ['id', 'number', 'name']
+    ordering = ['id']
     queryset = Account.objects.all()
 
     @extend_schema(responses={200: NumberResponse})

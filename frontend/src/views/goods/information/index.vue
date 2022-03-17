@@ -228,6 +228,12 @@
             });
         }, 1000);
       },
+      tableChange(pagination, filters, sorter) {
+        this.searchForm.page = pagination.current;
+        this.pagination.current = pagination.current;
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
+      },
     },
     mounted() {
       this.initialize();
