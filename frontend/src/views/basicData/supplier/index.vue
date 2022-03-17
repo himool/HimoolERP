@@ -2,16 +2,20 @@
   <div>
     <a-card title="供应商">
       <a-row gutter="16">
-        <a-col :span="24" :md="6" :xl="5" style="max-width: 256px; margin-bottom: 12px;">
+        <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
           <a-select v-model="searchForm.is_active" placeholder="状态" allowClear style="width: 100%;" @change="search">
             <a-select-option :value="true">激活</a-select-option>
             <a-select-option :value="false">冻结</a-select-option>
           </a-select>
         </a-col>
-        <a-col :span="24" :md="6" :xl="4" style="max-width: 256px; margin-bottom: 12px;">
-          <a-input-search v-model="searchForm.search" placeholder="编号, 名称, 备注" allowClear @search="search" />
+        <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
+          <a-input v-model="searchForm.search" placeholder="编号, 名称, 备注" allowClear @pressEnter="search" />
         </a-col>
-        <a-col :span="24" :md="6" :xl="8" style="margin-bottom: 12px;">
+        <a-col :span="24" style="width: 100px; margin-bottom: 12px;">
+          <a-button type="primary" icon="search" @click="search">查询</a-button>
+        </a-col>
+
+        <a-col :span="24" style="width: 300px; margin-bottom: 12px;">
           <a-button-group>
             <a-button icon="file-excel" @click="downloadTemplate">模板下载</a-button>
             <a-upload name="file" :showUploadList="false" :customRequest="importExcel">
