@@ -30,8 +30,8 @@ class WarehouseSerializer(BaseSerializer):
 
 
 class WarehouseImportExportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填唯一)')
-    name = CharField(label='名称(必填唯一)')
+    number = CharField(label='仓库编号(必填唯一)')
+    name = CharField(label='仓库名称(必填唯一)')
     manager = CharField(source='manager.name', required=False, label='管理员')
     phone = CharField(required=False, label='电话')
     address = CharField(required=False, label='地址')
@@ -76,8 +76,8 @@ class ClientSerializer(BaseSerializer):
 
 
 class ClientImportExportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填唯一)')
-    name = CharField(label='名称(必填唯一)')
+    number = CharField(label='客户编号(必填唯一)')
+    name = CharField(label='客户名称(必填唯一)')
     level = CharField(required=False, label='等级[0/1/2/3](默认: 0)')
     contact = CharField(required=False, label='联系人')
     phone = CharField(required=False, label='手机号')
@@ -123,8 +123,8 @@ class SupplierSerializer(BaseSerializer):
 
 
 class SupplierImportExportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填唯一)')
-    name = CharField(label='名称(必填唯一)')
+    number = CharField(label='供应商编号(必填唯一)')
+    name = CharField(label='供应商名称(必填唯一)')
     contact = CharField(required=False, label='联系人')
     phone = CharField(required=False, label='手机号')
     email = CharField(required=False, label='邮箱')
@@ -172,8 +172,8 @@ class AccountSerializer(BaseSerializer):
 
 
 class AccountImportExportSerializer(BaseSerializer):
-    number = CharField(label='编号(必填唯一)')
-    name = CharField(label='名称(必填唯一)')
+    number = CharField(label='账户编号(必填唯一)')
+    name = CharField(label='账户名称(必填唯一)')
     type = CharField(required=False, label='账户类型[cash/alipay/wechat/bank_account/other](默认: cash)')
     holder = CharField(required=False, label='开户人')
     remark = CharField(required=False, label='备注')
@@ -199,7 +199,7 @@ class ChargeItemSerializer(BaseSerializer):
 
 
 class ChargeItemImportExportSerializer(BaseSerializer):
-    name = CharField(label='名称(必填唯一)')
+    name = CharField(label='收支项目(必填唯一)')
     type = CharField(label='收支类型[income/expenditure](必填)')
     remark = CharField(required=False, label='备注')
 

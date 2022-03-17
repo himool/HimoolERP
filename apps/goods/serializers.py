@@ -18,7 +18,7 @@ class GoodsCategorySerializer(BaseSerializer):
 
 
 class GoodsCategoryImportExportSerializer(BaseSerializer):
-    name = CharField(label='名称(必填唯一)')
+    name = CharField(label='分类名称(必填唯一)')
     remark = CharField(required=False, label='备注')
 
     class Meta:
@@ -39,7 +39,7 @@ class GoodsUnitSerializer(BaseSerializer):
 
 
 class GoodsUnitImportExportSerializer(BaseSerializer):
-    name = CharField(label='名称(必填唯一)')
+    name = CharField(label='单位名称(必填唯一)')
     remark = CharField(required=False, label='备注')
 
     class Meta:
@@ -284,8 +284,8 @@ class GoodsSerializer(BaseSerializer):
 
 
 class GoodsImportExportSerializer(BaseSerializer):
-    number = CharField(label='编号(唯一必填)')
-    name = CharField(label='名称(必填)')
+    number = CharField(label='商品编号(唯一必填)')
+    name = CharField(label='商品名称(必填)')
     barcode = CharField(required=False, label='条码')
     category = CharField(source='category.name', required=False, label='分类')
     unit = CharField(source='unit.name', required=False, label='单位')
