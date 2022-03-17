@@ -296,7 +296,7 @@ class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
     serializer_class = AccountSerializer
     permission_classes = [IsAuthenticated, AccountPermission]
     filterset_fields = ['type', 'is_active']
-    search_fields = ['number', 'name', 'contact', 'remark']
+    search_fields = ['number', 'name', 'remark']
     ordering_fields = ['id', 'number', 'name']
     ordering = ['id']
     queryset = Account.objects.all()

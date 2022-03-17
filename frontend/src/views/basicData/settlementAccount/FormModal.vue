@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal v-model="visible" :confirmLoading="loading" :maskClosable="false" @cancel="cancel" @ok="confirm">
-      <div slot="title">{{form.id ? '编辑结算账户' : '新增结算账户' }}</div>
+      <div slot="title">{{ form.id ? "编辑结算账户" : "新增结算账户" }}</div>
       <div>
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
           <a-form-model-item prop="name" label="账户名称">
@@ -19,6 +19,9 @@
           </a-form-model-item>
           <a-form-model-item prop="holder" label="开户人">
             <a-input v-model="form.holder" />
+          </a-form-model-item>
+          <a-form-model-item prop="card_number" label="开户账号">
+            <a-input v-model="form.card_number" />
           </a-form-model-item>
           <a-form-model-item prop="remark" label="备注">
             <a-textarea v-model="form.remark" allowClear :rows="4" />
@@ -39,54 +42,55 @@
 </template>
 
 <script>
-  import { settlementAccountCreate, settlementAccountUpdate } from '@/api/basicData'
-  
-  export default {
-    name: 'FormModal',
-    props: ['visible', 'form'],
-    model: { prop: 'visible', event: 'cancel' },
-    data() {
-      return {
-        typeOptions: [
-          { id: 'cash', name: '现金'},
-          { id: 'alipay', name: '支付宝'},
-          { id: 'wechat', name: '微信钱包'},
-          { id: 'bank_account', name: '银行账户'},
-          { id: 'other', name: '其他'},
+import { settlementAccountCreate, settlementAccountUpdate } from "@/api/basicData";
+
+export default {
+  name: "FormModal",
+  props: ["visible", "form"],
+  model: { prop: "visible", event: "cancel" },
+  data() {
+    return {
+      typeOptions: [
+        { id: "cash", name: "现金" },
+        { id: "alipay", name: "支付宝" },
+        { id: "wechat", name: "微信钱包" },
+        { id: "bank_account", name: "银行账户" },
+        { id: "other", name: "其他" },
+      ],
+      rules: {
+        name: [{ required: true, message: "请输入账户名称", trigger: "change" }],
+        number: [{ required: true, message: "请输入账户编号", trigger: "change" }],
+        initial_balance_amount: [
+          { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: "初期余额格式不正确", trigger: "change" },
         ],
-        rules: {
-          name: [{ required: true, message: '请输入账户名称', trigger: 'change' }],
-          number: [{ required: true, message: '请输入账户编号', trigger: 'change' }],
-          initial_balance_amount: [
-            { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: '初期余额格式不正确', trigger: 'change' }
-          ],
-        },
-        loading: false,
-      };
-    },
-    methods: {
-      confirm() {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            this.loading = true;
-            let func = this.form.id ? settlementAccountUpdate : settlementAccountCreate;
-            func(this.form).then(data => {
-              this.$message.success(this.form.id ? '修改成功' : '新增成功');
-              this.$emit(this.form.id ? 'update' : 'create', data);
+      },
+      loading: false,
+    };
+  },
+  methods: {
+    confirm() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          let func = this.form.id ? settlementAccountUpdate : settlementAccountCreate;
+          func(this.form)
+            .then((data) => {
+              this.$message.success(this.form.id ? "修改成功" : "新增成功");
+              this.$emit(this.form.id ? "update" : "create", data);
               this.cancel();
-            }).finally(() => {
+            })
+            .finally(() => {
               this.loading = false;
             });
-          }
-        });
-      },
-      cancel() {
-        this.$emit('cancel', false);
-        this.$refs.form.resetFields();
-      },
+        }
+      });
     },
-  }
+    cancel() {
+      this.$emit("cancel", false);
+      this.$refs.form.resetFields();
+    },
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

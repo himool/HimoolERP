@@ -89,10 +89,6 @@
             sorter: true,
           },
           {
-            title: '手机号',
-            dataIndex: 'phone',
-          },
-          {
             title: '状态',
             dataIndex: 'is_active',
             scopedSlots: { customRender: 'is_active' }

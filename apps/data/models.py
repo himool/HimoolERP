@@ -124,6 +124,7 @@ class Account(Model):
     name = CharField(max_length=64, verbose_name='名称')
     type = CharField(max_length=32, choices=Type.choices, default=Type.CASH, verbose_name='账户类型')
     holder = CharField(max_length=64, null=True, blank=True, verbose_name='开户人')
+    card_number = CharField(max_length=64, null=True, blank=True, verbose_name='开户账号')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     is_active = BooleanField(default=True, verbose_name='激活状态')
     initial_balance_amount = AmountField(default=0, verbose_name='初期余额')

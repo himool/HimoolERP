@@ -88,12 +88,16 @@
             sorter: true,
           },
           {
-            title: '零售价',
-            dataIndex: 'retail_price',
+            title: '分类',
+            dataIndex: 'category_name',
           },
           {
-            title: '保质期天数',
-            dataIndex: 'shelf_life_days',
+            title: '采购价',
+            dataIndex: 'purchase_price',
+          },
+          {
+            title: '零售价',
+            dataIndex: 'retail_price',
           },
           {
             title: '状态',

@@ -144,7 +144,7 @@ class AccountSerializer(BaseSerializer):
     class Meta:
         model = Account
         read_only_fields = ['id', 'type_display', 'balance_amount', 'has_balance']
-        fields = ['number', 'name', 'type', 'holder', 'remark', 'is_active',
+        fields = ['number', 'name', 'type', 'holder', 'card_number', 'remark', 'is_active',
                   'initial_balance_amount', *read_only_fields]
 
     def validate_number(self, value):
@@ -173,12 +173,13 @@ class AccountImportExportSerializer(BaseSerializer):
     name = CharField(label='账户名称(必填唯一)')
     type = CharField(required=False, label='账户类型[cash/alipay/wechat/bank_account/other](默认: cash)')
     holder = CharField(required=False, label='开户人')
+    card_number = CharField(required=False, label='开户账号')
     remark = CharField(required=False, label='备注')
     is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
 
     class Meta:
         model = Account
-        fields = ['number', 'name', 'type', 'holder', 'remark', 'is_active']
+        fields = ['number', 'name', 'type', 'holder', 'card_number', 'remark', 'is_active']
 
 
 class ChargeItemSerializer(BaseSerializer):
