@@ -4,10 +4,10 @@
       <div slot="title">{{form.id ? '编辑结算账户' : '新增结算账户' }}</div>
       <div>
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
-          <a-form-model-item prop="name" label="名称">
+          <a-form-model-item prop="name" label="账户名称">
             <a-input v-model="form.name" />
           </a-form-model-item>
-          <a-form-model-item prop="number" label="编号">
+          <a-form-model-item prop="number" label="账户编号">
             <a-input v-model="form.number" />
           </a-form-model-item>
           <a-form-model-item prop="type" label="账户类型">
@@ -58,8 +58,8 @@
           { id: 'other', name: '其他'},
         ],
         rules: {
-          name: [{ required: true, message: '请输入名称', trigger: 'change' }],
-          number: [{ required: true, message: '请输入编号', trigger: 'change' }],
+          name: [{ required: true, message: '请输入账户名称', trigger: 'change' }],
+          number: [{ required: true, message: '请输入账户编号', trigger: 'change' }],
           initial_balance_amount: [
             { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: '初期余额格式不正确', trigger: 'change' }
           ],

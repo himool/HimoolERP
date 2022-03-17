@@ -2,26 +2,6 @@ import request from '@/utils/request';
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
-// 客户分类模板
-export function clientClassificationTemplate(params) {
-  return axios({
-    url: '/api/client_categories/import_template/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
-    responseType: 'blob',
-    method: 'get',
-    params,
-  })
-}
-
-// 客户分类导入
-export function clientClassificationImport(data) {
-  return axios({
-    url: '/api/client_categories/import_data/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
-    method: 'post',
-    data,
-  })
-}
 
 // 客户模板
 export function clientTemplate(params) {
@@ -38,27 +18,6 @@ export function clientTemplate(params) {
 export function clientImport(data) {
   return axios({
     url: '/api/clients/import_data/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
-    method: 'post',
-    data,
-  })
-}
-
-// 供应商分类模板
-export function supplierClassificationTemplate(params) {
-  return axios({
-    url: '/api/supplier_categories/import_template/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
-    responseType: 'blob',
-    method: 'get',
-    params,
-  })
-}
-
-// 供应商分类导入
-export function supplierClassificationImport(data) {
-  return axios({
-    url: '/api/supplier_categories/import_data/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
     method: 'post',
     data,

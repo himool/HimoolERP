@@ -15,18 +15,11 @@ export function userOption(params) {
 export function materialsOption(params) {
   return request({ url: `/materials/options/`, method: 'get', params })
 }
-// 供应商分类
-export function supplierClassification(params) {
-  return request({ url: `/supplier_categories/options/`, method: 'get', params })
-}
 // 供应商
 export function suppliersOption(params) {
   return request({ url: `/suppliers/options/`, method: 'get', params })
 }
-// 客户分类
-export function clientClassification(params) {
-  return request({ url: `/client_categories/options/`, method: 'get', params })
-}
+
 // 客户
 export function clientsOption(params) {
   return request({ url: `/clients/options/`, method: 'get', params })

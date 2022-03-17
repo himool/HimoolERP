@@ -76,13 +76,13 @@
             },
           },
           {
-            title: '名称',
-            dataIndex: 'name',
-            sorter: true,
+            title: '账户编号',
+            dataIndex: 'number',
           },
           {
-            title: '编号',
-            dataIndex: 'number',
+            title: '账户名称',
+            dataIndex: 'name',
+            sorter: true,
           },
           {
             title: '账户类型',

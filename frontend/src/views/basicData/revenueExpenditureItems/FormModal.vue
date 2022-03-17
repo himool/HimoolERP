@@ -4,7 +4,7 @@
       <div slot="title">{{form.id ? '编辑收支项目' : '新增收支项目' }}</div>
       <div>
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
-          <a-form-model-item prop="name" label="名称">
+          <a-form-model-item prop="name" label="收支项目">
             <a-input v-model="form.name" />
           </a-form-model-item>
           <a-form-model-item prop="type" label="收支类型">
@@ -32,7 +32,7 @@
     data() {
       return {
         rules: {
-          name: [{ required: true, message: '请输入名称', trigger: 'change' }],
+          name: [{ required: true, message: '请输入收支项目', trigger: 'change' }],
           type: [{ required: true, message: '请选择收支类型', trigger: 'change' }]
         },
         loading: false,

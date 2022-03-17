@@ -69,7 +69,7 @@
             },
           },
           {
-            title: '分类名称',
+            title: '单位名称',
             dataIndex: 'name',
             sorter: true,
           },

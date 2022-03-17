@@ -80,13 +80,13 @@
             },
           },
           {
+            title: '仓库编号',
+            dataIndex: 'number',
+          },
+          {
             title: '仓库名称',
             dataIndex: 'name',
             sorter: true,
-          },
-          {
-            title: '出库编号',
-            dataIndex: 'number',
           },
           {
             title: '手机号',

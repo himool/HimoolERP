@@ -58,7 +58,6 @@
   import { supplierTemplate, supplierImport } from '@/api/import'
   import { supplierList, supplierDestroy } from '@/api/basicData'
   import { getSupplierNumber } from '@/api/data'
-  import { supplierClassification }  from '@/api/option'
 
   export default {
     name: 'Warehouse',
@@ -77,13 +76,13 @@
             },
           },
           {
+            title: '供应商编号',
+            dataIndex: 'number',
+          },
+          {
             title: '供应商名称',
             dataIndex: 'name',
             sorter: true,
-          },
-          {
-            title: '供应商编号',
-            dataIndex: 'number',
           },
           {
             title: '联系人',
@@ -155,9 +154,7 @@
         } else {
           this.targetItem = { ...item };
         }
-        supplierClassification({ page_size: 999999 }).then(data => {
-          this.suppliersClassificationOptions = data.results;
-        });
+
         this.visible = true;
       },
       destroy(id) {

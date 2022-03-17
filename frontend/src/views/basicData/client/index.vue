@@ -58,7 +58,6 @@
   import { clientTemplate, clientImport } from '@/api/import'
   import { clientList, clientDestroy } from '@/api/basicData'
   import { getClientNumber } from '@/api/data'
-  import { clientClassification }  from '@/api/option'
 
   export default {
     name: 'Warehouse',
@@ -78,13 +77,13 @@
             },
           },
           {
+            title: '客户编号',
+            dataIndex: 'number',
+          },
+          {
             title: '客户名称',
             dataIndex: 'name',
             sorter: true,
-          },
-          {
-            title: '客户编号',
-            dataIndex: 'number',
           },
           {
             title: '联系人',
@@ -156,9 +155,7 @@
         } else {
           this.targetItem = { ...item };
         }
-        clientClassification({ page_size: 999999 }).then(data => {
-          this.clientsClassificationItems = data.results;
-        });
+
         this.visible = true;
       },
       destroy(id) {

@@ -75,7 +75,7 @@
             },
           },
           {
-            title: '名称',
+            title: '收支项目',
             dataIndex: 'name',
             sorter: true,
           },

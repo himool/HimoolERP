@@ -78,12 +78,12 @@
             },
           },
           {
-            title: '编号',
+            title: '商品编号',
             dataIndex: 'number',
             sorter: true,
           },
           {
-            title: '分类名称',
+            title: '商品名称',
             dataIndex: 'name',
             sorter: true,
           },

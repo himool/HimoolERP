@@ -1,32 +1,11 @@
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
-// 客户分类
-export function clientClassificationExport(params) {
-  return axios({
-    url: '/api/client_categories/export/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
-    responseType: 'blob',
-    method: 'get',
-    params,
-  })
-}
 
 // 客户
 export function clientExport(params) {
   return axios({
     url: '/api/clients/export/',
-    headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
-    responseType: 'blob',
-    method: 'get',
-    params,
-  })
-}
-
-// 供应商分类
-export function supplierClassificationExport(params) {
-  return axios({
-    url: '/api/supplier_categories/export/',
     headers: { 'X-CSRFToken': Cookies.get('csrftoken'), Authorization: 'Bearer ' + Cookies.get('access') },
     responseType: 'blob',
     method: 'get',
