@@ -8,7 +8,7 @@
             <a-input v-model="form.name" />
           </a-form-model-item>
           <a-form-model-item prop="remark" label="备注">
-            <a-textarea v-model="form.remark" allowClear :rows="4" />
+            <a-input v-model="form.remark" allowClear />
           </a-form-model-item>
         </a-form-model>
       </div>

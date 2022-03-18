@@ -48,7 +48,7 @@
             <a-date-picker v-model="form.handle_time" valueFormat="YYYY-MM-DD" style="width: 100%" />
           </a-form-model-item>
           <a-form-model-item prop="remark" label="备注">
-            <a-textarea v-model="form.remark" allowClear :rows="4" />
+            <a-input v-model="form.remark" allowClear />
           </a-form-model-item>
         </a-form-model>
       </div>

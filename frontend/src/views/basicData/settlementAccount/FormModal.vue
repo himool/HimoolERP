@@ -24,7 +24,7 @@
             <a-input v-model="form.card_number" />
           </a-form-model-item>
           <a-form-model-item prop="remark" label="备注">
-            <a-textarea v-model="form.remark" allowClear :rows="4" />
+            <a-input v-model="form.remark" allowClear />
           </a-form-model-item>
           <a-form-model-item prop="is_active" label="状态">
             <a-select v-model="form.is_active" style="width: 100%;">
