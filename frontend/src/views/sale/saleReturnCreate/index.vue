@@ -50,7 +50,7 @@
                 <a-date-picker v-model="form.handle_time" valueFormat="YYYY-MM-DD" style="width: 100%" />
               </a-form-model-item>
             </a-col>
-            <a-col :span="6" style="width: 320px;">
+            <!-- <a-col :span="6" style="width: 320px;">
               <a-form-model-item prop="discount" label="整单折扣">
                 <a-input-number v-model="form.discount" style="width: 100%;" />
               </a-form-model-item>
@@ -59,7 +59,7 @@
               <a-form-model-item prop="other_amount" label="其他费用">
                 <a-input-number v-model="form.other_amount" style="width: 100%;" />
               </a-form-model-item>
-            </a-col>
+            </a-col> -->
             <a-col :span="6" style="width: 320px;">
               <a-form-model-item prop="remark" label="备注">
                 <a-input v-model="form.remark" allowClear />
@@ -67,7 +67,86 @@
             </a-col>
           </a-row>
         </a-form-model>
+
+        <a-divider orientation="left">商品信息</a-divider>
+
         <div>
+          <a-row gutter="16">
+            <a-space>
+              <a-button type="primary" @click="openMaterialModal">添加商品</a-button>
+            </a-space>
+          </a-row>
+          <div style="margin-top: 16px;">
+              <a-table rowKey="id" size="middle" :columns="columns" :data-source="goodsData"
+                :pagination="false">
+                <div slot="return_quantity" slot-scope="value, item, index">
+                  <div v-if="item.isTotal">{{ value }}</div>
+                  <a-input-number v-else v-model="item.return_quantity" :min="0" size="small"></a-input-number>
+                </div>
+                <div slot="return_price" slot-scope="value, item, index">
+                  <a-input-number v-if="!item.isTotal" v-model="item.return_price" :min="0" size="small"></a-input-number>
+                </div>
+                <div slot="action" slot-scope="value, item, index">
+                  <a-button-group v-if="!item.isTotal" size="small">
+                    <a-button type="danger" @click="removeMaterial(item)">移除</a-button>
+                  </a-button-group>
+                </div>
+              </a-table>
+          </div>
+        </div>
+
+        <a-divider orientation="left">账单信息</a-divider>
+        <div>
+          <a-row gutter="16">
+            <a-col :span="4">
+              <a-form-model-item prop="discount" label="整单折扣" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number v-model="form.discount" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+
+            <a-col :span="4">
+              <a-form-model-item
+                prop="other_amount"
+                label="其他费用"
+                :label-col="{ span: 24 }"
+                :wrapper-col="{ span: 24 }"
+              >
+                <a-input-number v-model="form.other_amount" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="4">
+              <a-form-model-item label="总计金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number :value="totalAmount" :disabled="true" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+
+          <a-row gutter="16">
+            <a-col :span="4">
+              <a-form-model-item label="结算账户" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-select v-model="sales_return_account_item.account" style="width: 100%">
+                  <a-select-option v-for="Account in accountsItems" :key="Account.id" :value="Account.id">
+                    {{ Account.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="4">
+              <a-form-model-item label="实付金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number v-model="sales_return_account_item.payment_amount" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row gutter="16">
+            <a-col :span="4">
+              <a-form-model-item label="本单欠款(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number :value="amountOwed" :disabled="true" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+        </div>
+
+        <!-- <div>
           <a-row gutter="16">
             <a-space>
               <a-button type="primary" @click="handelAddAcount">添加结算账户</a-button>
@@ -98,33 +177,7 @@
                 </div>
               </a-table>
           </div>
-        </div>
-        <a-divider></a-divider>
-
-        <div>
-          <a-row gutter="16">
-            <a-space>
-              <a-button type="primary" @click="openMaterialModal">添加商品</a-button>
-            </a-space>
-          </a-row>
-          <div style="margin-top: 16px;">
-              <a-table rowKey="id" size="middle" :columns="columns" :data-source="goodsData"
-                :pagination="false">
-                <div slot="return_quantity" slot-scope="value, item, index">
-                  <div v-if="item.isTotal">{{ value }}</div>
-                  <a-input-number v-else v-model="item.return_quantity" :min="0" size="small"></a-input-number>
-                </div>
-                <div slot="return_price" slot-scope="value, item, index">
-                  <a-input-number v-if="!item.isTotal" v-model="item.return_price" :min="0" size="small"></a-input-number>
-                </div>
-                <div slot="action" slot-scope="value, item, index">
-                  <a-button-group v-if="!item.isTotal" size="small">
-                    <a-button type="danger" @click="removeMaterial(item)">移除</a-button>
-                  </a-button-group>
-                </div>
-              </a-table>
-          </div>
-        </div>
+        </div> -->
       </a-spin>
 
       <div style="margin-top: 32px;">
@@ -280,9 +333,24 @@
           },
         ],
         sales_return_account_items: [],
+        sales_return_account_item: {},
       }
     },
     computed: {
+      totalAmount() {
+      let totalAmount = 0;
+      for (let item of this.materialItems) {
+        let amount = NP.times(item.return_quantity, item.return_price);
+        totalAmount = NP.plus(totalAmount, amount);
+      }
+
+      totalAmount = NP.times(totalAmount, this.form.discount || 100, 0.01);
+      totalAmount = NP.plus(totalAmount, this.form.other_amount || 0);
+      return totalAmount;
+    },
+    amountOwed() {
+      return NP.minus(this.totalAmount, this.sales_return_account_item.payment_amount || 0);
+    },
       goodsData() {
         // 统计合计
         let totalQuantity = 0,
@@ -401,10 +469,10 @@
                 ifHasEmptyAccounts = true;
               }
             })
-            if (ifHasEmptyAccounts) {
-              this.$message.warn('请将结算账户信息填写完整');
-              return false
-            }
+            // if (ifHasEmptyAccounts) {
+            //   this.$message.warn('请将结算账户信息填写完整');
+            //   return false
+            // }
 
             if (this.materialItems.length == 0) {
               this.$message.warn('未添加商品');
@@ -423,10 +491,11 @@
             this.loading = true;
             let formData = {
               ...this.form,
-              sales_return_account_items: this.sales_return_account_items.map(item => {
-                delete item.id
-                return item
-              }),
+              // sales_return_account_items: this.sales_return_account_items.map(item => {
+              //   delete item.id
+              //   return item
+              // }),
+              sales_return_account_items: [this.sales_return_account_item],
               sales_return_goods_items: this.materialItems.map(item => {
                 return {
                   goods: item.goods,
@@ -445,9 +514,11 @@
         });
       },
       resetForm() {
-        this.form = {};
+        this.form = { other_amount: 0 };
+      this.sales_return_account_item = { payment_amount: 0 };
+
         getSaleReturnOrderNumber().then(data => {
-          this.form = { number: data.number, discount: 100 }
+          this.form = { ...this.form, number: data.number, discount: 100 }
         })
         this.materialItems = [];
         this.handelAddAcount();

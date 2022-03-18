@@ -49,84 +49,84 @@
           </a-row>
         </a-form-model>
 
-          <a-divider orientation="left">商品信息</a-divider>
+        <a-divider orientation="left">商品信息</a-divider>
 
-          <div>
-            <a-row gutter="16">
-              <a-space>
-                <!-- <a-input placeholder="请扫描商品条码"></a-input> -->
-                <a-button type="primary" @click="openMaterialModal">添加商品</a-button>
-              </a-space>
-            </a-row>
-            <div style="margin-top: 16px;">
-              <a-table rowKey="id" size="middle" :columns="columns" :data-source="goodsData" :pagination="false">
-                <div slot="purchase_quantity" slot-scope="value, item, index">
-                  <div v-if="item.isTotal">{{ value }}</div>
-                  <a-input-number v-else v-model="item.purchase_quantity" :min="0" size="small"></a-input-number>
-                </div>
-                <div slot="purchase_price" slot-scope="value, item, index">
-                  <a-input-number
-                    v-if="!item.isTotal"
-                    v-model="item.purchase_price"
-                    :min="0"
-                    size="small"
-                  ></a-input-number>
-                </div>
-                <div slot="action" slot-scope="value, item, index">
-                  <a-button-group v-if="!item.isTotal" size="small">
-                    <a-button type="danger" @click="removeMaterial(item)">移除</a-button>
-                  </a-button-group>
-                </div>
-              </a-table>
-            </div>
+        <div>
+          <a-row gutter="16">
+            <a-space>
+              <!-- <a-input placeholder="请扫描商品条码"></a-input> -->
+              <a-button type="primary" @click="openMaterialModal">添加商品</a-button>
+            </a-space>
+          </a-row>
+          <div style="margin-top: 16px;">
+            <a-table rowKey="id" size="middle" :columns="columns" :data-source="goodsData" :pagination="false">
+              <div slot="purchase_quantity" slot-scope="value, item, index">
+                <div v-if="item.isTotal">{{ value }}</div>
+                <a-input-number v-else v-model="item.purchase_quantity" :min="0" size="small"></a-input-number>
+              </div>
+              <div slot="purchase_price" slot-scope="value, item, index">
+                <a-input-number
+                  v-if="!item.isTotal"
+                  v-model="item.purchase_price"
+                  :min="0"
+                  size="small"
+                ></a-input-number>
+              </div>
+              <div slot="action" slot-scope="value, item, index">
+                <a-button-group v-if="!item.isTotal" size="small">
+                  <a-button type="danger" @click="removeMaterial(item)">移除</a-button>
+                </a-button-group>
+              </div>
+            </a-table>
           </div>
+        </div>
 
-          <a-divider orientation="left">账单信息</a-divider>
+        <a-divider orientation="left">账单信息</a-divider>
 
-          <div>
-            <a-row gutter="16">
-              <a-col :span="4">
-                <a-form-model-item
-                  prop="other_amount"
-                  label="其他费用"
-                  :label-col="{ span: 24 }"
-                  :wrapper-col="{ span: 24 }"
-                >
-                  <a-input-number v-model="form.other_amount" style="width: 100%;" />
-                </a-form-model-item>
-              </a-col>
-              <a-col :span="4">
-                <a-form-model-item label="总计金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                  <a-input-number :value="totalAmount" :disabled="true" style="width: 100%;" />
-                </a-form-model-item>
-              </a-col>
-            </a-row>
+        <div>
+          <a-row gutter="16">
+            <a-col :span="4">
+              <a-form-model-item
+                prop="other_amount"
+                label="其他费用"
+                :label-col="{ span: 24 }"
+                :wrapper-col="{ span: 24 }"
+              >
+                <a-input-number v-model="form.other_amount" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="4">
+              <a-form-model-item label="总计金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number :value="totalAmount" :disabled="true" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
 
-            <a-row gutter="16">
-              <a-col :span="4">
-                <a-form-model-item label="结算账户" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                  <a-select v-model="purchase_account_item.account" style="width: 100%">
-                    <a-select-option v-for="Account in accountsItems" :key="Account.id" :value="Account.id">
-                      {{ Account.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-form-model-item>
-              </a-col>
-              <a-col :span="4">
-                <a-form-model-item label="实付金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                  <a-input-number v-model="purchase_account_item.payment_amount" style="width: 100%;" />
-                </a-form-model-item>
-              </a-col>
-            </a-row>
-            <a-row gutter="16">
-              <a-col :span="4">
-                <a-form-model-item label="本单欠款(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                  <a-input-number :value="amountOwed" :disabled="true" style="width: 100%;" />
-                </a-form-model-item>
-              </a-col>
-            </a-row>
+          <a-row gutter="16">
+            <a-col :span="4">
+              <a-form-model-item label="结算账户" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-select v-model="purchase_account_item.account" style="width: 100%">
+                  <a-select-option v-for="Account in accountsItems" :key="Account.id" :value="Account.id">
+                    {{ Account.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-col>
+            <a-col :span="4">
+              <a-form-model-item label="实付金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number v-model="purchase_account_item.payment_amount" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
+          <a-row gutter="16">
+            <a-col :span="4">
+              <a-form-model-item label="本单欠款(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number :value="amountOwed" :disabled="true" style="width: 100%;" />
+              </a-form-model-item>
+            </a-col>
+          </a-row>
 
-            <!-- <div style="margin-top: 16px; width: 40%;">
+          <!-- <div style="margin-top: 16px; width: 40%;">
               <a-table
                 rowKey="id"
                 size="middle"
@@ -164,7 +164,7 @@
                 </div>
               </a-table>
             </div> -->
-          </div>
+        </div>
       </a-spin>
 
       <div style="margin-top: 32px;">
@@ -500,8 +500,9 @@ export default {
     },
     resetForm() {
       this.form = { other_amount: 0 };
+      this.purchase_account_item = { payment_amount: 0 };
       getPurchaseOrderNumber().then((data) => {
-        this.form = { number: data.number };
+        this.form = { ...this.form, number: data.number };
       });
       this.materialItems = [];
       this.handelAddAcount();
