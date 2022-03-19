@@ -70,15 +70,23 @@ class Client(Model):
 
     @classmethod
     def get_number(cls, team):
-        instance = cls.objects.filter(team=team).last()
+        default_number = 'C001'
+        if instance := cls.objects.filter(team=team).last():
+            if result := re.findall('[0-9]+', instance.number):
+                current_number = result[-1]
+                next_number = str(int(current_number) + 1)
 
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'C001'
+                if len(current_number) > len(next_number):
+                    next_number = next_number.zfill(len(current_number))
+            else:
+                return default_number
+        else:
+            return default_number
+        
+        result = re.match(f'^(.*){current_number}(.*?)$', instance.number)
+        prefix, suffix = result.group(1), result.group(2)
 
-        return number
+        return prefix + next_number + suffix
 
 
 class Supplier(Model):
@@ -104,15 +112,23 @@ class Supplier(Model):
 
     @classmethod
     def get_number(cls, team):
-        instance = cls.objects.filter(team=team).last()
+        default_number = 'S001'
+        if instance := cls.objects.filter(team=team).last():
+            if result := re.findall('[0-9]+', instance.number):
+                current_number = result[-1]
+                next_number = str(int(current_number) + 1)
 
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'S001'
+                if len(current_number) > len(next_number):
+                    next_number = next_number.zfill(len(current_number))
+            else:
+                return default_number
+        else:
+            return default_number
+        
+        result = re.match(f'^(.*){current_number}(.*?)$', instance.number)
+        prefix, suffix = result.group(1), result.group(2)
 
-        return number
+        return prefix + next_number + suffix
 
 
 class Account(Model):
@@ -144,15 +160,23 @@ class Account(Model):
 
     @classmethod
     def get_number(cls, team):
-        instance = cls.objects.filter(team=team).last()
+        default_number = 'A001'
+        if instance := cls.objects.filter(team=team).last():
+            if result := re.findall('[0-9]+', instance.number):
+                current_number = result[-1]
+                next_number = str(int(current_number) + 1)
 
-        try:
-            result = re.match('^(.*?)([1-9]+)$', instance.number)
-            number = result.group(1) + str(int(result.group(2)) + 1)
-        except AttributeError:
-            number = 'A001'
+                if len(current_number) > len(next_number):
+                    next_number = next_number.zfill(len(current_number))
+            else:
+                return default_number
+        else:
+            return default_number
+        
+        result = re.match(f'^(.*){current_number}(.*?)$', instance.number)
+        prefix, suffix = result.group(1), result.group(2)
 
-        return number
+        return prefix + next_number + suffix
 
 
 class ChargeItem(Model):
