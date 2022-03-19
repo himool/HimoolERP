@@ -12,7 +12,7 @@ from apps.goods.models import *
 from apps.system.models import *
 
 
-class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
+class WarehouseViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """仓库"""
 
     serializer_class = WarehouseSerializer
@@ -140,7 +140,7 @@ class WarehouseViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
+class ClientViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """客户"""
 
     serializer_class = ClientSerializer
@@ -215,7 +215,7 @@ class ClientViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
+class SupplierViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """供应商"""
 
     serializer_class = SupplierSerializer
@@ -290,7 +290,7 @@ class SupplierViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class AccountViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
+class AccountViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """结算账户"""
 
     serializer_class = AccountSerializer

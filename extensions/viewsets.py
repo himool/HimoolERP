@@ -51,10 +51,19 @@ class BaseViewSet(GenericViewSet):
         queryset = queryset.select_related(*self.select_related_fields)
         queryset = queryset.prefetch_related(*self.prefetch_related_fields)
         return queryset
+    
+    
+class SafeDestroyMixin:
+    
+    def perform_destroy(self, instance):
+        try:
+            instance.delete()
+        except ProtectedError:
+            raise ValidationError('已被数据引用, 无法删除')
 
 
 class ModelViewSet(BaseViewSet, ListModelMixin, CreateModelMixin,
-                   RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+                   RetrieveModelMixin, UpdateModelMixin, SafeDestroyMixin):
     """模型视图"""
 
 
@@ -77,16 +86,6 @@ class InfiniteOptionViewSet(BaseViewSet, ListModelMixin):
 
 class ReadOnlyMixin(RetrieveModelMixin, ListModelMixin):
     """只读"""
-
-
-class DataProtectMixin:
-    """数据保护"""
-
-    def perform_destroy(self, instance):
-        try:
-            instance.delete()
-        except ProtectedError:
-            raise ValidationError('已被数据引用, 无法删除')
 
 
 class ExportMixin:
@@ -185,7 +184,7 @@ class ImportMixin:
 __all__ = [
     'FunctionViewSet', 'BaseViewSet', 'ModelViewSet', 'PersonalViewSet',
     'LimitedOptionViewSet', 'InfiniteOptionViewSet',
-    'ReadOnlyMixin', 'DataProtectMixin', 'ExportMixin', 'ImportMixin',
+    'ReadOnlyMixin', 'SafeDestroyMixin', 'ExportMixin', 'ImportMixin',
     'ListModelMixin', 'CreateModelMixin', 'RetrieveModelMixin', 'UpdateModelMixin', 'DestroyModelMixin',
     'DjangoFilterBackend', 'SearchFilter', 'OrderingFilter',
 ]

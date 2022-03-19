@@ -141,7 +141,7 @@ class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class GoodsViewSet(ModelViewSet, DataProtectMixin, ExportMixin, ImportMixin):
+class GoodsViewSet(ModelViewSet, ExportMixin, ImportMixin):
     """商品"""
 
     serializer_class = GoodsSerializer
