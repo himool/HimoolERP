@@ -53,7 +53,7 @@ class BaseViewSet(GenericViewSet):
         return queryset
     
     
-class SafeDestroyMixin:
+class SafeDestroyMixin(DestroyModelMixin):
     
     def perform_destroy(self, instance):
         try:
