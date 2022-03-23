@@ -13,7 +13,6 @@ class Warehouse(Model):
     address = CharField(max_length=256, null=True, blank=True, verbose_name='地址')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     is_active = BooleanField(default=True, verbose_name='激活状态')
-    is_locked = BooleanField(default=True, verbose_name='锁定状态')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='warehouses')
 
     class Meta:

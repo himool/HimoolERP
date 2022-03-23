@@ -36,9 +36,6 @@
           <div slot="is_active" slot-scope="value">
             <a-tag :color="value ? 'green' : 'red'">{{value ? '激活' : '冻结'}}</a-tag>
           </div>
-          <div slot="is_locked" slot-scope="value">
-            <a-tag :color="value ? 'green' : 'red'">{{value ? '锁定' : '未锁定'}}</a-tag>
-          </div>
           <div slot="action" slot-scope="value, item">
             <a-button-group>
               <a-button icon="edit" size="small" @click="openFormModal(item)">编辑</a-button>
@@ -96,11 +93,6 @@
             title: '状态',
             dataIndex: 'is_active',
             scopedSlots: { customRender: 'is_active' }
-          },
-          {
-            title: '锁定状态',
-            dataIndex: 'is_locked',
-            scopedSlots: { customRender: 'is_locked' }
           },
           {
             title: '操作',

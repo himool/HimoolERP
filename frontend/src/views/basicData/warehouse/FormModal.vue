@@ -32,12 +32,6 @@
               <a-select-option :value="false">冻结</a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item prop="is_locked" label="锁定状态">
-            <a-select v-model="form.is_locked" style="width: 100%;">
-              <a-select-option :value="true">锁定</a-select-option>
-              <a-select-option :value="false">未锁定</a-select-option>
-            </a-select>
-          </a-form-model-item>
         </a-form-model>
       </div>
     </a-modal>

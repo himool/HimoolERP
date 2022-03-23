@@ -12,7 +12,7 @@ class WarehouseSerializer(BaseSerializer):
         model = Warehouse
         read_only_fields = ['id', 'manager_name']
         fields = ['number', 'name', 'manager', 'phone', 'address', 'remark', 'is_active',
-                  'is_locked', *read_only_fields]
+                  *read_only_fields]
 
     def validate_number(self, value):
         self.validate_unique({'number': value}, message=f'编号[{value}]已存在')

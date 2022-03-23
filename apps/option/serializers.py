@@ -28,7 +28,7 @@ class WarehouseOptionSerializer(ModelSerializer):
 
     class Meta:
         model = Warehouse
-        fields = ['id', 'number', 'name', 'is_locked', 'is_active']
+        fields = ['id', 'number', 'name', 'is_active']
 
 
 class ClientOptionSerializer(ModelSerializer):

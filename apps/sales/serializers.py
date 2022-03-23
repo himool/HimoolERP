@@ -92,8 +92,6 @@ class SalesOrderSerializer(BaseSerializer):
         if not instance.is_active:
             raise ValidationError(f'仓库[{instance.name}]未激活')
 
-        if instance.is_locked:
-            raise ValidationError(f'仓库[{instance.name}]已锁定')
         return instance
 
     def validate_client(self, instance):
@@ -269,8 +267,6 @@ class SalesReturnOrderSerializer(BaseSerializer):
         if not instance.is_active:
             raise ValidationError(f'仓库[{instance.name}]未激活')
 
-        if instance.is_locked:
-            raise ValidationError(f'仓库[{instance.name}]已锁定')
         return instance
 
     def validate_client(self, instance):
