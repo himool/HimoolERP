@@ -19,6 +19,7 @@ class PermissionGroupViewSet(BaseViewSet, ListModelMixin):
     serializer_class = PermissionGroupSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = None
+    ordering = ['id']
     queryset = PermissionGroup.objects.all()
 
     def get_queryset(self):
