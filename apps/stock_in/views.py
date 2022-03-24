@@ -62,6 +62,8 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             ))
 
             inventory.total_quantity = quantity_after
+            if inventory.total_quantity < 0:
+                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
             inventory.has_stock = inventory.total_quantity > 0
             inventory.save(update_fields=['total_quantity', 'has_stock'])
 
@@ -108,6 +110,8 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             ))
 
             inventory.total_quantity = quantity_after
+            if inventory.total_quantity < 0:
+                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
             inventory.has_stock = inventory.total_quantity > 0
             inventory.save(update_fields=['total_quantity', 'has_stock'])
 

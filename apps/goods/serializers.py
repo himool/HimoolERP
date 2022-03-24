@@ -170,6 +170,8 @@ class GoodsSerializer(BaseSerializer):
                             if total_initial_quantity != inventory_initial_quantity:
                                 inventory.initial_quantity = total_initial_quantity
                                 inventory.total_quantity = total_initial_quantity
+                                if inventory.total_quantity < 0:
+                                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
                                 inventory.has_stock = inventory.total_quantity > 0
                                 inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
                     break
@@ -262,12 +264,16 @@ class GoodsSerializer(BaseSerializer):
                             inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
                             inventory.initial_quantity = total_initial_quantity
                             inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
+                            if inventory.total_quantity < 0:
+                                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
                             inventory.has_stock = inventory.total_quantity > 0
                             inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
                     else:
                         inventory.total_quantity = NP.minus(inventory.total_quantity, inventory.initial_quantity)
                         inventory.initial_quantity = inventory_initial_quantity
                         inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
+                        if inventory.total_quantity < 0:
+                            raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
                         inventory.has_stock = inventory.total_quantity > 0
                         inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
 
