@@ -36,7 +36,7 @@ class StockCheckOrder(Model):
     @classmethod
     def get_number(cls, team):
         start_date, end_date = pendulum.today(), pendulum.tomorrow()
-        instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
+        instance = cls.objects.filter(team=team, create_time__gte=start_date.format('YYYY-MM-DD HH:mm:ss'), create_time__lt=end_date.format('YYYY-MM-DD HH:mm:ss')).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
