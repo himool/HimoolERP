@@ -135,6 +135,9 @@ class UserActionViewSet(FunctionViewSet):
         if not check_password(validated_data['password'], user.password):
             raise AuthenticationFailed('密码错误')
 
+        if not user.is_active and not user.is_manager:
+            raise ValidationError('用户未激活')
+
         token = RefreshToken()
         token['user_id'] = user.id
         data = {'refresh': str(token), 'access': str(token.access_token)}
