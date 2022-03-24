@@ -447,11 +447,11 @@ export default {
           let ifHasEmptyGoods = false;
           let ifHasEmptyAccounts = false;
 
-          this.sales_account_items.map((item) => {
-            if (!item.account || item.collection_amount === "" || item.collection_amount === null) {
-              ifHasEmptyAccounts = true;
-            }
-          });
+          // this.sales_account_items.map((item) => {
+          //   if (!item.account || item.collection_amount === "" || item.collection_amount === null) {
+          //     ifHasEmptyAccounts = true;
+          //   }
+          // });
           // if (ifHasEmptyAccounts) {
           //   this.$message.warn("请将结算账户信息填写完整");
           //   return false;
@@ -471,6 +471,11 @@ export default {
             return false;
           }
 
+          let sales_account_items = [];
+          if (this.sales_account_item.account && this.sales_account_item.collection_amount > 0) {
+            sales_account_items = [this.sales_account_item];
+          }
+
           this.loading = true;
           let formData = {
             ...this.form,
@@ -478,7 +483,7 @@ export default {
             //   delete item.id;
             //   return item;
             // }),
-            sales_account_items: [this.sales_account_item],
+            sales_account_items,
             sales_goods_items: this.materialItems.map((item) => {
               return {
                 goods: item.goods,
