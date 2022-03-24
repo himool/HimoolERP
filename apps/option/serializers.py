@@ -96,6 +96,11 @@ class InventoryOptionSerializer(ModelSerializer):
     goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
     goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
     goods_spec = CharField(source='goods.spec', read_only=True, label='商品规格')
+    purchase_price = FloatField(source='goods.purchase_price', read_only=True, label='采购价')
+    retail_price = FloatField(source='goods.retail_price', read_only=True, label='零售价')
+    level_price1 = FloatField(source='goods.level_price1', read_only=True, label='等级价一')
+    level_price2 = FloatField(source='goods.level_price2', read_only=True, label='等级价二')
+    level_price3 = FloatField(source='goods.level_price3', read_only=True, label='等级价三')
     unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
     enable_batch_control = BooleanField(source='goods.enable_batch_control',
                                         read_only=True, label='启用批次控制')
@@ -103,7 +108,8 @@ class InventoryOptionSerializer(ModelSerializer):
     class Meta:
         model = Inventory
         fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'goods_spec',
-                  'total_quantity', 'unit_name', 'enable_batch_control']
+                  'total_quantity', 'unit_name', 'enable_batch_control', 'purchase_price',
+                  'retail_price', 'level_price1', 'level_price2', 'level_price3']
 
 
 # Purchase
