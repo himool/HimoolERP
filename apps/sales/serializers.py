@@ -143,7 +143,7 @@ class SalesOrderSerializer(BaseSerializer):
             total_sales_amount = NP.plus(total_sales_amount, total_amount)
         else:
             SalesGoods.objects.bulk_create(sales_goods_set)
-            total_sales_amount = NP.times(total_sales_amount, sales_order.discount)
+            total_sales_amount = NP.times(total_sales_amount, sales_order.discount, 0.01)
             total_sales_amount = NP.plus(total_sales_amount, sales_order.other_amount)
             sales_order.total_quantity = total_sales_quantity
             sales_order.total_amount = total_sales_amount
