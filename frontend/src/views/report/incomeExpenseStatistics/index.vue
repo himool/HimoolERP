@@ -154,6 +154,10 @@ export default {
         page: this.searchForm.page,
         type: this.currentTab,
       };
+      if (form.end_date) {
+          form.end_date = moment(form.end_date).add(1, 'days').format('YYYY-MM-DD');
+        }
+      
       financialStatistics(form).then((resp) => {
         this.statistics = resp;
       }).finally(() => {

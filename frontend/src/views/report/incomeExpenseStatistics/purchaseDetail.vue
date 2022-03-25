@@ -70,7 +70,12 @@
       },
       list(start_date, end_date) {
         this.loading = true;
-        purchasePaymentRecord({...this.searchForm, ...{ start_date, end_date }}).then(resp => {
+        let form =  {...this.searchForm, ...{ start_date, end_date }};
+        if (form.end_date) {
+          form.end_date = moment(form.end_date).add(1, 'days').format('YYYY-MM-DD');
+        }
+
+        purchasePaymentRecord(form).then(resp => {
           this.totalRows = resp.count;
           this.items = resp.results;
         }).finally(() => {
