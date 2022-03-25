@@ -100,6 +100,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                 ))
 
                 account.balance_amount = amount_after
+                if account.balance_amount < 0:
+                    raise ValidationError(f'结算账户[{account.name}]余额不足')
                 account.has_balance = account.balance_amount > 0
                 account.save(update_fields=['balance_amount', 'has_balance'])
             else:
@@ -182,6 +184,8 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
                 ))
 
                 account.balance_amount = amount_after
+                if account.balance_amount < 0:
+                    raise ValidationError(f'结算账户[{account.name}]余额不足')
                 account.has_balance = account.balance_amount > 0
                 account.save(update_fields=['balance_amount', 'has_balance'])
             else:
@@ -277,6 +281,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
                 ))
 
                 account.balance_amount = amount_after
+                if account.balance_amount < 0:
+                    raise ValidationError(f'结算账户[{account.name}]余额不足')
                 account.has_balance = account.balance_amount > 0
                 account.save(update_fields=['balance_amount', 'has_balance'])
             else:
@@ -365,6 +371,8 @@ class SalesReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
                 ))
 
                 account.balance_amount = amount_after
+                if account.balance_amount < 0:
+                    raise ValidationError(f'结算账户[{account.name}]余额不足')
                 account.has_balance = account.balance_amount > 0
                 account.save(update_fields=['balance_amount', 'has_balance'])
             else:

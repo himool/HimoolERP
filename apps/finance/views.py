@@ -73,6 +73,8 @@ class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Creat
             ))
 
             account.balance_amount = amount_after
+            if account.balance_amount < 0:
+                raise ValidationError(f'结算账户[{account.name}]余额不足')
             account.has_balance = account.balance_amount > 0
             account.save(update_fields=['balance_amount', 'has_balance'])
         else:
@@ -117,6 +119,8 @@ class PaymentOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Creat
             ))
 
             account.balance_amount = amount_after
+            if account.balance_amount < 0:
+                raise ValidationError(f'结算账户[{account.name}]余额不足')
             account.has_balance = account.balance_amount > 0
             account.save(update_fields=['balance_amount', 'has_balance'])
         else:
@@ -163,6 +167,8 @@ class CollectionOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
             ))
 
             account.balance_amount = amount_after
+            if account.balance_amount < 0:
+                raise ValidationError(f'结算账户[{account.name}]余额不足')
             account.has_balance = account.balance_amount > 0
             account.save(update_fields=['balance_amount', 'has_balance'])
         else:
@@ -207,6 +213,8 @@ class CollectionOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cr
             ))
 
             account.balance_amount = amount_after
+            if account.balance_amount < 0:
+                raise ValidationError(f'结算账户[{account.name}]余额不足')
             account.has_balance = account.balance_amount > 0
             account.save(update_fields=['balance_amount', 'has_balance'])
         else:
@@ -268,6 +276,8 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         )
 
         account.balance_amount = amount_after
+        if account.balance_amount < 0:
+            raise ValidationError(f'结算账户[{account.name}]余额不足')
         account.has_balance = account.balance_amount > 0
         account.save(update_fields=['balance_amount', 'has_balance'])
 
@@ -325,6 +335,9 @@ class ChargeOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Create
         )
 
         account.balance_amount = amount_after
+        if account.balance_amount < 0:
+            raise ValidationError(f'结算账户[{account.name}]余额不足')
+
         account.has_balance = account.balance_amount > 0
         account.save(update_fields=['balance_amount', 'has_balance'])
 
@@ -373,6 +386,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         out_account.balance_amount = amount_after
+        if out_account.balance_amount < 0:
+            raise ValidationError(f'结算账户[{out_account.name}]余额不足')
         out_account.has_balance = out_account.balance_amount > 0
         out_account.save(update_fields=['balance_amount', 'has_balance'])
 
@@ -386,6 +401,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         in_account.balance_amount = amount_after
+        if in_account.balance_amount < 0:
+            raise ValidationError(f'结算账户[{in_account.name}]余额不足')
         in_account.has_balance = in_account.balance_amount > 0
         in_account.save(update_fields=['balance_amount', 'has_balance'])
 
@@ -424,6 +441,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         out_account.balance_amount = amount_after
+        if out_account.balance_amount < 0:
+            raise ValidationError(f'结算账户[{out_account.name}]余额不足')
         out_account.has_balance = out_account.balance_amount > 0
         out_account.save(update_fields=['balance_amount', 'has_balance'])
 
@@ -437,6 +456,8 @@ class AccountTransferRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMix
         ))
 
         in_account.balance_amount = amount_after
+        if in_account.balance_amount < 0:
+            raise ValidationError(f'结算账户[{in_account.name}]余额不足')
         in_account.has_balance = in_account.balance_amount > 0
         in_account.save(update_fields=['balance_amount', 'has_balance'])
 
