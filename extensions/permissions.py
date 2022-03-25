@@ -9,7 +9,7 @@ class IsAuthenticated(BasePermission):
 
     def has_permission(self, request, view):
         if not isinstance(request.user, User):
-            raise False
+            return False
 
         if (expiry_time := request.user.team.expiry_time) < pendulum.now():
             raise ValidationError(f'已到期, 到期日期: {expiry_time}')
