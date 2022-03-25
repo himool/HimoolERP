@@ -98,7 +98,7 @@
             width: '156px'
           },
         ],
-        searchForm: { search: '', page: 1 },
+        searchForm: { search: '', page: 1, page_size: 15 },
         pagination: { current: 1, total: 0, pageSize: 15 },
         loading: false,
         items: [],
@@ -125,7 +125,8 @@
         });
       },
       create(item) {
-        this.items.splice(0, 0, item);
+        // this.items.splice(0, 0, item);
+        this.list();
       },
       update(item) {
         this.items.splice(this.items.findIndex(i => i.id == item.id), 1, item);
@@ -141,8 +142,9 @@
       },
       destroy(id) {
         revenueExpenditureItemsDestroy({ id }).then(() => {
-          this.items.splice(this.items.findIndex(item => item.id == id), 1);
+          // this.items.splice(this.items.findIndex(item => item.id == id), 1);
           this.$message.success('删除成功');
+          this.list();
         });
       },
       exportExcel() {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-table :columns="columns" :data-source="items" size="small" :pagination="pagination" :loading="loading">
+    <a-table :columns="columns" :data-source="items" size="small" :pagination="pagination" @change="tableChange" :loading="loading">
       <div slot="avg_retail_price" slot-scope="value">{{NP.round(value, 2)}}</div>
     </a-table>
   </div>
@@ -64,5 +64,10 @@
         ],
       };
     },
+    methods: {
+      tableChange(pagination, filters, sorter) {
+        this.$emit('tableChange', pagination, filters, sorter)
+      },
+    }
   }
 </script>

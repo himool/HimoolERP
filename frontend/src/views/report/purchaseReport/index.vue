@@ -34,8 +34,8 @@
       </a-descriptions>
 
       <div>
-        <flow-pane v-show="currentTab === 'flow'" :items="items" :loading="loading" :pagination="pagination" />
-        <goods-pane v-show="currentTab === 'goods'" :items="items" :loading="loading" :pagination="pagination" />
+        <flow-pane v-show="currentTab === 'flow'" :items="items" :loading="loading" :pagination="pagination" @tableChange="tableChange" />
+        <goods-pane v-show="currentTab === 'goods'" :items="items" :loading="loading" :pagination="pagination" @tableChange="tableChange" />
       </div>
       <div style="text-align: center; margin-top: 12px;">
         <a-spin :spinning="loading && searchForm.page > 1" />
@@ -75,6 +75,7 @@
           dateRange: [moment().startOf('day'), moment().startOf('day')],
           category: null,
           page: 1,
+          page_size: 15
         },
         loading: true,
         categoryItems: [],
@@ -116,6 +117,7 @@
           end_date: this.searchForm.dateRange.length > 0 ? this.searchForm.dateRange[1].format('YYYY-MM-DD') : null,
           category: this.searchForm.category,
           page: this.searchForm.page,
+          page_size: this.searchForm.page_size,
         };
 
         if (form.end_date) {
@@ -141,6 +143,12 @@
             this.loading = false;
           });
         }
+      },
+      tableChange(pagination, filters, sorter) {
+        this.searchForm.page = pagination.current;
+        this.pagination.current = pagination.current;
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
       search() {
         this.searchForm.page = 1;
@@ -175,6 +183,7 @@
           dateRange: [moment().startOf('day'), moment().startOf('day')],
           category: null,
           page: 1,
+          page_size: 15
         };
       },
     },
