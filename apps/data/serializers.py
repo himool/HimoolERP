@@ -63,6 +63,7 @@ class ClientSerializer(BaseSerializer):
 
     def create(self, validated_data):
         validated_data['arrears_amount'] = validated_data.get('initial_arrears_amount', 0)
+        validated_data['has_arrears'] = validated_data['arrears_amount'] > 0
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -70,6 +71,7 @@ class ClientSerializer(BaseSerializer):
         if initial_arrears_amount is not None and instance.initial_arrears_amount != initial_arrears_amount:
             arrears_amount = NP.minus(instance.arrears_amount, instance.initial_arrears_amount)
             validated_data['arrears_amount'] = NP.plus(arrears_amount, validated_data['initial_arrears_amount'])
+            validated_data['has_arrears'] = validated_data['arrears_amount'] > 0
 
         return super().update(instance, validated_data)
 
@@ -109,6 +111,7 @@ class SupplierSerializer(BaseSerializer):
 
     def create(self, validated_data):
         validated_data['arrears_amount'] = validated_data.get('initial_arrears_amount', 0)
+        validated_data['has_arrears'] = validated_data['arrears_amount'] > 0
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -116,6 +119,7 @@ class SupplierSerializer(BaseSerializer):
         if initial_arrears_amount is not None and instance.initial_arrears_amount != initial_arrears_amount:
             arrears_amount = NP.minus(instance.arrears_amount, instance.initial_arrears_amount)
             validated_data['arrears_amount'] = NP.plus(arrears_amount, validated_data['initial_arrears_amount'])
+            validated_data['has_arrears'] = validated_data['arrears_amount'] > 0
 
         return super().update(instance, validated_data)
 
@@ -157,6 +161,7 @@ class AccountSerializer(BaseSerializer):
 
     def create(self, validated_data):
         validated_data['balance_amount'] = validated_data.get('initial_balance_amount', 0)
+        validated_data['has_balance'] = validated_data['balance_amount'] > 0
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -164,6 +169,7 @@ class AccountSerializer(BaseSerializer):
         if initial_balance_amount is not None and instance.initial_balance_amount != initial_balance_amount:
             balance_amount = NP.minus(instance.balance_amount, instance.initial_balance_amount)
             validated_data['balance_amount'] = NP.plus(balance_amount, validated_data['initial_balance_amount'])
+            validated_data['has_balance'] = validated_data['balance_amount'] > 0
 
         return super().update(instance, validated_data)
 
