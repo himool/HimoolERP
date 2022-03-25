@@ -45,6 +45,10 @@
           end_date: this.dateRange[1].format('YYYY-MM-DD'),
         };
 
+        if (form.end_date) {
+          form.end_date = moment(form.end_date).add(1, 'days').format('YYYY-MM-DD');
+        }
+
         this.loading = true;
         salesTrendList(form).then(resp => {
           let data = [...resp, ...this.fillData(resp, resp.map(item => { return item.warehouse_name }))];

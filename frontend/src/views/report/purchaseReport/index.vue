@@ -117,6 +117,11 @@
           category: this.searchForm.category,
           page: this.searchForm.page,
         };
+
+        if (form.end_date) {
+          form.end_date = moment(form.end_date).add(1, 'days').format('YYYY-MM-DD');
+        }
+
         this.loading = true;
         purchaseReportStatistics(form).then(resp => {
           this.total = resp;
