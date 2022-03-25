@@ -91,7 +91,7 @@
             dataIndex: 'is_active',
           },
         ],
-        searchForm: { page: 1,has_arrears: true },
+        searchForm: { page: 1,has_arrears: true, page_size: 15 },
         pagination: { current: 1, total: 0, pageSize: 15 },
         loading: false,
         items: [],
@@ -114,6 +114,12 @@
         }).finally(() => {
           this.loading = false;
         });
+      },
+      tableChange(pagination, filters, sorter) {
+        this.searchForm.page = pagination.current;
+        this.pagination.current = pagination.current;
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
       },
       onChangePicker(date, dateString) {
         let startDate = date[0], endDate = date[1];

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-table :columns="columns" :data-source="items" size="small" :pagination="pagination" :loading="loading">
+    <a-table :columns="columns" :data-source="items" size="small" :pagination="pagination" @change="tableChange" :loading="loading">
       <div slot="date" slot-scope="value">{{moment(value).format('YYYY-MM-DD')}}</div>
       <div slot="relation_order" slot-scope="value">
         <a-button type="link" @click="openInvoice(value)">查看</a-button>
@@ -83,6 +83,9 @@
       };
     },
     methods: {
+      tableChange(pagination, filters, sorter) {
+        this.$emit('tableChange', pagination, filters, sorter)
+      },
       openInvoice(id) {
         window.open(`/invoice/sales?id=${id}`);
       },

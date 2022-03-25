@@ -103,7 +103,7 @@
             width: '156px'
           },
         ],
-        searchForm: { search: '', page: 1 },
+        searchForm: { search: '', page: 1, page_size: 15 },
         pagination: { current: 1, total: 0, pageSize: 15 },
         loading: false,
         items: [],
@@ -133,8 +133,15 @@
           this.loading = false;
         });
       },
+      tableChange(pagination, filters, sorter) {
+        this.searchForm.page = pagination.current;
+        this.pagination.current = pagination.current;
+        this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
+        this.list();
+      },
       create(item) {
-        this.items.splice(0, 0, item);
+        // this.items.splice(0, 0, item);
+        this.list();
       },
       update(item) {
         this.items.splice(this.items.findIndex(i => i.id == item.id), 1, item);
