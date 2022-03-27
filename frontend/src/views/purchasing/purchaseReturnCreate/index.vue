@@ -11,7 +11,7 @@
             </a-col>
             <a-col :span="6" style="width: 320px;">
               <a-form-model-item prop="purchase_order" label="采购单据">
-                <a-select v-model="form.purchase_order" style="width: 100%">
+                <a-select v-model="form.purchase_order" @change="changeRelatedOrder" style="width: 100%">
                   <a-select-option v-for="item in purchaseOrdersItems" :key="item.id" :value="item.id">
                     {{ item.number }}
                   </a-select-option>
@@ -396,6 +396,15 @@ export default {
         this.accountsItems = data.results;
       });
     },
+    changeRelatedOrder(value, option) {
+      let selected = this.purchaseOrdersItems.filter(item => item.id == value)[0];
+      this.form.supplier = selected.supplier;
+      this.form.warehouse = selected.warehouse;
+      this.form.handler = selected.handler;
+      selected.purchase_goods_items.map(item => {
+        this.onSelectMaterial({...item, ...{ goods_spec: item.goods_spec || '', total_quantity: item.total_amount }})
+      })
+    },
     handelAddAcount() {
       this.purchase_return_account_items.push({
         id: this.purchase_return_account_items.length + 1,
@@ -426,7 +435,7 @@ export default {
       this.materialsSelectModalVisible = true;
     },
     onSelectMaterial(item) {
-      let index = this.materialItems.findIndex((_item) => _item.id == item.id);
+      let index = this.materialItems.findIndex((_item) => _item.goods == item.goods);
       if (index != -1) {
         this.$message.warn("产品已存在");
         return;
@@ -439,7 +448,7 @@ export default {
         spec: item.goods_spec,
         unit: item.unit_name,
         return_quantity: 1,
-        return_price: 0,
+        return_price: item.purchase_price,
         total_quantity: item.total_quantity,
       });
     },
@@ -491,11 +500,21 @@ export default {
             // }),
             purchase_return_account_items,
             purchase_return_goods_items: this.materialItems.map((item) => {
-              return {
-                goods: item.goods,
-                return_quantity: item.return_quantity,
-                return_price: item.return_price,
-              };
+              if (this.form.purchase_order) {
+                return {
+                  purchase_goods: item.id,
+                  goods: item.goods,
+                  return_quantity: item.return_quantity,
+                  return_price: item.return_price,
+                };
+              } else {
+                return {
+                  goods: item.goods,
+                  return_quantity: item.return_quantity,
+                  return_price: item.return_price,
+                };
+              }
+              
             }),
           };
           console.log(formData);

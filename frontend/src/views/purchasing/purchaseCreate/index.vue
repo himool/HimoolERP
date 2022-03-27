@@ -438,7 +438,7 @@ export default {
         spec: item.goods_spec,
         unit: item.unit_name,
         purchase_quantity: 1,
-        purchase_price: 0,
+        purchase_price: item.purchase_price,
         total_quantity: item.total_quantity,
       });
     },

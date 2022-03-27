@@ -55,3 +55,8 @@ export function purchasePaymentRecord(params) {
 export function purchaseReturnPaymentRecord(params) {
   return request({ url: `/purchase_return_collection_detials/`, method: 'get', params })
 }
+
+// 批次报表
+export function batchsReportList(params) {
+  return request({ url: `/batchs/`, method: 'get', params })
+}

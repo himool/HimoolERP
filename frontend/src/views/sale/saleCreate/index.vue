@@ -431,7 +431,7 @@ export default {
         spec: item.goods_spec,
         unit: item.unit_name,
         sales_quantity: 1,
-        sales_price: 1,
+        sales_price: item.retail_price,
         totalAmount: 1,
       });
 
