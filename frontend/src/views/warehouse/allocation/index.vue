@@ -68,11 +68,6 @@
             dataIndex: 'handle_time',
           },
           {
-            title: '处理日期',
-            dataIndex: 'create_time',
-            width: 170
-          },
-          {
             title: '备注',
             dataIndex: 'remark'
           },

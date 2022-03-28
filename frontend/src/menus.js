@@ -5,6 +5,7 @@ export default [
       { key: '/report/purchase_report', name: '采购报表' },
       { key: '/report/stock_report', name: '库存报表' },
       { key: '/report/income_expense_statistics', name: '收支统计' },
+      { key: '/report/batch_report', name: '批次报表' },
     ]
   },
   {

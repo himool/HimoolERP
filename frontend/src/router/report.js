@@ -24,5 +24,10 @@ export default {
       meta: { title: '收支统计', permission: 'income_expense_statistics' },
       component: () => import('@/views/report/incomeExpenseStatistics/index'),
     },
+    {
+      path: 'batch_report',
+      meta: { title: '批次报表', permission: 'batch_report' },
+      component: () => import('@/views/report/batchReport/index'),
+    },
   ],
 }

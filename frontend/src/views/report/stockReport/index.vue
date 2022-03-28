@@ -23,7 +23,12 @@
       </a-row>
 
       <a-row style="margin-top: 12px;">
-        <a-table size="small" :columns="columns" :dataSource="items" rowKey="id" :loading="loading" :pagination="pagination"
+        <a-table size="small"
+          rowKey="id"
+          :columns="columns"
+          :dataSource="items" 
+          :loading="loading"
+          :pagination="pagination"
           @change="tableChange">
         </a-table>
       </a-row>
@@ -122,6 +127,7 @@
         });
       },
       tableChange(pagination, filters, sorter) {
+        console.log(pagination)
         this.searchForm.page = pagination.current;
         this.pagination.current = pagination.current;
         this.searchForm.ordering = `${sorter.order == 'descend' ? '-' : ''}${sorter.field}`;
