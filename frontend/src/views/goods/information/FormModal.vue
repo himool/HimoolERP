@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal v-model="visible" width="750px" :confirmLoading="loading" :maskClosable="false" @cancel="cancel" @ok="confirm">
-      <div slot="title">{{form.id ? '编辑产品分类' : '新增产品分类' }}</div>
+      <div slot="title">{{form.id ? '编辑产品信息' : '新增产品信息' }}</div>
       <div>
         <a-form-model
           ref="form"
