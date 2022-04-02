@@ -11,7 +11,7 @@ class StockCheckOrderSerializer(BaseSerializer):
     """盘点单据"""
 
     class StockCheckGoodsItemSerializer(BaseSerializer):
-        """盘点商品"""
+        """盘点产品"""
 
         class StockCheckBatchItemSerializer(BaseSerializer):
             """盘点批次"""
@@ -28,9 +28,9 @@ class StockCheckOrderSerializer(BaseSerializer):
                     raise ValidationError('盘点数量小于零')
                 return value
 
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
         enable_batch_control = BooleanField(source='goods.enable_batch_control',
                                             read_only=True, label='启用批次控制')
@@ -46,9 +46,9 @@ class StockCheckOrderSerializer(BaseSerializer):
             fields = ['goods', 'actual_quantity', 'stock_check_batch_items', *read_only_fields]
 
         def validate_goods(self, instance):
-            instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
+            instance = self.validate_foreign_key(Goods, instance, message='产品不存在')
             if not instance.is_active:
-                raise ValidationError(f'商品[{instance.name}]未激活')
+                raise ValidationError(f'产品[{instance.name}]未激活')
             return instance
 
         def validate_actual_quantity(self, value):
@@ -60,13 +60,13 @@ class StockCheckOrderSerializer(BaseSerializer):
             goods = attrs['goods']
             if goods.enable_batch_control:
                 if not (stock_check_batch_items := attrs.get('stock_check_batchs')):
-                    raise ValidationError(f'商品[{goods.name}]批次为空')
+                    raise ValidationError(f'产品[{goods.name}]批次为空')
 
                 total_actual_quantity = reduce(lambda total, item: NP.plus(total, item['actual_quantity']),
                                                stock_check_batch_items, 0)
 
                 if total_actual_quantity != attrs['actual_quantity']:
-                    raise ValidationError(f'商品[{goods.name}]盘点数量错误')
+                    raise ValidationError(f'产品[{goods.name}]盘点数量错误')
 
             return super().validate(attrs)
 
@@ -76,7 +76,7 @@ class StockCheckOrderSerializer(BaseSerializer):
     status_display = CharField(source='get_status_display', read_only=True, label='盘点状态')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_check_goods_Items = StockCheckGoodsItemSerializer(
-        source='stock_check_goods_set', many=True, label='盘点商品')
+        source='stock_check_goods_set', many=True, label='盘点产品')
 
     class Meta:
         model = StockCheckOrder
@@ -116,7 +116,7 @@ class StockCheckOrderSerializer(BaseSerializer):
         total_actual_quantity = 0
         total_surplus_amount = 0
 
-        # 创建盘点商品
+        # 创建盘点产品
         stock_check_batchs = []
         for stock_check_goods_item in stock_check_goods_items:
             goods = stock_check_goods_item['goods']

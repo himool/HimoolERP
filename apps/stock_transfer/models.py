@@ -41,12 +41,12 @@ class StockTransferOrder(Model):
 
 
 class StockTransferGoods(Model):
-    """调拨商品"""
+    """调拨产品"""
 
     stock_transfer_order = ForeignKey('stock_transfer.StockTransferOrder', on_delete=CASCADE,
                                       related_name='stock_transfer_goods_set', verbose_name='采购单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
-                       related_name='stock_transfer_goods_set', verbose_name='商品')
+                       related_name='stock_transfer_goods_set', verbose_name='产品')
     stock_transfer_quantity = FloatField(verbose_name='调拨数量')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='stock_transfer_goods_set')
 

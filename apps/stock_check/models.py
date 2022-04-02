@@ -48,7 +48,7 @@ class StockCheckOrder(Model):
 
 
 class StockCheckGoods(Model):
-    """盘点商品"""
+    """盘点产品"""
 
     class Status(TextChoices):
         """盘点状态"""
@@ -60,7 +60,7 @@ class StockCheckGoods(Model):
     stock_check_order = ForeignKey('stock_check.StockCheckOrder', on_delete=CASCADE,
                                    related_name='stock_check_goods_set', verbose_name='盘点单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
-                       related_name='stock_check_goods_set', verbose_name='商品')
+                       related_name='stock_check_goods_set', verbose_name='产品')
     book_quantity = FloatField(verbose_name='账面数量')
     actual_quantity = FloatField(verbose_name='实际数量')
     surplus_quantity = FloatField(verbose_name='盘盈数量')
@@ -86,11 +86,11 @@ class StockCheckBatch(Model):
     stock_check_order = ForeignKey('stock_check.StockCheckOrder', on_delete=CASCADE,
                                    related_name='stock_check_batchs', verbose_name='盘点单据')
     stock_check_goods = ForeignKey('stock_check.StockCheckGoods', on_delete=CASCADE,
-                                   related_name='stock_check_batchs', verbose_name='盘点商品')
+                                   related_name='stock_check_batchs', verbose_name='盘点产品')
     batch_number = CharField(max_length=32, verbose_name='批次编号')
     production_date = DateField(null=True, verbose_name='生产日期')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
-                       related_name='stock_check_batchs', verbose_name='商品')
+                       related_name='stock_check_batchs', verbose_name='产品')
     book_quantity = FloatField(verbose_name='账面数量')
     actual_quantity = FloatField(verbose_name='实际数量')
     surplus_quantity = FloatField(verbose_name='盘盈数量')

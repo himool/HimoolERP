@@ -42,11 +42,11 @@ class SalesOrder(Model):
 
 
 class SalesGoods(Model):
-    """销售商品"""
+    """销售产品"""
 
     sales_order = ForeignKey('sales.SalesOrder', on_delete=CASCADE,
                              related_name='sales_goods_set', verbose_name='销售单据')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_goods_set', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_goods_set', verbose_name='产品')
     sales_quantity = FloatField(verbose_name='销售数量')
     sales_price = FloatField(verbose_name='销售单价')
     total_amount = AmountField(verbose_name='总金额')
@@ -111,13 +111,13 @@ class SalesReturnOrder(Model):
 
 
 class SalesReturnGoods(Model):
-    """销售退货商品"""
+    """销售退货产品"""
 
     sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE,
                                     related_name='sales_return_goods_set', verbose_name='销售退货单据')
     sales_goods = ForeignKey('sales.SalesGoods', on_delete=CASCADE, null=True,
-                             related_name='sales_return_goods_set', verbose_name='销售商品')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_return_goods_set', verbose_name='商品')
+                             related_name='sales_return_goods_set', verbose_name='销售产品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='sales_return_goods_set', verbose_name='产品')
     return_quantity = FloatField(verbose_name='退货数量')
     return_price = FloatField(verbose_name='退货单价')
     total_amount = AmountField(verbose_name='总金额')

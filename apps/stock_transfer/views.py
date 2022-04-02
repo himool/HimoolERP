@@ -75,11 +75,11 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
-                # 创建出库商品
+                # 创建出库产品
                 stock_out_goods_set.append(StockOutGoods(
                     stock_out_order=stock_out_order, goods=stock_transfer_goods.goods,
                     stock_out_quantity=stock_transfer_goods.stock_transfer_quantity,
@@ -103,11 +103,11 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
-                # 创建入库商品
+                # 创建入库产品
                 stock_in_goods_set.append(StockInGoods(
                     stock_in_order=stock_in_order, goods=stock_transfer_goods.goods,
                     stock_in_quantity=stock_transfer_goods.stock_transfer_quantity,
@@ -136,7 +136,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
         if stock_transfer_order.is_void:
             raise ValidationError(f'调拨单据[{stock_transfer_order.number}]已作废, 无法再次作废')
 
-        # 同步调拨单据, 调拨商品
+        # 同步调拨单据, 调拨产品
         stock_transfer_order.is_void = True
         stock_transfer_order.save(update_fields=['is_void'])
 
@@ -159,7 +159,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
         else:
@@ -190,7 +190,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
         else:

@@ -63,7 +63,7 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
 
             inventory.total_quantity = quantity_after
             if inventory.total_quantity < 0:
-                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
             inventory.has_stock = inventory.total_quantity > 0
             inventory.save(update_fields=['total_quantity', 'has_stock'])
 
@@ -73,7 +73,7 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
                 batch.has_stock = batch.remain_quantity > 0
                 batch.save(update_fields=['remain_quantity', 'has_stock'])
 
-            # 同步出库商品
+            # 同步出库产品
             stock_out_goods = stock_out_record_goods.stock_out_goods
             stock_out_goods.remain_quantity = NP.minus(stock_out_goods.remain_quantity, quantity_change)
             stock_out_goods.save(update_fields=['remain_quantity'])
@@ -95,7 +95,7 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
         if stock_out_record.is_void:
             raise ValidationError(f'出库记录已作废, 无法再次作废')
 
-        # 同步出库记录, 出库记录商品
+        # 同步出库记录, 出库记录产品
         stock_out_record.is_void = True
         stock_out_record.save(update_fields=['is_void'])
 
@@ -117,7 +117,7 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
 
             inventory.total_quantity = quantity_after
             if inventory.total_quantity < 0:
-                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
             inventory.has_stock = inventory.total_quantity > 0
             inventory.save(update_fields=['total_quantity', 'has_stock'])
 
@@ -128,7 +128,7 @@ class StockOutRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Cre
                 batch.has_stock = batch.remain_quantity > 0
                 batch.save(update_fields=['total_quantity', 'remain_quantity', 'has_stock'])
 
-            # 同步出库商品
+            # 同步出库产品
             stock_out_goods = stock_out_record_goods.stock_out_goods
             stock_out_goods.remain_quantity = NP.plus(stock_out_goods.remain_quantity, quantity_change)
             stock_out_goods.save(update_fields=['remain_quantity'])

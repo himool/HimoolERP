@@ -9,10 +9,10 @@ from apps.finance.models import *
 class PurchaseReportDetialSerializer(BaseSerializer):
     """采购明细"""
 
-    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
-    goods_spec = CharField(source='goods.spec', read_only=True, label='商品规格')
+    goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
+    goods_spec = CharField(source='goods.spec', read_only=True, label='产品规格')
     category_name = CharField(source='goods.category.name', read_only=True, label='分类名称')
     unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
     purchase_order_number = CharField(source='purchase_order.number', read_only=True, label='采购单号')
@@ -34,10 +34,10 @@ class PurchaseReportDetialSerializer(BaseSerializer):
 class SalesReportDetialSerializer(BaseSerializer):
     """销售明细"""
 
-    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
-    goods_spec = CharField(source='goods.spec', read_only=True, label='商品规格')
+    goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
+    goods_spec = CharField(source='goods.spec', read_only=True, label='产品规格')
     category_name = CharField(source='goods.category.name', read_only=True, label='分类名称')
     unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
     sales_order_number = CharField(source='sales_order.number', read_only=True, label='采购单号')

@@ -12,6 +12,6 @@ def run(*args):
         Supplier.objects.create(number='S001', name='默认供应商', team=team)
 
         warehouse = Warehouse.objects.create(number='W001', name='默认仓库', team=team)
-        goods = Goods.objects.create(number='G001', name='商品A', purchase_price=10, retail_price=20,
+        goods = Goods.objects.create(number='G001', name='产品A', purchase_price=10, retail_price=20,
                                      level_price1=20, level_price2=20, level_price3=20, team=team)
         Inventory.objects.create(warehouse=warehouse, goods=goods, team=team)

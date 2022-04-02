@@ -63,11 +63,11 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
             inventory.total_quantity = quantity_after
             if inventory.total_quantity < 0:
-                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
             inventory.has_stock = inventory.total_quantity > 0
             inventory.save(update_fields=['total_quantity', 'has_stock'])
 
-            # 同步入库商品
+            # 同步入库产品
             stock_in_goods = stock_in_record_goods.stock_in_goods
             stock_in_goods.remain_quantity = NP.minus(stock_in_goods.remain_quantity, quantity_change)
             stock_in_goods.save(update_fields=['remain_quantity'])
@@ -89,7 +89,7 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         if stock_in_record.is_void:
             raise ValidationError(f'入库记录已作废, 无法再次作废')
 
-        # 同步入库记录, 入库记录商品
+        # 同步入库记录, 入库记录产品
         stock_in_record.is_void = True
         stock_in_record.save(update_fields=['is_void'])
 
@@ -111,7 +111,7 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
             inventory.total_quantity = quantity_after
             if inventory.total_quantity < 0:
-                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
             inventory.has_stock = inventory.total_quantity > 0
             inventory.save(update_fields=['total_quantity', 'has_stock'])
 
@@ -122,7 +122,7 @@ class StockInRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 batch.has_stock = batch.remain_quantity > 0
                 batch.save(update_fields=['total_quantity', 'remain_quantity', 'has_stock'])
 
-            # 同步入库商品
+            # 同步入库产品
             stock_in_goods = stock_in_record_goods.stock_in_goods
             stock_in_goods.remain_quantity = NP.plus(stock_in_goods.remain_quantity, quantity_change)
             stock_in_goods.save(update_fields=['remain_quantity'])

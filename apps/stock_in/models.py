@@ -53,12 +53,12 @@ class StockInOrder(Model):
 
 
 class StockInGoods(Model):
-    """入库商品"""
+    """入库产品"""
 
     stock_in_order = ForeignKey('stock_in.StockInOrder', on_delete=CASCADE,
                                 related_name='stock_in_goods_set', verbose_name='入库单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
-                       related_name='stock_in_goods_set', verbose_name='商品')
+                       related_name='stock_in_goods_set', verbose_name='产品')
     stock_in_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='完成状态')
@@ -88,14 +88,14 @@ class StockInRecord(Model):
 
 
 class StockInRecordGoods(Model):
-    """入库记录商品"""
+    """入库记录产品"""
 
     stock_in_record = ForeignKey('stock_in.StockInRecord', on_delete=CASCADE,
                                  related_name='stock_in_record_goods_set', verbose_name='入库记录')
     stock_in_goods = ForeignKey('stock_in.StockInGoods', on_delete=CASCADE,
-                                related_name='stock_in_record_goods_set', verbose_name='入库商品')
+                                related_name='stock_in_record_goods_set', verbose_name='入库产品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
-                       related_name='stock_in_record_goods_set', verbose_name='商品')
+                       related_name='stock_in_record_goods_set', verbose_name='产品')
     stock_in_quantity = FloatField(verbose_name='入库数量')
     batch = ForeignKey('goods.Batch', on_delete=CASCADE, null=True,
                        related_name='stock_in_record_goods_set', verbose_name='批次')

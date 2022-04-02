@@ -11,11 +11,11 @@ class StockTransferOrderSerializer(BaseSerializer):
     """调拨单据"""
 
     class StockTransferGoodsItemSerializer(BaseSerializer):
-        """调拨商品"""
+        """调拨产品"""
 
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
         class Meta:
@@ -24,9 +24,9 @@ class StockTransferOrderSerializer(BaseSerializer):
             fields = ['goods', 'stock_transfer_quantity', *read_only_fields]
 
         def validate_goods(self, instance):
-            instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
+            instance = self.validate_foreign_key(Goods, instance, message='产品不存在')
             if not instance.is_active:
-                raise ValidationError(f'入库商品[{instance.goods.name}]已作废')
+                raise ValidationError(f'入库产品[{instance.goods.name}]已作废')
             return instance
 
         def validate_stock_transfer_quantity(self, value):
@@ -41,7 +41,7 @@ class StockTransferOrderSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_transfer_goods_items = StockTransferGoodsItemSerializer(
-        source='stock_transfer_goods_set', many=True, label='调拨商品')
+        source='stock_transfer_goods_set', many=True, label='调拨产品')
 
     class Meta:
         model = StockTransferOrder
@@ -92,7 +92,7 @@ class StockTransferOrderSerializer(BaseSerializer):
 
         total_stock_transfer_quantity = 0
 
-        # 创建调拨商品
+        # 创建调拨产品
         stock_transfer_goods_set = []
         for stock_transfer_goods_item in stock_transfer_goods_items:
             goods = stock_transfer_goods_item['goods']

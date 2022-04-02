@@ -60,7 +60,7 @@ class PurchaseReportViewSet(BaseViewSet):
                    responses={200: PurchaseReportGroupByGoodsResponse})
     @action(detail=False, methods=['get'])
     def group_by_goods(self, request, *args, **kwargs):
-        """商品汇总"""
+        """产品汇总"""
 
         queryset = self.filter_queryset(self.get_queryset())
         queryset = queryset.select_related('goods', 'goods__category', 'goods__unit')
@@ -124,7 +124,7 @@ class SalesReportViewSet(BaseViewSet):
                    responses={200: SalesReportGroupByGoodsResponse})
     @action(detail=False, methods=['get'])
     def group_by_goods(self, request, *args, **kwargs):
-        """商品汇总"""
+        """产品汇总"""
 
         queryset = self.filter_queryset(self.get_queryset())
         queryset = queryset.select_related('goods', 'goods__category', 'goods__unit')
@@ -143,7 +143,7 @@ class SalesReportViewSet(BaseViewSet):
 
 
 class SalesHotGoodsViewSet(BaseViewSet, ListModelMixin):
-    """销售前十商品"""
+    """销售前十产品"""
 
     permission_classes = [IsAuthenticated, SalesHotGoodsPermission]
     pagination_class = None

@@ -27,7 +27,7 @@ class InventoryFlow(Model):
         VOID_STOCK_TRANSFER_IN = ('void_stock_transfer_in', '作废调拨转入')
 
     warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT, related_name='inventory_flows', verbose_name='仓库')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='inventory_flows', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='inventory_flows', verbose_name='产品')
     type = CharField(max_length=32, choices=Type.choices, verbose_name='流水类型')
     quantity_before = FloatField(verbose_name='变化之前数量')
     quantity_change = FloatField(verbose_name='变化数量')

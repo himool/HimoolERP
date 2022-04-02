@@ -93,7 +93,7 @@ class GoodsSerializer(BaseSerializer):
     inventory_items = InventoryItemSerializer(
         source='inventories', required=False, many=True, label='库存Item')
     goods_image_items = GoodsImageItemSerializer(
-        source='goods_images', many=True, read_only=True, label='商品图片Item')
+        source='goods_images', many=True, read_only=True, label='产品图片Item')
 
     class Meta:
         model = Goods
@@ -110,20 +110,20 @@ class GoodsSerializer(BaseSerializer):
         return value
 
     def validate_category(self, instance):
-        instance = self.validate_foreign_key(GoodsCategory, instance, message='商品分类不存在')
+        instance = self.validate_foreign_key(GoodsCategory, instance, message='产品分类不存在')
         return instance
 
     def validate_unit(self, instance):
-        instance = self.validate_foreign_key(GoodsUnit, instance, message='商品单位不存在')
+        instance = self.validate_foreign_key(GoodsUnit, instance, message='产品单位不存在')
         return instance
 
     def validate_enable_batch_control(self, value):
         if value and (self.team.enable_auto_stock_in or self.team.enable_auto_stock_out):
-            raise ValidationError('只有同时关闭自动入库、自动出库, 才可以开启商品的批次控制')
+            raise ValidationError('只有同时关闭自动入库、自动出库, 才可以开启产品的批次控制')
         return value
 
     def validate_goods_images(self, instances):
-        instances = self.validate_foreign_key_set(GoodsImage, instances, message='商品图片不存在')
+        instances = self.validate_foreign_key_set(GoodsImage, instances, message='产品图片不存在')
         return instances
 
     @transaction.atomic
@@ -145,7 +145,7 @@ class GoodsSerializer(BaseSerializer):
 
                     total_initial_quantity = 0
 
-                    # 商品开启批次控制, 创建批次
+                    # 产品开启批次控制, 创建批次
                     batch_items = inventory_item.get('batchs')
                     if goods.enable_batch_control and batch_items:
                         for batch_item in batch_items:
@@ -171,7 +171,7 @@ class GoodsSerializer(BaseSerializer):
                                 inventory.initial_quantity = total_initial_quantity
                                 inventory.total_quantity = total_initial_quantity
                                 if inventory.total_quantity < 0:
-                                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                                 inventory.has_stock = inventory.total_quantity > 0
                                 inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
                     break
@@ -265,7 +265,7 @@ class GoodsSerializer(BaseSerializer):
                             inventory.initial_quantity = total_initial_quantity
                             inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
                             if inventory.total_quantity < 0:
-                                raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                                raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                             inventory.has_stock = inventory.total_quantity > 0
                             inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
                     else:
@@ -273,7 +273,7 @@ class GoodsSerializer(BaseSerializer):
                         inventory.initial_quantity = inventory_initial_quantity
                         inventory.total_quantity = NP.plus(inventory.total_quantity, inventory.initial_quantity)
                         if inventory.total_quantity < 0:
-                            raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                            raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                         inventory.has_stock = inventory.total_quantity > 0
                         inventory.save(update_fields=['initial_quantity', 'total_quantity', 'has_stock'])
 
@@ -290,8 +290,8 @@ class GoodsSerializer(BaseSerializer):
 
 
 class GoodsImportExportSerializer(BaseSerializer):
-    number = CharField(label='商品编号(唯一必填)')
-    name = CharField(label='商品名称(必填)')
+    number = CharField(label='产品编号(唯一必填)')
+    name = CharField(label='产品名称(必填)')
     barcode = CharField(required=False, label='条码')
     category = CharField(source='category.name', required=False, label='分类')
     unit = CharField(source='unit.name', required=False, label='单位')
@@ -334,9 +334,9 @@ class GoodsImageSerializer(BaseSerializer):
 class BatchSerializer(BaseSerializer):
     warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
-    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+    goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
     unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
     class Meta:
@@ -349,9 +349,9 @@ class BatchSerializer(BaseSerializer):
 class InventorySerializer(BaseSerializer):
     warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
-    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+    goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
     unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
     class Meta:

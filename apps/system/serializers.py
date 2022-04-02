@@ -29,13 +29,13 @@ class SystemConfigSerializer(BaseSerializer):
 
     def validate_enable_batch_control(self, value):
         if value and (self.team.enable_auto_stock_in or self.team.enable_auto_stock_out):
-            raise ValidationError('只有同时关闭自动入库、自动出库, 才可以开启商品的批次控制')
+            raise ValidationError('只有同时关闭自动入库、自动出库, 才可以开启产品的批次控制')
         return value
 
     def validate(self, attrs):
         if attrs['enable_auto_stock_in'] or attrs['enable_auto_stock_out']:
             if goods := Goods.objects.filter(enable_batch_control=True, team=self.team).first():
-                raise ValidationError(f'商品[{goods.name}]已开启批次控制, 无法开启自动出/入库')
+                raise ValidationError(f'产品[{goods.name}]已开启批次控制, 无法开启自动出/入库')
         return super().validate(attrs)
 
 

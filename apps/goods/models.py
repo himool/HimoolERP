@@ -3,7 +3,7 @@ from extensions.models import *
 
 
 class GoodsCategory(Model):
-    """商品分类"""
+    """产品分类"""
 
     name = CharField(max_length=64, verbose_name='名称')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
@@ -14,7 +14,7 @@ class GoodsCategory(Model):
 
 
 class GoodsUnit(Model):
-    """商品单位"""
+    """产品单位"""
 
     name = CharField(max_length=64, verbose_name='名称')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
@@ -25,15 +25,15 @@ class GoodsUnit(Model):
 
 
 class Goods(Model):
-    """商品"""
+    """产品"""
 
     number = CharField(max_length=32, verbose_name='编号')
     name = CharField(max_length=64, verbose_name='名称')
     barcode = CharField(max_length=32, null=True, blank=True, verbose_name='条码')
     category = ForeignKey('goods.GoodsCategory', on_delete=SET_NULL, null=True,
-                          related_name='goods_set', verbose_name='商品分类')
+                          related_name='goods_set', verbose_name='产品分类')
     unit = ForeignKey('goods.GoodsUnit', on_delete=SET_NULL, null=True,
-                      related_name='goods_set', verbose_name='商品单位')
+                      related_name='goods_set', verbose_name='产品单位')
     spec = CharField(max_length=64, null=True, blank=True, verbose_name='规格')
     enable_batch_control = BooleanField(default=False, verbose_name='启用批次控制')
     shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
@@ -76,10 +76,10 @@ class Goods(Model):
 
 
 class GoodsImage(Model):
-    """商品图片"""
+    """产品图片"""
 
     goods = ForeignKey('goods.Goods', on_delete=SET_NULL, null=True,
-                       related_name='goods_images', verbose_name='商品')
+                       related_name='goods_images', verbose_name='产品')
     file = ImageField(verbose_name='文件')
     name = CharField(max_length=256, verbose_name='文件名称')
     team = ForeignKey('system.Team', on_delete=CASCADE, related_name='goods_images')
@@ -91,7 +91,7 @@ class Batch(Model):
     number = CharField(max_length=32, verbose_name='编号')
     inventory = ForeignKey('goods.Inventory', on_delete=CASCADE, related_name='batchs', verbose_name='库存')
     warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='batchs', verbose_name='仓库')
-    goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='batchs', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='batchs', verbose_name='产品')
     initial_quantity = FloatField(default=0, verbose_name='初始库存')
     total_quantity = FloatField(verbose_name='批次数量')
     remain_quantity = FloatField(verbose_name='批次剩余数量')
@@ -110,7 +110,7 @@ class Inventory(Model):
     """库存"""
 
     warehouse = ForeignKey('data.Warehouse', on_delete=CASCADE, related_name='inventories', verbose_name='仓库')
-    goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='inventories', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=CASCADE, related_name='inventories', verbose_name='产品')
     initial_quantity = FloatField(default=0, verbose_name='初始库存')
     total_quantity = FloatField(default=0, verbose_name='库存总数')
     has_stock = BooleanField(default=False, verbose_name='库存状态')

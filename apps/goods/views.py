@@ -12,7 +12,7 @@ from apps.data.models import *
 
 
 class GoodsCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
-    """商品分类"""
+    """产品分类"""
 
     serializer_class = GoodsCategorySerializer
     permission_classes = [IsAuthenticated, GoodsCategoryPermission]
@@ -77,7 +77,7 @@ class GoodsCategoryViewSet(ModelViewSet, ExportMixin, ImportMixin):
 
 
 class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
-    """商品单位"""
+    """产品单位"""
 
     serializer_class = GoodsUnitSerializer
     permission_classes = [IsAuthenticated, GoodsUnitPermission]
@@ -142,7 +142,7 @@ class GoodsUnitViewSet(ModelViewSet, ExportMixin, ImportMixin):
 
 
 class GoodsViewSet(ModelViewSet, ExportMixin, ImportMixin):
-    """商品"""
+    """产品"""
 
     serializer_class = GoodsSerializer
     permission_classes = [IsAuthenticated, GoodsPermission]
@@ -250,7 +250,7 @@ class GoodsViewSet(ModelViewSet, ExportMixin, ImportMixin):
 
 
 class GoodsImageViewSet(ModelViewSet):
-    """商品图片"""
+    """产品图片"""
 
     serializer_class = GoodsImageSerializer
     permission_classes = [IsAuthenticated, GoodsPermission]

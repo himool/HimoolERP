@@ -6,7 +6,7 @@ PERMISSIONS = [
         'name': '首页',
         'permissions': [
             {'name': '销售走势', 'code': 'sales_trend'},
-            {'name': '销售前十商品', 'code': 'sales_hot_goods'},
+            {'name': '销售前十产品', 'code': 'sales_hot_goods'},
             {'name': '入库任务提醒', 'code': 'stock_in_reminder'},
             {'name': '出库任务提醒', 'code': 'stock_out_reminder'},
             {'name': '库存预警', 'code': 'inventory_warning'},
@@ -33,11 +33,11 @@ PERMISSIONS = [
         ],
     },
     {
-        'name': '商品管理',
+        'name': '产品管理',
         'permissions': [
-            {'name': '商品分类', 'code': 'goods_category'},
-            {'name': '商品单位', 'code': 'goods_unit'},
-            {'name': '商品信息', 'code': 'goods'},
+            {'name': '产品分类', 'code': 'goods_category'},
+            {'name': '产品单位', 'code': 'goods_unit'},
+            {'name': '产品信息', 'code': 'goods'},
         ],
     },
     {

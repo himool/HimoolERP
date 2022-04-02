@@ -92,10 +92,10 @@ class BatchOptionSerializer(ModelSerializer):
 
 
 class InventoryOptionSerializer(ModelSerializer):
-    goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-    goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-    goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
-    goods_spec = CharField(source='goods.spec', read_only=True, label='商品规格')
+    goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+    goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+    goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
+    goods_spec = CharField(source='goods.spec', read_only=True, label='产品规格')
     purchase_price = FloatField(source='goods.purchase_price', read_only=True, label='采购价')
     retail_price = FloatField(source='goods.retail_price', read_only=True, label='零售价')
     level_price1 = FloatField(source='goods.level_price1', read_only=True, label='等级价一')
@@ -116,9 +116,9 @@ class InventoryOptionSerializer(ModelSerializer):
 class PurchaseOrderOptionSerializer(ModelSerializer):
 
     class PurchaseGoodsItemSerializer(ModelSerializer):
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
         class Meta:
@@ -141,7 +141,7 @@ class PurchaseOrderOptionSerializer(ModelSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     purchase_goods_items = PurchaseGoodsItemSerializer(
-        source='purchase_goods_set', many=True, label='采购商品Item')
+        source='purchase_goods_set', many=True, label='采购产品Item')
     purchase_account_items = PurchaseAccountItemSerializer(
         source='purchase_accounts', required=False, many=True, label='采购结算账户Item')
 
@@ -158,9 +158,9 @@ class PurchaseOrderOptionSerializer(ModelSerializer):
 class SalesOrderOptionSerializer(ModelSerializer):
 
     class SalesGoodsItemSerializer(ModelSerializer):
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
         class Meta:
@@ -183,7 +183,7 @@ class SalesOrderOptionSerializer(ModelSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     sales_goods_items = SalesGoodsItemSerializer(
-        source='sales_goods_set', many=True, label='采购商品Item')
+        source='sales_goods_set', many=True, label='采购产品Item')
     sales_account_items = SalesAccountItemSerializer(
         source='sales_accounts', required=False, many=True, label='采购结算账户Item')
 

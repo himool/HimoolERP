@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="visible" :confirmLoading="loading" :maskClosable="false" @cancel="cancel" @ok="confirm">
+    <a-modal v-model="visible" :width="560" :confirmLoading="loading" :maskClosable="false" @cancel="cancel" @ok="confirm">
       <div slot="title">{{form.id ? '编辑角色' : '新增角色' }}</div>
       <div>
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
@@ -11,11 +11,33 @@
             <a-input v-model="form.remark" allowClear />
           </a-form-model-item>
 
-          <a-checkbox-group v-model="form.permissions">
+          <!-- <a-checkbox-group v-model="form.permissions">
             <a-descriptions size="small" title="权限" bordered>
               <a-descriptions-item v-for="permissionTypeItem in $parent.permissionItems" :key="permissionTypeItem.id" :label="permissionTypeItem.name" :span="3">
                 <a-row>
                   <a-col v-for="item in permissionTypeItem.permission_items" :key="item.id" :span="24">
+                    <a-checkbox :value="item.id">{{ item.name }}</a-checkbox>
+                  </a-col>
+                </a-row>
+              </a-descriptions-item>
+            </a-descriptions>
+          </a-checkbox-group> -->
+
+
+          <a-checkbox-group v-model="form.permissions">
+            <a-descriptions size="small" title="权限" bordered>
+              <a-descriptions-item
+                v-for="permissionTypeItem in $parent.permissionItems"
+                :key="permissionTypeItem.id"
+                :span="3"
+              >
+                <div slot="label" style="width: 90px">
+                  <a-checkbox :value="permissionTypeItem.name" @change="checkAll">{{
+                    permissionTypeItem.name
+                  }}</a-checkbox>
+                </div>
+                <a-row>
+                  <a-col v-for="item in permissionTypeItem.permission_items" :key="item.id" :span="8">
                     <a-checkbox :value="item.id">{{ item.name }}</a-checkbox>
                   </a-col>
                 </a-row>
@@ -70,6 +92,22 @@
         this.$emit('cancel', false);
         this.$refs.form.resetFields();
       },
+      checkAll(event) {
+      for (let item of this.$parent.permissionItems) {
+        if (item.name == event.target.value) {
+          for (let permissionItem of item.permission_items) {
+            let index = this.form.permissions.indexOf(permissionItem.id);
+
+            if (event.target.checked && index == -1) {
+              this.form.permissions.push(permissionItem.id);
+            } else if (!event.target.checked && index != -1) {
+              this.form.permissions.splice(index, 1);
+            }
+          }
+          break;
+        }
+      }
+    },
     },
   }
 </script>

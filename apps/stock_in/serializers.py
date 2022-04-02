@@ -10,11 +10,11 @@ class StockInOrderSerializer(BaseSerializer):
     """入库单据"""
 
     class StockInGoodsItemSerializer(BaseSerializer):
-        """入库商品"""
+        """入库产品"""
 
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
         enable_batch_control = BooleanField(source='goods.enable_batch_control',
                                             read_only=True, label='启用批次控制')
@@ -36,7 +36,7 @@ class StockInOrderSerializer(BaseSerializer):
                                             read_only=True, label='调拨单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_in_goods_items = StockInGoodsItemSerializer(
-        source='stock_in_goods_set', many=True, label='入库商品Item')
+        source='stock_in_goods_set', many=True, label='入库产品Item')
 
     class Meta:
         model = StockInOrder
@@ -51,11 +51,11 @@ class StockInRecordSerializer(BaseSerializer):
     """入库记录"""
 
     class StockInRecordGoodsItemSerializer(BaseSerializer):
-        """入库记录商品"""
+        """入库记录产品"""
 
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
         enable_batch_control = BooleanField(source='goods.enable_batch_control',
                                             read_only=True, label='启用批次控制')
@@ -72,9 +72,9 @@ class StockInRecordSerializer(BaseSerializer):
                       *read_only_fields]
 
         def validate_stock_in_goods(self, instance):
-            instance = self.validate_foreign_key(StockInGoods, instance, message='入库商品不存在')
+            instance = self.validate_foreign_key(StockInGoods, instance, message='入库产品不存在')
             if instance.is_completed:
-                raise ValidationError(f'入库商品[{instance.goods.name}]已完成')
+                raise ValidationError(f'入库产品[{instance.goods.name}]已完成')
             return instance
 
         def validate_stock_in_quantity(self, value):
@@ -87,11 +87,11 @@ class StockInRecordSerializer(BaseSerializer):
             goods = stock_in_goods.goods
 
             if stock_in_goods.remain_quantity < attrs['stock_in_quantity']:
-                raise ValidationError(f'商品[{goods.name}]入库数量错误')
+                raise ValidationError(f'产品[{goods.name}]入库数量错误')
 
             if goods.enable_batch_control:
                 if not (attrs.get('batch') or attrs['batch'].get('number')):
-                    raise ValidationError(f'商品[{goods.name}]批次编号为空')
+                    raise ValidationError(f'产品[{goods.name}]批次编号为空')
             return super().validate(attrs)
 
     stock_in_order_number = CharField(source='stock_in_order.number', read_only=True, label='入库单据编号')
@@ -100,7 +100,7 @@ class StockInRecordSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_in_record_goods_items = StockInRecordGoodsItemSerializer(
-        source='stock_in_record_goods_set', many=True, label='入库记录商品')
+        source='stock_in_record_goods_set', many=True, label='入库记录产品')
 
     class Meta:
         model = StockInRecord
@@ -136,12 +136,12 @@ class StockInRecordSerializer(BaseSerializer):
 
         total_stock_in_quantity = 0
 
-        # 创建入库记录商品
+        # 创建入库记录产品
         stock_in_record_goods_set = []
         for stock_in_record_goods_item in stock_in_record_goods_items:
             stock_in_goods = stock_in_record_goods_item['stock_in_goods']
             if stock_in_goods.stock_in_order != stock_in_order:
-                raise ValidationError('入库商品错误')
+                raise ValidationError('入库产品错误')
 
             stock_in_quantity = stock_in_record_goods_item['stock_in_quantity']
             goods = stock_in_goods.goods

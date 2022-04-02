@@ -12,11 +12,11 @@ class PurchaseOrderSerializer(BaseSerializer):
     """采购单据"""
 
     class PurchaseGoodsItemSerializer(BaseSerializer):
-        """采购商品"""
+        """采购产品"""
 
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
         class Meta:
@@ -26,9 +26,9 @@ class PurchaseOrderSerializer(BaseSerializer):
             fields = ['goods', 'purchase_quantity', 'purchase_price', *read_only_fields]
 
         def validate_goods(self, instance):
-            instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
+            instance = self.validate_foreign_key(Goods, instance, message='产品不存在')
             if not instance.is_active:
-                raise ValidationError(f'商品[{instance.name}]未激活')
+                raise ValidationError(f'产品[{instance.name}]未激活')
             return instance
 
         def validate_purchase_quantity(self, value):
@@ -70,7 +70,7 @@ class PurchaseOrderSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     purchase_goods_items = PurchaseGoodsItemSerializer(
-        source='purchase_goods_set', many=True, label='采购商品Item')
+        source='purchase_goods_set', many=True, label='采购产品Item')
     purchase_account_items = PurchaseAccountItemSerializer(
         source='purchase_accounts', required=False, many=True, label='采购结算账户Item')
 
@@ -123,7 +123,7 @@ class PurchaseOrderSerializer(BaseSerializer):
         total_purchase_quantity = 0
         total_purchase_amount = 0
 
-        # 创建采购商品
+        # 创建采购产品
         purchase_goods_set = []
         for purchase_goods_item in purchase_goods_items:
             purchase_quantity = purchase_goods_item['purchase_quantity']
@@ -171,11 +171,11 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
     """采购退货单据"""
 
     class PurchaseReturnGoodsItemSerializer(BaseSerializer):
-        """采购退货商品"""
+        """采购退货产品"""
 
-        goods_number = CharField(source='goods.number', read_only=True, label='商品编号')
-        goods_name = CharField(source='goods.name', read_only=True, label='商品名称')
-        goods_barcode = CharField(source='goods.barcode', read_only=True, label='商品条码')
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
         unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
 
         class Meta:
@@ -185,13 +185,13 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
             fields = ['purchase_goods', 'goods', 'return_quantity', 'return_price', *read_only_fields]
 
         def validate_purchase_goods(self, instance):
-            instance = self.validate_foreign_key(PurchaseGoods, instance, message='采购商品不存在')
+            instance = self.validate_foreign_key(PurchaseGoods, instance, message='采购产品不存在')
             return instance
 
         def validate_goods(self, instance):
-            instance = self.validate_foreign_key(Goods, instance, message='商品不存在')
+            instance = self.validate_foreign_key(Goods, instance, message='产品不存在')
             if not instance.is_active:
-                raise ValidationError(f'商品[{instance.name}]未激活')
+                raise ValidationError(f'产品[{instance.name}]未激活')
             return instance
 
         def validate_return_quantity(self, value):
@@ -234,7 +234,7 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     purchase_return_goods_items = PurchaseReturnGoodsItemSerializer(
-        source='purchase_return_goods_set', many=True, label='采购退货商品Item')
+        source='purchase_return_goods_set', many=True, label='采购退货产品Item')
     purchase_return_account_items = PurchaseReturnAccountItemSerializer(
         source='purchase_return_accounts', required=False, many=True, label='采购退货结算账户Item')
 
@@ -299,7 +299,7 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
         total_return_quantity = 0
         total_return_amount = 0
 
-        # 创建采购退货商品
+        # 创建采购退货产品
         purchase_return_goods_set = []
         for purchase_return_goods_item in purchase_return_goods_items:
             goods = purchase_return_goods_item['goods']
@@ -308,13 +308,13 @@ class PurchaseReturnOrderSerializer(BaseSerializer):
             purchase_goods = None
             if purchase_order := purchase_return_order.purchase_order:
                 if not (purchase_goods := purchase_return_goods_item.get('purchase_goods')):
-                    raise ValidationError(f'采购单据[{purchase_order.number}]不存在商品[{goods.name}]')
+                    raise ValidationError(f'采购单据[{purchase_order.number}]不存在产品[{goods.name}]')
 
                 purchase_goods.return_quantity = NP.plus(purchase_goods.return_quantity, return_quantity)
                 if purchase_goods.return_quantity > purchase_goods.purchase_quantity:
-                    raise ValidationError(f'退货商品[{goods.name}]退货数量错误')
+                    raise ValidationError(f'退货产品[{goods.name}]退货数量错误')
 
-                # 同步采购商品退货数量
+                # 同步采购产品退货数量
                 purchase_goods.save(update_fields=['return_quantity'])
 
             return_price = purchase_return_goods_item['return_price']

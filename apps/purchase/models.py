@@ -41,11 +41,11 @@ class PurchaseOrder(Model):
 
 
 class PurchaseGoods(Model):
-    """采购商品"""
+    """采购产品"""
 
     purchase_order = ForeignKey('purchase.PurchaseOrder', on_delete=CASCADE,
                                 related_name='purchase_goods_set', verbose_name='采购单据')
-    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='purchase_goods_set', verbose_name='商品')
+    goods = ForeignKey('goods.Goods', on_delete=PROTECT, related_name='purchase_goods_set', verbose_name='产品')
     purchase_quantity = FloatField(verbose_name='采购数量')
     purchase_price = FloatField(verbose_name='采购单价')
     total_amount = AmountField(verbose_name='总金额')
@@ -110,14 +110,14 @@ class PurchaseReturnOrder(Model):
 
 
 class PurchaseReturnGoods(Model):
-    """采购退货商品"""
+    """采购退货产品"""
 
     purchase_return_order = ForeignKey('purchase.PurchaseReturnOrder', on_delete=CASCADE,
                                        related_name='purchase_return_goods_set', verbose_name='采购退货单据')
     purchase_goods = ForeignKey('purchase.PurchaseGoods', on_delete=CASCADE, null=True,
-                                related_name='purchase_return_goods_set', verbose_name='采购商品')
+                                related_name='purchase_return_goods_set', verbose_name='采购产品')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
-                       related_name='purchase_return_goods_set', verbose_name='商品')
+                       related_name='purchase_return_goods_set', verbose_name='产品')
     return_quantity = FloatField(verbose_name='退货数量')
     return_price = FloatField(verbose_name='退货单价')
     total_amount = AmountField(verbose_name='总金额')

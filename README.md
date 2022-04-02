@@ -79,9 +79,9 @@
    * 仓库
    * 结算账户
    * 收支项目
-* 商品管理
-   * 商品分类
-   * 商品信息
+* 产品管理
+   * 产品分类
+   * 产品信息
 * 采购管理
    * 采购开单
    * 采购退货
@@ -111,7 +111,7 @@
 ### 界面截图
 ![首页](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%A6%96%E9%A1%B5.png)
 ![报表](https://gitee.com/haioucloud/erp/raw/master/raw/%E6%8A%A5%E8%A1%A8.png)
-![商品](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%95%86%E5%93%81.png)
+![产品](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%95%86%E5%93%81.png)
 ![采购](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
 ![库存](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%BA%93%E5%AD%98.png)
 ![财务](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%B4%A2%E5%8A%A1.png)

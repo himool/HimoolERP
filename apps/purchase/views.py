@@ -51,7 +51,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
@@ -67,7 +67,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
                 creator=self.user, team=self.team
             )
 
-            # 创建入库商品
+            # 创建入库产品
             stock_in_goods_set = []
             for purchase_goods in purchase_order.purchase_goods_set.all():
                 stock_in_goods_set.append(StockInGoods(
@@ -125,7 +125,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
         if purchase_order.is_void:
             raise ValidationError(f'采购单据[{purchase_order.number}]已作废, 无法再次作废')
 
-        # 同步采购单据, 采购商品
+        # 同步采购单据, 采购产品
         purchase_order.is_void = True
         purchase_order.save(update_fields=['is_void'])
 
@@ -148,7 +148,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
@@ -232,7 +232,7 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
             else:
@@ -248,7 +248,7 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
                 creator=self.user, team=self.team
             )
 
-            # 创建出库商品
+            # 创建出库产品
             stock_out_goods_set = []
             for purchase_return_goods in purchase_return_order.purchase_return_goods_set.all():
                 stock_out_goods_set.append(StockOutGoods(
@@ -305,7 +305,7 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
         if purchase_return_order.is_void:
             raise ValidationError(f'采购退货单据[{purchase_return_order.number}]已作废, 无法再次作废')
 
-        # 同步采购退货单据, 采购退货商品
+        # 同步采购退货单据, 采购退货产品
         purchase_return_order.is_void = True
         purchase_return_order.save(update_fields=['is_void'])
 
@@ -328,11 +328,11 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
 
                 inventory.total_quantity = quantity_after
                 if inventory.total_quantity < 0:
-                    raise ValidationError(f'商品[{inventory.goods.name}]库存不足')
+                    raise ValidationError(f'产品[{inventory.goods.name}]库存不足')
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
 
-                # 同步采购商品退货数量
+                # 同步采购产品退货数量
                 if purchase_goods := purchase_return_goods.purchase_goods:
                     purchase_goods.return_quantity = NP.minus(purchase_goods.return_quantity,
                                                               purchase_return_goods.return_quantity)
