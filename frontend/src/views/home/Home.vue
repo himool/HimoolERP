@@ -37,7 +37,7 @@
         </a-card>
       </a-col>
 
-      <a-col :span="24">
+      <!-- <a-col :span="24">
         <a-card title="ERP操作快捷入口" size="small">
           <a-row gutter="0">
             <a-col :span="4">
@@ -78,7 +78,7 @@
             </a-col>
           </a-row>
         </a-card>
-      </a-col>
+      </a-col> -->
 
       <a-col :span="12">
         <sales-trend />

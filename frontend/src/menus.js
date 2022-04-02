@@ -18,7 +18,7 @@ export default [
     ]
   },
   {
-    key: '3', name: '产品管理', icon: 'shopping', submenus: [
+    key: '3', name: '产品管理', icon: 'appstore', submenus: [
       { key: '/goods/classification', name: '产品分类' },
       { key: '/goods/unit', name: '产品单位' },
       { key: '/goods/information', name: '产品信息' },
@@ -41,14 +41,14 @@ export default [
     ]
   },
   {
-    key: '6', name: '生产管理', icon: 'shopping', submenus: [
+    key: '6', name: '生产管理', icon: 'schedule', submenus: [
       { key: '/production/plan', name: '生产计划' },
       { key: '/production/task', name: '生产任务' },
       { key: '/production/record', name: '生产记录' },
     ]
   },
   {
-    key: '7', name: '库内管理', icon: 'database', submenus: [
+    key: '7', name: '库存管理', icon: 'database', submenus: [
       { key: '/warehouse/inStock', name: '入库任务' },
       { key: '/warehouse/outStock', name: '出库任务' },
       { key: '/warehouse/inventory', name: '盘点' },
