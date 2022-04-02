@@ -68,7 +68,7 @@
           },
           {
             key: 'goods',
-            tab: '按商品汇总',
+            tab: '按产品汇总',
           },
         ],
         searchForm: {

@@ -33,7 +33,7 @@
             key: 'warehouse_name',
           },
           {
-            title: '商品名称',
+            title: '产品名称',
             dataIndex: 'goods_name',
             key: 'goods_name',
           },

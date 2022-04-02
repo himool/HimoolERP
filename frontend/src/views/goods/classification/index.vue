@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="商品分类">
+    <a-card title="产品分类">
       <a-row gutter="16">
         <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
           <a-input v-model="searchForm.search" placeholder="名称, 备注" allowClear @pressEnter="search" />
@@ -139,14 +139,14 @@
       },
       exportExcel() {
         goodsClassificationExport(this.searchForm).then(resp => {
-          exportExcel(resp.data, '商品分类列表');
+          exportExcel(resp.data, '产品分类列表');
         }).catch(err => {
           this.$message.error(err.response.data.error);
         });
       },
       downloadTemplate () {
         goodsClassificationTemplate().then(resp => {
-          exportExcel(resp.data, '商品分类导入模板');
+          exportExcel(resp.data, '产品分类导入模板');
         }).catch(err => {
           this.$message.error(err.response.data.error);
         });

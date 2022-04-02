@@ -3,7 +3,7 @@
     <a-modal v-model="visible" title="物料选择" width="750px" :footer="null" @cancel="onCloseModel">
       <a-row gutter="16">
         <a-col :span="24" style="width: 256px;">
-          <a-input v-model="searchForm.search" placeholder="商品名称, 编码, 条码" allowClear @pressEnter="search" />
+          <a-input v-model="searchForm.search" placeholder="产品名称, 编码, 条码" allowClear @pressEnter="search" />
         </a-col>
         <a-space>
           <a-button type="primary" icon="search" @click="search">查询</a-button>

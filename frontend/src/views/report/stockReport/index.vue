@@ -3,7 +3,7 @@
     <a-card title="库存报表">
       <a-row gutter="16">
         <a-col :span="24" :md="6" :xl="4" style="max-width: 256px; margin-bottom: 12px;">
-          <a-input-search v-model="searchForm.search" placeholder="商品编号/名称" allowClear @search="search" />
+          <a-input-search v-model="searchForm.search" placeholder="产品编号/名称" allowClear @search="search" />
         </a-col>
         <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
           <a-select v-model="searchForm.warehouse" placeholder="仓库" allowClear style="width: 100%;" @change="search">
@@ -65,15 +65,15 @@
             dataIndex: 'warehouse_number',
           },
           {
-            title: '商品名称',
+            title: '产品名称',
             dataIndex: 'goods_name',
           },
           {
-            title: '商品编号',
+            title: '产品编号',
             dataIndex: 'goods_number',
           },
           {
-            title: '商品条码',
+            title: '产品条码',
             dataIndex: 'goods_barcode',
           },
           {

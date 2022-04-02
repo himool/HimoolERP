@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal v-model="visible" width="750px" :confirmLoading="loading" :maskClosable="false" @cancel="cancel" @ok="confirm">
-      <div slot="title">{{form.id ? '编辑商品分类' : '新增商品分类' }}</div>
+      <div slot="title">{{form.id ? '编辑产品分类' : '新增产品分类' }}</div>
       <div>
         <a-form-model
           ref="form"
@@ -22,12 +22,12 @@
               </a-form-model-item>
             </a-col>
             <a-col :span="24" :md="12">
-              <a-form-model-item prop="number" label="商品编号">
+              <a-form-model-item prop="number" label="产品编号">
                 <a-input v-model="form.number" />
               </a-form-model-item>
             </a-col>
             <a-col :span="24" :md="12">
-              <a-form-model-item prop="name" label="商品名称">
+              <a-form-model-item prop="name" label="产品名称">
                 <a-input v-model="form.name" />
               </a-form-model-item>
             </a-col>
@@ -168,7 +168,7 @@
             </a-col>
             <a-col :span="24" :md="24">
               <a-textarea
-                placeholder="商品详细介绍"
+                placeholder="产品详细介绍"
                 :rows="4"
                 v-model="form.description"
               />
@@ -326,10 +326,10 @@
         categoryVisible: false,
         rules: {
           name: [
-            { required: true, message: "请输入商品名称", trigger: "change" },
+            { required: true, message: "请输入产品名称", trigger: "change" },
           ],
           number: [
-            { required: true, message: "请输入商品编号", trigger: "change" },
+            { required: true, message: "请输入产品编号", trigger: "change" },
           ],
           purchase_price: [
             { required: true, message: "请输入采购价", trigger: "change" },

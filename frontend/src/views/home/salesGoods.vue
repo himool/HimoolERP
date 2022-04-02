@@ -1,11 +1,11 @@
 <template>
   <div>
-    <a-card style="height: calc(50vh - 48px);">
+    <a-card style="height: calc(50vh - 40px);">
       <div slot="title">
-        <span>销售前十商品</span>
+        <span>销售前十产品</span>
         <a-range-picker v-model="dateRange" :ranges="ranges" :disabled="salesLoading" :allowClear="false"
           @change="changeDateRange" style="float: right;" />
-        <div id="salesGoods" style="margin-top: 36px; padding-left: 32px;"></div>
+        <div id="salesGoods" style="margin-top: 36px;"></div>
       </div>
     </a-card>
   </div>
@@ -42,6 +42,7 @@
           start_date: this.dateRange[0].format('YYYY-MM-DD'),
           end_date: this.dateRange[1].format('YYYY-MM-DD'),
         };
+
         if (form.end_date) {
           form.end_date = moment(form.end_date).add(1, 'days').format('YYYY-MM-DD');
         }

@@ -58,13 +58,13 @@
             },
           },
           {
-            title: '商品名称',
+            title: '产品名称',
             dataIndex: 'goods_name',
             key: 'goods_name',
             width: 150,
           },
           {
-            title: '商品编号',
+            title: '产品编号',
             dataIndex: 'goods_number',
             key: 'goods_number',
             width: 150,

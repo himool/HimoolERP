@@ -44,7 +44,6 @@
           start_date: this.dateRange[0].format('YYYY-MM-DD'),
           end_date: this.dateRange[1].format('YYYY-MM-DD'),
         };
-
         if (form.end_date) {
           form.end_date = moment(form.end_date).add(1, 'days').format('YYYY-MM-DD');
         }

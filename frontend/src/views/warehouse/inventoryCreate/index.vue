@@ -44,7 +44,7 @@
         <div>
           <a-row gutter="16">
             <a-space>
-              <a-button type="primary" @click="openMaterialModal">添加商品</a-button>
+              <a-button type="primary" @click="openMaterialModal">添加产品</a-button>
             </a-space>
           </a-row>
           <div style="margin-top: 16px;">
@@ -393,7 +393,7 @@
              let ifHasEmptyGoods = false;
              let ifHasEmptyBatch = false;
             if (this.materialItems.length == 0) {
-              this.$message.warn('未添加商品');
+              this.$message.warn('未添加产品');
               return false
             }
             this.materialItems.map(item => {
@@ -409,7 +409,7 @@
               return false
             }
             if (ifHasEmptyBatch) {
-              this.$message.warn('开启批次控制的商品, 需要完善该商品的批次信息');
+              this.$message.warn('开启批次控制的产品, 需要完善该产品的批次信息');
               return false
             }
             this.loading = true;

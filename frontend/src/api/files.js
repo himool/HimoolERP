@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
-// 上传商品图片
+// 上传产品图片
 export function contractOriginalFiles(data) {
   return axios({
     url: '/api/goods_images/',

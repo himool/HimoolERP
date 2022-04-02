@@ -27,7 +27,7 @@
               {{ info.remark }}
             </a-descriptions-item> -->
           </a-descriptions>
-          <a-divider orientation="left" style="margin-top: 30px;">商品信息</a-divider>
+          <a-divider orientation="left" style="margin-top: 30px;">产品信息</a-divider>
           <a-table
             rowKey="id"
             size="middle"
@@ -60,13 +60,13 @@
             },
           },
           {
-            title: '商品名称',
+            title: '产品名称',
             dataIndex: 'goods_name',
             key: 'goods_name',
             width: 150,
           },
           {
-            title: '商品编号',
+            title: '产品编号',
             dataIndex: 'goods_number',
             key: 'goods_number',
             width: 150,

@@ -1,16 +1,16 @@
 export default [
   {
-    title: '商品编号',
+    title: '产品编号',
     dataIndex: 'number',
     sorter: true,
   },
   {
-    title: '商品名称',
+    title: '产品名称',
     dataIndex: 'name',
     sorter: true,
   },
   {
-    title: '商品单位',
+    title: '产品单位',
     dataIndex: 'unit_name',
   },
   {

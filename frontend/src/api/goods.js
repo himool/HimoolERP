@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-// 商品分类
+// 产品分类
 export function goodsClassificationList(params) {
   return request({ url: `/goods_categories/`, method: 'get', params })
 }
@@ -17,7 +17,7 @@ export function goodsClassificationDestroy(data) {
   return request({ url: `/goods_categories/${data.id}/`, method: 'delete', data })
 }
 
-// 商品信息
+// 产品信息
 export function goodsInformationList(params) {
   return request({ url: `/goods/`, method: 'get', params })
 }
@@ -34,7 +34,7 @@ export function goodsInformationDestroy(data) {
   return request({ url: `/goods/${data.id}/`, method: 'delete', data })
 }
 
-// 商品单位
+// 产品单位
 export function goodsUnitList(params) {
   return request({ url: `/goods_units/`, method: 'get', params })
 }

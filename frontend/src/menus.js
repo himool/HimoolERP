@@ -18,10 +18,10 @@ export default [
     ]
   },
   {
-    key: '3', name: '商品管理', icon: 'shopping', submenus: [
-      { key: '/goods/classification', name: '商品分类' },
-      { key: '/goods/unit', name: '商品单位' },
-      { key: '/goods/information', name: '商品信息' },
+    key: '3', name: '产品管理', icon: 'shopping', submenus: [
+      { key: '/goods/classification', name: '产品分类' },
+      { key: '/goods/unit', name: '产品单位' },
+      { key: '/goods/information', name: '产品信息' },
     ]
   },
   {
@@ -41,7 +41,14 @@ export default [
     ]
   },
   {
-    key: '6', name: '库内管理', icon: 'database', submenus: [
+    key: '6', name: '生产管理', icon: 'shopping', submenus: [
+      { key: '/production/plan', name: '生产计划' },
+      { key: '/production/task', name: '生产任务' },
+      { key: '/production/record', name: '生产记录' },
+    ]
+  },
+  {
+    key: '7', name: '库内管理', icon: 'database', submenus: [
       { key: '/warehouse/inStock', name: '入库任务' },
       { key: '/warehouse/outStock', name: '出库任务' },
       { key: '/warehouse/inventory', name: '盘点' },
@@ -50,7 +57,7 @@ export default [
     ]
   },
   {
-    key: '7', name: '财务管理', icon: 'dollar', submenus: [
+    key: '8', name: '财务管理', icon: 'dollar', submenus: [
       { key: '/finance/arrears_payable', name: '应付欠款' },
       { key: '/finance/payment', name: '付款' },
       { key: '/finance/arrears_receivable', name: '应收欠款' },
@@ -61,7 +68,7 @@ export default [
     ]
   },
   {
-    key: '8', name: '系统管理', icon: 'team', submenus: [
+    key: '9', name: '系统管理', icon: 'team', submenus: [
       { key: '/role', name: '角色管理' },
       { key: '/account', name: '员工账号' },
       { key: '/config', name: '系统配置' },

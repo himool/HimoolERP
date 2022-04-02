@@ -8,7 +8,7 @@ export function salesReportStatistics(params) {
 export function salesReportDetialsList(params) {
   return request({ url: `/sales_reports/detials/`, method: 'get', params })
 }
-// 销售报表按商品汇总
+// 销售报表按产品汇总
 export function salesReportByGoodsList(params) {
   return request({ url: `/sales_reports/group_by_goods/`, method: 'get', params })
 }
@@ -21,7 +21,7 @@ export function purchaseReportStatistics(params) {
 export function purchaseReportDetialsList(params) {
   return request({ url: `/purchase_reports/detials/`, method: 'get', params })
 }
-// 采购报表按商品汇总
+// 采购报表按产品汇总
 export function purchaseReportByGoodsList(params) {
   return request({ url: `/purchase_reports/group_by_goods/`, method: 'get', params })
 }

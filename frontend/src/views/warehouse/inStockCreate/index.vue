@@ -224,7 +224,7 @@
               return false
             }
             if (ifHasEmptyBatch) {
-              this.$message.warn('开启批次控制的商品需要输入批次编号');
+              this.$message.warn('开启批次控制的产品需要输入批次编号');
               return false
             }
 

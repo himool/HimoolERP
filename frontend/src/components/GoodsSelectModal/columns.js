@@ -8,12 +8,12 @@ export const columns = [
     },
   },
   {
-    title: '商品编号',
+    title: '产品编号',
     dataIndex: 'number',
     key: 'number',
   },
   {
-    title: '商品名称',
+    title: '产品名称',
     dataIndex: 'name',
     key: 'name',
   },

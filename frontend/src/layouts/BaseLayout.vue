@@ -75,7 +75,7 @@
           // if (data.inventory_warnning_count > 0) {
           //   this.$notification.warning({
           //     message: '库存预警',
-          //     remark: `您有 ${resp.data.inventory_warnning_count} 个商品超出库存设定范围`,
+          //     remark: `您有 ${resp.data.inventory_warnning_count} 个产品超出库存设定范围`,
           //   })
           // }
         });

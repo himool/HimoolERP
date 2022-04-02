@@ -28,7 +28,7 @@ export function stockInList(params) {
 export function stockOutList(params) {
   return request({ url: `/stock_out_order_reminders/`, method: 'get', params })
 }
-// 销售前十商品
+// 销售前十产品
 export function salesTopTenList(params) {
   return request({ url: `/sales_hot_goods/`, method: 'get', params })
 }

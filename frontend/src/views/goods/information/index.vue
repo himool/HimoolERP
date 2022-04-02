@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="商品信息">
+    <a-card title="产品信息">
       <a-row gutter="16">
         <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
           <a-input v-model="searchForm.search" placeholder="编号, 名称, 备注" allowClear @pressEnter="search" />
@@ -20,7 +20,7 @@
         </a-col>
 
         <div style="margin-bottom: 12px; float: right;">
-          <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="openFormModal(form)">新增商品</a-button>
+          <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="openFormModal(form)">新增产品</a-button>
         </div>
       </a-row>
 
@@ -82,12 +82,12 @@
             },
           },
           {
-            title: '商品编号',
+            title: '产品编号',
             dataIndex: 'number',
             sorter: true,
           },
           {
-            title: '商品名称',
+            title: '产品名称',
             dataIndex: 'name',
             sorter: true,
           },
@@ -208,14 +208,14 @@
       },
       exportExcel() {
         goodsInformationExport(this.searchForm).then(resp => {
-          exportExcel(resp.data, '商品信息列表');
+          exportExcel(resp.data, '产品信息列表');
         }).catch(err => {
           this.$message.error(err.response.data.error);
         });
       },
       downloadTemplate () {
         goodsInformationTemplate().then(resp => {
-          exportExcel(resp.data, '商品信息导入模板');
+          exportExcel(resp.data, '产品信息导入模板');
         }).catch(err => {
           this.$message.error(err.response.data.error);
         });

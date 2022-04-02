@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="visible" title="选择商品" :footer="null" :maskClosable="false" @cancel="cancel">
+    <a-modal v-model="visible" title="选择产品" :footer="null" :maskClosable="false" @cancel="cancel">
       <div>
         <a-input-search v-model="searchForm.search" placeholder="输入查询..." @search="search" />
       </div>
@@ -16,7 +16,7 @@
     <a-modal v-model="formVisible" :maskClosable="false" okText="确定" cancelText="取消" :title="targetItem.name"
       @ok="confirm">
       <a-form-model ref="form" :model="targetItem" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
-        <a-form-model-item prop="quantity" label="商品数量">
+        <a-form-model-item prop="quantity" label="产品数量">
           <a-input-number v-model="targetItem.quantity" :min="0" style="width: 100%;" />
         </a-form-model-item>
       </a-form-model>
@@ -43,7 +43,7 @@
         targetItem: {},
         rules: {
           quantity: [
-            { required: true, message: '请输入商品数量', trigger: 'change' },
+            { required: true, message: '请输入产品数量', trigger: 'change' },
             { validator: this.validateQuantity, trigger: 'change' },
           ],
         },
@@ -108,7 +108,7 @@
         this.pagination = { current: 1, total: 0, pageSize: 15 };
       },
       validateQuantity(rule, value, callback) {
-        return value > 0 ? callback() : callback(new Error('商品数量需要大于0'))
+        return value > 0 ? callback() : callback(new Error('产品数量需要大于0'))
       },
     },
     watch: {

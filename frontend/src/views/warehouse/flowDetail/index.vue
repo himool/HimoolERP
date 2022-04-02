@@ -14,10 +14,10 @@
             <a-descriptions-item label="仓库">
               {{ info.warehouse_name }}
             </a-descriptions-item>
-            <a-descriptions-item label="商品名称">
+            <a-descriptions-item label="产品名称">
               {{ info.goods_name }}
             </a-descriptions-item>
-            <a-descriptions-item label="商品编号">
+            <a-descriptions-item label="产品编号">
               {{ info.goods_number }}
             </a-descriptions-item>
             <a-descriptions-item label="单位名称">

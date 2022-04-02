@@ -59,12 +59,12 @@
           </a-row>
         </a-form-model>
 
-        <a-divider orientation="left">商品信息</a-divider>
+        <a-divider orientation="left">产品信息</a-divider>
 
         <div>
           <a-row gutter="16">
             <a-space>
-              <a-button type="primary" @click="openMaterialModal">添加商品</a-button>
+              <a-button type="primary" @click="openMaterialModal">添加产品</a-button>
             </a-space>
           </a-row>
           <div style="margin-top: 16px;">
@@ -458,7 +458,7 @@ export default {
           // }
 
           if (this.materialItems.length == 0) {
-            this.$message.warn("未添加商品");
+            this.$message.warn("未添加产品");
             return false;
           }
           this.materialItems.map((item) => {

@@ -57,7 +57,7 @@ export function revenueExpenditureItemsExport(params) {
   })
 }
 
-// 商品分类
+// 产品分类
 export function goodsClassificationExport(params) {
   return axios({
     url: '/api/goods_categories/export/',
@@ -68,7 +68,7 @@ export function goodsClassificationExport(params) {
   })
 }
 
-// 商品信息
+// 产品信息
 export function goodsInformationExport(params) {
   return axios({
     url: '/api/goods/export/',
@@ -79,7 +79,7 @@ export function goodsInformationExport(params) {
   })
 }
 
-// 商品单位
+// 产品单位
 export function goodsUnitExport(params) {
   return axios({
     url: '/api/goods_units/export/',

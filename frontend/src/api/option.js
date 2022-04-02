@@ -11,7 +11,7 @@ export function userOption(params) {
   return request({ url: `/users/options/`, method: 'get', params })
 }
 
-// 商品
+// 产品
 export function materialsOption(params) {
   return request({ url: `/materials/options/`, method: 'get', params })
 }
@@ -28,19 +28,19 @@ export function clientsOption(params) {
 export function warehousesOption(params) {
   return request({ url: `/warehouses/options/`, method: 'get', params })
 }
-// 商品分类
+// 产品分类
 export function goodsClassificationOption(params) {
   return request({ url: `/goods_categories/options/`, method: 'get', params })
 }
-// 商品单位
+// 产品单位
 export function goodsUnitOption(params) {
   return request({ url: `/goods_units/options/`, method: 'get', params })
 }
-// 商品选项
+// 产品选项
 export function inventoriesOption(params) {
   return request({ url: `/inventories/options/`, method: 'get', params })
 }
-// 商品选项
+// 产品选项
 export function goodsOption(params) {
   return request({ url: `/goods/options/`, method: 'get', params })
 }

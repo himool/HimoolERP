@@ -108,7 +108,7 @@ export function revenueExpenditureItemsImport(data) {
   })
 }
 
-// 商品分类模板
+// 产品分类模板
 export function goodsClassificationTemplate(params) {
   return axios({
     url: '/api/goods_categories/import_template/',
@@ -119,7 +119,7 @@ export function goodsClassificationTemplate(params) {
   })
 }
 
-// 商品分类导入
+// 产品分类导入
 export function goodsClassificationImport(data) {
   return axios({
     url: '/api/goods_categories/import_data/',
@@ -129,7 +129,7 @@ export function goodsClassificationImport(data) {
   })
 }
 
-// 商品信息模板
+// 产品信息模板
 export function goodsInformationTemplate(params) {
   return axios({
     url: '/api/goods/import_template/',
@@ -140,7 +140,7 @@ export function goodsInformationTemplate(params) {
   })
 }
 
-// 商品信息导入
+// 产品信息导入
 export function goodsInformationImport(data) {
   return axios({
     url: '/api/goods/import_data/',
@@ -150,7 +150,7 @@ export function goodsInformationImport(data) {
   })
 }
 
-// 商品单位模板
+// 产品单位模板
 export function goodsUnitTemplate(params) {
   return axios({
     url: '/api/goods_units/import_template/',
@@ -161,7 +161,7 @@ export function goodsUnitTemplate(params) {
   })
 }
 
-// 商品单位导入
+// 产品单位导入
 export function goodsUnitImport(data) {
   return axios({
     url: '/api/goods_units/import_data/',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="商品单位">
+    <a-card title="产品单位">
       <a-row gutter="16">
         <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
           <a-input v-model="searchForm.search" placeholder="名称, 备注" allowClear @pressEnter="search" />
@@ -139,14 +139,14 @@
       },
       exportExcel() {
         goodsUnitExport(this.searchForm).then(resp => {
-          exportExcel(resp.data, '商品单位列表');
+          exportExcel(resp.data, '产品单位列表');
         }).catch(err => {
           this.$message.error(err.response.data.error);
         });
       },
       downloadTemplate () {
         goodsUnitTemplate().then(resp => {
-          exportExcel(resp.data, '商品单位导入模板');
+          exportExcel(resp.data, '产品单位导入模板');
         }).catch(err => {
           this.$message.error(err.response.data.error);
         });

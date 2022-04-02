@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal v-model="visible" :confirmLoading="loading" :maskClosable="false" @cancel="cancel" @ok="confirm">
-      <div slot="title">{{form.id ? '编辑商品分类' : '新增商品分类' }}</div>
+      <div slot="title">{{form.id ? '编辑产品分类' : '新增产品分类' }}</div>
       <div>
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 16 }">
           <a-form-model-item prop="name" label="分类名称">

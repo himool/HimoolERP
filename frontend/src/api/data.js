@@ -21,7 +21,7 @@ export function getSettlementAccountNumber(params) {
   return request({ url: `/accounts/number/`, method: 'get', params })
 }
 
-// 商品信息
+// 产品信息
 export function getGoodsNumber(params) {
   return request({ url: `/goods/number/`, method: 'get', params })
 }
