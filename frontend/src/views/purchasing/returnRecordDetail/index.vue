@@ -1,9 +1,11 @@
 <template>
   <div>
-    <a-card title="退货单详情">
+    <a-card title="采购退货单详情">
+      <a-button slot="extra" type="primary" style="margin-right: 8px;" ghost v-print="'#printContent'"> <a-icon type="printer" />打印</a-button>
       <a-button slot="extra" type="primary" ghost @click="() => { this.$router.go(-1); }"> <a-icon type="left" />返回</a-button>
-      <section id="pdfDom">
+      <section id="printContent">
         <a-spin :spinning="loading">
+          <img id="barcode" style="float: right" />
           <a-descriptions bordered>
             <a-descriptions-item label="退货单编号">
               {{ info.number }}
@@ -52,8 +54,9 @@
 
 <script>
   import { purchaseReturnOrderDetail } from '@/api/purchasing'
-  
-  export default {
+  import JsBarcode from 'jsbarcode'
+
+export default {
     data() {
       return {
         loading: false,
@@ -141,6 +144,14 @@
       this.initData();
     },
     methods: {
+      getJsBarcode(number) {
+        JsBarcode("#barcode", number, {
+          lineColor: '#000',
+          width: 2,
+          height: 40,
+          displayValue: true
+        });
+      },
       initData() {
         this.loading = true;
         purchaseReturnOrderDetail({ id: this.$route.query.id }).then(data => {
@@ -162,6 +173,7 @@
               totalAmount: this.info.total_amount,
             },
           ];
+          this.getJsBarcode(data.number)
         }).finally(() => {
           this.loading = false;
         });

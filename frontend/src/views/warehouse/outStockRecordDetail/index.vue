@@ -1,9 +1,11 @@
 <template>
   <div>
     <a-card title="出库记录详情">
+      <a-button slot="extra" type="primary" style="margin-right: 8px;" ghost v-print="'#printContent'"> <a-icon type="printer" />打印</a-button>
       <a-button slot="extra" type="primary" ghost @click="() => { this.$router.go(-1); }"> <a-icon type="left" />返回</a-button>
-      <section id="pdfDom">
+      <section id="printContent">
         <a-spin :spinning="loading">
+          <img id="barcode" style="float: right" />
           <a-descriptions bordered>
             <a-descriptions-item label="出库编号">
               {{ info.stock_out_order_number }}
@@ -39,7 +41,8 @@
 
 <script>
   import { stockOutRecordDetail } from '@/api/warehouse'
-  
+  import JsBarcode from 'jsbarcode'
+
   export default {
     data() {
       return {
@@ -93,6 +96,14 @@
       this.initData();
     },
     methods: {
+      getJsBarcode(number) {
+        JsBarcode("#barcode", number, {
+          lineColor: '#000',
+          width: 2,
+          height: 40,
+          displayValue: true
+        });
+      },
       initData() {
         this.loading = true;
         stockOutRecordDetail({ id: this.$route.query.id }).then(data => {
@@ -105,6 +116,7 @@
               stock_out_quantity: this.info.total_quantity,
             },
           ];
+          this.getJsBarcode(data.stock_out_order_number)
         }).finally(() => {
           this.loading = false;
         });
