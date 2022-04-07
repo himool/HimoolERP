@@ -1,9 +1,11 @@
 <template>
   <div>
     <a-card title="付款单详情">
+       <a-button slot="extra" type="primary" style="margin-right: 8px;" ghost v-print="'#printContent'"> <a-icon type="printer" />打印</a-button>
       <a-button slot="extra" type="primary" ghost @click="() => { this.$router.go(-1); }"> <a-icon type="left" />返回</a-button>
-      <section id="pdfDom">
+      <section id="printContent">
         <a-spin :spinning="loading">
+          <img id="barcode" style="float: right" />
           <a-descriptions bordered>
             <a-descriptions-item label="采购编号">
               {{ info.number }}
@@ -39,7 +41,8 @@
 
 <script>
   import { paymentOrderDetail } from '@/api/finance'
-  
+  import JsBarcode from 'jsbarcode'
+
   export default {
     data() {
       return {
@@ -128,8 +131,17 @@
       this.initData();
     },
     methods: {
+      getJsBarcode(number) {
+        JsBarcode("#barcode", number, {
+          lineColor: '#000',
+          width: 2,
+          height: 40,
+          displayValue: true
+        });
+      },
       initData() {
         let paymentAmount = 0;
+        this.loading = true;
         paymentOrderDetail({ id: this.$route.query.id }).then(data => {
           this.info = data;
           data.payment_account_items.map(item => { paymentAmount += Number(item.payment_amount) });
@@ -141,6 +153,7 @@
               payment_amount: paymentAmount,
             },
           ];
+          this.getJsBarcode(data.number)
         }).finally(() => {
           this.loading = false;
         });
