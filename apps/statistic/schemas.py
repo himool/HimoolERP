@@ -99,9 +99,20 @@ class FinanceStatisticResponse(Serializer):
     total_expenditure_amount = AmountField(label='支出金额')
 
 
+class HomeViewResponse(Serializer):
+    sales_count = IntegerField(label='销售笔数')
+    sales_amount = AmountField(label='销售额')
+    purchase_count = IntegerField(label='采购笔数')
+    stock_in_task_count = IntegerField(label='待入库')
+    stock_out_task_count = IntegerField(label='待出库')
+    inventory_warning_count = IntegerField(label='库存预警')
+    arrears_receivable_amount = AmountField(label='应收欠款')
+    arrears_payable_amount = AmountField(label='应付欠款')
+
+
 __all__ = [
     'PurchaseReportParameter', 'PurchaseReportStatisticResponse', 'PurchaseReportGroupByGoodsResponse',
     'SalesReportParameter', 'SalesReportStatisticResponse', 'SalesReportGroupByGoodsResponse',
     'SalesHotGoodsParameter', 'SalesHotGoodsResponse', 'SalesTrendParameter', 'SalesTrendResponse',
-    'FinanceStatisticParameter', 'FinanceStatisticResponse',
+    'FinanceStatisticParameter', 'FinanceStatisticResponse', 'HomeViewResponse',
 ]

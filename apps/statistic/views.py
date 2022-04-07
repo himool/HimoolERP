@@ -12,6 +12,10 @@ from apps.statistic.models import *
 from apps.purchase.models import *
 from apps.sales.models import *
 from apps.finance.models import *
+from apps.stock_in.models import *
+from apps.stock_out.models import *
+from apps.goods.models import *
+from apps.data.models import *
 
 
 class PurchaseReportViewSet(BaseViewSet):
@@ -326,6 +330,76 @@ class SalesReturnPaymentDetialViewSet(BaseViewSet, ListModelMixin):
 
     def get_queryset(self):
         return super().get_queryset().filter(is_void=False)
+
+
+class HomeOverviewViewSet(BaseViewSet, ListModelMixin):
+    """首页概览"""
+
+    @extend_schema(responses={200: HomeViewResponse})
+    def list(self, request, *args, **kwargs):
+        start_time = pendulum.now().to_datetime_string()
+        end_time = pendulum.tomorrow().to_datetime_string()
+        data = {
+            "sales_count": 0,
+            "sales_amount": 0,
+            "purchase_count": 0,
+            "stock_in_task_count": 0,
+            "stock_out_task_count": 0,
+            "inventory_warning_count": 0,
+            "arrears_receivable_amount": 0,
+            "arrears_payable_amount": 0,
+        }
+
+        # 销售
+        queryset = SalesOrder.objects.filter(create_time__gte=start_time, create_time__lt=end_time,
+                                             is_void=False, team=self.team)
+        result = queryset.aggregate(sales_count=Count('id'), sales_amount=Sum('total_amount'))
+        if result['sales_count'] is not None:
+            data['sales_count'] = result['sales_count']
+
+        if result['sales_amount'] is not None:
+            data['sales_amount'] = result['sales_amount']
+
+        # 采购
+        queryset = PurchaseOrder.objects.filter(create_time__gte=start_time, create_time__lt=end_time,
+                                                is_void=False, team=self.team)
+        result = queryset.aggregate(purchase_count=Count('id'))
+        if result['purchase_count'] is not None:
+            data['purchase_count'] = result['purchase_count']
+
+        # 入库
+        queryset = StockInOrder.objects.filter(is_completed=False, is_void=False, team=self.team)
+        result = queryset.aggregate(stock_in_task_count=Count('id'))
+        if result['stock_in_task_count'] is not None:
+            data['stock_in_task_count'] = result['stock_in_task_count']
+
+        # 出库
+        queryset = StockOutOrder.objects.filter(is_completed=False, is_void=False, team=self.team)
+        result = queryset.aggregate(stock_out_task_count=Count('id'))
+        if result['stock_out_task_count'] is not None:
+            data['stock_out_task_count'] = result['stock_out_task_count']
+
+        # 库存预警
+        queryset = Inventory.objects.filter(team=self.team, goods__enable_inventory_warning=True,
+                                            total_quantity__gt=F('goods__inventory_upper'),
+                                            total_quantity__lt=F('goods__inventory_lower'))
+        result = queryset.aggregate(inventory_warning_count=Count('id'))
+        if result['inventory_warning_count'] is not None:
+            data['inventory_warning_count'] = result['inventory_warning_count']
+
+        # 应收欠款
+        queryset = Client.objects.filter(is_active=True, has_arrears=True, team=self.team)
+        result = queryset.aggregate(arrears_receivable_amount=Sum('arrears_amount'))
+        if result['arrears_receivable_amount'] is not None:
+            data['arrears_receivable_amount'] = result['arrears_receivable_amount']
+
+        # 应付欠款
+        queryset = Supplier.objects.filter(is_active=True, has_arrears=True, team=self.team)
+        result = queryset.aggregate(arrears_payable_amount=Sum('arrears_amount'))
+        if result['arrears_payable_amount'] is not None:
+            data['arrears_payable_amount'] = result['arrears_payable_amount']
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 __all__ = [

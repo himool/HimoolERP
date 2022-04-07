@@ -43,9 +43,7 @@ class StockInOrder(Model):
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
-            print(result)
             number = result.group(1) + str(int(result.group(2)) + 1)
-            print(result)
         except AttributeError:
             number = 'RK' + pendulum.today().format('YYYYMMDD') + '0001'
 
