@@ -110,7 +110,7 @@ class BatchOptionViewSet(InfiniteOptionViewSet):
     ordering_fields = ['id', 'number']
     ordering = ['-number', 'id']
     select_related_fields = ['goods__unit']
-    queryset = Batch.objects.filter(has_stock=True)
+    queryset = Batch.objects.all()
 
 
 class InventoryOptionViewSet(LimitedOptionViewSet):
@@ -120,7 +120,7 @@ class InventoryOptionViewSet(LimitedOptionViewSet):
     ordering_fields = ['id', 'total_quantity']
     ordering = ['id']
     select_related_fields = ['goods__unit']
-    queryset = Inventory.objects.filter(has_stock=True)
+    queryset = Inventory.objects.all()
 
 
 # Purchase
