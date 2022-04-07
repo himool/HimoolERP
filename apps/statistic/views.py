@@ -337,7 +337,7 @@ class HomeOverviewViewSet(BaseViewSet, ListModelMixin):
 
     @extend_schema(responses={200: HomeViewResponse})
     def list(self, request, *args, **kwargs):
-        start_time = pendulum.now().to_datetime_string()
+        start_time = pendulum.today().to_datetime_string()
         end_time = pendulum.tomorrow().to_datetime_string()
         data = {
             "sales_count": 0,
