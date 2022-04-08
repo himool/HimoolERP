@@ -21,6 +21,7 @@ class RefreshTokenResponse(Serializer):
 
 
 class UserInfoResponse(Serializer):
+    id = IntegerField(label='用户ID')
     username = CharField(label='用户名')
     name = CharField(label='名称')
     is_manager = BooleanField(label='管理员状态')
