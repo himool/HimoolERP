@@ -32,13 +32,13 @@
               {{ info.remark }}
             </a-descriptions-item>
           </a-descriptions>
-          <a-divider orientation="left" style="margin-top: 30px;">结算账户信息</a-divider>
+          <!-- <a-divider orientation="left" style="margin-top: 30px;">结算账户信息</a-divider>
           <a-table
             rowKey="id"
             size="middle"
             :columns="columnsAccount"
             :data-source="info.purchase_return_account_items"
-            :pagination="false" />
+            :pagination="false" /> -->
           <a-divider orientation="left" style="margin-top: 30px;">产品信息</a-divider>
           <a-table
             rowKey="id"

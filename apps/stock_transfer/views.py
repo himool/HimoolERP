@@ -32,7 +32,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
     def perform_create(self, serializer):
         stock_transfer_order = serializer.save()
 
-        # 创建出库单据
+        # 创建出库通知单据
         if not stock_transfer_order.enable_auto_stock_out:
             stock_out_order_number = StockOutOrder.get_number(team=self.team)
             stock_out_order = StockOutOrder.objects.create(
@@ -43,7 +43,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 creator=self.user, team=self.team
             )
 
-        # 创建入库单据
+        # 创建入库通知单据
         if not stock_transfer_order.enable_auto_stock_in:
             stock_in_order_number = StockInOrder.get_number(team=self.team)
             stock_in_order = StockInOrder.objects.create(
@@ -163,7 +163,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
         else:
-            # 作废出库单据
+            # 作废出库通知单据
             stock_out_order = stock_transfer_order.stock_out_order
             if stock_out_order.total_quantity != stock_out_order.remain_quantity:
                 raise ValidationError(f'调拨单据[{stock_transfer_order.number}]无法作废, 已存在出库记录')
@@ -194,7 +194,7 @@ class StockTransferOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin,
                 inventory.has_stock = inventory.total_quantity > 0
                 inventory.save(update_fields=['total_quantity', 'has_stock'])
         else:
-            # 作废入库单据
+            # 作废入库通知单据
             stock_in_order = stock_transfer_order.stock_in_order
             if stock_in_order.total_quantity != stock_in_order.remain_quantity:
                 raise ValidationError(f'调拨单据[{stock_transfer_order.number}]无法作废, 已存在入库记录')

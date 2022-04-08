@@ -4,7 +4,7 @@ import request from '@/utils/request';
 export function stockInOrdersList(params) {
   return request({ url: `/stock_in_orders/`, method: 'get', params })
 }
-// 入库单据
+// 入库通知单据
 export function stockInOrderDetail(params) {
   return request({ url: `/stock_in_orders/${params.id}/`, method: 'get', params })
 }
@@ -30,7 +30,7 @@ export function stockInOrdersVoid(data) {
 export function stockOutOrdersList(params) {
   return request({ url: `/stock_out_orders/`, method: 'get', params })
 }
-// 出库单据
+// 出库通知单据
 export function stockOutOrderDetail(params) {
   return request({ url: `/stock_out_orders/${params.id}/`, method: 'get', params })
 }

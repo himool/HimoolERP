@@ -57,7 +57,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
-            # 创建入库单据
+            # 创建入库通知单据
             stock_in_order_number = StockInOrder.get_number(team=self.team)
             stock_in_order = StockInOrder.objects.create(
                 number=stock_in_order_number, warehouse=purchase_order.warehouse,
@@ -154,7 +154,7 @@ class PurchaseOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, Crea
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
-            # 作废入库单据
+            # 作废入库通知单据
             stock_in_order = purchase_order.stock_in_order
             if stock_in_order.total_quantity != stock_in_order.remain_quantity:
                 raise ValidationError(f'采购单据[{purchase_order.number}]无法作废, 已存在入库记录')
@@ -238,7 +238,7 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
-            # 创建出库单据
+            # 创建出库通知单据
             stock_out_order_number = StockOutOrder.get_number(team=self.team)
             stock_out_order = StockOutOrder.objects.create(
                 number=stock_out_order_number, warehouse=purchase_return_order.warehouse,
@@ -340,7 +340,7 @@ class PurchaseReturnOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin
             else:
                 InventoryFlow.objects.bulk_create(inventory_flows)
         else:
-            # 作废出库单据
+            # 作废出库通知单据
             stock_out_order = purchase_return_order.stock_out_order
             if stock_out_order.total_quantity != stock_out_order.remain_quantity:
                 raise ValidationError(f'采购退货单据[{purchase_return_order.number}]无法作废, 已存在出库记录')

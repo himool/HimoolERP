@@ -3,7 +3,7 @@ from extensions.models import *
 
 
 class StockOutOrder(Model):
-    """出库单据"""
+    """出库通知单据"""
 
     class Type(TextChoices):
         """出库类型"""
@@ -52,7 +52,7 @@ class StockOutGoods(Model):
     """出库产品"""
 
     stock_out_order = ForeignKey('stock_out.StockOutOrder', on_delete=CASCADE,
-                                 related_name='stock_out_goods_set', verbose_name='出库单据')
+                                 related_name='stock_out_goods_set', verbose_name='出库通知单据')
     goods = ForeignKey('goods.Goods', on_delete=PROTECT,
                        related_name='stock_out_goods_set', verbose_name='产品')
     stock_out_quantity = FloatField(verbose_name='出库总数')
@@ -68,7 +68,7 @@ class StockOutRecord(Model):
     """出库记录"""
 
     stock_out_order = ForeignKey('stock_out.StockOutOrder', on_delete=CASCADE,
-                                 related_name='stock_out_records', verbose_name='出库单据')
+                                 related_name='stock_out_records', verbose_name='出库通知单据')
     warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
                            related_name='stock_out_records', verbose_name='仓库')
     handler = ForeignKey('system.User', on_delete=PROTECT,

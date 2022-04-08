@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="出库单详情">
+    <a-card title="出库通知单详情">
       <a-button slot="extra" type="primary" style="margin-right: 8px;" ghost v-print="'#printContent'"> <a-icon type="printer" />打印</a-button>
       <a-button slot="extra" type="primary" ghost @click="() => { this.$router.go(-1); }"> <a-icon type="left" />返回</a-button>
       <section id="printContent">

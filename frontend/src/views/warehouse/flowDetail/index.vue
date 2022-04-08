@@ -59,16 +59,16 @@
             <a-descriptions-item label="作废销售退货单号">
               {{ info.void_sales_return_order_number }}
             </a-descriptions-item>
-            <a-descriptions-item label="入库单号">
+            <a-descriptions-item label="入库通知单号">
               {{ info.stock_in_order_number }}
             </a-descriptions-item>
-            <a-descriptions-item label="作废入库单号">
+            <a-descriptions-item label="作废入库通知单号">
               {{ info.void_stock_in_order_number }}
             </a-descriptions-item>
-            <a-descriptions-item label="出库单号">
+            <a-descriptions-item label="出库通知单号">
               {{ info.stock_out_order_number }}
             </a-descriptions-item>
-            <a-descriptions-item label="作废出库单号">
+            <a-descriptions-item label="作废出库通知单号">
               {{ info.void_stock_out_order_number }}
             </a-descriptions-item>
             <a-descriptions-item label="盘点单号">

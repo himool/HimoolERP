@@ -13,7 +13,7 @@ from apps.flow.models import *
 
 
 class StockOutOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin):
-    """出库单据"""
+    """出库通知单据"""
 
     serializer_class = StockOutOrderSerializer
     permission_classes = [IsAuthenticated, StockOutPermission]

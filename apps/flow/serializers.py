@@ -26,12 +26,12 @@ class InventoryFlowSerializer(BaseSerializer):
                                           read_only=True, label='销售退货单号')
     void_sales_return_order_number = CharField(source='void_sales_return_order.number',
                                                read_only=True, label='作废销售退货单号')
-    stock_in_order_number = CharField(source='stock_in_order.number', read_only=True, label='入库单号')
+    stock_in_order_number = CharField(source='stock_in_order.number', read_only=True, label='入库通知单号')
     void_stock_in_order_number = CharField(source='void_stock_in_order.number',
-                                           read_only=True, label='作废入库单号')
-    stock_out_order_number = CharField(source='stock_out_order.number', read_only=True, label='出库单号')
+                                           read_only=True, label='作废入库通知单号')
+    stock_out_order_number = CharField(source='stock_out_order.number', read_only=True, label='出库通知单号')
     void_stock_out_order_number = CharField(source='void_stock_out_order.number',
-                                            read_only=True, label='作废出库单号')
+                                            read_only=True, label='作废出库通知单号')
     stock_check_order_number = CharField(source='stock_check_order.number', read_only=True, label='盘点单号')
     void_stock_check_order_number = CharField(source='void_stock_check_order.number',
                                               read_only=True, label='作废盘点单号')

@@ -16,7 +16,7 @@ export default {
     },
     {
       path: 'inStock_detail',
-      meta: { title: '入库单详情', permission: 'inStock_detail' },
+      meta: { title: '入库通知单详情', permission: 'inStock_detail' },
       component: () => import('@/views/warehouse/inStockDetail/index'),
     },
     {
@@ -36,7 +36,7 @@ export default {
     },
     {
       path: 'outStock_detail',
-      meta: { title: '出库单详情', permission: 'outStock_detail' },
+      meta: { title: '出库通知单详情', permission: 'outStock_detail' },
       component: () => import('@/views/warehouse/outStockDetail/index'),
     },
     {

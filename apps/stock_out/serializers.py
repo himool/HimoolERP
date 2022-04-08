@@ -7,7 +7,7 @@ from apps.system.models import *
 
 
 class StockOutOrderSerializer(BaseSerializer):
-    """出库单据"""
+    """出库通知单据"""
 
     class StockOutGoodsItemSerializer(BaseSerializer):
         """出库产品"""
@@ -101,7 +101,7 @@ class StockOutRecordSerializer(BaseSerializer):
 
             return super().validate(attrs)
 
-    stock_out_order_number = CharField(source='stock_out_order.number', read_only=True, label='出库单据编号')
+    stock_out_order_number = CharField(source='stock_out_order.number', read_only=True, label='出库通知单据编号')
     warehouse_number = CharField(source='warehouse.number', read_only=True, label='仓库编号')
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
     handler_name = CharField(source='handler.name', read_only=True, label='经手人名称')
@@ -118,12 +118,12 @@ class StockOutRecordSerializer(BaseSerializer):
                   *read_only_fields]
 
     def validate_stock_out_order(self, instance):
-        instance = self.validate_foreign_key(StockOutOrder, instance, message='出库单据不存在')
+        instance = self.validate_foreign_key(StockOutOrder, instance, message='出库通知单据不存在')
         if instance.is_void:
-            raise ValidationError(f'出库单据[{instance.number}]已作废')
+            raise ValidationError(f'出库通知单据[{instance.number}]已作废')
 
         if instance.is_completed:
-            raise ValidationError(f'出库单据[{instance.number}]已完成')
+            raise ValidationError(f'出库通知单据[{instance.number}]已完成')
         return instance
 
     def validate_handler(self, instance):

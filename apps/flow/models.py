@@ -50,13 +50,13 @@ class InventoryFlow(Model):
     void_sales_return_order = ForeignKey('sales.SalesReturnOrder', on_delete=CASCADE, null=True,
                                          related_name='void_inventory_flows', verbose_name='作废销售退货单据')
     stock_in_order = ForeignKey('stock_in.StockInOrder', on_delete=CASCADE, null=True,
-                                related_name='inventory_flows', verbose_name='入库单据')
+                                related_name='inventory_flows', verbose_name='入库通知单据')
     void_stock_in_order = ForeignKey('stock_in.StockInOrder', on_delete=CASCADE, null=True,
-                                     related_name='void_inventory_flows', verbose_name='作废入库单据')
+                                     related_name='void_inventory_flows', verbose_name='作废入库通知单据')
     stock_out_order = ForeignKey('stock_out.StockOutOrder', on_delete=CASCADE, null=True,
-                                 related_name='inventory_flows', verbose_name='出库单据')
+                                 related_name='inventory_flows', verbose_name='出库通知单据')
     void_stock_out_order = ForeignKey('stock_out.StockOutOrder', on_delete=CASCADE, null=True,
-                                      related_name='void_inventory_flows', verbose_name='作废出库单据')
+                                      related_name='void_inventory_flows', verbose_name='作废出库通知单据')
     stock_check_order = ForeignKey('stock_check.StockCheckOrder', on_delete=CASCADE, null=True,
                                    related_name='inventory_flows', verbose_name='盘点单据')
     void_stock_check_order = ForeignKey('stock_check.StockCheckOrder', on_delete=CASCADE, null=True,
