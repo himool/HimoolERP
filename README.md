@@ -63,18 +63,18 @@
     进入 frontend 目录, npm run build
 
 ### 业务流程
-![业务流程](https://gitee.com/haioucloud/erp/blob/master/raw/ERP%20Workflow.png)
+![业务流程](https://gitee.com/haioucloud/erp/raw/master/raw/ERP%20Workflow.png)
 
 ### 管理模块
-![管理模块](https://gitee.com/haioucloud/erp/blob/master/raw/ERP%E6%A8%A1%E5%9D%97.png)
+![管理模块](https://gitee.com/haioucloud/erp/raw/master/raw/ERP%E6%A8%A1%E5%9D%97.png)
 
 ### 界面截图
 ![首页](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%A6%96%E9%A1%B5.png)
 ![报表](https://gitee.com/haioucloud/erp/raw/master/raw/%E6%8A%A5%E8%A1%A8.png)
-![产品](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%95%86%E5%93%81.png)
+![产品](https://gitee.com/haioucloud/erp/raw/master/raw/%E4%BA%A7%E5%93%81.png)
 ![采购](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
-![销售](https://gitee.com/haioucloud/erp/blob/master/raw/%E9%94%80%E5%94%AE.png)
-![生产](https://gitee.com/haioucloud/erp/blob/master/raw/%E9%94%80%E5%94%AE.png)
+![销售](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%94%80%E5%94%AE.png)
+![生产](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%94%80%E5%94%AE.png)
 ![库存](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%BA%93%E5%AD%98.png)
 ![财务](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%B4%A2%E5%8A%A1.png)
 ![设置](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%AE%BE%E7%BD%AE.png)
