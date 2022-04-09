@@ -51,7 +51,7 @@ class ProductionOrderSerializer(BaseSerializer):
         return super().create(validated_data)
 
     def save(self, **kwargs):
-        kwargs['remain_quantity'] = kwargs['total_quantity']
+        kwargs['remain_quantity'] = self.validated_data['total_quantity']
         return super().save(**kwargs)
 
 
