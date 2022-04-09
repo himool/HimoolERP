@@ -13,7 +13,9 @@
         </a-col>
 
         <div style="margin-bottom: 12px; float: right">
-          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openCreateModal">新增生产计划</a-button>
+          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openCreateModal(defaultForm)">
+            新增生产计划
+          </a-button>
         </div>
       </a-row>
 
@@ -47,6 +49,13 @@
 </template>
 
 <script>
+import {
+  productionOrderList,
+  productionOrderDelete,
+  productionOrderIssue,
+  productionOrderClose,
+} from "@/api/production";
+
 export default {
   components: {
     FormModal: () => import("./FormModal.vue"),
@@ -56,20 +65,7 @@ export default {
       searchForm: { search: "", page: 1, ordering: undefined },
       pagination: { current: 1, total: 0, pageSize: 16 },
       loading: false,
-      items: [
-        {
-          id: 1,
-          number: "p3423412312312",
-          sales_order_number: "SO2322343242342",
-          status: "进行中",
-          goods_number: "G10000000001",
-          goods_name: "手机",
-          planned_quantity: 12,
-          completed_quantity: 6,
-          start_time: "2020-02-02 00:00:00",
-          end_time: "2022-02-02 00:00:00",
-        },
-      ],
+      items: [],
       columns: [
         {
           title: "序号",
@@ -132,18 +128,49 @@ export default {
       ],
       visible: false,
       targetItem: {},
-      sss: false,
+      defaultForm: { is_related: false },
     };
   },
   methods: {
-    search() {},
-    openCreateModal() {
-      this.targetItem = {};
+    initialize() {
+      this.list();
+    },
+    list() {
+      this.loading = true;
+      productionOrderList(this.searchForm)
+        .then((data) => {
+          this.pagination.total = data.count;
+          this.items = data.results;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    search() {
+      this.searchForm.page = 1;
+      this.pagination.current = 1;
+      this.list();
+    },
+    tableChange(pagination, filters, sorter) {
+      this.searchForm.page = pagination.current;
+      this.pagination.current = pagination.current;
+      this.searchForm.ordering = `${sorter.order == "descend" ? "-" : ""}${sorter.field}`;
+      this.list();
+    },
+    onChangePicker(date, dateString) {
+      let startDate = date[0];
+      let endDate = date[1];
+      this.searchForm.start_date = startDate ? startDate.format("YYYY-MM-DD") : undefined;
+      this.searchForm.end_date = endDate ? endDate.add(1, "days").format("YYYY-MM-DD") : undefined;
+      this.search();
+    },
+    openCreateModal(item) {
+      this.targetItem = { ...item };
       this.visible = true;
     },
-    create() {},
-    update() {},
-    onChangePicker() {},
+  },
+  mounted() {
+    this.initialize();
   },
 };
 </script>

@@ -42,7 +42,7 @@ class ProductionOrderViewSet(ModelViewSet):
         return Response(data={'number': number}, status=status.HTTP_200_OK)
 
     @extend_schema(responses={200: ProductionOrderSerializer})
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['post'])
     def issue(self, request, *args, **kwargs):
         """发布工单"""
 
@@ -57,7 +57,7 @@ class ProductionOrderViewSet(ModelViewSet):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(responses={200: ProductionOrderSerializer})
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['post'])
     def close(self, request, *args, **kwargs):
         """关闭工单"""
 

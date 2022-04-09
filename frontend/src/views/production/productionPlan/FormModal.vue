@@ -4,16 +4,14 @@
       <div slot="title">{{ form.id ? "编辑生产计划" : "新增生产计划" }}</div>
       <div>
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-          <a-form-model-item prop="name" label="类型">
-            <a-select style="width: 100%">
-              <a-select-option value="jack">
-                按库存生产
-              </a-select-option>
-              <a-select-option value="lucy">
-                按订单生产
-              </a-select-option>
-            </a-select>
+          <a-form-model-item prop="is_related" label="类型">
+            <a-radio-group v-model="form.is_related" button-style="solid">
+              <a-radio-button :value="false">按库存生产</a-radio-button>
+              <a-radio-button :value="true">按订单生产</a-radio-button>
+            </a-radio-group>
           </a-form-model-item>
+
+          
         </a-form-model>
       </div>
     </a-modal>
