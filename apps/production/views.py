@@ -93,10 +93,11 @@ class ProductionRecordViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, C
         if production_order.remain_quantity < production_quantity:
             raise ValidationError('生产数量错误')
 
+        production_order.quantity_produced = NP.plus(production_order.quantity_produced, production_quantity)
         production_order.remain_quantity = NP.minus(production_order.remain_quantity, production_quantity)
         if production_order.remain_quantity == 0:
             production_order.status = ProductionOrder.Status.COMPLETED
-        production_order.save(update_fields=['remain_quantity', 'status'])
+        production_order.save(update_fields=['quantity_produced', 'remain_quantity', 'status'])
 
         serializer.save()
 
