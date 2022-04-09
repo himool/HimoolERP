@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="生产计划">
+    <a-card title="生产记录">
       <a-row :gutter="[12, 8]">
         <a-col :span="24" style="width: 256px;">
           <a-range-picker @change="onChangePicker" />
@@ -14,13 +14,13 @@
       </a-row>
 
       <a-row style="margin-top: 12px">
-        <a-table rowKey="id" :columns="columns" :data-source="items" :pagination="pagination" :loading="loading">
-          <div slot="action" slot-scope="value, item, index">
-            <a-button-group size="small">
-              <a-button>详情</a-button>
-              <a-button>生产</a-button>
-            </a-button-group>
-          </div>
+        <a-table
+          rowKey="id"
+          :columns="columns"
+          :data-source="items"
+          :pagination="pagination"
+          :loading="loading"
+        >
         </a-table>
       </a-row>
     </a-card>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { productionRecordList } from "@/api/production";
+
 export default {
   data() {
     return {
@@ -40,17 +42,15 @@ export default {
           title: "序号",
           dataIndex: "index",
           width: 60,
+          fixed: "left",
           customRender: (value, item, index) => {
             return index + 1;
           },
         },
         {
           title: "生产计划单号",
-          dataIndex: "number",
-        },
-        {
-          title: "销售单号",
-          dataIndex: "sales_order_number",
+          dataIndex: "production_order_number",
+          fixed: "left",
         },
         {
           title: "产品编号",
@@ -61,28 +61,63 @@ export default {
           dataIndex: "goods_name",
         },
         {
-          title: "计划数量",
-          dataIndex: "planned_quantity",
-        },
-        {
           title: "生产数量",
           dataIndex: "production_quantity",
+          width: 100,
         },
         {
           title: "创建时间",
-          dataIndex: "start_time",
+          dataIndex: "create_time",
+          width: 180,
         },
         {
-          title: "操作",
-          dataIndex: "action",
-          scopedSlots: { customRender: "action" },
+          title: "创建人",
+          dataIndex: "creator_name",
+          width: 180,
         },
       ],
-      visible: false,
-      targetItem: {},
     };
   },
-  methods: {},
+  methods: {
+    initialize() {
+      this.list();
+    },
+    list() {
+      this.loading = true;
+      productionRecordList(this.searchForm)
+        .then((data) => {
+          this.pagination.total = data.count;
+          this.items = data.results;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    create() {
+      this.list();
+    },
+    search() {
+      this.searchForm.page = 1;
+      this.pagination.current = 1;
+      this.list();
+    },
+    tableChange(pagination, filters, sorter) {
+      this.searchForm.page = pagination.current;
+      this.pagination.current = pagination.current;
+      this.searchForm.ordering = `${sorter.order == "descend" ? "-" : ""}${sorter.field}`;
+      this.list();
+    },
+    onChangePicker(date, dateString) {
+      let startDate = date[0];
+      let endDate = date[1];
+      this.searchForm.start_date = startDate ? startDate.format("YYYY-MM-DD") : undefined;
+      this.searchForm.end_date = endDate ? endDate.add(1, "days").format("YYYY-MM-DD") : undefined;
+      this.search();
+    },
+  },
+  mounted() {
+    this.initialize();
+  },
 };
 </script>
 

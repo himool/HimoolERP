@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="生产计划">
+    <a-card title="生产任务">
       <a-row :gutter="[12, 8]">
         <a-col :span="24" style="width: 256px;">
           <a-range-picker @change="onChangePicker" />
