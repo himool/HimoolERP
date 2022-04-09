@@ -31,7 +31,7 @@
           <div slot="action" slot-scope="value, item, index">
             <a-button-group size="small">
               <a-button v-if="item.status == 'in_plan'" @click="openCreateModal(item)">编辑</a-button>
-              <a-button>详情</a-button>
+              <a-button @click="detial(item)">详情</a-button>
               <a-popconfirm v-if="item.status == 'in_plan'" title="确定发布吗?" @confirm="issue(item)">
                 <a-button type="primary">发布工单</a-button>
               </a-popconfirm>
@@ -171,6 +171,9 @@ export default {
         this.$message.success("关闭成功");
         this.items = this.$functions.replaceItem(this.items, data);
       });
+    },
+    detial(item) {
+      this.$router.push({ path: "/production/detial", query: { id: item.id } });
     },
     search() {
       this.searchForm.page = 1;

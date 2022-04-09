@@ -10,6 +10,11 @@ export default {
       component: () => import('@/views/production/productionPlan/index'),
     },
     {
+      path: 'detial',
+      meta: { title: '生产计划详情' },
+      component: () => import('@/views/production/productionDetial/index'),
+    },
+    {
       path: 'task',
       meta: { title: '生产任务' },
       component: () => import('@/views/production/productionTask/index'),
@@ -18,6 +23,6 @@ export default {
       path: 'record',
       meta: { title: '生产记录' },
       component: () => import('@/views/production/productionRecord/index'),
-    }
+    },
   ],
 }
