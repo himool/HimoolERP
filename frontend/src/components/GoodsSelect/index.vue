@@ -48,11 +48,12 @@ export default {
   },
   computed: {
     options() {
+      console.log()
       let items = [...this.items];
       if (this.defaultItem && !this.loading && (!this.searchForm.search || this.searchForm.search == "")) {
         if (this.defaultItem.goods && this.defaultItem.goods_name) {
           if (this.items.findIndex((item) => item.id == this.value) == -1) {
-            items.splice(0, 0, { id: this.defaultItem, name: this.defaultItem.goods_name });
+            items.splice(0, 0, { id: this.defaultItem.goods, name: this.defaultItem.goods_name });
           }
         }
       }

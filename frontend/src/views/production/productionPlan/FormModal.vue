@@ -14,13 +14,18 @@
             </a-radio-group>
           </a-form-model-item>
           <a-form-model-item v-if="!dataForm.is_related" prop="goods" label="产品">
-            <goods-select v-model="dataForm.goods" :defaultItem="dataForm" />
+            <goods-select v-model="dataForm.goods" :defaultItem="{ ...dataForm }" />
           </a-form-model-item>
           <a-form-model-item v-if="dataForm.is_related" prop="sales_order" label="销售单">
             <sales-order-select
               v-model="dataForm.sales_order"
-              :defaultItem="dataForm"
-              @select="(item) => (dataForm.sales_goods_items = item.sales_goods_items)"
+              :defaultItem="{ ...dataForm }"
+              @select="
+                (item) => {
+                  dataForm.sales_goods_items = item.sales_goods_items;
+                  dataForm.goods = undefined;
+                }
+              "
             />
           </a-form-model-item>
           <a-form-model-item v-if="dataForm.is_related" prop="goods" label="产品">
@@ -30,7 +35,7 @@
               </a-select-option>
             </a-select>
           </a-form-model-item>
-          <a-form-model-item prop="total_quantity" label="生产数量">
+          <a-form-model-item prop="total_quantity" label="计划数量">
             <a-input-number v-model="dataForm.total_quantity" style="width: 100%;" />
           </a-form-model-item>
           <a-form-model-item prop="start_time" label="开始时间">
@@ -71,6 +76,8 @@ export default {
     return {
       rules: {
         number: [{ required: true, message: "请输入编号", trigger: "change" }],
+        goods: [{ required: true, message: "请选择生产产品", trigger: "change" }],
+        total_quantity: [{ required: true, message: "请输入计划数量", trigger: "change" }],
       },
       loading: false,
       dataForm: {},

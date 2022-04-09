@@ -52,7 +52,7 @@ export default {
       if (this.defaultItem && !this.loading && (!this.searchForm.search || this.searchForm.search == "")) {
         if (this.defaultItem.sales_order && this.defaultItem.sales_order_number) {
           if (this.items.findIndex((item) => item.id == this.value) == -1) {
-            items.splice(0, 0, { id: this.defaultItem, name: this.defaultItem.sales_order_number });
+            items.splice(0, 0, { id: this.defaultItem.sales_order, number: this.defaultItem.sales_order_number });
           }
         }
       }

@@ -30,12 +30,15 @@
         >
           <div slot="action" slot-scope="value, item, index">
             <a-button-group size="small">
-              <a-button @click="openCreateModal(item)">编辑</a-button>
+              <a-button v-if="item.status == 'in_plan'" @click="openCreateModal(item)">编辑</a-button>
               <a-button>详情</a-button>
-              <a-popconfirm title="确定发布吗?">
+              <a-popconfirm v-if="item.status == 'in_plan'" title="确定发布吗?" @confirm="issue(item)">
                 <a-button type="primary">发布工单</a-button>
               </a-popconfirm>
-              <a-popconfirm title="确定删除吗?" @confirm="destroy(item)">
+              <a-popconfirm v-if="item.status == 'in_progress'" title="确定关闭吗?" @confirm="close(item)">
+                <a-button type="primary">关闭工单</a-button>
+              </a-popconfirm>
+              <a-popconfirm v-if="item.status == 'in_plan'" title="确定删除吗?" @confirm="destroy(item)">
                 <a-button type="danger">删除</a-button>
               </a-popconfirm>
             </a-button-group>
@@ -87,7 +90,7 @@ export default {
         },
         {
           title: "状态",
-          dataIndex: "status_diaplay",
+          dataIndex: "status_display",
           width: 100,
         },
         {
@@ -155,6 +158,18 @@ export default {
       productionOrderDelete({ id: item.id }).then(() => {
         this.$message.success("删除成功");
         this.items = this.$functions.removeItem(this.items, item);
+      });
+    },
+    issue(item) {
+      productionOrderIssue({ id: item.id }).then((data) => {
+        this.$message.success("发布成功");
+        this.items = this.$functions.replaceItem(this.items, data);
+      });
+    },
+    close(item) {
+      productionOrderClose({ id: item.id }).then((data) => {
+        this.$message.success("关闭成功");
+        this.items = this.$functions.replaceItem(this.items, data);
       });
     },
     search() {

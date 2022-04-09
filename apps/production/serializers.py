@@ -84,6 +84,8 @@ class ProductionRecordSerializer(BaseSerializer):
 
     def validate_production_order(self, instance):
         instance = self.validate_foreign_key(ProductionOrder, instance, message='生产单不存在')
+        if instance.status != ProductionOrder.Status.IN_PROGRESS:
+            raise ValidationError(f'工单{instance.number}{instance.get_status_display()}, 无法创建')
         return instance
 
     def validate_production_quantity(self, value):
