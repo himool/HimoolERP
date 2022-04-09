@@ -30,12 +30,12 @@
         >
           <div slot="action" slot-scope="value, item, index">
             <a-button-group size="small">
-              <a-button>编辑</a-button>
+              <a-button @click="openCreateModal(item)">编辑</a-button>
               <a-button>详情</a-button>
               <a-popconfirm title="确定发布吗?">
                 <a-button type="primary">发布工单</a-button>
               </a-popconfirm>
-              <a-popconfirm title="确定删除吗?">
+              <a-popconfirm title="确定删除吗?" @confirm="destroy(item)">
                 <a-button type="danger">删除</a-button>
               </a-popconfirm>
             </a-button-group>
@@ -87,7 +87,7 @@ export default {
         },
         {
           title: "状态",
-          dataIndex: "status",
+          dataIndex: "status_diaplay",
           width: 100,
         },
         {
@@ -100,12 +100,12 @@ export default {
         },
         {
           title: "计划数量",
-          dataIndex: "planned_quantity",
+          dataIndex: "total_quantity",
           width: 100,
         },
         {
           title: "完成数量",
-          dataIndex: "completed_quantity",
+          dataIndex: "quantity_produced",
           width: 100,
         },
         {
@@ -144,6 +144,18 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    create(item) {
+      this.items = this.$functions.insertItem(this.items, item);
+    },
+    update(item) {
+      this.items = this.$functions.replaceItem(this.items, item);
+    },
+    destroy(item) {
+      productionOrderDelete({ id: item.id }).then(() => {
+        this.$message.success("删除成功");
+        this.items = this.$functions.removeItem(this.items, item);
+      });
     },
     search() {
       this.searchForm.page = 1;

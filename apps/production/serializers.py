@@ -9,7 +9,20 @@ from apps.goods.models import *
 class ProductionOrderSerializer(BaseSerializer):
     """生产单据"""
 
+    class SalesGoodsItemSerializer(ModelSerializer):
+        goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
+        goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+        goods_barcode = CharField(source='goods.barcode', read_only=True, label='产品条码')
+        unit_name = CharField(source='goods.unit.name', read_only=True, label='单位名称')
+
+        class Meta:
+            model = SalesGoods
+            fields = ['id', 'goods', 'goods_number', 'goods_name', 'goods_barcode', 'sales_quantity',
+                      'sales_price', 'total_amount', 'return_quantity', 'unit_name']
+
     sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单号')
+    sales_goods_items = SalesGoodsItemSerializer(
+        source='sales_order.sales_goods_set', many=True, label='销售产品Item')
     goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
     goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
     status_display = CharField(source='get_status_display', read_only=True, label='状态')
@@ -17,9 +30,9 @@ class ProductionOrderSerializer(BaseSerializer):
 
     class Meta:
         model = ProductionOrder
-        read_only_fields = ['id', 'sales_order_number', 'remain_quantity', 'goods_number', 'goods_name',
-                            'quantity_produced', 'remain_quantity', 'status', 'status_display', 'creator',
-                            'creator_name', 'create_time']
+        read_only_fields = ['id', 'sales_order_number', 'sales_goods_items', 'remain_quantity', 'goods_number',
+                            'goods_name', 'quantity_produced', 'remain_quantity', 'status', 'status_display',
+                            'creator', 'creator_name', 'create_time']
         fields = ['number', 'is_related', 'sales_order', 'goods', 'total_quantity',
                   'start_time', 'end_time', *read_only_fields]
 

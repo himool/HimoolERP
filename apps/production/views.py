@@ -20,6 +20,7 @@ class ProductionOrderViewSet(ModelViewSet):
     ordering_fields = ['number', 'total_quantity', 'quantity_produced', 'remain_quantity',
                        'start_time', 'end_time', 'create_time']
     select_related_fields = ['sales_order', 'goods', 'creator']
+    prefetch_related_fields = ['sales_order__sales_goods_set']
     queryset = ProductionOrder.objects.all()
 
     def perform_update(self, serializer):

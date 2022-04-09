@@ -14,17 +14,18 @@
             </a-radio-group>
           </a-form-model-item>
           <a-form-model-item v-if="!dataForm.is_related" prop="goods" label="产品">
-            <goods-select v-model="dataForm.goods" />
+            <goods-select v-model="dataForm.goods" :defaultItem="dataForm" />
           </a-form-model-item>
           <a-form-model-item v-if="dataForm.is_related" prop="sales_order" label="销售单">
             <sales-order-select
               v-model="dataForm.sales_order"
-              @select="(item) => (goodsItems = item.sales_goods_items)"
+              :defaultItem="dataForm"
+              @select="(item) => (dataForm.sales_goods_items = item.sales_goods_items)"
             />
           </a-form-model-item>
           <a-form-model-item v-if="dataForm.is_related" prop="goods" label="产品">
             <a-select v-model="dataForm.goods" style="width: 100%;">
-              <a-select-option v-for="item in goodsItems" :key="item.goods" :value="item.goods">
+              <a-select-option v-for="item in dataForm.sales_goods_items" :key="item.goods" :value="item.goods">
                 {{ item.goods_name }}
               </a-select-option>
             </a-select>
@@ -73,7 +74,6 @@ export default {
       },
       loading: false,
       dataForm: {},
-      goodsItems: [],
     };
   },
   methods: {
