@@ -13,7 +13,7 @@
         </a-col>
 
         <div style="margin-bottom: 12px; float: right">
-          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openCreateModal(defaultForm)">
+          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openCreateModal({})">
             新增生产计划
           </a-button>
         </div>
@@ -128,7 +128,6 @@ export default {
       ],
       visible: false,
       targetItem: {},
-      defaultForm: { is_related: false },
     };
   },
   methods: {
