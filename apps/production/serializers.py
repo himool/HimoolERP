@@ -9,13 +9,16 @@ from apps.goods.models import *
 class ProductionOrderSerializer(BaseSerializer):
     """生产单据"""
 
+    sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单号')
     goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
     goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
+    status_display = CharField(source='get_status_display', read_only=True, label='状态')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
 
     class Meta:
         model = ProductionOrder
-        read_only_fields = ['id', 'remain_quantity', 'goods_number', 'goods_name', 'creator',
+        read_only_fields = ['id', 'sales_order_number', 'remain_quantity', 'goods_number', 'goods_name',
+                            'quantity_produced', 'remain_quantity', 'status', 'status_display', 'creator',
                             'creator_name', 'create_time']
         fields = ['number', 'is_related', 'sales_order', 'goods', 'total_quantity',
                   'start_time', 'end_time', *read_only_fields]
