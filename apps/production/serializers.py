@@ -22,7 +22,7 @@ class ProductionOrderSerializer(BaseSerializer):
 
     sales_order_number = CharField(source='sales_order.number', read_only=True, label='销售单号')
     sales_goods_items = SalesGoodsItemSerializer(
-        source='sales_order.sales_goods_set', many=True, label='销售产品Item')
+        source='sales_order.sales_goods_set', many=True, read_only=True, label='销售产品Item')
     goods_number = CharField(source='goods.number', read_only=True, label='产品编号')
     goods_name = CharField(source='goods.name', read_only=True, label='产品名称')
     status_display = CharField(source='get_status_display', read_only=True, label='状态')
