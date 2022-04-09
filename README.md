@@ -6,11 +6,11 @@
 * Demo地址: [Demo](http://114.218.158.78:12222/) &nbsp;&nbsp;公司编号: admin  测试帐号：admin  密码：admin
 
 ### 使用前须知
-* 软件开放源码(发行协议:GPL-3.0)，用户可免费使用，但禁止任何单位或个人修改软件后再次发行的行为。
+* 软件开放源码(发行协议:GPL-3.0)，用户可免费使用，但禁止任何单位或个人修改软件后再次发行的行为。商业使用需得到我司商业授权。
 * 我们欢迎对开源技术感兴趣的朋友一起加入到我们项目中来完善系统功能并为客户提供服务。欢迎扫描下方二维码添加技术交流群，添加时请备注来意
 
    ![微信群](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
-* 功能定制：Tel:18761717855或扫描下方二维码联系
+* 功能定制或代理授权咨询：Tel:18761717855或扫描下方二维码联系
 
    ![微信](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%BE%AE%E4%BF%A1.png)
 
@@ -66,53 +66,15 @@
 ![业务流程](https://gitee.com/haioucloud/erp/raw/master/raw/OMS%20Flow.JPG)
 
 ### 管理模块
-* 报表管理 
-   * 销售报表
-   * 采购报表
-   * 库存报表
-   * 批次报表
-   * 收支统计
-   * 利润统计
-* 基础数据 
-   * 客户
-   * 供应商
-   * 仓库
-   * 结算账户
-   * 收支项目
-* 产品管理
-   * 产品分类
-   * 产品信息
-* 采购管理
-   * 采购开单
-   * 采购退货
-   * 采购记录
-   * 采购价变更记录
-* 销售管理
-   * 销售开单
-   * 销售退货
-   * 销售记录
-   * 销售任务
-* 库存管理
-   * 入库
-   * 出库
-   * 盘点
-   * 调拨
-   * 库存流水
-* 财务管理
-   * 销售收款
-   * 采购付款
-   * 日常收支
-   * 成本管理
-* 系统管理
-   * 角色权限
-   * 员工账号
-   * 配置管理
+![管理模块](https://gitee.com/haioucloud/erp/raw/master/raw/OMS%20Flow.JPG)
 
 ### 界面截图
 ![首页](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%A6%96%E9%A1%B5.png)
 ![报表](https://gitee.com/haioucloud/erp/raw/master/raw/%E6%8A%A5%E8%A1%A8.png)
 ![产品](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%95%86%E5%93%81.png)
 ![采购](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
+![销售](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
+![生产](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
 ![库存](https://gitee.com/haioucloud/erp/raw/master/raw/%E5%BA%93%E5%AD%98.png)
 ![财务](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%B4%A2%E5%8A%A1.png)
 ![设置](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%AE%BE%E7%BD%AE.png)
