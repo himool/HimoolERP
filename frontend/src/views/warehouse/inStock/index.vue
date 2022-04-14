@@ -22,7 +22,7 @@
         tabList: [
           {
             key: 'inStockOrder',
-            tab: '待入库通知单',
+            tab: '入库通知单',
           },
           {
             key: 'inStockRecord',
