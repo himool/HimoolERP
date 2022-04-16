@@ -19,10 +19,11 @@ class InventoryOptionFilter(FilterSet):
     warehouse = NumberFilter(field_name='warehouse', required=True, label='仓库')
     category = NumberFilter(field_name='goods__category', label='产品分类')
     is_active = BooleanFilter(field_name='goods__is_active', label='产品激活状态')
+    goods_number = CharFilter(field_name='goods__number', label='产品编号')
 
     class Meta:
         model = Inventory
-        fields = ['warehouse', 'category', 'is_active', 'has_stock']
+        fields = ['warehouse', 'category', 'is_active', 'has_stock', 'goods_number']
 
 
 # Purchase

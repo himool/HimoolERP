@@ -117,6 +117,7 @@ class InventoryOptionViewSet(LimitedOptionViewSet):
     serializer_class = InventoryOptionSerializer
     permission_classes = [IsAuthenticated, InventoryOptionPermission]
     filterset_class = InventoryOptionFilter
+    search_fields = ['goods__name', 'goods__number']
     ordering_fields = ['id', 'total_quantity']
     ordering = ['id']
     select_related_fields = ['goods__unit']
