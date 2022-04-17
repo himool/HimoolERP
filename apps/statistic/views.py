@@ -387,6 +387,11 @@ class HomeOverviewViewSet(BaseViewSet, ListModelMixin):
         if result['inventory_warning_count'] is not None:
             data['inventory_warning_count'] = result['inventory_warning_count']
 
+        # 临期预警
+        # today = pendulum.today().add()
+        # queryset = Batch.objects.filter(team=self.team, has_stock=True, goods__enable_batch_control=True,
+        #                                 goods__is_active=True, goods__shelf_life_days__isnull=False)
+
         # 应收欠款
         queryset = Client.objects.filter(is_active=True, has_arrears=True, team=self.team)
         result = queryset.aggregate(arrears_receivable_amount=Sum('arrears_amount'))
