@@ -391,7 +391,7 @@ class HomeOverviewViewSet(BaseViewSet, ListModelMixin):
         today_date = pendulum.today().to_date_string()
         queryset = Batch.objects.filter(team=self.team, has_stock=True, goods__enable_batch_control=True,
                                         goods__is_active=True, production_date__isnull=False,
-                                        warning_date__gte=today_date, expiration_date__lte=today_date)
+                                        warning_date__lte=today_date, expiration_date__gte=today_date)
         result = queryset.aggregate(expiration_warning_count=Count('id'))
         if result['expiration_warning_count'] is not None:
             data['expiration_warning_count'] = result['expiration_warning_count']
