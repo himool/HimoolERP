@@ -15,7 +15,7 @@ class BatchFilter(FilterSet):
     def is_warning_period_filter(self, queryset, name, value):
         if value:
             today_date = pendulum.today().to_date_string()
-            return queryset.filter(warning_date__gte=today_date, expiration_date__lte=today_date)
+            return queryset.filter(warning_date__lte=today_date, expiration_date__gte=today_date)
         return queryset
 
     def is_expiration_filter(self, queryset, name, value):
