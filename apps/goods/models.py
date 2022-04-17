@@ -97,6 +97,7 @@ class Batch(Model):
     remain_quantity = FloatField(verbose_name='批次剩余数量')
     production_date = DateField(null=True, verbose_name='生产日期')
     shelf_life_days = IntegerField(null=True, verbose_name='保质期天数')
+    warning_date = DateField(null=True, verbose_name='预警日期')
     expiration_date = DateField(null=True, verbose_name='过期日期')
     has_stock = BooleanField(default=True, verbose_name='库存状态')
     create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')

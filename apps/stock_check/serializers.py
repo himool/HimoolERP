@@ -155,16 +155,20 @@ class StockCheckOrderSerializer(BaseSerializer):
                     if not batch:
                         production_date = stock_check_batch_item.get('production_date')
                         expiration_date = None
+                        warning_date = None
+
                         if production_date and goods.shelf_life_days:
                             expiration_date = pendulum.parse(str(production_date)) \
                                 .add(days=goods.shelf_life_days).to_date_string()
+                            warning_date = pendulum.parse(str(production_date)) \
+                                .add(days=goods.shelf_life_days - goods.shelf_life_warning_days).to_date_string()
 
                         inventory = Inventory.objects.get(warehouse=warehouse, goods=goods, team=self.team)
                         batch = Batch.objects.create(
                             number=batch_number, inventory=inventory, warehouse=warehouse, goods=goods,
                             total_quantity=0, remain_quantity=0, production_date=production_date,
                             shelf_life_days=goods.shelf_life_days, expiration_date=expiration_date,
-                            has_stock=False, team=self.team
+                            warning_date=warning_date, has_stock=False, team=self.team
                         )
 
                     book_quantity = batch.remain_quantity

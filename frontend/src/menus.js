@@ -22,6 +22,7 @@ export default [
       { key: '/goods/classification', name: '产品分类' },
       { key: '/goods/unit', name: '产品单位' },
       { key: '/goods/information', name: '产品信息' },
+      { key: '/goods/temporary_warning', name: '临期预警' },
     ]
   },
   {

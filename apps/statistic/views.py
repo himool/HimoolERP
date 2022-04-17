@@ -388,9 +388,13 @@ class HomeOverviewViewSet(BaseViewSet, ListModelMixin):
             data['inventory_warning_count'] = result['inventory_warning_count']
 
         # 临期预警
-        # today = pendulum.today().add()
-        # queryset = Batch.objects.filter(team=self.team, has_stock=True, goods__enable_batch_control=True,
-        #                                 goods__is_active=True, goods__shelf_life_days__isnull=False)
+        today_date = pendulum.today().to_date_string()
+        queryset = Batch.objects.filter(team=self.team, has_stock=True, goods__enable_batch_control=True,
+                                        goods__is_active=True, today_date__isnull=False,
+                                        warning_date__gte=today_date, expiration_date__lte=today_date)
+        result = queryset.aggregate(expiration_warning_count=Count('id'))
+        if result['expiration_warning_count'] is not None:
+            data['expiration_warning_count'] = result['expiration_warning_count']
 
         # 应收欠款
         queryset = Client.objects.filter(is_active=True, has_arrears=True, team=self.team)

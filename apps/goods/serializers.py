@@ -152,9 +152,13 @@ class GoodsSerializer(BaseSerializer):
                             batch_initial_quantity = batch_item.get('initial_quantity', 0)
                             production_date = batch_item.get('production_date')
                             expiration_date = None
+                            warning_date = None
+
                             if production_date and goods.shelf_life_days:
                                 expiration_date = pendulum.parse(str(production_date)) \
                                     .add(days=goods.shelf_life_days).to_date_string()
+                                warning_date = pendulum.parse(str(production_date)) \
+                                    .add(days=goods.shelf_life_days - goods.shelf_life_warning_days).to_date_string()
 
                             has_stock = batch_initial_quantity > 0
                             batchs.append(Batch(
@@ -162,7 +166,7 @@ class GoodsSerializer(BaseSerializer):
                                 goods=goods, initial_quantity=batch_initial_quantity,
                                 total_quantity=batch_initial_quantity, remain_quantity=batch_initial_quantity,
                                 production_date=production_date, shelf_life_days=goods.shelf_life_days,
-                                expiration_date=expiration_date, has_stock=has_stock, team=self.team
+                                expiration_date=expiration_date, warning_date=warning_date, has_stock=has_stock, team=self.team
                             ))
 
                             total_initial_quantity = NP.plus(total_initial_quantity, batch_initial_quantity)
@@ -222,9 +226,13 @@ class GoodsSerializer(BaseSerializer):
                             batch_initial_quantity = batch_item.get('initial_quantity', 0)
                             production_date = batch_item.get('production_date')
                             expiration_date = None
+                            warning_date = None
+
                             if production_date and goods.shelf_life_days:
                                 expiration_date = pendulum.parse(str(production_date)) \
                                     .add(days=goods.shelf_life_days).to_date_string()
+                                warning_date = pendulum.parse(str(production_date)) \
+                                    .add(days=goods.shelf_life_days - goods.shelf_life_warning_days).to_date_string()
 
                             if batch_id := batch_item.get('id'):
                                 batch = Batch.objects.filter(id=batch_id, warehouse=warehouse,
@@ -241,6 +249,7 @@ class GoodsSerializer(BaseSerializer):
                                 batch.remain_quantity = NP.plus(batch.remain_quantity, batch.initial_quantity)
                                 batch.production_date = production_date
                                 batch.expiration_date = expiration_date
+                                batch.warning_date = warning_date
                                 batch.has_stock = batch.total_quantity > 0
 
                                 update_batchs.append(batch)
@@ -284,7 +293,7 @@ class GoodsSerializer(BaseSerializer):
             Batch.objects.bulk_create(create_batchs)
             Batch.objects.bulk_update(update_batchs,
                                       ['number', 'initial_quantity', 'total_quantity', 'remain_quantity',
-                                       'production_date', 'expiration_date', 'has_stock'])
+                                       'production_date', 'expiration_date', 'warning_date', 'has_stock'])
 
         return goods
 
@@ -343,7 +352,8 @@ class BatchSerializer(BaseSerializer):
         model = Batch
         fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'goods', 'goods_number',
                   'goods_name', 'goods_barcode', 'total_quantity', 'remain_quantity', 'unit_name',
-                  'production_date', 'shelf_life_days', 'expiration_date', 'has_stock', 'create_time']
+                  'production_date', 'shelf_life_days', 'expiration_date', 'warning_date', 'has_stock',
+                  'warning_date', 'create_time']
 
 
 class InventorySerializer(BaseSerializer):

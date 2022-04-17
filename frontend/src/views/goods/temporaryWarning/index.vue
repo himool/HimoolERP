@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card title="批次报表">
+    <a-card title="临期预警">
       <a-row gutter="16">
         <a-col :span="24" :md="6" :xl="4" style="max-width: 256px; margin-bottom: 12px;">
           <a-input-search v-model="searchForm.search" placeholder="产品编号/名称" allowClear @search="search" />
@@ -9,12 +9,6 @@
           <a-select v-model="searchForm.warehouse" placeholder="仓库" allowClear style="width: 100%;" @change="search">
             <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
             </a-select-option>
-          </a-select>
-        </a-col>
-        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
-          <a-select v-model="searchForm.has_stock" placeholder="库存状态" allowClear style="width: 100%;" @change="search">
-            <a-select-option  :value="true">有库存</a-select-option>
-            <a-select-option  :value="false">无库存</a-select-option>
           </a-select>
         </a-col>
       </a-row>
@@ -67,8 +61,16 @@ export default {
           dataIndex: "total_quantity",
         },
         {
-          title: "批次剩余数量",
+          title: "剩余数量",
           dataIndex: "remain_quantity",
+        },
+        {
+          title: "生产日期",
+          dataIndex: "production_date",
+        },
+        {
+          title: "到期日期",
+          dataIndex: "expiration_date",
         },
         {
           title: "产品编号",
@@ -87,15 +89,8 @@ export default {
           title: "仓库编号",
           dataIndex: "warehouse_number",
         },
-        {
-          title: "库存状态",
-          dataIndex: "has_stock",
-          customRender: (value, item, index) => {
-            return item.has_stock ? '有' : '无'
-          },
-        },
       ],
-      searchForm: { search: "", page: 1, page_size: 15 },
+      searchForm: { search: "", page: 1, page_size: 15, has_stock: true, is_warning_period: true },
       pagination: { current: 1, total: 0, pageSize: 15 },
       loading: false,
       items: [],

@@ -263,7 +263,7 @@ class BatchViewSet(BaseViewSet, ReadOnlyMixin):
 
     serializer_class = BatchSerializer
     permission_classes = [IsAuthenticated, BatchPermission]
-    filterset_fields = ['number', 'warehouse', 'goods', 'has_stock']
+    filterset_class = BatchFilter
     search_fields = ['number', 'goods__number', 'goods__name']
     ordering_fields = ['id', 'number', 'total_quantity', 'remain_quantity', 'production_date',
                        'expiration_date', 'create_time']

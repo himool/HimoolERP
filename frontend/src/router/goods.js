@@ -18,6 +18,11 @@ export default {
       path: 'information',
       meta: { title: '产品信息', permission: 'information' },
       component: () => import('@/views/goods/information/index'),
-    }
+    },
+    {
+      path: 'temporary_warning',
+      meta: { title: '临期预警', permission: 'temporary_warning' },
+      component: () => import('@/views/goods/temporaryWarning/index'),
+    },
   ],
 }

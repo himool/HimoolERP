@@ -148,12 +148,15 @@ class StockInRecordSerializer(BaseSerializer):
 
             production_date = None
             expiration_date = None
+            warning_date = None
             batch = None
             if goods.enable_batch_control:
                 production_date = stock_in_record_goods_item['batch']['production_date']
                 if production_date and goods.shelf_life_days:
                     expiration_date = pendulum.parse(str(production_date)).add(days=goods.shelf_life_days)
                     expiration_date = expiration_date.to_date_string()
+                    warning_date = pendulum.parse(str(production_date)) \
+                        .add(days=goods.shelf_life_days - goods.shelf_life_warning_days).to_date_string()
 
                 # 同步批次
                 batch_number = stock_in_record_goods_item['batch']['number']
@@ -170,7 +173,7 @@ class StockInRecordSerializer(BaseSerializer):
                         number=batch_number, inventory=inventory, warehouse=stock_in_record.warehouse,
                         goods=goods, total_quantity=stock_in_quantity, remain_quantity=stock_in_quantity,
                         production_date=production_date, shelf_life_days=goods.shelf_life_days,
-                        expiration_date=expiration_date, team=self.team
+                        expiration_date=expiration_date, warning_date=warning_date, team=self.team
                     )
 
             stock_in_record_goods_set.append(StockInRecordGoods(
