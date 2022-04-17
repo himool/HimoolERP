@@ -88,7 +88,7 @@ class BatchOptionSerializer(ModelSerializer):
 
     class Meta:
         model = Batch
-        fields = ['id', 'number', 'remain_quantity', 'unit_name', 'production_date', 'expiration_date']
+        fields = ['id', 'number', 'goods', 'remain_quantity', 'unit_name', 'production_date', 'expiration_date']
 
 
 class InventoryOptionSerializer(ModelSerializer):
