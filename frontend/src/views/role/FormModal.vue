@@ -77,8 +77,12 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             this.loading = true;
+
+            let dataForm = {...this.form};
+            dataForm.permissions = dataForm.permissions.map(value => typeof value === 'number');
+
             let func = this.form.id ? roleUpdate : roleCreate;
-            func(this.form).then(data => {
+            func(dataForm).then(data => {
               this.$message.success(this.form.id ? '修改成功' : '新增成功');
               this.$emit(this.form.id ? 'update' : 'create', data);
               this.cancel();
