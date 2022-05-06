@@ -28,8 +28,8 @@ class PurchaseOrder(Model):
 
     @classmethod
     def get_number(cls, team):
-        start_date, end_date = pendulum.today(), pendulum.tomorrow()
-        instance = cls.objects.filter(team=team, create_time__gte=start_date.format('YYYY-MM-DD HH:mm:ss'), create_time__lt=end_date.format('YYYY-MM-DD HH:mm:ss')).last()
+        start_date, end_date = pendulum.today().to_date_string(), pendulum.tomorrow().to_date_string()
+        instance = cls.objects.filter(team=team, create_time__gte=start_date, create_time__lt=end_date).last()
 
         try:
             result = re.match('^(.*?)([1-9]+)$', instance.number)
