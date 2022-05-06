@@ -79,9 +79,10 @@
             this.loading = true;
 
             let permissions = [];
-          for (let value of this.form.permissions) {
-            if (typeof value == "number") {
-              permissions.push(value);
+            for (let value of this.form.permissions) {
+              if (typeof value == "number") {
+                permissions.push(value);
+              }
             }
       
             let func = this.form.id ? roleUpdate : roleCreate;
