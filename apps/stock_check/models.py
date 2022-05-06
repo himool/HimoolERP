@@ -17,7 +17,7 @@ class StockCheckOrder(Model):
                            related_name='stock_check_orders', verbose_name='仓库')
     handler = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='stock_check_orders', verbose_name='经手人')
-    handle_time = DateTimeField(verbose_name='处理时间')
+    handle_time = DateField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     status = CharField(max_length=32, choices=Status.choices, null=True, verbose_name='盘点状态')
     total_book_quantity = FloatField(null=True, verbose_name='账面总数量')

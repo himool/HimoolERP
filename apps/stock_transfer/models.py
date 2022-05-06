@@ -12,7 +12,7 @@ class StockTransferOrder(Model):
                                        related_name='in_stock_transfer_orders', verbose_name='入库仓库')
     handler = ForeignKey('system.User', on_delete=PROTECT,
                          related_name='stock_transfer_orders', verbose_name='经手人')
-    handle_time = DateTimeField(verbose_name='处理时间')
+    handle_time = DateField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_quantity = FloatField(null=True, verbose_name='调拨总数量')
     is_void = BooleanField(default=False, verbose_name='作废状态')

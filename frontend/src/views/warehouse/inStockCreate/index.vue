@@ -37,7 +37,7 @@
               </a-col>
               <a-col :span="6" style="width: 320px;">
                 <a-form-model-item prop="handle_time" label="处理日期">
-                  <a-date-picker v-model="form.handle_time" valueFormat="YYYY-MM-DD hh:mm:ss" style="width: 100%" />
+                  <a-date-picker v-model="form.handle_time" valueFormat="YYYY-MM-DD" style="width: 100%" />
                 </a-form-model-item>
                 </a-col>
               <a-col :span="6" style="width: 320px;">

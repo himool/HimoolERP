@@ -8,7 +8,7 @@ class PaymentOrder(Model):
     number = CharField(max_length=32, verbose_name='编号')
     supplier = ForeignKey('data.Supplier', on_delete=PROTECT, related_name='payment_orders', verbose_name='供应商')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='payment_orders', verbose_name='经手人')
-    handle_time = DateTimeField(verbose_name='处理时间')
+    handle_time = DateField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_amount = AmountField(null=True, verbose_name='总金额')
     discount_amount = AmountField(default=0, verbose_name='优惠金额')
@@ -54,7 +54,7 @@ class CollectionOrder(Model):
     number = CharField(max_length=32, verbose_name='编号')
     client = ForeignKey('data.Client', on_delete=PROTECT, related_name='collection_orders', verbose_name='客户')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='collection_orders', verbose_name='经手人')
-    handle_time = DateTimeField(verbose_name='处理时间')
+    handle_time = DateField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     total_amount = AmountField(null=True, verbose_name='总金额')
     discount_amount = AmountField(default=0, verbose_name='优惠金额')
@@ -110,7 +110,7 @@ class ChargeOrder(Model):
     client = ForeignKey('data.Client', on_delete=PROTECT, null=True,
                         related_name='charge_orders', verbose_name='客户')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='charge_orders', verbose_name='经手人')
-    handle_time = DateTimeField(verbose_name='处理时间')
+    handle_time = DateField(verbose_name='处理时间')
     charge_item = ForeignKey('data.ChargeItem', on_delete=SET_NULL, null=True,
                              related_name='charge_orders', verbose_name='收支项目')
     charge_item_name = CharField(max_length=64, verbose_name='收支项目名称')
@@ -161,7 +161,7 @@ class AccountTransferRecord(Model):
     service_charge_payer = CharField(max_length=32, choices=ServiceChargePayer.choices,
                                      default=ServiceChargePayer.TRANSFER_OUT, verbose_name='手续费支付方')
     handler = ForeignKey('system.User', on_delete=PROTECT, related_name='account_transfer_records', verbose_name='经手人')
-    handle_time = DateTimeField(verbose_name='处理时间')
+    handle_time = DateField(verbose_name='处理时间')
     remark = CharField(max_length=256, null=True, blank=True, verbose_name='备注')
     is_void = BooleanField(default=False, verbose_name='作废状态')
     creator = ForeignKey('system.User', on_delete=PROTECT,
