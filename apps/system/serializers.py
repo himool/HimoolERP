@@ -80,7 +80,7 @@ class UserSerializer(BaseSerializer):
         return instances
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['username'])
+        validated_data['password'] = make_password('123456')
         return super().create(validated_data)
 
     def save(self, **kwargs):

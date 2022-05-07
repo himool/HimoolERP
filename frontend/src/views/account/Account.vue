@@ -33,10 +33,10 @@
           <div slot="action" slot-scope="value, item">
             <a-button-group>
               <a-button icon="edit" size="small" @click="targetItem = {...item}; visible = true;">编辑</a-button>
-              <a-popconfirm title="确定重置吗" @confirm="resetPassword(item.id)">
+              <a-popconfirm title="确定重置吗? 密码: 123456" @confirm="resetPassword(item.id)">
                 <a-button size="small" type="primary" icon="sync">重置密码</a-button>
               </a-popconfirm>
-              <a-popconfirm title="确定删除吗" @confirm="destroy(item.id)">
+              <a-popconfirm title="确定删除吗?" @confirm="destroy(item.id)">
                 <a-button type="danger" icon="delete" size="small">删除</a-button>
               </a-popconfirm>
             </a-button-group>

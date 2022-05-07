@@ -111,7 +111,7 @@ class UserViewSet(ModelViewSet):
         """重置密码"""
 
         instance = self.get_object()
-        instance.password = make_password(self.user.username)
+        instance.password = make_password('123456')
         instance.save(update_fields=['password'])
 
         return Response(status=status.HTTP_200_OK)

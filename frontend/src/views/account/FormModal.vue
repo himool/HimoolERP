@@ -38,6 +38,10 @@
             </a-select>
           </a-form-model-item>
         </a-form-model>
+
+        <div style="color: rgb(255, 77, 79); text-align: center;">
+          默认初始密码为: 123456, 登录后请修改密码
+        </div>
       </div>
     </a-modal>
   </div>
