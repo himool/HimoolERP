@@ -1,7 +1,18 @@
 from rest_framework.permissions import BasePermission
 from extensions.exceptions import ValidationError
 from apps.system.models import User
+from apps.manage.models import SuperUser
 import pendulum
+
+
+class IsSuperUser(BasePermission):
+    message = '未登陆验证'
+
+    def has_permission(self, request, view):
+        if not isinstance(request.user, SuperUser):
+            return False
+
+        return True
 
 
 class IsAuthenticated(BasePermission):
@@ -69,6 +80,6 @@ class DataPermission:
 
 
 __all__ = [
-    'IsAuthenticated', 'IsManagerPermission',
+    'IsSuperUser', 'IsAuthenticated', 'IsManagerPermission',
     'ModelPermission', 'FunctionPermission', 'DataPermission',
 ]

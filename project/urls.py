@@ -46,4 +46,5 @@ urlpatterns = [
     path('api/', include('apps.statistic.urls')),
     path('api/', include('apps.message.urls')),
     path('api/', include('apps.option.urls')),
+    path('admin/', include('apps.manage.urls')),
 ]

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.statistic',
     'apps.message',
     'apps.option',
+    'apps.manage',
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'manage.SuperUser'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -143,7 +146,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_AUTHENTICATION_CLASSES': ['extensions.authentications.BaseAuthentication'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'extensions.authentications.BaseAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -161,7 +168,11 @@ SIMPLE_JWT = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Project API',
-    'SERVE_AUTHENTICATION': ['extensions.authentications.BaseAuthentication'],
+    'SERVE_AUTHENTICATION': [
+        'extensions.authentications.BaseAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
 }
 
 # Debug Toolbar
