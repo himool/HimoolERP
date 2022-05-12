@@ -20,8 +20,6 @@
 </template>
 
 <script>
-  import { permissions } from '@/permissions'
-  // import { configList } from '@/api/system'
   import { getInfo } from '@/api/user'
   import Cookies from 'js-cookie';
 
@@ -48,16 +46,6 @@
     computed: {
       username() {
         return this.$store.state.user.username
-      },
-      isManager() {
-        return this.$store.state.user.isManager
-      },
-      permissions() {
-        return this.$store.state.user.permissions
-      },
-      havePermisssion() {
-        let permission = this.$route.meta.permission;
-        return this.isManager || !(permissions[permission] && this.permissions.indexOf(permission) == -1);
       },
     },
     methods: {

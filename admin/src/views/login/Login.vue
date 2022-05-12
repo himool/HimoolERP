@@ -2,9 +2,6 @@
   <div>
     <div>
       <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 5 }" :wrapper-col="{ span: 14 }">
-        <a-form-model-item prop="number" label="公司编号">
-          <a-input size="large" v-model="form.number" />
-        </a-form-model-item>
         <a-form-model-item prop="username" label="用户名">
           <a-input size="large" v-model="form.username" />
         </a-form-model-item>
@@ -33,7 +30,7 @@
 </template>
 
 <script>
-  import { getToken } from '@/api/user';
+  import { superUserLogin } from '@/api/manage';
   import Cookies from 'js-cookie';
 
   export default {
@@ -43,14 +40,10 @@
         wechatCustomerService: require('@/assets/wechat_customer_service.png'),
         isLoading: false,
         form: {
-          number: '',
           username: '',
           password: '',
         },
         rules: {
-          number: [
-            { required: true, message: '请输入公司编号', trigger: 'change' },
-          ],
           username: [
             { required: true, message: '请输入用户名', trigger: 'change' },
           ],
@@ -74,9 +67,7 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             this.isLoading = true;
-            getToken(this.form).then(data => {
-              Cookies.set('access', data.access);
-              Cookies.set('refresh', data.refresh);
+            superUserLogin(this.form).then(data => {
               this.$router.push('/home');
             }).finally(() => {
               this.isLoading = false;

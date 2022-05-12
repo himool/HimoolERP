@@ -9,7 +9,7 @@ const LOGIN_PATH = '/user/login';
 let requestQueue = [], isRefreshing = false;
 
 const instance = axios.create({
-  baseURL: '/api/',
+  baseURL: '/admin/',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });

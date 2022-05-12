@@ -39,6 +39,14 @@ class SuperUserActionViewSet(ViewSet):
         auth.logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(responses={200: SuperUserInfoResponse})
+    @action(detail=False, methods=['get'], permission_classes=[IsSuperUser])
+    def info(self, request, *args, **kwargs):
+        """用户信息"""
+
+        serializer = SuperUserInfoResponse(instance=self.user)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class TeamViewSet(ModelViewSet):
     serializer_class = TeamSerializer
