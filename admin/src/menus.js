@@ -1,11 +1,11 @@
 export default [
   {
-    key: "1",
+    key: "team",
     name: "账户管理",
     icon: "line-chart",
   },
   {
-    key: "2",
+    key: "device",
     name: "设备管理",
     icon: "line-chart",
   },

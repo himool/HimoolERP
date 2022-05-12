@@ -10,7 +10,7 @@ class TeamSerializer(ModelSerializer):
 
     class Meta:
         model = Team
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'create_time']
         fields = ['number', 'expiry_time', 'user_quantity', *read_only_fields]
 
     def validate_number(self, value):

@@ -64,7 +64,7 @@ class TeamViewSet(ModelViewSet):
     queryset = Team.objects.all()
 
     def get_serializer_class(self):
-        if self.method == 'POST':
+        if self.METHOD == 'POST':
             return TeamCreateSerializer
         return super().get_serializer_class()
 

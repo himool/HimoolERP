@@ -11,8 +11,7 @@
         </a-layout-header>
 
         <a-layout-content>
-          <router-view v-if="havePermisssion && isRouterAlive" style="padding: 8px;" />
-          <a-result v-else status="403" title="403" sub-title="抱歉，您无权访问此页面" style="margin-top: 36px;" />
+          <router-view v-if="isRouterAlive" style="padding: 8px;" />
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -20,89 +19,60 @@
 </template>
 
 <script>
-  import { superUserInfo } from '@/api/manage'
-  import Cookies from 'js-cookie';
+import { superUserInfo } from "@/api/manage";
 
-  export default {
-    name: 'BaseLayout',
-    components: {
-      Headbar: () => import('@/components/Headbar/Headbar'),
-      Sidebar: () => import('@/components/Sidebar/Sidebar'),
-    },
-    provide() {
-      return {
-        reloadPage: () => {
-          return this.reloadPage()
-        },
-      }
-    },
-    data() {
-      return {
-        isLogin: false,
-        collapsed: false,
-        isRouterAlive: true,
-        username: '222',
-      };
-    },
-    // computed: {
-    //   username() {
-    //     return this.$store.state.user.username
-    //   },
-    // },
-    methods: {
-      initialize() {
-        if (!Cookies.get('access') || !Cookies.get('refresh')) {
-          return this.$router.push('/user/login');
-        }
-
-        superUserInfo().then(response => {
-          this.isLogin = true;
-          this.username = response.data.username;
-          // this.getConfig();
-          // this.$store.commit('setUser', data);
-
-          // // 库存预警
-          // if (data.inventory_warnning_count > 0) {
-          //   this.$notification.warning({
-          //     message: '库存预警',
-          //     remark: `您有 ${resp.data.inventory_warnning_count} 个产品超出库存设定范围`,
-          //   })
-          // }
-        });
+export default {
+  name: "BaseLayout",
+  components: {
+    Headbar: () => import("@/components/Headbar/Headbar"),
+    Sidebar: () => import("@/components/Sidebar/Sidebar"),
+  },
+  provide() {
+    return {
+      reloadPage: () => {
+        return this.reloadPage();
       },
-      getConfig() {
-        // configList()
-        //   .then(resp => {
-        //     this.$store.commit('setConfig', resp.data);
-        //   })
-        //   .catch(err => {
-        //     this.$message.error(err.response.data.error);
-        //   });
-      },
-      toggleCollapsed() {
-        this.collapsed = !this.collapsed;
-      },
-      reloadPage() {
-        this.isRouterAlive = false;
-        this.$nextTick(() => this.isRouterAlive = true);
-      },
+    };
+  },
+  data() {
+    return {
+      isLogin: false,
+      collapsed: false,
+      isRouterAlive: true,
+      username: "222",
+    };
+  },
+  methods: {
+    initialize() {
+      superUserInfo().then((response) => {
+        this.isLogin = true;
+        this.username = response.data.username;
+      });
     },
-    mounted() {
-      this.initialize();
+    toggleCollapsed() {
+      this.collapsed = !this.collapsed;
     },
-  }
+    reloadPage() {
+      this.isRouterAlive = false;
+      this.$nextTick(() => (this.isRouterAlive = true));
+    },
+  },
+  mounted() {
+    this.initialize();
+  },
+};
 </script>
 
 <style scoped>
-  .headbar {
-    background: #fff;
-    padding: 0;
-    box-shadow: 0px 1px 10px #7774;
-  }
+.headbar {
+  background: #fff;
+  padding: 0;
+  box-shadow: 0px 1px 10px #7774;
+}
 
-  .sidebar {
-    background: #fff;
-    overflow: auto;
-    box-shadow: 1px 0px 10px #7774;
-  }
+.sidebar {
+  background: #fff;
+  overflow: auto;
+  box-shadow: 1px 0px 10px #7774;
+}
 </style>

@@ -9,7 +9,6 @@ export function getCSRFToken(data) {
   });
 }
 
-
 // SuperUSer
 export function superUserLogin(data) {
   return axios({

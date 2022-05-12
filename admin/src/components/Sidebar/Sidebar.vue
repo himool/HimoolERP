@@ -5,7 +5,7 @@
       <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px;">海鸥云</span>
       <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px; font-size: 18px;">ERP</span>
     </div>
-    <a-menu theme="light" mode="inline" :selectedKeys="selectedKeys" :openKeys="openKeys" :inline-collapsed="collapsed"
+    <a-menu theme="light" mode="inline" :selectedKeys="selectedKeys" :inline-collapsed="collapsed"
       :style="{width: collapsed ? '80px' : '256px'}" @click="switchView" @openChange="openChange">
       <a-menu-item v-for="menu in menus" :key="menu.key">
         <a-icon type="home" /><span>{{menu.name}}</span>
@@ -43,16 +43,16 @@
       return {
         menus,
         openKeys: [],
-        selectedKeys: [],
+        selectedKeys: ['team'],
         logo: require('@/assets/logo.png'),
         // wechatCustomerService: require('@/assets/wechat_customer_service.png'),
         // wechatExchange: require('@/assets/wechat_exchange.png'),
       };
     },
     methods: {
-      // initialize() {
-      //   this.changeRoute(this.$route.path);
-      // },
+      initialize() {
+        this.changeRoute(this.$route.path);
+      },
       switchView(item) {
         if (this.$route.path !== item.key) {
           this.$router.push(item.key);
@@ -61,24 +61,24 @@
       openChange(openKeys) {
         this.openKeys = [openKeys[openKeys.length - 1]];
       },
-      // changeRoute(path) {
-      //   this.selectedKeys = [path];
-      //   for (let m of menus) {
-      //     if (m.submenus.findIndex(item => item.key == path) != -1) {
-      //       this.openKeys = [m.key];
-      //       return
-      //     }
-      //   }
-      // },
+      changeRoute(path) {
+        this.selectedKeys = [path];
+        // for (let m of menus) {
+        //   if (m.submenus.findIndex(item => item.key == path) != -1) {
+        //     this.openKeys = [m.key];
+        //     return
+        //   }
+        // }
+      },
     },
     watch: {
       $route(to) {
         this.changeRoute(to.path);
       },
     },
-    // created() {
-    //   this.initialize();
-    // },
+    created() {
+      this.initialize();
+    },
   }
 </script>
 

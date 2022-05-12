@@ -8,6 +8,7 @@
 
 <script>
 import { getCSRFToken } from "@/api/manage";
+import Cookies from "js-cookie";
 
 export default {
   name: "App",
@@ -21,6 +22,7 @@ export default {
     initData() {
       getCSRFToken().then((data) => {
         this.loading = false;
+        Cookies.set()
       });
     },
   },
