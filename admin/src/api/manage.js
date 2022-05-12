@@ -4,7 +4,7 @@ import axios from "axios";
 // SuperUSer
 export function superUserLogin(data) {
   return axios({
-    url: "/admin/super_user/login/",
+    url: "/api/super_user/login/",
     headers: { "X-CSRFToken": Cookies.get("csrftoken") },
     method: "post",
     data,
@@ -13,7 +13,7 @@ export function superUserLogin(data) {
 
 export function superUserLogout(data) {
   return axios({
-    url: "/admin/super_user/logout/",
+    url: "/api/super_user/logout/",
     headers: { "X-CSRFToken": Cookies.get("csrftoken") },
     method: "post",
     data,
@@ -22,7 +22,7 @@ export function superUserLogout(data) {
 
 export function superUserInfo(params) {
   return axios({
-    url: "/admin/super_user/info/",
+    url: "/api/super_user/info/",
     headers: { "X-CSRFToken": Cookies.get("csrftoken") },
     method: "get",
     params,
