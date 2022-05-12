@@ -3,6 +3,7 @@ from extensions.common.schema import *
 from extensions.common.base import *
 from extensions.permissions import *
 from extensions.exceptions import *
+from extensions.paginations import *
 from apps.manage.serializers import *
 from apps.manage.schemas import *
 from apps.manage.models import *
@@ -58,6 +59,7 @@ class SuperUserActionViewSet(ViewSet):
 
 class TeamViewSet(ModelViewSet):
     serializer_class = TeamSerializer
+    pagination_class = LimitedPagination
     permission_classes = [IsSuperUser]
     search_fields = ['number']
     ordering_fields = ['id', 'number', 'expiry_time', 'create_time']
