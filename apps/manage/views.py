@@ -1,4 +1,4 @@
-from rest_framework.viewsets import ViewSet, ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ViewSet, ModelViewSet
 from extensions.common.schema import *
 from extensions.common.base import *
 from extensions.permissions import *
@@ -8,15 +8,21 @@ from apps.manage.schemas import *
 from apps.manage.models import *
 from apps.system.models import *
 from django.contrib import auth
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 
 
 class SuperUserActionViewSet(ViewSet):
     """管理员操作"""
 
+    @extend_schema(responses={200: CSRFTokenResponse})
+    @action(detail=False, methods=['post'])
+    def get_csrf_token(self, request, *args, **kwargs):
+        """获取csrf令牌"""
+
+        return Response({'token': get_token(request)})
+
     @extend_schema(request=LoginRequest, responses={204: None})
     @action(detail=False, methods=['post'])
-    @ensure_csrf_cookie
     def login(self, request, *args, **kwargs):
         """登录"""
 
@@ -43,7 +49,6 @@ class SuperUserActionViewSet(ViewSet):
 
     @extend_schema(responses={200: SuperUserInfoResponse})
     @action(detail=False, methods=['get'], permission_classes=[IsSuperUser])
-    @ensure_csrf_cookie
     def info(self, request, *args, **kwargs):
         """用户信息"""
 

@@ -1,6 +1,15 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 
+export function getCSRFToken(data) {
+  return axios({
+    url: "/api/super_user/get_csrf_token/",
+    method: "get",
+    data,
+  });
+}
+
+
 // SuperUSer
 export function superUserLogin(data) {
   return axios({
