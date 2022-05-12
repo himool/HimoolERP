@@ -1,4 +1,4 @@
-from rest_framework.viewsets import ViewSet, ModelViewSet
+from rest_framework.viewsets import ViewSet, ModelViewSet, GenericViewSet
 from extensions.common.schema import *
 from extensions.common.base import *
 from extensions.permissions import *
@@ -43,8 +43,9 @@ class SuperUserActionViewSet(ViewSet):
     @action(detail=False, methods=['get'], permission_classes=[IsSuperUser])
     def info(self, request, *args, **kwargs):
         """用户信息"""
+        
 
-        serializer = SuperUserInfoResponse(instance=self.user)
+        serializer = SuperUserInfoResponse(instance=request.user)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 

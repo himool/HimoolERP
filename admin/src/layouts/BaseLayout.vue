@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import { getInfo } from '@/api/user'
+  import { superUserInfo } from '@/api/manage'
   import Cookies from 'js-cookie';
 
   export default {
@@ -54,7 +54,7 @@
           return this.$router.push('/user/login');
         }
 
-        getInfo().then(data => {
+        superUserInfo().then(data => {
           this.isLogin = true;
           // this.getConfig();
           this.$store.commit('setUser', data);
