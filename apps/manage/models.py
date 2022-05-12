@@ -3,10 +3,15 @@ from extensions.models import *
 
 
 class SuperUser(AbstractBaseUser):
+
+    class Manager(BaseUserManager):
+        def create_superuser(self, username, password=None, **extra_fields):
+            return self._create_user(username, password, **extra_fields)
+
     username = CharField(max_length=32, unique=True, verbose_name='用户名')
 
     USERNAME_FIELD = 'username'
-    objects = BaseUserManager()
+    objects = Manager()
 
 
 class Device(Model):
