@@ -1,12 +1,13 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.hashers import make_password
 from extensions.models import *
 
 
 class SuperUser(AbstractBaseUser):
 
     class Manager(BaseUserManager):
-        def create_superuser(self, username, password=None, **extra_fields):
-            return self._create_user(username, password, **extra_fields)
+        def create_superuser(self, username, password):
+            return SuperUser.objects.create(username=username, password=make_password(password))
 
     username = CharField(max_length=32, unique=True, verbose_name='用户名')
 
