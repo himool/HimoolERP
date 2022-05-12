@@ -15,7 +15,7 @@ class SuperUserActionViewSet(ViewSet):
     """管理员操作"""
 
     @extend_schema(responses={200: CSRFTokenResponse})
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['get'])
     def get_csrf_token(self, request, *args, **kwargs):
         """获取csrf令牌"""
 
