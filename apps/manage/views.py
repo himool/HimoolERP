@@ -8,6 +8,7 @@ from apps.manage.schemas import *
 from apps.manage.models import *
 from apps.system.models import *
 from django.contrib import auth
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 class SuperUserActionViewSet(ViewSet):
@@ -41,6 +42,7 @@ class SuperUserActionViewSet(ViewSet):
 
     @extend_schema(responses={200: SuperUserInfoResponse})
     @action(detail=False, methods=['get'], permission_classes=[IsSuperUser])
+    @ensure_csrf_cookie
     def info(self, request, *args, **kwargs):
         """用户信息"""
 
