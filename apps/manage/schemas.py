@@ -9,7 +9,6 @@ class LoginRequest(Serializer):
 class SuperUserInfoResponse(Serializer):
     id = IntegerField(label='用户ID')
     username = CharField(label='用户名')
-    name = CharField(label='名称')
 
 
 __all__ = [
