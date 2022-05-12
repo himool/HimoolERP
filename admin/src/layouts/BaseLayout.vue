@@ -41,23 +41,25 @@
         isLogin: false,
         collapsed: false,
         isRouterAlive: true,
+        username: '222',
       };
     },
-    computed: {
-      username() {
-        return this.$store.state.user.username
-      },
-    },
+    // computed: {
+    //   username() {
+    //     return this.$store.state.user.username
+    //   },
+    // },
     methods: {
       initialize() {
         if (!Cookies.get('access') || !Cookies.get('refresh')) {
           return this.$router.push('/user/login');
         }
 
-        superUserInfo().then(data => {
+        superUserInfo().then(response => {
           this.isLogin = true;
+          this.username = response.data.username;
           // this.getConfig();
-          this.$store.commit('setUser', data);
+          // this.$store.commit('setUser', data);
 
           // // 库存预警
           // if (data.inventory_warnning_count > 0) {

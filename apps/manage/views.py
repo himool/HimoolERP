@@ -31,7 +31,7 @@ class SuperUserActionViewSet(ViewSet):
         auth.login(request, super_user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @extend_schema(request=None, responses={204: None})
+    @extend_schema(responses={204: None})
     @action(detail=False, methods=['post'])
     def logout(self, request, *args, **kwargs):
         """登出"""
@@ -43,7 +43,6 @@ class SuperUserActionViewSet(ViewSet):
     @action(detail=False, methods=['get'], permission_classes=[IsSuperUser])
     def info(self, request, *args, **kwargs):
         """用户信息"""
-        
 
         serializer = SuperUserInfoResponse(instance=request.user)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

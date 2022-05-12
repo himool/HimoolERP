@@ -7,15 +7,15 @@
     </div>
     <a-menu theme="light" mode="inline" :selectedKeys="selectedKeys" :openKeys="openKeys" :inline-collapsed="collapsed"
       :style="{width: collapsed ? '80px' : '256px'}" @click="switchView" @openChange="openChange">
-      <a-menu-item key="/home">
-        <a-icon type="home" /><span>首页</span>
+      <a-menu-item v-for="menu in menus" :key="menu.key">
+        <a-icon type="home" /><span>{{menu.name}}</span>
       </a-menu-item>
-
+<!-- 
       <a-sub-menu v-for="menu in menus" :key="menu.key">
         <span slot="title">
           <a-icon :type="menu.icon" /><span>{{menu.name}}</span></span>
         <a-menu-item v-for="submenu of menu.submenus" :key="submenu.key">{{submenu.name}}</a-menu-item>
-      </a-sub-menu>
+      </a-sub-menu> -->
     </a-menu>
 
     <!-- <div style="position: fixed; bottom: 0;">
@@ -50,9 +50,9 @@
       };
     },
     methods: {
-      initialize() {
-        this.changeRoute(this.$route.path);
-      },
+      // initialize() {
+      //   this.changeRoute(this.$route.path);
+      // },
       switchView(item) {
         if (this.$route.path !== item.key) {
           this.$router.push(item.key);
@@ -61,24 +61,24 @@
       openChange(openKeys) {
         this.openKeys = [openKeys[openKeys.length - 1]];
       },
-      changeRoute(path) {
-        this.selectedKeys = [path];
-        for (let m of menus) {
-          if (m.submenus.findIndex(item => item.key == path) != -1) {
-            this.openKeys = [m.key];
-            return
-          }
-        }
-      },
+      // changeRoute(path) {
+      //   this.selectedKeys = [path];
+      //   for (let m of menus) {
+      //     if (m.submenus.findIndex(item => item.key == path) != -1) {
+      //       this.openKeys = [m.key];
+      //       return
+      //     }
+      //   }
+      // },
     },
     watch: {
       $route(to) {
         this.changeRoute(to.path);
       },
     },
-    created() {
-      this.initialize();
-    },
+    // created() {
+    //   this.initialize();
+    // },
   }
 </script>
 

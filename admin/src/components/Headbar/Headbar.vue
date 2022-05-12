@@ -22,10 +22,10 @@
           <a-icon type="down" />
         </span>
         <a-menu slot="overlay">
-          <a-menu-item @click="$router.push('/user/set_password')">
+          <!-- <a-menu-item @click="$router.push('/user/set_password')">
             <span>修改密码</span>
           </a-menu-item>
-          <a-menu-divider />
+          <a-menu-divider /> -->
           <a-menu-item @click="logout">
             <span>退出登录</span>
           </a-menu-item>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  // import { warehouseOption } from '@/api/option';
+  import { superUserLogout } from '@/api/manage';
   import Cookies from 'js-cookie';
 
   export default {
@@ -57,9 +57,11 @@
         // });
       },
       logout() {
-        Cookies.remove('access');
-        Cookies.remove('refresh');
-        this.$router.push('/user/login');
+        superUserLogout().then(() => {
+          this.$router.push('/user/login');
+        })
+        Cookies.remove('sessionid');
+        Cookies.remove('csrftoken');
       },
       onChangeWarehouse(item) {
         this.currentWarehouse = item.name;
