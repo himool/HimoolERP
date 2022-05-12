@@ -3,7 +3,7 @@ from extensions.models import *
 
 
 class SuperUser(AbstractBaseUser):
-    username = CharField(max_length=32, verbose_name='用户名')
+    username = CharField(max_length=32, unique=True, verbose_name='用户名')
 
     USERNAME_FIELD = 'username'
     objects = BaseUserManager()
@@ -17,9 +17,6 @@ class Device(Model):
     model = CharField(max_length=64, null=True, blank=True, verbose_name='型号')
     serial_number = CharField(max_length=256, null=True, blank=True, verbose_name='序列号')
     account_ownership = CharField(max_length=256, null=True, blank=True, verbose_name='账号归属')
-
-    class Meta:
-        unique_together = [('number', 'team')]
 
 
 __all__ = [
