@@ -43,7 +43,7 @@
       return {
         menus,
         openKeys: [],
-        selectedKeys: ['team'],
+        selectedKeys: [],
         logo: require('@/assets/logo.png'),
         // wechatCustomerService: require('@/assets/wechat_customer_service.png'),
         // wechatExchange: require('@/assets/wechat_exchange.png'),
@@ -62,6 +62,7 @@
         this.openKeys = [openKeys[openKeys.length - 1]];
       },
       changeRoute(path) {
+        console.log(path)
         this.selectedKeys = [path];
         // for (let m of menus) {
         //   if (m.submenus.findIndex(item => item.key == path) != -1) {

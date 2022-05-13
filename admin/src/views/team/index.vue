@@ -10,7 +10,7 @@
         </a-col>
 
         <div style="margin-bottom: 12px; float: right;">
-          <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="openFormModal(form)">新增账户</a-button>
+          <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="openFormModal({})">新增账户</a-button>
         </div>
       </a-row>
 
@@ -41,7 +41,6 @@
     <form-modal
       v-model="visible"
       :form="targetItem"
-      :clientsClassificationOptions="clientsClassificationItems"
       @create="create"
       @update="update"
     />
@@ -110,9 +109,9 @@ export default {
     list() {
       this.loading = true;
       teamList(this.searchForm)
-        .then((data) => {
-          this.pagination.total = data.count;
-          this.items = data.results;
+        .then((response) => {
+          this.pagination.total = response.data.count;
+          this.items = response.data.results;
         })
         .finally(() => {
           this.loading = false;
@@ -133,14 +132,7 @@ export default {
       this.list();
     },
     openFormModal(item) {
-      if (!item.id) {
-        getClientNumber().then((data) => {
-          this.targetItem = { ...item, ...{ number: data.number } };
-        });
-      } else {
-        this.targetItem = { ...item };
-      }
-
+      this.targetItem = { ...item };
       this.visible = true;
     },
     destroy(id) {
@@ -152,42 +144,6 @@ export default {
 
         this.$message.success("删除成功");
       });
-    },
-    exportExcel() {
-      clientExport(this.searchForm)
-        .then((resp) => {
-          exportExcel(resp.data, "客户列表");
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data.error);
-        });
-    },
-    downloadTemplate() {
-      clientTemplate()
-        .then((resp) => {
-          exportExcel(resp.data, "客户导入模板");
-        })
-        .catch((err) => {
-          this.$message.error(err.response.data.error);
-        });
-    },
-    importExcel(item) {
-      let data = new FormData();
-      data.append("file", item.file);
-      this.importLoading = true;
-      setTimeout(() => {
-        clientImport(data)
-          .then(() => {
-            this.$message.success("导入成功");
-            this.list();
-          })
-          .catch((err) => {
-            this.$message.error(err.response.data.detail);
-          })
-          .finally(() => {
-            this.importLoading = false;
-          });
-      }, 1000);
     },
     tableChange(pagination, filters, sorter) {
       this.searchForm.page = pagination.current;
