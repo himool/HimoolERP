@@ -32,6 +32,10 @@ class TeamCreateSerializer(ModelSerializer):
         if Team.objects.filter(number=value).exists():
             raise ValidationError(f'公司编号[{value}]已存在')
         return value
+    
+    def save(self, **kwargs):
+        print('save')
+        return super().save(**kwargs)
 
     @transaction.atomic
     def create(self, validated_data):
