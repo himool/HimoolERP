@@ -60,6 +60,9 @@ export default {
               this.$emit(this.form.id ? "update" : "create", data);
               this.cancel();
             })
+            .catch((error) => {
+              this.$message.error(error.response.data.detial);
+            })
             .finally(() => {
               this.loading = false;
             });

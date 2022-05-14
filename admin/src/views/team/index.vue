@@ -121,10 +121,7 @@ export default {
       this.items.splice(0, 0, item);
     },
     update(item) {
-      let index = this.items.findIndex((_item) => _item.id == item.id);
-      if (index !== -1) {
-        this.items.splice(index, 1, item);
-      }
+      this.list();
     },
     search() {
       this.searchForm.page = 1;

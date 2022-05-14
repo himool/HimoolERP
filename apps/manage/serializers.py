@@ -29,10 +29,6 @@ class DeviceSerializer(ModelSerializer):
         read_only_fields = ['id']
         fields = ['number', 'name', 'model', 'serial_number', 'account_ownership', *read_only_fields]
 
-    def validate_number(self, value):
-        self.validate_unique({'number': value}, message=f'编号[{value}]已存在')
-        return value
-
 
 __all__ = [
     'TeamSerializer', 'DeviceSerializer',
