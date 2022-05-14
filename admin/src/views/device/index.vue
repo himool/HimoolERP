@@ -97,6 +97,7 @@
       list() {
         this.loading = true;
         deviceList(this.searchForm).then(response => {
+          console.log(response);
           this.pagination.total = response.data.count;
           this.items = response.data.results;
         }).finally(() => {

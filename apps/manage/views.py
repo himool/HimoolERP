@@ -87,6 +87,7 @@ class TeamViewSet(ModelViewSet):
 
 class DeviceViewSet(ModelViewSet):
     serializer_class = DeviceSerializer
+    pagination_class = LimitedPagination
     permission_classes = [IsSuperUser]
     search_fields = ['number', 'name', 'serial_number']
     ordering_fields = ['id', 'number', 'name', 'serial_number']
