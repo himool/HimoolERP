@@ -77,7 +77,7 @@ class TeamViewSet(ModelViewSet):
         password = make_password(password)
         name = validated_data['name']
 
-        team = super().perform_create(serializer)
+        team = serializer.save()
         User.objects.create(username=username, password=password, name=name, is_manager=True, team=team)
 
     @extend_schema(request=TeamCreateRequest, responses={200: TeamSerializer})
