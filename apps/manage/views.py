@@ -10,6 +10,7 @@ from apps.manage.models import *
 from apps.system.models import *
 from django.contrib import auth
 from django.middleware.csrf import get_token
+from django.contrib.auth.hashers import make_password
 
 
 class SuperUserActionViewSet(ViewSet):
@@ -65,10 +66,23 @@ class TeamViewSet(ModelViewSet):
     ordering_fields = ['id', 'number', 'expiry_time', 'create_time']
     queryset = Team.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return TeamCreateSerializer
-        return super().get_serializer_class()
+    @transaction.atomic
+    def perform_create(self, serializer):
+        team_serializer = TeamCreateRequest(data=self.request.data)
+        team_serializer.is_valid(raise_exception=True)
+
+        validated_data = team_serializer.validated_data
+        username = validated_data['username']
+        password = validated_data['password']
+        password = make_password(password)
+        name = validated_data['name']
+
+        team = super().perform_create(serializer)
+        User.objects.create(username=username, password=password, name=name, is_manager=True, team=team)
+
+    @extend_schema(request=TeamCreateRequest, responses={200: TeamSerializer})
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 
 class DeviceViewSet(ModelViewSet):
