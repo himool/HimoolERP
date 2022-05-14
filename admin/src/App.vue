@@ -15,15 +15,15 @@ export default {
   data() {
     return {
       locales: window.antd.locales,
-      loading: true,
+      loading: false,
     };
   },
   methods: {
     initData() {
-      getCSRFToken().then((data) => {
-        this.loading = false;
-        Cookies.set()
-      });
+      // getCSRFToken().then((data) => {
+      //   this.loading = false;
+      //   Cookies.set()
+      // });
     },
   },
   mounted() {
