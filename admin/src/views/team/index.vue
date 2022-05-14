@@ -118,7 +118,7 @@ export default {
         });
     },
     create(item) {
-      this.items.splice(0, 0, item);
+      this.list();
     },
     update(item) {
       this.list();
