@@ -13,6 +13,7 @@ class TeamSerializer(ModelSerializer):
         fields = ['number', 'expiry_time', 'user_quantity', *read_only_fields]
 
     def validate_number(self, value):
+        print(value)
         if Team.objects.filter(number=value).exists():
             raise ValidationError(f'公司编号[{value}]已存在')
         return value
