@@ -44,10 +44,17 @@ export default {
   },
   methods: {
     initialize() {
-      superUserInfo().then((response) => {
-        this.isLogin = true;
-        this.username = response.data.username;
-      });
+      superUserInfo()
+        .then((response) => {
+          this.isLogin = true;
+          this.username = response.data.username;
+        })
+        .catch((error) => {
+          console.log(error.response)
+          if (error.response.status == 401) {
+            this.$router.push('/user/login');
+          }
+        });
     },
     toggleCollapsed() {
       this.collapsed = !this.collapsed;
