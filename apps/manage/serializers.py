@@ -39,7 +39,7 @@ class TeamCreateSerializer(ModelSerializer):
         password = validated_data.pop('password')
         password = make_password(password)
         name = validated_data.pop('name')
-
+        print(validated_data)
         team = super().create(validated_data)
         User.objects.create(username=username, password=password, name=name, is_manager=True, team=team)
 
