@@ -96,19 +96,18 @@
       },
       list() {
         this.loading = true;
-        deviceList(this.searchForm).then(data => {
-          this.pagination.total = data.count;
-          this.items = data.results;
+        deviceList(this.searchForm).then(response => {
+          this.pagination.total = response.data.count;
+          this.items = response.data.results;
         }).finally(() => {
           this.loading = false;
         });
       },
       create(item) {
-        // this.items.splice(0, 0, item);
         this.list();
       },
       update(item) {
-        this.items.splice(this.items.findIndex(i => i.id == item.id), 1, item);
+        this.list();
       },
       search() {
         this.searchForm.page = 1;
