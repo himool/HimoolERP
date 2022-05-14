@@ -80,6 +80,9 @@ class UserSerializer(BaseSerializer):
         return instances
 
     def create(self, validated_data):
+        if self.team.users.count() >= self.team.user_quantity:
+            raise ValidationError('用户数量达到上限, 无法创建用户')
+
         validated_data['password'] = make_password('123456')
         return super().create(validated_data)
 
