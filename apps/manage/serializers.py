@@ -29,7 +29,8 @@ class TeamCreateSerializer(ModelSerializer):
         fields = ['number', 'expiry_time', 'user_quantity', 'username', 'password', 'name', *read_only_fields]
 
     def validate_number(self, value):
-        self.validate_unique({'number': value}, message=f'公司编号[{value}]已存在')
+        if Team.objects.filter(number=value).exists():
+            raise ValidationError(f'公司编号[{value}]已存在')
         return value
 
     @transaction.atomic
