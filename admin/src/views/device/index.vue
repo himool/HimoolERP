@@ -57,19 +57,19 @@
           },
           {
             title: '名称',
-            dataIndex: 'namek'
+            dataIndex: 'name'
           },
           {
             title: '型号',
-            dataIndex: 'modelk'
+            dataIndex: 'model'
           },
           {
             title: '序列号',
-            dataIndex: 'serial_numberk'
+            dataIndex: 'serial_number'
           },
           {
             title: '账号归属',
-            dataIndex: 'account_ownershipk'
+            dataIndex: 'account_ownership'
           },
           {
             title: '操作',
