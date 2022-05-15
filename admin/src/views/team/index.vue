@@ -38,12 +38,7 @@
         </a-table>
       </a-row>
     </a-card>
-    <form-modal
-      v-model="visible"
-      :form="targetItem"
-      @create="create"
-      @update="update"
-    />
+    <form-modal v-model="visible" :form="targetItem" @create="create" @update="update" />
     <a-modal v-model="importLoading" :footer="null" :maskClosable="false" :closable="false">
       <div><a-spin style="margin-right: 12px;" />正在导入中, 请等待...</div>
     </a-modal>
@@ -85,6 +80,10 @@ export default {
         {
           title: "创建时间",
           dataIndex: "create_time",
+        },
+        {
+          title: "备注",
+          dataIndex: "remark",
         },
         {
           title: "操作",

@@ -20,6 +20,7 @@
 
 <script>
 import { superUserInfo } from "@/api/manage";
+import moment from "moment";
 
 export default {
   name: "BaseLayout",
@@ -48,11 +49,23 @@ export default {
         .then((response) => {
           this.isLogin = true;
           this.username = response.data.username;
+          if (response.data.warning_list && response.data.warning_list.length > 0) {
+            for (let item of response.data.warning_list) {
+              let diffDay = moment(item.expiry_time).diff(moment(), "day");
+              setTimeout(() => {
+                this.$notification.warning({
+                  message: `到期提醒: ${item.number}`,
+                  description: `到期: ${moment(item.expiry_time).format("YYYY-MM-DD HH:mm:ss")}, 剩余: ${diffDay}天`,
+                  duration: 0,
+                });
+              }, 500);
+            }
+          }
         })
         .catch((error) => {
-          console.log(error.response)
+          console.log(error.response);
           if (error.response.status == 401) {
-            this.$router.push('/user/login');
+            this.$router.push("/user/login");
           }
         });
     },

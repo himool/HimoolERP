@@ -69,7 +69,7 @@ class TeamViewSet(ModelViewSet):
     serializer_class = TeamSerializer
     pagination_class = LimitedPagination
     permission_classes = [IsSuperUser]
-    search_fields = ['number']
+    search_fields = ['number', 'remark']
     ordering_fields = ['id', 'number', 'expiry_time', 'create_time']
     queryset = Team.objects.all()
 
