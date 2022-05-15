@@ -54,8 +54,15 @@ class SuperUserActionViewSet(ViewSet):
     def info(self, request, *args, **kwargs):
         """用户信息"""
 
+        warning_date = pendulum.today().add(days=30).to_datetime_string()
+        results = Team.objects.filter(expiry_time__lte=warning_date).values('number', 'expiry_time',
+                                                                            'create_time', 'remark')
+
         serializer = SuperUserInfoResponse(instance=request.user)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        data = serializer.data
+        data['warning_list'] = results
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 class TeamViewSet(ModelViewSet):
