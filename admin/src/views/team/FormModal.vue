@@ -10,7 +10,7 @@
           <a-form-model-item prop="expiry_time" label="到期时间">
             <a-date-picker v-model="form.expiry_time" showTime valueFormat="YYYY-MM-DD HH:mm:ss" style="width: 100%;" />
           </a-form-model-item>
-          <a-form-model-item prop="user_quantity" label="用户数量">
+          <a-form-model-item prop="user_quantity" label="子账户数量">
             <a-input v-model="form.user_quantity" />
           </a-form-model-item>
           <a-form-model-item v-if="!form.id" prop="username" label="用户名">
@@ -19,8 +19,11 @@
           <a-form-model-item v-if="!form.id" prop="password" label="密码">
             <a-input v-model="form.password" />
           </a-form-model-item>
-          <a-form-model-item v-if="!form.id" prop="name" label="名称">
+          <a-form-model-item v-if="!form.id" prop="name" label="客户名称">
             <a-input v-model="form.name" />
+          </a-form-model-item>
+          <a-form-model-item prop="remark" label="备注">
+            <a-input v-model="form.remark" allowClear />
           </a-form-model-item>
         </a-form-model>
       </div>
