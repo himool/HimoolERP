@@ -11,7 +11,7 @@ module.exports = {
       'axios': 'axios',
       'vue': 'Vue',
       'moment': 'moment',
-      'number-precision': 'NP',
+      // 'number-precision': 'NP',
       'vuex': 'Vuex',
     },
     plugins: [
