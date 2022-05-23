@@ -4,16 +4,6 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 module.exports = {
   assetsDir: 'static',
   configureWebpack: {
-    externals: {
-      'ant-design-vue': 'Antd',
-      'vue-router': 'VueRouter',
-      'js-cookie': 'Cookies',
-      'axios': 'axios',
-      'vue': 'Vue',
-      'moment': 'moment',
-      'number-precision': 'NP',
-      'vuex': 'Vuex',
-    },
     plugins: [
       new CompressionWebpackPlugin({
         algorithm: 'gzip',

@@ -24,7 +24,8 @@
     "viser-vue": "^2.4.8",
     "vue": "^2.6.11",
     "vue-print-nb": "^1.7.5",
-    "vue-router": "^3.4.3"
+    "vue-router": "^3.4.3",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
