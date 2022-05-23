@@ -1,33 +1,20 @@
 <template>
   <div id="app">
-    <a-config-provider v-if="!loading" :locale="locales.zh_CN">
+    <a-config-provider :locale="zh_CN">
       <router-view />
     </a-config-provider>
   </div>
 </template>
 
 <script>
-import { getCSRFToken } from "@/api/manage";
-import Cookies from "js-cookie";
+import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
 
 export default {
   name: "App",
   data() {
     return {
-      locales: window.antd.locales,
-      loading: false,
+      zh_CN,
     };
-  },
-  methods: {
-    initData() {
-      // getCSRFToken().then((data) => {
-      //   this.loading = false;
-      //   Cookies.set()
-      // });
-    },
-  },
-  mounted() {
-    this.initData();
   },
 };
 </script>

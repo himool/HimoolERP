@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import router from "./router";
 import store from "./store";
 import App from "./App.vue";
-import Vuex from "vuex";
 import Vue from "vue";
 import Viser from "viser-vue";
 import Antd from "ant-design-vue/es";
