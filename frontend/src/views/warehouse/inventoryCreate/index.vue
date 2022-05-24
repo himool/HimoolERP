@@ -130,6 +130,7 @@
   import { getStockCheckOrderNumber } from '@/api/data'
   import { stockCheckCreate } from '@/api/warehouse';
   import { userOption, warehousesOption, inventoriesOption, batchsOption } from '@/api/option'
+  import NP from 'number-precision'
 
   export default {
     components: {

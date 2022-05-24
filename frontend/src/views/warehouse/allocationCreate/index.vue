@@ -95,6 +95,7 @@
   import { getStockTransferOrderNumber } from '@/api/data'
   import { stockTransferCreate } from '@/api/warehouse';
   import { userOption, warehousesOption, inventoriesOption, batchsOption } from '@/api/option'
+  import NP from 'number-precision'
 
   export default {
     components: {

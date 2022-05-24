@@ -188,6 +188,7 @@ import moment from "moment";
 import { getSaleOrderNumber } from "@/api/data";
 import { saleOrderCreate } from "@/api/sale";
 import { userOption, clientsOption, warehousesOption, inventoriesOption, accountsOption } from "@/api/option";
+import NP from 'number-precision'
 
 export default {
   components: {

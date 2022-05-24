@@ -186,6 +186,7 @@ import moment from "moment";
 import { getPurchaseOrderNumber } from "@/api/data";
 import { purchaseOrderCreate } from "@/api/purchasing";
 import { suppliersOption, userOption, warehousesOption, inventoriesOption, accountsOption } from "@/api/option";
+import NP from 'number-precision'
 
 export default {
   components: {

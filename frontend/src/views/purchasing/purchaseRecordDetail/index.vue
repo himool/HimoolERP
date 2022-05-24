@@ -52,6 +52,7 @@
 <script>
   import { purchaseOrderDetail } from '@/api/purchasing'
   import JsBarcode from 'jsbarcode'
+  import NP from 'number-precision'
 
 export default {
     data() {

@@ -93,6 +93,7 @@
   import { getCollectionOrderNumber} from '@/api/data'
   import { collectionOrderCreate } from '@/api/finance';
   import { clientArrearsOption, userOption, accountsOption } from '@/api/option'
+  import NP from 'number-precision'
 
   export default {
     components: {

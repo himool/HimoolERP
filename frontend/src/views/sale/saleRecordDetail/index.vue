@@ -55,6 +55,7 @@
 <script>
   import { saleOrderDetail } from '@/api/sale'
   import JsBarcode from 'jsbarcode'
+  import NP from 'number-precision'
 
 export default {
     data() {
