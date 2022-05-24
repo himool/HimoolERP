@@ -93,6 +93,7 @@
   import { getPaymentOrderNumber } from '@/api/data'
   import { paymentOrderCreate } from '@/api/finance';
   import { supplierArrearsOption, userOption, accountsOption } from '@/api/option'
+  import NP from 'number-precision'
 
   export default {
     components: {

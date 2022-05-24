@@ -42,6 +42,7 @@
 <script>
   import { collectioOrderDetail } from '@/api/finance'
   import JsBarcode from 'jsbarcode'
+  import NP from 'number-precision'
 
   export default {
     data() {

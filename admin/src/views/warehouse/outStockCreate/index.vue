@@ -79,6 +79,7 @@
 <script>
   import { userOption, warehousesOption, batchsOption } from '@/api/option'
   import { stockOutOrderDetail, stockOutCreate } from '@/api/warehouse'
+  import NP from 'number-precision'
 
   export default {
     data() {

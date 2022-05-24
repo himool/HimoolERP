@@ -195,6 +195,7 @@
   import { getSaleReturnOrderNumber } from '@/api/data'
   import { saleReturnOrderCreate } from '@/api/sale';
   import { userOption, clientsOption, warehousesOption, inventoriesOption, accountsOption, saleOrdersOption } from '@/api/option'
+  import NP from 'number-precision'
 
   export default {
     components: {

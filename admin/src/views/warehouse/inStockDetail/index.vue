@@ -45,6 +45,7 @@
 <script>
   import { stockInOrderDetail } from '@/api/warehouse'
   import JsBarcode from 'jsbarcode'
+  import NP from 'number-precision'
 
   export default {
     data() {
