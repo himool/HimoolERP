@@ -331,21 +331,6 @@
           number: [
             { required: true, message: "请输入产品编号", trigger: "change" },
           ],
-          purchase_price: [
-            { required: true, message: "请输入采购价", trigger: "change" },
-          ],
-          retail_price: [
-            { required: true, message: "请输入零售价", trigger: "change" },
-          ],
-          level_price1: [
-            { required: true, message: "请输入等级价一", trigger: "change" },
-          ],
-          level_price2: [
-            { required: true, message: "请输入等级价二", trigger: "change" },
-          ],
-          level_price3: [
-            { required: true, message: "请输入等级价三", trigger: "change" },
-          ],
         },
         previewVisible: false,
         previewImage: "",
