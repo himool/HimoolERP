@@ -90,8 +90,8 @@ export default {
           dataIndex: "warehouse_number",
         },
       ],
-      searchForm: { search: "", page: 1, page_size: 15, has_stock: true, is_expiration_warning: true },
-      pagination: { current: 1, total: 0, pageSize: 15 },
+      searchForm: { search: "", page: 1, page_size: 16, has_stock: true, is_expiration_warning: true },
+      pagination: { current: 1, total: 0, pageSize: 16 },
       loading: false,
       items: [],
     };

@@ -70,8 +70,8 @@
       return {
         columns,
         permissions,
-        searchForm: { search: '', page: 1, ordering: undefined, page_size: 15 },
-        pagination: { current: 1, total: 0, pageSize: 15 },
+        searchForm: { search: '', page: 1, ordering: undefined, page_size: 16 },
+        pagination: { current: 1, total: 0, pageSize: 16 },
         loading: false,
         items: [],
         roleItems: [],

@@ -105,7 +105,7 @@
         this.$refs.form.resetFields();
         this.items = [];
         this.searchForm = { search: '', page: 1, ordering: undefined, page_size: 10 };
-        this.pagination = { current: 1, total: 0, pageSize: 15 };
+        this.pagination = { current: 1, total: 0, pageSize: 16 };
       },
       validateQuantity(rule, value, callback) {
         return value > 0 ? callback() : callback(new Error('产品数量需要大于0'))

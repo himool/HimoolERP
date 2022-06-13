@@ -30,7 +30,7 @@
     data() {
       return {
         items: [],
-        searchForm: { search: '', page: 1, page_size: 15 },
+        searchForm: { search: '', page: 1, page_size: 16 },
         totalRows: 0,
         loading: false,
         timeout: null,

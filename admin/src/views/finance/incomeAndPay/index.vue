@@ -103,8 +103,8 @@
             width: '156px'
           },
         ],
-        searchForm: { search: '', page: 1, page_size: 15 },
-        pagination: { current: 1, total: 0, pageSize: 15 },
+        searchForm: { search: '', page: 1, page_size: 16 },
+        pagination: { current: 1, total: 0, pageSize: 16 },
         loading: false,
         items: [],
         clientsItems: [],

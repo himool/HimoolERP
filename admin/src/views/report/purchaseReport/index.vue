@@ -75,7 +75,7 @@
           dateRange: [moment().startOf('day'), moment().startOf('day')],
           category: null,
           page: 1,
-          page_size: 15
+          page_size: 16
         },
         loading: true,
         categoryItems: [],
@@ -85,7 +85,7 @@
           amount: 0,
         },
         items: [],
-        pagination: { current: 1, total: 0, pageSize: 15 },
+        pagination: { current: 1, total: 0, pageSize: 16 },
       };
     },
     computed: {
@@ -183,7 +183,7 @@
           dateRange: [moment().startOf('day'), moment().startOf('day')],
           category: null,
           page: 1,
-          page_size: 15
+          page_size: 16
         };
       },
     },
