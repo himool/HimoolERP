@@ -65,34 +65,34 @@
     进入 frontend 目录, npm run build
 
 ### 业务流程
-![业务流程](https://gitee.com/haioucloud/erp/raw/master/raw/ERP%20Workflow.png)
+![业务流程](https://gitee.com/haioucloud/erp/raw/master/img/ERP%20Workflow.png)
 
 ### 管理模块
-![管理模块](https://gitee.com/haioucloud/erp/raw/master/raw/ERP%E6%A8%A1%E5%9D%97.png)
+![管理模块](https://gitee.com/haioucloud/erp/raw/master/img/ERP%E6%A8%A1%E5%9D%97.png)
 
 ### PDA界面截图
 菜单
-![菜单](https://gitee.com/haioucloud/erp/blob/master/raw/%E8%8F%9C%E5%8D%95.png)
+![菜单](https://gitee.com/haioucloud/erp/raw/master/img/%E8%8F%9C%E5%8D%95.png)
 产品管理
-![产品管理](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86.png)
+![产品管理](https://gitee.com/haioucloud/erp/raw/master/img/%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86.png)
 入库操作
-![入库操作](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E5%85%A5%E5%BA%93%E6%93%8D%E4%BD%9C.png)
+![入库操作](https://gitee.com/haioucloud/erp/raw/master/img/%E5%85%A5%E5%BA%93%E6%93%8D%E4%BD%9C.png)
 出库操作
-![出库操作](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E5%87%BA%E5%BA%93%E6%93%8D%E4%BD%9C.png)
+![出库操作](https://gitee.com/haioucloud/erp/raw/master/img/%E5%87%BA%E5%BA%93%E6%93%8D%E4%BD%9C.png)
 盘点操作
-![盘点操作](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E7%9B%98%E7%82%B9%E6%93%8D%E4%BD%9C.png)
+![盘点操作](https://gitee.com/haioucloud/erp/raw/master/img/%E7%9B%98%E7%82%B9%E6%93%8D%E4%BD%9C.png)
 批次报表
-![批次报表](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E6%89%B9%E6%AC%A1%E6%8A%A5%E8%A1%A8.png)
+![批次报表](https://gitee.com/haioucloud/erp/raw/master/img/%E6%89%B9%E6%AC%A1%E6%8A%A5%E8%A1%A8.png)
 
 ### PC界面截图
 首页
-![首页](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%A6%96%E9%A1%B5.png)
+![首页](https://gitee.com/haioucloud/erp/raw/master/img/%E9%A6%96%E9%A1%B5.png)
 报表
-![报表](https://gitee.com/haioucloud/erp/raw/master/raw/%E6%8A%A5%E8%A1%A8.png)
+![报表](https://gitee.com/haioucloud/erp/raw/master/img/%E6%8A%A5%E8%A1%A8.png)
 产品
-![产品](https://gitee.com/haioucloud/erp/blob/master/raw/%E4%BA%A7%E5%93%81.png)
+![产品](https://gitee.com/haioucloud/erp/raw/master/img/%E4%BA%A7%E5%93%81.png)
 采购
-![采购](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
+![采购](https://gitee.com/haioucloud/erp/raw/master/img/%E9%87%87%E8%B4%AD.png)
 销售
 ![销售](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%94%80%E5%94%AE.png)
 生产
@@ -102,4 +102,4 @@
 财务
 ![财务](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%B4%A2%E5%8A%A1.png)
 设置
-![设置](https://gitee.com/haioucloud/erp/raw/master/raw/%E8%AE%BE%E7%BD%AE.png)
+![设置](https://gitee.com/haioucloud/erp/raw/master/img/%E8%AE%BE%E7%BD%AE.png)
