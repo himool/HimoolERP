@@ -90,7 +90,7 @@
 报表
 ![报表](https://gitee.com/haioucloud/erp/raw/master/raw/%E6%8A%A5%E8%A1%A8.png)
 产品
-![产品](https://gitee.com/haioucloud/erp/raw/master/raw/%E4%BA%A7%E5%93%81.png)
+![产品](https://github.com/haioucloud/ERP/blob/master/raw/%E4%BA%A7%E5%93%81.png)
 采购
 ![采购](https://gitee.com/haioucloud/erp/raw/master/raw/%E9%87%87%E8%B4%AD.png)
 销售
