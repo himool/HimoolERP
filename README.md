@@ -74,15 +74,15 @@
 菜单
 ![菜单](https://gitee.com/haioucloud/erp/blob/master/raw/%E8%8F%9C%E5%8D%95.png)
 产品管理
-![产品管理](https://gitee.com/haioucloud/erp/blob/master/raw/%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86.png)
+![产品管理](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E4%BA%A7%E5%93%81%E7%AE%A1%E7%90%86.png)
 入库操作
-![入库操作](https://gitee.com/haioucloud/erp/blob/master/raw/%E5%85%A5%E5%BA%93%E6%93%8D%E4%BD%9C.png)
+![入库操作](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E5%85%A5%E5%BA%93%E6%93%8D%E4%BD%9C.png)
 出库操作
-![出库操作](https://gitee.com/haioucloud/erp/blob/master/raw/%E5%87%BA%E5%BA%93%E6%93%8D%E4%BD%9C.png)
+![出库操作](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E5%87%BA%E5%BA%93%E6%93%8D%E4%BD%9C.png)
 盘点操作
-![盘点操作](https://gitee.com/haioucloud/erp/blob/master/raw/%E7%9B%98%E7%82%B9%E6%93%8D%E4%BD%9C.png)
+![盘点操作](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E7%9B%98%E7%82%B9%E6%93%8D%E4%BD%9C.png)
 批次报表
-![批次报表](https://gitee.com/haioucloud/erp/blob/master/raw/%E6%89%B9%E6%AC%A1%E6%8A%A5%E8%A1%A8.png)
+![批次报表](https://gitee.com/haioucloud/erp/blob/raw/master/raw/%E6%89%B9%E6%AC%A1%E6%8A%A5%E8%A1%A8.png)
 
 ### PC界面截图
 首页
