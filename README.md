@@ -87,7 +87,7 @@
 生产
 ![生产](https://gitee.com/haioucloud/erp/raw/master/img/%E7%94%9F%E4%BA%A7.png)
 库存
-![库存](https://gitee.com/haioucloud/erp/raw/master/img%E5%BA%93%E5%AD%98.png)
+![库存](https://gitee.com/haioucloud/erp/raw/master/img/%E5%BA%93%E5%AD%98.png)
 财务
 ![财务](https://gitee.com/haioucloud/erp/raw/master/img/%E8%B4%A2%E5%8A%A1.png)
 设置
