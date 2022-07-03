@@ -169,7 +169,7 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
         client.save(update_fields=['arrears_amount', 'has_arrears'])
 
         # 同步账户, 流水
-        if sales_order.payment_amount > 0:
+        if sales_order.collection_amount > 0:
             finance_flows = []
             for sales_account in sales_order.sales_accounts.all():
                 account = sales_account.account
