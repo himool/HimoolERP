@@ -80,7 +80,7 @@ class SalesOrderViewSet(BaseViewSet, ListModelMixin, RetrieveModelMixin, CreateM
 
         # 同步欠款
         client = sales_order.client
-        client.arrears_amount = NP.plus(client.arrears_amount, client.arrears_amount)
+        client.arrears_amount = NP.plus(client.arrears_amount, sales_order.arrears_amount)
         client.has_arrears = client.arrears_amount > 0
         client.save(update_fields=['arrears_amount', 'has_arrears'])
 
