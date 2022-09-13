@@ -151,7 +151,7 @@ class GoodsViewSet(ModelViewSet, ExportMixin, ImportMixin):
     ordering_fields = ['id', 'number', 'name']
     ordering = ['id']
     select_related_fields = ['category', 'unit']
-    prefetch_related_fields = ['inventories', 'inventories__batchs']
+    prefetch_related_fields = ['inventories', 'inventories__warehouse', 'inventories__batchs', 'goods_images']
     queryset = Goods.objects.all()
 
     @extend_schema(responses={200: NumberResponse})
