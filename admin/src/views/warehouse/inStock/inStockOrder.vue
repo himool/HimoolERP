@@ -16,7 +16,7 @@
           <div slot="action" slot-scope="value, item">
             <a-button-group size="small">
               <a-button size="small" @click="detial(item)">详情</a-button>
-              <a-button type="primary" size="small" @click="toStockIn(item)">入库</a-button>
+              <a-button :disabled="item.is_void" type="primary" size="small" @click="toStockIn(item)">入库</a-button>
             </a-button-group>
           </div>
         </a-table>
