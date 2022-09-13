@@ -88,6 +88,9 @@
             { required: true, message: '请输入应收/付金额', trigger: 'change' },
             { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: '应收/付金额格式不正确', trigger: 'change' }
           ],
+          charge_item: [
+            { required: true, message: '请选择收支项目', trigger: 'change' },
+          ],
           charge_amount: [
             { required: true, message: '请输入实收/付金额', trigger: 'change' },
             { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: '实收/付金额格式不正确', trigger: 'change' }
