@@ -13,8 +13,8 @@
             <a-descriptions-item label="销售单号">
               {{ info.sales_order }}
             </a-descriptions-item>
-            <a-descriptions-item label="供应商">
-              {{ info.supplier_name }}
+            <a-descriptions-item label="客户">
+              {{ info.client_name }}
             </a-descriptions-item>
             <a-descriptions-item label="仓库">
               {{ info.warehouse_name }}
