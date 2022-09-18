@@ -7,9 +7,9 @@
             @click="backIndex" />
         </div>
         <div class="title" style="margin: 0;">
-          <span style="cursor: pointer;" @click="backIndex">海鸥云</span>
+          <span style="cursor: pointer; font-size: 24px" @click="backIndex">Himool ERP</span>
         </div>
-        <div style="text-align: center; font-size: 16px; color: #666; margin-bottom: 24px;">ERP - 让企业管理更简单高效</div>
+        <div style="text-align: center; font-size: 16px; color: #666; margin-bottom: 24px;">让企业管理更简单高效</div>
       </div>
       <router-view />
     </a-card>
