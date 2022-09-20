@@ -9,7 +9,7 @@
           <span style="cursor: pointer; font-size: 24px" @click="backIndex">Himool ERP</span>
         </div>
         <div style="text-align: center; font-size: 16px; color: #1890ff; margin-top: 8px; margin-bottom: 24px">
-          <span>盒木企业管理系统</span>
+          <span>盒木进销存管理系统</span>
         </div>
       </div>
       <router-view />
