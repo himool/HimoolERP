@@ -23,9 +23,9 @@ export default [
   },
   {
     title: "状态",
-    dataIndex: "status",
-    key: "status",
-    scopedSlots: { customRender: "status" },
+    dataIndex: "is_active",
+    key: "is_active",
+    scopedSlots: { customRender: "is_active" },
   },
   {
     title: '角色',
