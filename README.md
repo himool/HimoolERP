@@ -1,4 +1,5 @@
-## 海鸥云ERP--开源ERP管理系统
+## Himool ERP--开源ERP管理系统
+
 ### 公司介绍
 盒木科技([官网地址](https://www.himool.com/home))专注于仓储物流和生产制造行业数字化系统的研发和实施。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布Himool WMS仓库管理系统，Himool WCS仓库控制系统,Himool MES制造执行系统，Himool ERP进销存管理系统及Himool AMS资产管理系统。欢迎合作伙伴，代理商或者客户微信扫描下方客户经理二维码或电话18761717855体验咨询。<br /><br />
 ![微信](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
