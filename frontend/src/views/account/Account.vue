@@ -15,7 +15,7 @@
       <a-row style="margin-top: 12px;">
         <a-table rowKey="id" size="small" :columns="columns" :dataSource="items" :loading="loading" :pagination="pagination"
           @change="tableChange">
-          <div slot="status" slot-scope="value">
+          <div slot="is_active" slot-scope="value">
             <template v-if="value">
               <a-badge status="success" />
               <span>启用</span>
