@@ -1,10 +1,20 @@
 <template>
   <view style="text-align: center;">
-    <view style="padding-top: 180rpx;">
+    <!--    <view style="padding-top: 180rpx;">
       <image src="../../static/images/logo.png" style="width: 180rpx; height: 180rpx;"></image>
     </view>
+ -->
 
-    <view style="width: 70%; margin: auto; padding-top: 80rpx;">
+    <view style="padding-top: 180rpx;">
+      <image src="../../static/images/logo.png" style="width: 160rpx; height: 160rpx;"></image>
+    </view>
+
+    <view style="color: rgb(24, 144, 255); margin-top: 24rpx;">
+      <view style="font-size: 52rpx; font-weight: 800;">Himool ERP</view>
+      <view style="font-size: 30rpx; margin-top: 8rpx;">盒木进销存管理系统</view>
+    </view>
+
+    <view style="width: 70%; margin: auto; padding-top: 10rpx;">
       <view class="form-input">
         <u--input v-model="form.number" placeholder="公司编号" border="none" prefixIcon="tags"
           prefixIconStyle="font-size: 24px; color: #3c9cffbb" fontSize="18px" clearable></u--input>
