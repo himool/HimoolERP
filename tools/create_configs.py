@@ -118,7 +118,7 @@ def create_gunicorn_config():
 import multiprocessing
 
 
-bind = '{bind_address}'
+bind = '0.0.0.0:{bind_address}'
 workers = multiprocessing.cpu_count() * 2 + 1
 reload = True
 daemon = True
