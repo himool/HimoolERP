@@ -1,14 +1,14 @@
 ## Himool ERP--开源ERP管理系统
 
 ### 公司介绍
-盒木科技([官网地址](https://www.himool.com/home))专注于仓储物流和生产制造行业数字化系统的研发和实施。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布Himool WMS仓库管理系统，Himool WCS仓库控制系统,Himool MES制造执行系统，Himool ERP进销存管理系统及Himool AMS资产管理系统。欢迎合作伙伴，代理商或者客户微信扫描下方客户经理二维码或电话18761717855体验咨询。<br /><br />
+盒木科技([官网地址](https://www.himool.com/home))专注于仓储物流和生产制造行业数字化系统的研发和实施。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[Himool WMS仓库管理系统](https://wms.himool.com)，[Himool WCS仓库控制系统](https://wcs.himool.com),[Himool MES制造执行系统](https://mes.himool.com)及[Himool ERP进销存管理系统](https://erp.himool.com)。欢迎合作伙伴，代理商或者客户微信扫描下方客户经理二维码或电话18761717855体验咨询。<br /><br />
 ![微信](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
 
 ### 项目介绍
 #### 开源ERP管理系统，该系统前后端分离，包含PDA移动端扫码操作，api使用restful协议，方便二次开发，后端使用Python，Django，DRF等技术，前端代码使用AntD进行构建，包含采购管理，销售管理，库存管理等业务管理流程。移动端使用Uniapp，包含产品标签打印，出入库扫码等功能。
 * Gitee地址: [Gitee](https://gitee.com/himool/erp)
 * Github地址: [Github](https://github.com/lianzhanshu/oms)
-* Demo地址: [Demo](http://114.218.158.78:12222/)
+* Demo地址: [Demo](https://erp.himool.com)
 
 ### 使用前须知
 * 软件开放源码(发行协议:GPL-3.0)，个人用户可免费学习使用，但禁止任何单位或个人修改软件后再次发行的行为。商业使用需得到我司授权，否则我们将通过法律途径解决侵权问题。
@@ -16,7 +16,7 @@
    ![微信群](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
 
 ### 项目背景
-#### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的Himool ERP系统，支持高自由度的开发，来支持企业的自定义需求。我们的代码将持续更新，并且保持与[Demo](http://114.218.158.78:12222/)地址的同步。
+#### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的Himool ERP系统，支持高自由度的开发，来支持企业的自定义需求。我们的代码将持续更新，并且保持与[Demo](https://erp.himool.com)地址的同步。
 
 ### 硬件要求及开发环境
 * 移动端打印功能需指定型号PDA，请联系作者购买
