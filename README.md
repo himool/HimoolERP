@@ -1,8 +1,9 @@
 ## Himool ERP--开源ERP管理系统
 
 ### 公司介绍
-盒木科技([官网地址](https://www.himool.com/home))专注于仓储物流和生产制造行业数字化系统的研发和实施。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[Himool WMS仓库管理系统](https://wms.himool.com)，[Himool WCS仓库控制系统](https://wcs.himool.com),[Himool MES制造执行系统](https://mes.himool.com)及[Himool ERP进销存管理系统](https://erp.himool.com)。欢迎合作伙伴，代理商或者客户微信扫描下方客户经理二维码或电话18761717855体验咨询。<br />
-#### 添加微信时请备注单位/个人+目的（如代理，公司需要或个人学习等），否则不予通过。<br /><br />
+盒木科技([官网地址](https://www.himool.com/home))是一家专注于仓储物流领域数字化的科技创新企业。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[Himool ERP进销存管理系统](https://erp.himool.com)及[Himool WMS仓库管理系统](https://wms.himool.com)。想要购买WMS的用户，可点击[该淘宝链接](https://item.taobao.com/item.htm?id=687009035041)进行购买。<br />
+目前盒木WMS及进销存在全国诚招代理，无论你是公司或者个人皆可代理，欢迎扫描下方客户经理二维码或电话18761717855咨询。<br />
+#### 添加微信时请备注单位/个人称呼+目的（如代理，商用或个人学习等），否则不予通过。<br /><br />
 ![微信](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
 
 ### 项目介绍
@@ -13,7 +14,7 @@
 
 ### 使用前须知
 * 软件开放源码(发行协议:GPL-3.0)，个人用户可免费学习使用，但禁止任何单位或个人修改软件后再次发行的行为。商业使用需得到我司授权，否则我们将通过法律途径解决侵权问题。
-* 我们欢迎对开源技术感兴趣的朋友一起加入到我们项目中来完善系统功能并为客户提供服务。欢迎扫描下方二维码添加技术交流群，添加时请备注来意
+* 我们欢迎对开源技术感兴趣的朋友一起加入到我们项目中来完善系统功能并为客户提供服务。欢迎扫描下方二维码添加技术交流群，添加时请备注来意<br />
    ![微信群](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
 
 ### 项目背景
