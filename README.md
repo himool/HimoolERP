@@ -8,7 +8,7 @@
 ### 公司介绍
 盒木科技([官网地址](https://www.himool.com/home))是一家专注于仓储物流领域数字化的科技创新企业。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[盒木Himool ERP进销存管理系统](https://erp.himool.com)及[盒木Himool WMS仓库管理系统](https://wms.himool.com)。想要购买WMS的用户，可点击[该淘宝链接](https://item.taobao.com/item.htm?id=687009035041)进行购买。<br />
 #### 欢迎有软件需求的客户或意向成为代理的公司/个人扫描下方销售经理二维码或致电18761717855咨询。<br />
-添加微信时请备注单位/个人称呼+目的（如代理合作，软件定制需求等，个人学习请直接添加交流群），否则不予通过。<br /><br />
+添加微信时请备注单位/个人称呼+目的（如代理合作，客户咨询等，个人学习请直接添加交流群），否则不予通过。<br /><br />
 ![微信](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
 
 ### 项目介绍
