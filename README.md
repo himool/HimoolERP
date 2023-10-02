@@ -1,9 +1,14 @@
 ## Himool ERP--开源ERP管理系统
 
+### 使用前须知
+#### 软件开放源码(发行协议:GPL-3.0)，个人用户可免费学习使用，但禁止任何单位或个人修改软件后再次发行的行为。商业使用需得到我司授权，否则我们将通过法律途径解决侵权问题。
+#### 我们欢迎对开源技术感兴趣的朋友一起加入到我们项目中来完善系统功能并为客户提供服务。欢迎扫描下方二维码添加技术交流群<br /><br />
+   ![微信群](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
+
 ### 公司介绍
 盒木科技([官网地址](https://www.himool.com/home))是一家专注于仓储物流领域数字化的科技创新企业。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[盒木Himool ERP进销存管理系统](https://erp.himool.com)及[盒木Himool WMS仓库管理系统](https://wms.himool.com)。想要购买WMS的用户，可点击[该淘宝链接](https://item.taobao.com/item.htm?id=687009035041)进行购买。<br />
-目前盒木WMS及进销存在全国诚招代理，无论你是公司或者个人皆可代理，欢迎扫描下方客户经理二维码或电话18761717855咨询。<br />
-#### 添加微信时请备注单位/个人称呼+目的（如代理，商用或个人学习等），否则不予通过。<br /><br />
+#### 欢迎有软件需求的客户或意向成为代理的公司/个人扫描下方销售经理二维码或致电18761717855咨询。<br />
+添加微信时请备注单位/个人称呼+目的（如代理合作，软件定制需求等，个人学习请直接添加交流群），否则不予通过。<br /><br />
 ![微信](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
 
 ### 项目介绍
@@ -11,11 +16,6 @@
 * Gitee地址: [Gitee](https://gitee.com/himool/erp)
 * Github地址: [Github](https://github.com/lianzhanshu/oms)
 * Demo地址: [Demo](https://erp.himool.com)
-
-### 使用前须知
-* 软件开放源码(发行协议:GPL-3.0)，个人用户可免费学习使用，但禁止任何单位或个人修改软件后再次发行的行为。商业使用需得到我司授权，否则我们将通过法律途径解决侵权问题。
-* 我们欢迎对开源技术感兴趣的朋友一起加入到我们项目中来完善系统功能并为客户提供服务。欢迎扫描下方二维码添加技术交流群，添加时请备注来意<br />
-   ![微信群](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
 
 ### 项目背景
 #### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的Himool ERP系统，支持高自由度的开发，来支持企业的自定义需求。我们的代码将持续更新，并且保持与[Demo](https://erp.himool.com)地址的同步。
@@ -77,21 +77,12 @@
 ![PDA界面](https://gitee.com/himool/erp/raw/master/img/PDA%E7%95%8C%E9%9D%A2.png)
 
 ### PC界面截图
-首页
 ![首页](https://gitee.com/himool/erp/raw/master/img/%E9%A6%96%E9%A1%B5.png)
-报表
 ![报表](https://gitee.com/himool/erp/raw/master/img/%E6%8A%A5%E8%A1%A8.png)
-产品
 ![产品](https://gitee.com/himool/erp/raw/master/img/%E4%BA%A7%E5%93%81.png)
-采购
 ![采购](https://gitee.com/himool/erp/raw/master/img/%E9%87%87%E8%B4%AD.png)
-销售
 ![销售](https://gitee.com/himool/erp/raw/master/img/%E9%94%80%E5%94%AE.png)
-生产
 ![生产](https://gitee.com/himool/erp/raw/master/img/%E7%94%9F%E4%BA%A7.png)
-库存
 ![库存](https://gitee.com/himool/erp/raw/master/img/%E5%BA%93%E5%AD%98.png)
-财务
 ![财务](https://gitee.com/himool/erp/raw/master/img/%E8%B4%A2%E5%8A%A1.png)
-设置
 ![设置](https://gitee.com/himool/erp/raw/master/img/%E8%AE%BE%E7%BD%AE.png)
