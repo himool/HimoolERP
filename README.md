@@ -1,3 +1,9 @@
+## Language
+
+- [中文](#中文)
+- [English](#english)
+
+## 中文
 ## Himool ERP--开源ERP管理系统
 
 ### 使用前须知
@@ -86,3 +92,7 @@
 ![库存](https://gitee.com/himool/erp/raw/master/img/%E5%BA%93%E5%AD%98.png)
 ![财务](https://gitee.com/himool/erp/raw/master/img/%E8%B4%A2%E5%8A%A1.png)
 ![设置](https://gitee.com/himool/erp/raw/master/img/%E8%AE%BE%E7%BD%AE.png)
+
+## English
+
+We're working on ...
