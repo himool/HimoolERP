@@ -101,7 +101,7 @@
 #### If you're interested to join us and make this project perfect, please send email to me. marketing@himool.com<br /><br />
 
 ### Company Introduction
-Himool Technology is focus on supply chain digitalization. All the products are developed by ourselves, now we have published[Himool ERP](https://www.himool.com/erp) and [Himool WMS](https://www.himool.com/wms).  ERP is free，only charge fee to customized demands and agency who requests authorit, we're aiming to be the leader of open-source ERP providers, we offer professional ERP service to our customers.<br />
+Himool Technology is focus on supply chain digitalization. All the products are developed by ourselves, now we have published [Himool ERP](https://www.himool.com/erp) and [Himool WMS](https://www.himool.com/wms).  ERP is free，only charge fee to customized demands and agency who requests authorit, we're aiming to be the leader of open-source ERP providers, we offer professional ERP service to our customers.<br />
 #### If you're interested, please scan below wechat QR code, call me +86 18761717855 or email me.<br />
 ![Wechat](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
 
