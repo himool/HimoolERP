@@ -94,5 +94,85 @@
 ![设置](https://gitee.com/himool/erp/raw/master/img/%E8%AE%BE%E7%BD%AE.png)
 
 ## English
+## Himool ERP--Open Source ERP System
 
-We're working on ...
+### Read me
+#### License Agreement:GPL-3.0，you can use this project for learning, business purpose is prohibited, please request authority from us before you use it for business.
+#### If you're interested to join us and make this project perfect, please send email to me. marketing@himool.com<br /><br />
+
+### Company Introduction
+Himool Technology is focus on supply chain digitalization. All the products are developed by ourselves, now we have published[Himool ERP](https://www.himool.com/erp) and [Himool WMS](https://www.himool.com/wms).  ERP is free，only charge fee to customized demands and agency who requests authorit, we're aiming to be the leader of open-source ERP providers, we offer professional ERP service to our customers.<br />
+#### If you're interested, please scan below wechat QR code, call me +86 18761717855 or email me.<br />
+![Wechat](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1.png)
+
+### Project Introduction
+#### Himool ERP contains core processes like master data, purchasing, sales, inbound, outbound and payment.
+* Gitee地址: [Gitee](https://gitee.com/himool/erp)
+* Github地址: [Github](https://github.com/himool/HimoolERP)
+* Demo地址: [Demo](https://erp.himool.com)
+
+### Devlopment Environment
+* Python version V3.9+
+* Django version V3.2+
+* Djangorestframework version V3.12+
+* Vue version 2.6+
+* Uniapp for mobile device
+* MySQL for database
+* AntD for frontend UI element
+* Please refer to requirement.txt for other python package
+
+### Build Environment
+
+* Install Pythonpip install -r requirements.txt
+* Go to frontend foldercd frontend
+* Install vuenpm install -g @vue/cli
+* Install package dependenciesnpm install
+
+### Config MySQL
+
+1. utf8mb4 for Database character setting
+2. Create datebase: CREATE DATABASE erp_db;
+    CREATE DATABASE erp_db;
+3. Migrate Database
+    * python manage.py makemigrations
+    * python manage.py migrate
+4. Create User
+    * python manage.py runscript create_user
+
+### Run in Local Machine
+
+1. Start Backend service
+    python manage.py runserver
+2. Start frontend service
+    npm run serve
+3. Access frontend address
+
+### Run in Server
+
+1. Config uwsgi
+    pip install uwsgi
+2. Run uwsgi
+    uwsgi --ini [project path]/configs/uwsgi.ini
+3. Config nginx(Config file in /configs/nginx)
+4. Build frontend file
+    Go to frontend directory, npm run build
+
+### Business Workflow
+![Business Workflow](https://gitee.com/himool/erp/raw/master/img/ERP%20Workflow.png)
+
+### Functional Modules
+![Functional Modules](https://gitee.com/himool/erp/raw/master/img/ERP%E6%A8%A1%E5%9D%97.png)
+
+### PDA Demo
+![PDA Demo](https://gitee.com/himool/erp/raw/master/img/PDA%E7%95%8C%E9%9D%A2.png)
+
+### PC Demo
+![Kanban](https://gitee.com/himool/erp/raw/master/img/%E9%A6%96%E9%A1%B5.png)
+![Report](https://gitee.com/himool/erp/raw/master/img/%E6%8A%A5%E8%A1%A8.png)
+![Product](https://gitee.com/himool/erp/raw/master/img/%E4%BA%A7%E5%93%81.png)
+![Purchase](https://gitee.com/himool/erp/raw/master/img/%E9%87%87%E8%B4%AD.png)
+![Sales](https://gitee.com/himool/erp/raw/master/img/%E9%94%80%E5%94%AE.png)
+![Production](https://gitee.com/himool/erp/raw/master/img/%E7%94%9F%E4%BA%A7.png)
+![Inventory](https://gitee.com/himool/erp/raw/master/img/%E5%BA%93%E5%AD%98.png)
+![Finance](https://gitee.com/himool/erp/raw/master/img/%E8%B4%A2%E5%8A%A1.png)
+![System](https://gitee.com/himool/erp/raw/master/img/%E8%AE%BE%E7%BD%AE.png)
