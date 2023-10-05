@@ -26,7 +26,7 @@
 ### 项目介绍
 #### 开源ERP管理系统，该系统前后端分离，包含PDA移动端扫码操作，api使用restful协议，方便二次开发，后端使用Python，Django，DRF等技术，前端代码使用AntD进行构建，包含采购管理，销售管理，库存管理等业务管理流程。移动端使用Uniapp，包含产品标签打印，出入库扫码等功能。
 * Gitee地址: [Gitee](https://gitee.com/himool/erp)
-* Github地址: [Github](https://github.com/lianzhanshu/oms)
+* Github地址: [Github](https://github.com/himool/HimoolERP)
 * Demo地址: [Demo](https://erp.himool.com)
 
 ### 项目背景
