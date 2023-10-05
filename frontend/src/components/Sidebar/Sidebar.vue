@@ -2,7 +2,7 @@
   <div style="height: 100vh;">
     <div class="logo" @click="$router.push('/')" style="width: 256px">
       <img :src="logo" width="36" style="margin-top: -6px; margin-left: 8px;" />
-      <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px; font-size: 16px">盒木 Himool ERP</span>
+      <span v-if="!collapsed" style="color: #1890ff; margin-left: 6px; font-size: 16px">盒木Himool ERP</span>
     </div>
     <a-menu theme="light" mode="inline" :selectedKeys="selectedKeys" :openKeys="openKeys" :inline-collapsed="collapsed"
       :style="{width: collapsed ? '80px' : '256px'}" @click="switchView" @openChange="openChange">
