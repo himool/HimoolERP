@@ -26,7 +26,7 @@
     },
     methods: {
       backIndex() {
-        window.open('http://www.haioucloud.com', '_self');
+        window.open('http://www.himool.com', '_self');
       },
     },
   }
