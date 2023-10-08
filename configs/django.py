@@ -16,3 +16,12 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# Tencent 短信接口
+SECRET_ID = ''
+SECRET_KEY = ''
+SMS_SDK_APP_ID = ''
+TEMPLATE_ID = ''
+SIGN_NAME = ''
+REGION = ''

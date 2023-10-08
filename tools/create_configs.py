@@ -104,6 +104,16 @@ DATABASES = {{
     }}
 }}
 """
+
+    file_content += f"""
+# Tencent 短信参数
+SECRET_ID = ''
+SECRET_KEY = ''
+SMS_SDK_APP_ID = ''
+TEMPLATE_ID = ''
+SIGN_NAME = ''
+REGION = ''  
+"""
     with open(BASE_DIR / 'configs/django.py', 'w') as file:
         file.write(file_content)
 

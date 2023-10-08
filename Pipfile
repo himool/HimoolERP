@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+django = "==3.2.16"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 drf-spectacular = "*"
@@ -17,6 +17,7 @@ number-precision = "*"
 openpyxl = "*"
 uvicorn = "*"
 gunicorn = "*"
+tencentcloud-sdk-python = "*"
 
 [dev-packages]
 autopep8 = "*"

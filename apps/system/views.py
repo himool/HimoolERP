@@ -11,6 +11,11 @@ from extensions.viewsets import *
 from apps.system.serializers import *
 from apps.system.schemas import *
 from apps.system.models import *
+from django.utils import timezone
+from datetime import timedelta
+import random
+from scripts.create_user import create_user
+from scripts.send_phone_code import send_phone_code
 
 
 class PermissionGroupViewSet(BaseViewSet, ListModelMixin):
@@ -186,6 +191,42 @@ class UserActionViewSet(FunctionViewSet):
         self.user.save(update_fields=['password'])
 
         return Response(status=status.HTTP_200_OK)
+
+    @extend_schema(request=MakeCodeRequest, responses={204: None})
+    @action(detail=False, methods=['post'])
+    def make_code(self, request, *args, **kwargs):
+        """生产验证码"""
+
+        serializer = MakeCodeRequest(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        code = str(random.randint(100000, 999999))
+        VerificationCode.objects.create(phone=validated_data['phone'], code=code)
+        send_phone_code(validated_data['phone'], code)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(request=RegisterRequest, responses={204: None})
+    @action(detail=False, methods=['post'])
+    def register(self, request, *args, **kwargs):
+        """注册"""
+
+        serializer = RegisterRequest(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        if Team.objects.filter(number=validated_data['number']).exists():
+            raise ValidationError('公司编号已存在')
+
+        start_time = timezone.localtime() - timedelta(minutes=10)
+        if not VerificationCode.objects.filter(
+                phone=validated_data['phone'], code=validated_data['code'], create_time__gte=start_time).exists():
+            raise ValidationError('验证码错误或超时')
+
+        expiry_time = timezone.localtime() + timedelta(days=3)
+        create_user(validated_data['number'], validated_data['phone'], validated_data['register_city'],
+                    expiry_time, validated_data['username'], validated_data['password'])
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 __all__ = [

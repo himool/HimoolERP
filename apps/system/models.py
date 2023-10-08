@@ -11,6 +11,9 @@ class Team(Model):
     enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
 
+    register_phone = CharField(max_length=32, blank=True, null=True, verbose_name='注册手机号')
+    register_city = CharField(max_length=32, blank=True, null=True, verbose_name='所在城市')
+
 
 class PermissionGroup(Model):
     """权限分组"""
@@ -64,6 +67,14 @@ class User(Model):
         unique_together = [('username', 'team'), ('name', 'team')]
 
 
+class VerificationCode(Model):
+    """验证码"""
+
+    phone = CharField(max_length=32, verbose_name='手机号')
+    code = CharField(max_length=6, verbose_name='验证码')
+    create_time = DateTimeField(auto_now_add=True, verbose_name='创建时间')
+
+
 __all__ = [
-    'Team', 'PermissionGroup', 'Permission', 'Role', 'User',
+    'Team', 'PermissionGroup', 'Permission', 'Role', 'User', 'VerificationCode',
 ]

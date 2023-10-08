@@ -33,8 +33,22 @@ class SetPasswordRequest(Serializer):
     new_password = CharField(label='新密码')
 
 
+class MakeCodeRequest(Serializer):
+    phone = CharField(label='手机号')
+
+
+class RegisterRequest(Serializer):
+    register_city = CharField(label='所在城市')
+    phone = CharField(label='手机号')
+    code = CharField(label='验证码')
+    number = CharField(label='公司编号')
+    username = CharField(label='用户名')
+    password = CharField(label='密码')
+
+
 __all__ = [
     'GetTokenRequest', 'GetTokenResponse',
     'RefreshTokenRequest', 'RefreshTokenResponse',
     'UserInfoResponse', 'SetPasswordRequest',
+    'MakeCodeRequest', 'RegisterRequest',
 ]
