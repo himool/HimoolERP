@@ -193,7 +193,7 @@ class UserActionViewSet(FunctionViewSet):
         return Response(status=status.HTTP_200_OK)
 
     @extend_schema(request=MakeCodeRequest, responses={204: None})
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], permission_classes=[])
     def make_code(self, request, *args, **kwargs):
         """生产验证码"""
 
@@ -207,7 +207,7 @@ class UserActionViewSet(FunctionViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(request=RegisterRequest, responses={204: None})
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'], permission_classes=[])
     def register(self, request, *args, **kwargs):
         """注册"""
 
@@ -229,8 +229,32 @@ class UserActionViewSet(FunctionViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class AdminActionViewSet(FunctionViewSet):
+
+    @extend_schema(request=AdminUpdateAccountRequest, responses={204: None})
+    @action(detail=False, methods=['post'])
+    def update_account(self, request, *args, **kwargs):
+        """更新账户"""
+
+        serializer = AdminUpdateAccountRequest(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        company = validated_data['company']
+        username = validated_data['username']
+        expiry_date = validated_data['expiry_date']
+
+        if team := Team.objects.filter(number=company).first():
+            team.expiry_time = expiry_date
+            team.save(update_fields=['expiry_time'])
+        else:
+            create_user(company, None, None, expiry_date, username, '123456')
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 __all__ = [
     'PermissionGroupViewSet',
     'SystemConfigViewSet',
-    'RoleViewSet', 'UserViewSet', 'UserActionViewSet',
+    'RoleViewSet', 'UserViewSet', 'UserActionViewSet', 'AdminActionViewSet',
 ]

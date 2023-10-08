@@ -46,9 +46,15 @@ class RegisterRequest(Serializer):
     password = CharField(label='密码')
 
 
+class AdminUpdateAccountRequest(Serializer):
+    company = CharField(label='公司编号')
+    username = CharField(label='用户名')
+    expiry_date = DateField(label='到期日期')
+
+
 __all__ = [
     'GetTokenRequest', 'GetTokenResponse',
     'RefreshTokenRequest', 'RefreshTokenResponse',
     'UserInfoResponse', 'SetPasswordRequest',
-    'MakeCodeRequest', 'RegisterRequest',
+    'MakeCodeRequest', 'RegisterRequest', 'AdminUpdateAccountRequest',
 ]
