@@ -1,6 +1,7 @@
 import { message } from "ant-design-vue";
 import Cookies from "js-cookie";
 import router from "@/router";
+import { T } from "@/locales";
 import axios from "axios";
 
 const GET_TOKEN_URL = "/user/get_token/";
@@ -11,16 +12,16 @@ let requestQueue = [],
 
 const instance = axios.create({
   baseURL: "/api/",
-  timeout: 10000,
-  headers: { "Content-Type": "application/json" },
+  timeout: 6000000,
 });
 
 instance.interceptors.request.use(
   (config) => {
     if (!config.url.includes(GET_TOKEN_URL) && !config.url.includes(REFRESH_TOKEN_URL)) {
-      config.headers.Authorization = "Bearer " + Cookies.get("access");
+      config.headers["Authorization"] = "Bearer " + Cookies.get("access");
     }
 
+    config.headers["Accept-Language"] = Cookies.get("language") || "zh-Hans";
     console.info("Send request:", config);
     return config;
   },
@@ -38,7 +39,7 @@ instance.interceptors.response.use(
     console.error("Request error:", error.response);
 
     if (error.response.status >= 500) {
-      message.error("服务器错误");
+      message.error(T("服务器错误"));
       return Promise.reject(error);
     }
 
@@ -62,7 +63,7 @@ instance.interceptors.response.use(
           .catch((error) => {
             if (error.response.status == 401) {
               redirectLogin();
-              message.error("令牌过期, 请重新登录");
+              message.error(T("令牌过期, 请重新登录"));
             }
             return Promise.reject(error);
           })
@@ -72,7 +73,9 @@ instance.interceptors.response.use(
       }
     }
 
-    message.error(error.response.data.detail);
+    if (error.response.data.detail) {
+      message.error(error.response.data.detail);
+    }
     return Promise.reject(error);
   }
 );

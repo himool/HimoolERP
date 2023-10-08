@@ -193,7 +193,7 @@ class UserActionViewSet(FunctionViewSet):
         return Response(status=status.HTTP_200_OK)
 
     @extend_schema(request=MakeCodeRequest, responses={204: None})
-    @action(detail=False, methods=['post'], permission_classes=[])
+    @action(detail=False, methods=['post'])
     def make_code(self, request, *args, **kwargs):
         """生产验证码"""
 
@@ -207,7 +207,7 @@ class UserActionViewSet(FunctionViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(request=RegisterRequest, responses={204: None})
-    @action(detail=False, methods=['post'], permission_classes=[])
+    @action(detail=False, methods=['post'])
     def register(self, request, *args, **kwargs):
         """注册"""
 
