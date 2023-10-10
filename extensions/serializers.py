@@ -1,4 +1,4 @@
-from rest_framework.fields import SerializerMethodField, ImageField, FileField, JSONField
+from rest_framework.fields import SerializerMethodField, ImageField, FileField, JSONField, ListField
 from rest_framework.fields import IntegerField, FloatField, DecimalField, BooleanField
 from rest_framework.fields import CharField, DateField, DateTimeField
 from rest_framework.serializers import Serializer, ModelSerializer
@@ -60,7 +60,7 @@ class AmountField(DecimalField):
 
 __all__ = [
     'Serializer', 'ModelSerializer', 'BaseSerializer',
-    'SerializerMethodField', 'ImageField', 'FileField', 'JSONField',
+    'SerializerMethodField', 'ImageField', 'FileField', 'JSONField', 'ListField',
     'BooleanField', 'IntegerField', 'FloatField', 'AmountField',
     'CharField', 'DateField', 'DateTimeField',
 ]

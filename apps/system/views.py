@@ -16,6 +16,8 @@ from datetime import timedelta
 import random
 from scripts.create_user import create_user
 from scripts.send_phone_code import send_phone_code
+from configs.django import CRM_URL
+import requests
 
 
 class PermissionGroupViewSet(BaseViewSet, ListModelMixin):
@@ -226,6 +228,16 @@ class UserActionViewSet(FunctionViewSet):
         expiry_time = timezone.localtime() + timedelta(days=3)
         create_user(validated_data['number'], validated_data['phone'], validated_data['register_city'],
                     expiry_time, validated_data['username'], validated_data['password'])
+
+        if CRM_URL:
+            result = requests.post(CRM_URL, data={
+                'system': "ERP",
+                'company': validated_data['number'],
+                'register_phone': validated_data['phone'],
+                'register_city_code': validated_data['register_city_code'],
+            })
+            if result.status_code != 204:
+                raise ValidationError('创建失败')
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

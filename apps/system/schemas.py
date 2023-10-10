@@ -39,6 +39,7 @@ class MakeCodeRequest(Serializer):
 
 class RegisterRequest(Serializer):
     register_city = CharField(label='所在城市')
+    register_city_code = ListField(child=CharField(), label='所在城市代码')
     phone = CharField(label='手机号')
     code = CharField(label='验证码')
     number = CharField(label='公司编号')

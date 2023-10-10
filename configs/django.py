@@ -25,3 +25,7 @@ SMS_SDK_APP_ID = ''
 TEMPLATE_ID = ''
 SIGN_NAME = ''
 REGION = ''
+
+# 系统接口
+# CRM_URL = None
+CRM_URL = 'http://127.0.0.1:11901/api/admin/register_account/'

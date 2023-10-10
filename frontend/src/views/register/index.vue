@@ -44,6 +44,7 @@ import { provinceAndCityData } from "element-china-area-data";
 export default {
   data() {
     return {
+      register_city_code: [],
       isLoading: false,
       form: {
         cityCode: undefined,
@@ -67,14 +68,15 @@ export default {
     };
   },
   methods: {
-    changeCity(_, selectedOptions) {
+    changeCity(code, selectedOptions) {
+      this.register_city_code = code;
       this.form.register_city = selectedOptions.map((item) => item.label).join(" ");
     },
     register() {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.isLoading = true;
-          registerAccount(this.form)
+          registerAccount({ ...this.form, register_city_code: this.register_city_code })
             .then((data) => {
               this.$message.success("注册成功");
               this.$router.push("/user/login");
