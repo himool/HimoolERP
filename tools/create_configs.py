@@ -64,7 +64,6 @@ from pathlib import Path
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = True
-
 """
 
     database_type = input('配置数据库: (sqlite: 0, mysql: 1)\n')
@@ -113,7 +112,16 @@ SMS_SDK_APP_ID = ''
 TEMPLATE_ID = ''
 SIGN_NAME = ''
 REGION = ''  
+
 """
+
+    file_content += f"""
+# 系统接口
+
+CRM_URL = None
+
+"""
+
     with open(BASE_DIR / 'configs/django.py', 'w') as file:
         file.write(file_content)
 
