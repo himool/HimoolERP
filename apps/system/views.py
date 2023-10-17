@@ -234,7 +234,7 @@ class UserActionViewSet(FunctionViewSet):
 
         if CRM_URL:
             result = requests.post(CRM_URL, data={
-                'system': "ERP",
+                'system': "test_erp",
                 'company': validated_data['number'],
                 'username': validated_data['username'],
                 'expiry_date': expiry_time.strftime('%Y-%m-%d'),
