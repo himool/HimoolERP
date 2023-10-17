@@ -22,6 +22,9 @@ class IsAuthenticated(BasePermission):
         if not isinstance(request.user, User):
             return False
 
+        if not request.user.team.is_active:
+            raise ValidationError(f'账号已冻结')
+
         if (expiry_time := request.user.team.expiry_time) < pendulum.now():
             raise ValidationError(f'已到期, 到期日期: {expiry_time}')
 

@@ -10,6 +10,7 @@ class Team(Model):
     remark = CharField(max_length=256, blank=True, null=True, verbose_name='备注')
     enable_auto_stock_in = BooleanField(default=False, verbose_name='启用自动入库')
     enable_auto_stock_out = BooleanField(default=False, verbose_name='启用自动出库')
+    is_active = BooleanField(default=True, verbose_name='激活状态')
 
     register_phone = CharField(max_length=32, blank=True, null=True, verbose_name='注册手机号')
     register_city = CharField(max_length=32, blank=True, null=True, verbose_name='所在城市')

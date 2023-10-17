@@ -260,12 +260,14 @@ class AdminActionViewSet(FunctionViewSet):
         company = validated_data['company']
         username = validated_data['username']
         expiry_date = validated_data['expiry_date']
+        is_active = validated_data['is_active']
 
         if team := Team.objects.filter(number=company).first():
             team.expiry_time = expiry_date
-            team.save(update_fields=['expiry_time'])
+            team.is_active = is_active
+            team.save(update_fields=['expiry_time', 'is_active'])
         else:
-            create_user(company, None, None, expiry_date, username, '123456')
+            create_user(company, None, None, expiry_date, username, '123456', is_active)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
