@@ -257,17 +257,26 @@ class AdminActionViewSet(FunctionViewSet):
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
 
+        type = validated_data['type']
         company = validated_data['company']
         username = validated_data['username']
         expiry_date = validated_data['expiry_date']
         is_active = validated_data['is_active']
 
-        if team := Team.objects.filter(number=company).first():
+        if type == 'create':
+            if Team.objects.filter(number=company).exists():
+                raise ValidationError('公司已存在')
+
+            create_user(company, None, None, expiry_date, username, '123456', is_active)
+        elif type == 'update':
+            if not (team := Team.objects.filter(number=company).first()):
+                raise ValidationError('公司不存在')
+
             team.expiry_time = expiry_date
             team.is_active = is_active
             team.save(update_fields=['expiry_time', 'is_active'])
         else:
-            create_user(company, None, None, expiry_date, username, '123456', is_active)
+            raise ValidationError('程序错误')
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 

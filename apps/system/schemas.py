@@ -48,6 +48,7 @@ class RegisterRequest(Serializer):
 
 
 class AdminUpdateAccountRequest(Serializer):
+    type = CharField(label='类型')
     company = CharField(label='公司编号')
     username = CharField(label='用户名')
     expiry_date = DateField(label='到期日期')
