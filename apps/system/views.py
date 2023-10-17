@@ -217,6 +217,9 @@ class UserActionViewSet(FunctionViewSet):
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
 
+        if Team.objects.filter(register_phone=validated_data['phone']).exists():
+            raise ValidationError('手机号已注册')
+
         if Team.objects.filter(number=validated_data['number']).exists():
             raise ValidationError('公司编号已存在')
 
@@ -233,6 +236,8 @@ class UserActionViewSet(FunctionViewSet):
             result = requests.post(CRM_URL, data={
                 'system': "ERP",
                 'company': validated_data['number'],
+                'username': validated_data['username'],
+                'expiry_date': expiry_time.strftime('%Y-%m-%d'),
                 'register_phone': validated_data['phone'],
                 'register_city_code': validated_data['register_city_code'],
             })
