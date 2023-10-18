@@ -64,6 +64,7 @@ class RoleViewSet(ModelViewSet):
     serializer_class = RoleSerializer
     permission_classes = [IsAuthenticated, IsManagerPermission]
     search_fields = ['name']
+    ordering_fields = ['id', 'name']
     queryset = Role.objects.all()
 
     @transaction.atomic

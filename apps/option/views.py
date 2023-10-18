@@ -27,7 +27,7 @@ class UserOptionViewSet(InfiniteOptionViewSet):
     permission_classes = [IsAuthenticated, UserOptionPermission]
     filterset_fields = ['is_active']
     search_fields = ['username', 'name']
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_active=True)
 
 
 # Data
@@ -38,7 +38,7 @@ class WarehouseOptionViewSet(InfiniteOptionViewSet):
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number']
     ordering = ['number', 'id']
-    queryset = Warehouse.objects.all()
+    queryset = Warehouse.objects.filter(is_active=True)
 
 
 class ClientOptionViewSet(InfiniteOptionViewSet):
@@ -48,7 +48,7 @@ class ClientOptionViewSet(InfiniteOptionViewSet):
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number']
     ordering = ['number', 'id']
-    queryset = Client.objects.all()
+    queryset = Client.objects.filter(is_active=True)
 
 
 class SupplierOptionViewSet(InfiniteOptionViewSet):
@@ -58,7 +58,7 @@ class SupplierOptionViewSet(InfiniteOptionViewSet):
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number']
     ordering = ['number', 'id']
-    queryset = Supplier.objects.all()
+    queryset = Supplier.objects.filter(is_active=True)
 
 
 class AccountOptionViewSet(InfiniteOptionViewSet):
@@ -68,7 +68,7 @@ class AccountOptionViewSet(InfiniteOptionViewSet):
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number']
     ordering = ['number', 'id']
-    queryset = Account.objects.all()
+    queryset = Account.objects.filter(is_active=True)
 
 
 class ChargeItemOptionViewSet(InfiniteOptionViewSet):
@@ -100,7 +100,7 @@ class GoodsOptionViewSet(LimitedOptionViewSet):
     search_fields = ['number', 'name']
     ordering_fields = ['id', 'number']
     ordering = ['number', 'id']
-    queryset = Goods.objects.all()
+    queryset = Goods.objects.filter(is_active=True)
 
 
 class BatchOptionViewSet(InfiniteOptionViewSet):

@@ -29,14 +29,14 @@
             />
           </a-form-model-item>
           <a-form-model-item v-if="dataForm.is_related" prop="goods" label="产品">
-            <a-select v-model="dataForm.goods" style="width: 100%;">
+            <a-select v-model="dataForm.goods" style="width: 100%">
               <a-select-option v-for="item in dataForm.sales_goods_items" :key="item.goods" :value="item.goods">
                 {{ item.goods_name }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item prop="total_quantity" label="计划数量">
-            <a-input-number v-model="dataForm.total_quantity" style="width: 100%;" />
+            <a-input-number v-model="dataForm.total_quantity" style="width: 100%" />
           </a-form-model-item>
           <a-form-model-item prop="start_time" label="开始时间">
             <a-date-picker
@@ -44,7 +44,7 @@
               placeholder="请选择时间"
               valueFormat="YYYY-MM-DD HH:mm:ss"
               show-time
-              style="width: 100%;"
+              style="width: 100%"
             />
           </a-form-model-item>
           <a-form-model-item prop="end_time" label="结束时间">
@@ -53,7 +53,7 @@
               placeholder="请选择时间"
               valueFormat="YYYY-MM-DD HH:mm:ss"
               show-time
-              style="width: 100%;"
+              style="width: 100%"
             />
           </a-form-model-item>
         </a-form-model>
@@ -75,7 +75,10 @@ export default {
   data() {
     return {
       rules: {
-        number: [{ required: true, message: "请输入编号", trigger: "change" }],
+        number: [
+          { required: true, message: "请输入编号", trigger: "change" },
+          { max: 32, message: "超出最大长度 (32)", trigger: "change" },
+        ],
         goods: [{ required: true, message: "请选择生产产品", trigger: "change" }],
         total_quantity: [{ required: true, message: "请输入计划数量", trigger: "change" }],
       },

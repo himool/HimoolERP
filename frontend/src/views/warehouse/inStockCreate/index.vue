@@ -114,11 +114,6 @@ export default {
       info: {},
       form: {},
       rules: {
-        // name: [{ required: true, message: '请输入名称', trigger: 'change' }],
-        // number: [{ required: true, message: '请输入编号', trigger: 'change' }],
-        // initial_arrears_amount: [
-        //   { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: '初期欠款金额格式不正确', trigger: 'change' }
-        // ],
         handler: [{ required: true, message: "请选择经手人", trigger: "change" }],
         handle_time: [{ required: true, message: "请选择处理日期", trigger: "change" }],
       },

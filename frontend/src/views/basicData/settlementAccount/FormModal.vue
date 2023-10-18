@@ -27,13 +27,13 @@
             <a-input v-model="form.remark" allowClear />
           </a-form-model-item>
           <a-form-model-item prop="is_active" label="状态">
-            <a-select v-model="form.is_active" style="width: 100%;">
+            <a-select v-model="form.is_active" style="width: 100%">
               <a-select-option :value="true">激活</a-select-option>
               <a-select-option :value="false">冻结</a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item prop="initial_balance_amount" label="初期余额">
-            <a-input-number v-model="form.initial_balance_amount" style="width: 100%;" />
+            <a-input-number v-model="form.initial_balance_amount" style="width: 100%" />
           </a-form-model-item>
         </a-form-model>
       </div>
@@ -58,8 +58,14 @@ export default {
         { id: "other", name: "其他" },
       ],
       rules: {
-        name: [{ required: true, message: "请输入账户名称", trigger: "change" }],
-        number: [{ required: true, message: "请输入账户编号", trigger: "change" }],
+        name: [
+          { required: true, message: "请输入账户名称", trigger: "change" },
+          { max: 64, message: "超出最大长度 (64)", trigger: "change" },
+        ],
+        number: [
+          { required: true, message: "请输入账户编号", trigger: "change" },
+          { max: 32, message: "超出最大长度 (32)", trigger: "change" },
+        ],
         initial_balance_amount: [
           { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: "初期余额格式不正确", trigger: "change" },
         ],

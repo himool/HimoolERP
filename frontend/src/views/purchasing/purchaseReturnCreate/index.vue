@@ -4,12 +4,12 @@
       <a-spin :spinning="loading">
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
           <a-row>
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="number" label="退货单编号">
                 <a-input v-model="form.number" />
               </a-form-model-item>
             </a-col>
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="purchase_order" label="采购单据">
                 <a-select v-model="form.purchase_order" @change="changeRelatedOrder" style="width: 100%">
                   <a-select-option v-for="item in purchaseOrdersItems" :key="item.id" :value="item.id">
@@ -18,7 +18,7 @@
                 </a-select>
               </a-form-model-item>
             </a-col>
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="supplier" label="供应商">
                 <a-select v-model="form.supplier" style="width: 100%">
                   <a-select-option v-for="item in suppliersItems" :key="item.id" :value="item.id">
@@ -27,7 +27,7 @@
                 </a-select>
               </a-form-model-item>
             </a-col>
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="warehouse" label="仓库">
                 <a-select v-model="form.warehouse" style="width: 100%" @change="changeWarehouse">
                   <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">
@@ -36,7 +36,7 @@
                 </a-select>
               </a-form-model-item>
             </a-col>
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="handler" label="经手人">
                 <a-select v-model="form.handler" style="width: 100%">
                   <a-select-option v-for="item in handlerItems" :key="item.id" :value="item.id">
@@ -45,7 +45,7 @@
                 </a-select>
               </a-form-model-item>
             </a-col>
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="handle_time" label="处理日期">
                 <a-date-picker v-model="form.handle_time" valueFormat="YYYY-MM-DD" style="width: 100%" />
               </a-form-model-item>
@@ -55,7 +55,7 @@
                 <a-input-number v-model="form.other_amount" style="width: 100%;" />
               </a-form-model-item>
             </a-col> -->
-            <a-col :span="6" style="width: 320px;">
+            <a-col :span="6" style="width: 320px">
               <a-form-model-item prop="remark" label="备注">
                 <a-input v-model="form.remark" allowClear />
               </a-form-model-item>
@@ -71,7 +71,7 @@
               <a-button type="primary" @click="openMaterialModal">添加产品</a-button>
             </a-space>
           </a-row>
-          <div style="margin-top: 16px;">
+          <div style="margin-top: 16px">
             <a-table rowKey="id" size="middle" :columns="columns" :data-source="goodsData" :pagination="false">
               <div slot="return_quantity" slot-scope="value, item, index">
                 <div v-if="item.isTotal">{{ value }}</div>
@@ -94,18 +94,13 @@
         <div>
           <a-row gutter="16">
             <a-col :span="4">
-              <a-form-model-item
-                prop="other_amount"
-                label="其他费用"
-                :label-col="{ span: 24 }"
-                :wrapper-col="{ span: 24 }"
-              >
-                <a-input-number v-model="form.other_amount" style="width: 100%;" />
+              <a-form-model-item prop="other_amount" label="其他费用" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
+                <a-input-number v-model="form.other_amount" style="width: 100%" />
               </a-form-model-item>
             </a-col>
             <a-col :span="4">
               <a-form-model-item label="总计金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-input-number :value="totalAmount" :disabled="true" style="width: 100%;" />
+                <a-input-number :value="totalAmount" :disabled="true" style="width: 100%" />
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -122,14 +117,14 @@
             </a-col>
             <a-col :span="4">
               <a-form-model-item label="实收金额(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-input-number v-model="purchase_return_account_item.collection_amount" style="width: 100%;" />
+                <a-input-number v-model="purchase_return_account_item.collection_amount" style="width: 100%" />
               </a-form-model-item>
             </a-col>
           </a-row>
           <a-row gutter="16">
             <a-col :span="4">
               <a-form-model-item label="本单欠款(元)" :label-col="{ span: 24 }" :wrapper-col="{ span: 24 }">
-                <a-input-number :value="amountOwed" :disabled="true" style="width: 100%;" />
+                <a-input-number :value="amountOwed" :disabled="true" style="width: 100%" />
               </a-form-model-item>
             </a-col>
           </a-row>
@@ -169,7 +164,7 @@
         </div> -->
       </a-spin>
 
-      <div style="margin-top: 32px;">
+      <div style="margin-top: 32px">
         <a-popconfirm title="确定创建吗?" @confirm="create">
           <a-button type="primary" :loading="loading">创建</a-button>
         </a-popconfirm>
@@ -195,7 +190,7 @@ import {
   accountsOption,
   purchaseOrdersOption,
 } from "@/api/option";
-import NP from 'number-precision'
+import NP from "number-precision";
 
 export default {
   components: {
@@ -214,14 +209,15 @@ export default {
       model: {},
       form: {},
       rules: {
-        number: [{ required: true, message: "请输入退货单编号", trigger: "change" }],
+        number: [
+          { required: true, message: "请输入退货单编号", trigger: "change" },
+          { max: 32, message: "超出最大长度 (32)", trigger: "change" },
+        ],
         warehouse: [{ required: true, message: "请选择仓库", trigger: "change" }],
         supplier: [{ required: true, message: "请选择供应商", trigger: "change" }],
         handler: [{ required: true, message: "请选择经手人", trigger: "change" }],
         handle_time: [{ required: true, message: "请选择处理日期", trigger: "change" }],
-        other_amount: [
-          { pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: "其他费用格式不正确", trigger: "change" },
-        ],
+        other_amount: [{ pattern: new RegExp(/^\d{0,14}(?:\.\d{0,2})?$/), message: "其他费用格式不正确", trigger: "change" }],
       },
       columns: [
         {
@@ -398,13 +394,13 @@ export default {
       });
     },
     changeRelatedOrder(value, option) {
-      let selected = this.purchaseOrdersItems.filter(item => item.id == value)[0];
+      let selected = this.purchaseOrdersItems.filter((item) => item.id == value)[0];
       this.form.supplier = selected.supplier;
       this.form.warehouse = selected.warehouse;
       this.form.handler = selected.handler;
-      selected.purchase_goods_items.map(item => {
-        this.onSelectMaterial({...item, ...{ goods_spec: item.goods_spec || '', total_quantity: item.total_amount }})
-      })
+      selected.purchase_goods_items.map((item) => {
+        this.onSelectMaterial({ ...item, ...{ goods_spec: item.goods_spec || "", total_quantity: item.total_amount } });
+      });
     },
     handelAddAcount() {
       this.purchase_return_account_items.push({
@@ -515,7 +511,6 @@ export default {
                   return_price: item.return_price,
                 };
               }
-              
             }),
           };
           console.log(formData);

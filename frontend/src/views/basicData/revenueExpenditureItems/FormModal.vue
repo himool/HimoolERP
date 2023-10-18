@@ -32,7 +32,8 @@
     data() {
       return {
         rules: {
-          name: [{ required: true, message: '请输入收支项目', trigger: 'change' }],
+          name: [{ required: true, message: '请输入收支项目', trigger: 'change' },
+          { max: 64, message: "超出最大长度 (64)", trigger: "change" },],
           type: [{ required: true, message: '请选择收支类型', trigger: 'change' }]
         },
         loading: false,

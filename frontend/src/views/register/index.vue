@@ -59,8 +59,14 @@ export default {
         register_city: [{ required: true, message: "请选择城市", trigger: "change" }],
         phone: [{ required: true, message: "请输入手机号", trigger: "change" }],
         code: [{ required: true, message: "请输入验证码", trigger: "change" }],
-        number: [{ required: true, message: "请输入公司", trigger: "change" }],
-        username: [{ required: true, message: "请输入用户名", trigger: "change" }],
+        number: [
+          { required: true, message: "请输入公司", trigger: "change" },
+          { max: 32, message: "超出最大长度 (32)", trigger: "change" },
+        ],
+        username: [
+          { required: true, message: "请输入用户名", trigger: "change" },
+          { max: 32, message: "超出最大长度 (32)", trigger: "change" },
+        ],
         password: [{ required: true, message: "请输入密码", trigger: "change" }],
       },
       countDown: -1,
