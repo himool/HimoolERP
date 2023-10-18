@@ -17,7 +17,7 @@
                 </a-form-model-item>
               </a-col>
               <a-col :span="6" style="width: 320px;">
-                <a-form-model-item prop="type_display" label="入库类型">
+                <a-form-model-item prop="type_display" label="出库类型">
                   {{ info.type_display }}
                 </a-form-model-item>
               </a-col>

@@ -11,10 +11,10 @@
               {{ info.number }}
             </a-descriptions-item>
             <a-descriptions-item label="销售单号">
-              {{ info.sales_order }}
+              {{ info.sales_order_number }}
             </a-descriptions-item>
-            <a-descriptions-item label="供应商">
-              {{ info.supplier_name }}
+            <a-descriptions-item label="客户">
+              {{ info.client_name }}
             </a-descriptions-item>
             <a-descriptions-item label="仓库">
               {{ info.warehouse_name }}
@@ -99,7 +99,7 @@ export default {
             width: 120,
           },
           {
-            title: '采购单价(元)',
+            title: '退货单价(元)',
             dataIndex: 'return_price',
             key: 'return_price',
             width: 120,

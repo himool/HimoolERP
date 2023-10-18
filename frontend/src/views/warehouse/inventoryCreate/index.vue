@@ -6,7 +6,7 @@
         <a-form-model ref="form" :model="form" :rules="rules" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
           <a-row>
             <a-col :span="6" style="width: 320px;">
-              <a-form-model-item prop="number" label="调拨编号">
+              <a-form-model-item prop="number" label="盘点编号">
                 <a-input v-model="form.number" />
               </a-form-model-item>
             </a-col>
