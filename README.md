@@ -12,11 +12,11 @@
    ![微信群](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
 
 ### 公司介绍
-盒木科技是一家专注于供应链领域数字化的科技创新企业。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[盒木Himool ERP进销存管理系统](https://www.himool.com/erp)，[盒木Himool WMS仓库管理系统](https://www.himool.com/wms)及[盒木Himool WCS仓库控制系统](https://www.himool.com/wcs)。其中ERP为开源产品，我们致力于成为开源ERP中的“领导者”，为中小企业提供功能丰富、操作便捷、成本低廉的专业ERP服务。WMS和WCS为付费产品，具体请扫描下方二维码咨询。
+盒木科技是一家专注于供应链领域数字化的科技创新企业。Himool是盒木科技自主研发的软件产品系列品牌,目前已发布[盒木Himool ERP进销存管理系统](https://www.himool.com/erp)，[盒木Himool WMS仓库管理系统](https://www.himool.com/wms)及[盒木Himool WCS仓库控制系统](https://www.himool.com/wcs)。其中ERP社区版为开源产品，涵盖了采购，销售，库存等主要功能，为中小企业提供功能丰富、操作便捷、成本低廉的专业进销存服务。
 
 #### ERP的服务模式
-* SaaS网络版。仅收取99元/年的费用以支持云服务器的运维及代码维护成本。如需购买可点击[该淘宝链接](https://item.taobao.com/item.htm?id=619069183482)
-* 客户定制服务。我们设计的开源ERP可供您学习和自用，针对有定制需求的客户我们将提供定制开发服务。
+* SaaS网络版。如需购买可点击[该淘宝链接](https://item.taobao.com/item.htm?id=619069183482)
+* 客户定制服务。我们设计的开源ERP社区版可供您学习和自用，针对有定制需求的客户我们将提供定制开发服务。
 * 商业授权。开源社区需要您的支持以得以发展，如果您希望将我们的系统或源码二次开发后出售给其他客户，请先联系我们获得商业授权，否则将承担法律风险。
 
 #### 欢迎有软件需求的客户或意向成为代理（[代理条件](https://www.himool.com/partner)）的公司/个人扫描下方销售经理二维码或致电18761717855咨询。<br />
