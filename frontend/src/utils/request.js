@@ -38,7 +38,7 @@ instance.interceptors.response.use(
     console.error("Request error:", error.response);
 
     if (error.response.status >= 500) {
-      message.error(T("服务器错误"));
+      message.error("服务器错误");
       return Promise.reject(error);
     }
 
@@ -62,7 +62,7 @@ instance.interceptors.response.use(
           .catch((error) => {
             if (error.response.status == 401) {
               redirectLogin();
-              message.error(T("令牌过期, 请重新登录"));
+              message.error("令牌过期, 请重新登录");
             }
             return Promise.reject(error);
           })

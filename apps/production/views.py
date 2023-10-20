@@ -8,6 +8,8 @@ from apps.production.permissions import *
 from apps.production.filters import *
 from apps.production.schemas import *
 from apps.production.models import *
+from apps.stock_in.models import *
+from apps.data.models import *
 
 
 class ProductionOrderViewSet(ModelViewSet):
@@ -70,6 +72,42 @@ class ProductionOrderViewSet(ModelViewSet):
         instance.save(update_fields=['status'])
 
         serializer = ProductionOrderSerializer(instance=instance)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(request=ProductionStockInRequest, responses={200: ProductionOrderSerializer})
+    @action(detail=True, methods=['post'])
+    def stock_in(self, request, *args, **kwargs):
+        """入库"""
+
+        request_serializer = ProductionStockInRequest(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
+        warehouse_id, stock_in_quantity = validated_data['warehouse'], validated_data['stock_in_quantity']
+
+        if not (warehouse := Warehouse.objects.filter(id=warehouse_id, team=self.team).first()):
+            raise ValidationError(f'仓库不存在')
+
+        production_order = self.get_object()
+        if production_order.status != ProductionOrder.Status.IN_PROGRESS:
+            raise ValidationError(f'工单{production_order.number}{production_order.get_status_display()}, 无法入库')
+
+        # 创建入库单据
+        stock_in_order_number = StockInOrder.get_number(team=self.team)
+        stock_in_order = StockInOrder.objects.create(
+            number=stock_in_order_number, warehouse=warehouse, type=StockInOrder.Type.PRODUCTION,
+            production_order=production_order, total_quantity=stock_in_quantity, remain_quantity=stock_in_quantity,
+            creator=self.user, team=self.team)
+
+        # 创建入库产品
+        StockInGoods.objects.create(
+            stock_in_order=stock_in_order, goods=production_order.goods, stock_in_quantity=stock_in_quantity,
+            remain_quantity=stock_in_quantity, team=self.team)
+
+        # 同步生产单据
+        production_order.stock_in_quantity = NP.plus(production_order.stock_in_quantity, stock_in_quantity)
+        production_order.save(update_fields=['stock_in_quantity'])
+
+        serializer = ProductionOrderSerializer(instance=production_order)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 

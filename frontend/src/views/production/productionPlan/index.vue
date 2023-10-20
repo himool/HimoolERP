@@ -2,20 +2,18 @@
   <div>
     <a-card title="生产计划">
       <a-row :gutter="[12, 8]">
-        <a-col :span="24" style="width: 256px;">
+        <a-col :span="24" style="width: 256px">
           <a-range-picker @change="onChangePicker" />
         </a-col>
-        <a-col :span="24" style="width: 200px;">
+        <a-col :span="24" style="width: 200px">
           <a-input v-model="searchForm.search" placeholder="生产单号, 销售单号" allowClear @pressEnter="search" />
         </a-col>
-        <a-col :span="24" style="width: 84px;">
+        <a-col :span="24" style="width: 84px">
           <a-button type="primary" icon="search" @click="search">查询</a-button>
         </a-col>
 
         <div style="margin-bottom: 12px; float: right">
-          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openCreateModal({})">
-            新增生产计划
-          </a-button>
+          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openCreateModal({})"> 新增生产计划 </a-button>
         </div>
       </a-row>
 
@@ -38,6 +36,7 @@
               <a-popconfirm v-if="item.status == 'in_progress'" title="确定关闭吗?" @confirm="close(item)">
                 <a-button type="primary">关闭工单</a-button>
               </a-popconfirm>
+              <a-button type="primary" @click="stockInModalVisible = true">入库</a-button>
               <a-popconfirm v-if="item.status == 'in_plan'" title="确定删除吗?" @confirm="destroy(item)">
                 <a-button type="danger">删除</a-button>
               </a-popconfirm>
@@ -48,20 +47,17 @@
     </a-card>
 
     <form-modal v-model="visible" :form="targetItem" @create="create" @update="update" />
+    <StockInModal v-model="stockInModalVisible" @update="update" />
   </div>
 </template>
 
 <script>
-import {
-  productionOrderList,
-  productionOrderDelete,
-  productionOrderIssue,
-  productionOrderClose,
-} from "@/api/production";
+import { productionOrderList, productionOrderDelete, productionOrderIssue, productionOrderClose } from "@/api/production";
 
 export default {
   components: {
     FormModal: () => import("./FormModal.vue"),
+    StockInModal: () => import("./StockInModal"),
   },
   data() {
     return {
@@ -131,6 +127,8 @@ export default {
       ],
       visible: false,
       targetItem: {},
+
+      stockInModalVisible: false,
     };
   },
   methods: {

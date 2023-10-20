@@ -30,10 +30,12 @@ class StockInOrderSerializer(BaseSerializer):
     warehouse_name = CharField(source='warehouse.name', read_only=True, label='仓库名称')
     type_display = CharField(source='get_type_display', read_only=True, label='入库类型')
     purchase_order_number = CharField(source='purchase_order.number', read_only=True, label='采购单据编号')
-    sales_return_order_number = CharField(source='sales_return_order.number',
-                                          read_only=True, label='销售退货单据编号')
-    stock_transfer_order_number = CharField(source='stock_transfer_order.number',
-                                            read_only=True, label='调拨单据编号')
+    sales_return_order_number = CharField(
+        source='sales_return_order.number', read_only=True, label='销售退货单据编号')
+    stock_transfer_order_number = CharField(
+        source='stock_transfer_order.number', read_only=True, label='调拨单据编号')
+    production_order_number = CharField(
+        source='production_order.number', read_only=True, label='生产单据编号')
     creator_name = CharField(source='creator.name', read_only=True, label='创建人名称')
     stock_in_goods_items = StockInGoodsItemSerializer(
         source='stock_in_goods_set', many=True, label='入库产品Item')
@@ -43,6 +45,7 @@ class StockInOrderSerializer(BaseSerializer):
         fields = ['id', 'number', 'warehouse', 'warehouse_number', 'warehouse_name', 'type',
                   'type_display', 'purchase_order', 'purchase_order_number', 'sales_return_order',
                   'sales_return_order_number', 'stock_transfer_order', 'stock_transfer_order_number',
+                  'production_order', 'production_order_number',
                   'total_quantity', 'remain_quantity', 'is_completed', 'is_void', 'creator',
                   'creator_name', 'create_time', 'stock_in_goods_items']
 

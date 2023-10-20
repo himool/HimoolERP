@@ -30,8 +30,8 @@ class ProductionOrderSerializer(BaseSerializer):
 
     class Meta:
         model = ProductionOrder
-        read_only_fields = ['id', 'sales_order_number', 'sales_goods_items', 'remain_quantity', 'goods_number',
-                            'goods_name', 'quantity_produced', 'remain_quantity', 'status', 'status_display',
+        read_only_fields = ['id', 'sales_order_number', 'sales_goods_items', 'remain_quantity', 'stock_in_quantity',
+                            'goods_number', 'goods_name', 'quantity_produced', 'remain_quantity', 'status', 'status_display',
                             'creator', 'creator_name', 'create_time']
         fields = ['number', 'is_related', 'sales_order', 'goods', 'total_quantity',
                   'start_time', 'end_time', *read_only_fields]
