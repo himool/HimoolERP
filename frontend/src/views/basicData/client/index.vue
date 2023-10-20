@@ -2,20 +2,20 @@
   <div>
     <a-card title="客户">
       <a-row gutter="16">
-        <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
-          <a-select v-model="searchForm.is_active" placeholder="状态" allowClear style="width: 100%;" @change="search">
+        <a-col :span="24" style="max-width: 200px; margin-bottom: 12px">
+          <a-select v-model="searchForm.is_active" placeholder="状态" allowClear style="width: 100%" @change="search">
             <a-select-option :value="true">激活</a-select-option>
             <a-select-option :value="false">冻结</a-select-option>
           </a-select>
         </a-col>
-        <a-col :span="24" style="max-width: 200px; margin-bottom: 12px;">
+        <a-col :span="24" style="max-width: 200px; margin-bottom: 12px">
           <a-input v-model="searchForm.search" placeholder="编号, 名称, 备注" allowClear @pressEnter="search" />
         </a-col>
-        <a-col :span="24" style="width: 100px; margin-bottom: 12px;">
+        <a-col :span="24" style="width: 100px; margin-bottom: 12px">
           <a-button type="primary" icon="search" @click="search">查询</a-button>
         </a-col>
 
-        <a-col :span="24" style="width: 300px; margin-bottom: 12px;">
+        <a-col :span="24" style="width: 300px; margin-bottom: 12px">
           <a-button-group>
             <a-button icon="file-excel" @click="downloadTemplate">模板下载</a-button>
             <a-upload name="file" :showUploadList="false" :customRequest="importExcel">
@@ -25,12 +25,12 @@
           </a-button-group>
         </a-col>
 
-        <div style="margin-bottom: 12px; float: right;">
-          <a-button type="primary" icon="plus" style="margin: 0 8px;" @click="openFormModal(form)">新增客户</a-button>
+        <div style="margin-bottom: 12px; float: right">
+          <a-button type="primary" icon="plus" style="margin: 0 8px" @click="openFormModal(form)">新增客户</a-button>
         </div>
       </a-row>
 
-      <a-row style="margin-top: 12px;">
+      <a-row style="margin-top: 12px">
         <a-table
           size="small"
           :columns="columns"
@@ -62,7 +62,7 @@
       @update="update"
     />
     <a-modal v-model="importLoading" :footer="null" :maskClosable="false" :closable="false">
-      <div><a-spin style="margin-right: 12px;" />正在导入中, 请等待...</div>
+      <div><a-spin style="margin-right: 12px" />正在导入中, 请等待...</div>
     </a-modal>
   </div>
 </template>
@@ -213,7 +213,7 @@ export default {
             this.list();
           })
           .catch((err) => {
-            this.$message.error(err.response.data.detail);
+            alert("导入错误:" + "\n" + err.response.data.join("\n"));
           })
           .finally(() => {
             this.importLoading = false;

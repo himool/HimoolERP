@@ -18,8 +18,16 @@ class GoodsCategorySerializer(BaseSerializer):
 
 
 class GoodsCategoryImportExportSerializer(BaseSerializer):
-    name = CharField(label='分类名称(必填唯一)')
-    remark = CharField(required=False, label='备注')
+    name = CharField(label='分类名称(必填唯一)', error_messages={
+        'invalid': '分类名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '分类名称 未填写',
+        'blank': '分类名称 未填写',
+        'max_length': '分类名称 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
 
     class Meta:
         model = GoodsCategory
@@ -39,8 +47,16 @@ class GoodsUnitSerializer(BaseSerializer):
 
 
 class GoodsUnitImportExportSerializer(BaseSerializer):
-    name = CharField(label='单位名称(必填唯一)')
-    remark = CharField(required=False, label='备注')
+    name = CharField(label='单位名称(必填唯一)', error_messages={
+        'invalid': '单位名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '单位名称 未填写',
+        'blank': '单位名称 未填写',
+        'max_length': '单位名称 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
 
     class Meta:
         model = GoodsUnit
@@ -299,25 +315,72 @@ class GoodsSerializer(BaseSerializer):
 
 
 class GoodsImportExportSerializer(BaseSerializer):
-    number = CharField(label='产品编号(唯一必填)')
-    name = CharField(label='产品名称(必填)')
-    barcode = CharField(required=False, label='条码')
-    category = CharField(source='category.name', required=False, label='分类')
-    unit = CharField(source='unit.name', required=False, label='单位')
-    spec = CharField(required=False, label='规格')
-    enable_batch_control = BooleanField(required=False, label='启用批次控制[TRUE/FALSE](默认: FALSE)')
-    shelf_life_days = IntegerField(required=False, label='保质期天数')
-    shelf_life_warning_days = IntegerField(required=False, label='保质期预警天数')
-    enable_inventory_warning = BooleanField(required=False, label='启用库存警告[TRUE/FALSE](默认: FALSE)')
-    inventory_upper = FloatField(required=False, label='库存上限')
-    inventory_lower = FloatField(required=False, label='库存下限')
-    purchase_price = FloatField(required=False, label='采购价')
-    retail_price = FloatField(required=False, label='零售价')
-    level_price1 = FloatField(required=False, label='等级价一')
-    level_price2 = FloatField(required=False, label='等级价二')
-    level_price3 = FloatField(required=False, label='等级价三')
-    remark = CharField(required=False, label='备注')
-    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
+    number = CharField(label='产品编号(唯一必填)', error_messages={
+        'invalid': '产品编号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '产品编号 未填写',
+        'blank': '产品编号 未填写',
+        'max_length': '产品编号 超出最大长度',
+    })
+    name = CharField(label='产品名称(必填)', error_messages={
+        'invalid': '产品名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '产品名称 未填写',
+        'blank': '产品名称 未填写',
+        'max_length': '产品名称 超出最大长度',
+    })
+    barcode = CharField(required=False, label='条码', error_messages={
+        'invalid': '条码 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '条码 超出最大长度',
+    })
+    category = CharField(source='category.name', required=False, label='分类', error_messages={
+        'invalid': '分类 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    unit = CharField(source='unit.name', required=False, label='单位', error_messages={
+        'invalid': '单位 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    spec = CharField(required=False, label='规格', error_messages={
+        'invalid': '规格 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '规格 超出最大长度',
+    })
+    enable_batch_control = BooleanField(required=False, label='启用批次控制[TRUE/FALSE](默认: FALSE)', error_messages={
+        'invalid': '启用批次控制 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    shelf_life_days = IntegerField(required=False, label='保质期天数', error_messages={
+        'invalid': '保质期天数 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    shelf_life_warning_days = IntegerField(required=False, label='保质期预警天数', error_messages={
+        'invalid': '保质期预警天数 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    enable_inventory_warning = BooleanField(required=False, label='启用库存警告[TRUE/FALSE](默认: FALSE)', error_messages={
+        'invalid': '启用库存警告 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    inventory_upper = FloatField(required=False, label='库存上限', error_messages={
+        'invalid': '库存上限 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    inventory_lower = FloatField(required=False, label='库存下限', error_messages={
+        'invalid': '库存下限 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    purchase_price = FloatField(required=False, label='采购价', error_messages={
+        'invalid': '采购价 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    retail_price = FloatField(required=False, label='零售价', error_messages={
+        'invalid': '零售价 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    level_price1 = FloatField(required=False, label='等级价一', error_messages={
+        'invalid': '等级价一 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    level_price2 = FloatField(required=False, label='等级价二', error_messages={
+        'invalid': '等级价二 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    level_price3 = FloatField(required=False, label='等级价三', error_messages={
+        'invalid': '等级价三 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
+    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)', error_messages={
+        'invalid': '激活状态 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
 
     class Meta:
         model = Goods

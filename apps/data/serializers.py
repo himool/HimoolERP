@@ -30,13 +30,36 @@ class WarehouseSerializer(BaseSerializer):
 
 
 class WarehouseImportExportSerializer(BaseSerializer):
-    number = CharField(label='仓库编号(必填唯一)')
-    name = CharField(label='仓库名称(必填唯一)')
-    manager = CharField(source='manager.name', required=False, label='管理员')
-    phone = CharField(required=False, label='电话')
-    address = CharField(required=False, label='地址')
-    remark = CharField(required=False, label='备注')
-    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
+    number = CharField(label='仓库编号(必填唯一)', error_messages={
+        'invalid': '仓库编号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '仓库编号 未填写',
+        'blank': '仓库编号 未填写',
+        'max_length': '仓库编号 超出最大长度',
+    })
+    name = CharField(label='仓库名称(必填唯一)', error_messages={
+        'invalid': '仓库名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '仓库名称 未填写',
+        'blank': '仓库名称 未填写',
+        'max_length': '仓库名称 超出最大长度',
+    })
+    manager = CharField(source='manager.name', required=False, label='管理员', error_messages={
+        'invalid': '管理员 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    phone = CharField(required=False, label='电话', error_messages={
+        'invalid': '电话 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '电话 超出最大长度',
+    })
+    address = CharField(required=False, label='地址', error_messages={
+        'invalid': '地址 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '地址 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
+    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)', error_messages={
+        'invalid': '激活状态 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
 
     class Meta:
         model = Warehouse
@@ -77,15 +100,44 @@ class ClientSerializer(BaseSerializer):
 
 
 class ClientImportExportSerializer(BaseSerializer):
-    number = CharField(label='客户编号(必填唯一)')
-    name = CharField(label='客户名称(必填唯一)')
-    level = CharField(required=False, label='等级[0/1/2/3](默认: 0)')
-    contact = CharField(required=False, label='联系人')
-    phone = CharField(required=False, label='手机号')
-    email = CharField(required=False, label='邮箱')
-    address = CharField(required=False, label='地址')
-    remark = CharField(required=False, label='备注')
-    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
+    number = CharField(label='客户编号(必填唯一)', error_messages={
+        'invalid': '客户编号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '客户编号 未填写',
+        'blank': '客户编号 未填写',
+        'max_length': '客户编号 超出最大长度',
+    })
+    name = CharField(label='客户名称(必填唯一)', error_messages={
+        'invalid': '客户名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '客户名称 未填写',
+        'blank': '客户名称 未填写',
+        'max_length': '客户名称 超出最大长度',
+    })
+    level = CharField(required=False, label='等级[0/1/2/3](默认: 0)', error_messages={
+        'invalid': '等级 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
+    contact = CharField(required=False, label='联系人', error_messages={
+        'invalid': '联系人 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '联系人 超出最大长度',
+    })
+    phone = CharField(required=False, label='手机号', error_messages={
+        'invalid': '手机号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '手机号 超出最大长度',
+    })
+    email = CharField(required=False, label='邮箱', error_messages={
+        'invalid': '邮箱 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '邮箱 超出最大长度',
+    })
+    address = CharField(required=False, label='地址', error_messages={
+        'invalid': '地址 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '地址 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
+    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)', error_messages={
+        'invalid': '激活状态 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
 
     class Meta:
         model = Client
@@ -125,16 +177,49 @@ class SupplierSerializer(BaseSerializer):
 
 
 class SupplierImportExportSerializer(BaseSerializer):
-    number = CharField(label='供应商编号(必填唯一)')
-    name = CharField(label='供应商名称(必填唯一)')
-    contact = CharField(required=False, label='联系人')
-    phone = CharField(required=False, label='手机号')
-    email = CharField(required=False, label='邮箱')
-    address = CharField(required=False, label='地址')
-    bank_account = CharField(required=False, label='银行账户')
-    bank_name = CharField(required=False, label='开户行')
-    remark = CharField(required=False, label='备注')
-    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
+    number = CharField(label='供应商编号(必填唯一)', error_messages={
+        'invalid': '供应商编号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '供应商编号 未填写',
+        'blank': '供应商编号 未填写',
+        'max_length': '供应商编号 超出最大长度',
+    })
+    name = CharField(label='供应商名称(必填唯一)', error_messages={
+        'invalid': '供应商名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '供应商名称 未填写',
+        'blank': '供应商名称 未填写',
+        'max_length': '供应商名称 超出最大长度',
+    })
+    contact = CharField(required=False, label='联系人', error_messages={
+        'invalid': '联系人 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '联系人 超出最大长度',
+    })
+    phone = CharField(required=False, label='手机号', error_messages={
+        'invalid': '手机号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '手机号 超出最大长度',
+    })
+    email = CharField(required=False, label='邮箱', error_messages={
+        'invalid': '邮箱 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '邮箱 超出最大长度',
+    })
+    address = CharField(required=False, label='地址', error_messages={
+        'invalid': '地址 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '地址 超出最大长度',
+    })
+    bank_account = CharField(required=False, label='银行账户', error_messages={
+        'invalid': '银行账户 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '银行账户 超出最大长度',
+    })
+    bank_name = CharField(required=False, label='开户行', error_messages={
+        'invalid': '开户行 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '开户行 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
+    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)', error_messages={
+        'invalid': '激活状态 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
 
     class Meta:
         model = Supplier
@@ -175,13 +260,37 @@ class AccountSerializer(BaseSerializer):
 
 
 class AccountImportExportSerializer(BaseSerializer):
-    number = CharField(label='账户编号(必填唯一)')
-    name = CharField(label='账户名称(必填唯一)')
-    type = CharField(required=False, label='账户类型[cash/alipay/wechat/bank_account/other](默认: cash)')
-    holder = CharField(required=False, label='开户人')
-    card_number = CharField(required=False, label='开户账号')
-    remark = CharField(required=False, label='备注')
-    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)')
+    number = CharField(label='账户编号(必填唯一)', error_messages={
+        'invalid': '账户编号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '账户编号 未填写',
+        'blank': '账户编号 未填写',
+        'max_length': '账户编号 超出最大长度',
+    })
+    name = CharField(label='账户名称(必填唯一)', error_messages={
+        'invalid': '账户名称 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '账户名称 未填写',
+        'blank': '账户名称 未填写',
+        'max_length': '账户名称 超出最大长度',
+    })
+    type = CharField(required=False, label='账户类型[cash/alipay/wechat/bank_account/other](默认: cash)', error_messages={
+        'invalid': '账户类型 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '账户类型 超出最大长度',
+    })
+    holder = CharField(required=False, label='开户人', error_messages={
+        'invalid': '开户人 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '开户人 超出最大长度',
+    })
+    card_number = CharField(required=False, label='开户账号', error_messages={
+        'invalid': '开户账号 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '开户账号 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
+    is_active = BooleanField(required=False, label='激活状态[TRUE/FALSE](默认: TRUE)', error_messages={
+        'invalid': '激活状态 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+    })
 
     class Meta:
         model = Account
@@ -202,9 +311,22 @@ class ChargeItemSerializer(BaseSerializer):
 
 
 class ChargeItemImportExportSerializer(BaseSerializer):
-    name = CharField(label='收支项目(必填唯一)')
-    type = CharField(label='收支类型[income/expenditure](必填)')
-    remark = CharField(required=False, label='备注')
+    name = CharField(label='收支项目(必填唯一)', error_messages={
+        'invalid': '收支项目 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '收支项目 未填写',
+        'blank': '收支项目 未填写',
+        'max_length': '收支项目 超出最大长度',
+    })
+    type = CharField(label='收支类型[income/expenditure](必填)', error_messages={
+        'invalid': '收支类型 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'required': '收支类型 未填写',
+        'blank': '收支类型 未填写',
+        'max_length': '收支类型 超出最大长度',
+    })
+    remark = CharField(required=False, label='备注', error_messages={
+        'invalid': '备注 数据无效, 只支持数字, 文本格式, 不支持公式, xx等其他格式',
+        'max_length': '备注 超出最大长度',
+    })
 
     class Meta:
         model = ChargeItem

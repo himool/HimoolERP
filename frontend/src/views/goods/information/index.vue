@@ -231,7 +231,7 @@
               this.list();
             })
             .catch(err => {
-              this.$message.error(err.response.data.detail);
+              alert("导入错误:" + "\n" + err.response.data.join("\n"));
             })
             .finally(() => {
               this.importLoading = false;
