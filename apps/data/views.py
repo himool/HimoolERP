@@ -160,8 +160,19 @@ class ClientViewSet(ModelViewSet, ExportMixin, ImportMixin):
         validated_data = request_serializer.validated_data
 
         import_serializer = self.load_data(validated_data['file'], ClientImportExportSerializer)
+        # if not import_serializer.is_valid(raise_exception=False):
+        #     raise ValidationError('数据错误')
+
+        # import_serializer = self.load_data(validated_data['file'], WarehouseImportExportSerializer)
         if not import_serializer.is_valid(raise_exception=False):
-            raise ValidationError('数据错误')
+            error_messages = []
+            for row_index, error in enumerate(import_serializer.errors, 2):
+                for error_details in error.values():
+                    for error_detail in error_details:
+                        error_messages.append(f'第 {row_index} 行数据错误: {error_detail}')
+
+            return Response(data=error_messages, status=status.HTTP_400_BAD_REQUEST)
+
 
         client_items = import_serializer.validated_data
         client_numbers = {item['number'] for item in client_items}

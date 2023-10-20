@@ -2,18 +2,17 @@
   <div>
     <a-card title="临期预警">
       <a-row gutter="16">
-        <a-col :span="24" :md="6" :xl="4" style="max-width: 256px; margin-bottom: 12px;">
+        <a-col :span="24" :md="6" :xl="4" style="max-width: 256px; margin-bottom: 12px">
           <a-input-search v-model="searchForm.search" placeholder="产品编号/名称" allowClear @search="search" />
         </a-col>
-        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px;">
-          <a-select v-model="searchForm.warehouse" placeholder="仓库" allowClear style="width: 100%;" @change="search">
-            <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{item.name}}
-            </a-select-option>
+        <a-col :span="24" :md="8" :xl="6" style="max-width: 256px; margin-bottom: 12px">
+          <a-select v-model="searchForm.warehouse" placeholder="仓库" allowClear style="width: 100%" @change="search">
+            <a-select-option v-for="item in warehouseItems" :key="item.id" :value="item.id">{{ item.name }} </a-select-option>
           </a-select>
         </a-col>
       </a-row>
 
-      <a-row style="margin-top: 12px;">
+      <a-row style="margin-top: 12px">
         <a-table
           size="small"
           :columns="columns"
@@ -33,13 +32,12 @@
 </template>
 
 <script>
-import { warehousesOption } from '@/api/option'
-import { batchsReportList,  } from '@/api/report'
+import { warehousesOption } from "@/api/option";
+import { batchsReportList } from "@/api/report";
 
 export default {
   name: "Warehouse",
-  components: {
-  },
+  components: {},
   data() {
     return {
       columns: [
@@ -94,12 +92,17 @@ export default {
       pagination: { current: 1, total: 0, pageSize: 16 },
       loading: false,
       items: [],
+      warehouseItems: [],
     };
   },
   computed: {},
   methods: {
     initialize() {
       this.list();
+
+      warehousesOption({ page_size: 999999, is_active: true }).then((data) => {
+        this.warehouseItems = data.results;
+      });
     },
     list() {
       this.loading = true;
