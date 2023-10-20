@@ -39,9 +39,6 @@
             <a-descriptions-item v-if="info.type === 'stock_transfer'" label="调拨单据">
               {{ info.stock_transfer_order_number }}
             </a-descriptions-item>
-            <a-descriptions-item v-if="info.type === 'production'" label="生产单据">
-              {{ info.production_order_number }}
-            </a-descriptions-item>
           </a-descriptions>
           <a-divider orientation="left" style="margin-top: 30px">产品信息</a-divider>
           <a-table rowKey="id" size="middle" :columns="columns" :data-source="info.stock_in_goods_items" :pagination="false" />

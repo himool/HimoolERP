@@ -11,7 +11,6 @@ class StockInOrder(Model):
         PURCHASE = ('purchase', '采购')
         SALES_RETURN = ('sales_return', '销售退货')
         STOCK_TRANSFER = ('stock_transfer', '调拨')
-        PRODUCTION = ('production', '生产')
 
     number = CharField(max_length=32, verbose_name='编号')
     warehouse = ForeignKey('data.Warehouse', on_delete=PROTECT,
@@ -23,8 +22,6 @@ class StockInOrder(Model):
                                        related_name='stock_in_order', verbose_name='销售退货单据')
     stock_transfer_order = OneToOneField('stock_transfer.StockTransferOrder', on_delete=CASCADE, null=True,
                                          related_name='stock_in_order', verbose_name='调拨单据')
-    production_order = OneToOneField('production.ProductionOrder', on_delete=CASCADE, null=True,
-                                     related_name='stock_in_order', verbose_name='生产单据')
     total_quantity = FloatField(verbose_name='入库总数')
     remain_quantity = FloatField(default=0, verbose_name='入库剩余数量')
     is_completed = BooleanField(default=False, verbose_name='入库完成状态')

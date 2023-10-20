@@ -42,13 +42,6 @@ export default [
     ]
   },
   {
-    key: '6', name: '生产管理', icon: 'schedule', submenus: [
-      { key: '/production/plan', name: '生产计划' },
-      { key: '/production/task', name: '生产任务' },
-      { key: '/production/record', name: '生产记录' },
-    ]
-  },
-  {
     key: '7', name: '库存管理', icon: 'database', submenus: [
       { key: '/warehouse/inStock', name: '入库任务' },
       { key: '/warehouse/outStock', name: '出库任务' },

@@ -55,13 +55,6 @@ PERMISSIONS = [
         ],
     },
     {
-        'name': '生产管理',
-        'permissions': [
-            {'name': '生产计划', 'code': 'production_order'},
-            {'name': '生产记录', 'code': 'production_record'},
-        ],
-    },
-    {
         'name': '库内管理',
         'permissions': [
             {'name': '入库', 'code': 'stock_in'},

@@ -10,7 +10,6 @@ import purchasing from './purchasing'
 import sale from './sale'
 import warehouse from './warehouse'
 import finance from './finance'
-import production from './production'
 
 const index = {
   path: '/',
@@ -26,6 +25,6 @@ const index = {
   ]
 }
 
-const routes = [index, user, account, manage, system, report, basicData, goods, purchasing, sale, warehouse, finance, production];
+const routes = [index, user, account, manage, system, report, basicData, goods, purchasing, sale, warehouse, finance];
 
 export default new VueRouter({ mode: 'history', routes })
