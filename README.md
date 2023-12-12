@@ -55,10 +55,12 @@
 1. 数据库字符集设置为 utf8mb4
 2. 创建 erp-db 数据库(先设置字符集, 再创建数据库)
     CREATE DATABASE erp_db;
-3. 迁移数据库
+3. 创建配置文件
+    * python tools/create_configs.py
+4. 迁移数据库
     * python manage.py makemigrations
     * python manage.py migrate
-4. 创建用户
+5. 创建用户
     * python manage.py runscript create_user
 
 ### 本地运行
