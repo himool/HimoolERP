@@ -12,9 +12,9 @@
    ![微信群](https://gitee.com/himool/erp/raw/master/img/%E5%BE%AE%E4%BF%A1%E7%BE%A4.png)
 
 ### 公司介绍
-盒木科技是一家专注于智慧工厂和仓储的科技创新企业。目前已发布[盒木ERP企业管理系统](https://www.himool.com/erp)，[盒木WMS仓库管理系统](https://www.himool.com/wms)及[盒木WCS仓库控制系统](https://www.himool.com/wcs)。其中ERP含社区版和企业版：
-* 社区版为开源进销存系统，包含采购，销售，库存，财务等模块。适用于贸易类企业。
-* 企业版为智慧工厂管理系统，除了社区版功能外，还增加了生产管理，质检管理，物料管控及追溯，实时看板，移动端App等实用功能。
+盒木科技是一家专注于**智慧工厂和仓储系统**研发的科技创新企业。目前已发布[盒木ERP企业管理系统](https://www.himool.com/erp)，[盒木WMS仓库管理系统](https://www.himool.com/wms)及[盒木WCS仓库控制系统](https://www.himool.com/wcs)。其中ERP含社区版和企业版：
+* **社区版**为开源进销存系统，包含采购，销售，库存，财务等模块。适用于贸易类企业。
+* **企业版**为智慧工厂管理系统，除了社区版功能外，还增加了生产管理，质检管理，物料管控及追溯，实时看板，移动端App等实用功能。
 
 #### ERP的服务模式
 * SaaS网络版。如需购买可点击[该淘宝链接](https://item.taobao.com/item.htm?id=619069183482)
