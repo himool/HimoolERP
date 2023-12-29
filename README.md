@@ -29,10 +29,9 @@
 #### 该系统前后端分离，api使用restful协议，方便二次开发，后端使用Python，Django，DRF等技术，前端代码使用AntD进行构建，包含采购管理，销售管理，库存管理等业务管理流程。移动端使用Uniapp，包含产品标签打印，出入库扫码等功能。
 * Gitee地址: [Gitee](https://gitee.com/himool/erp)
 * Github地址: [Github](https://github.com/himool/HimoolERP)
-* Demo地址: [Demo](https://erp.himool.com)
 
 ### 项目背景
-#### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的盒木ERP系统，支持高自由度的开发，来支持企业的自定义需求。我们的代码将持续更新，并且保持与[Demo](https://erp.himool.com)地址的同步。
+#### 目前市面上没有一款采用流行的前后端技术易用开源的ERP系统。有不少朋友也跟我们反应实施了ERP系统但是仍然会面临许多问题，尤其二开的费用高昂。于是我们总结了这些年ERP系统开发的经验，设计了这款开源的盒木ERP系统，支持高自由度的开发，来支持企业的自定义需求。
 
 ### 硬件要求及开发环境
 * 移动端打印功能需指定型号PDA，请联系作者购买
@@ -119,7 +118,6 @@ Himool Technology is focus on supply chain digitalization. All the products are 
 #### Himool ERP contains core processes like master data, purchasing, sales, inbound, outbound and payment.
 * Gitee地址: [Gitee](https://gitee.com/himool/erp)
 * Github地址: [Github](https://github.com/himool/HimoolERP)
-* Demo地址: [Demo](https://erp.himool.com)
 
 ### Devlopment Environment
 * Python version V3.9+
